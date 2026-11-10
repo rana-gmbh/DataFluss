@@ -5,14 +5,14 @@
     <link>https://github.com/rana-gmbh/DataFluss</link>
     <item>
       <title>DataFluss 0.1.2</title>
-      <pubDate>Tue, 10 Nov 2026 20:03:24 +0000</pubDate>
+      <pubDate>Tue, 10 Nov 2026 22:32:55 +0000</pubDate>
       <sparkle:version>0.1.2</sparkle:version>
       <description><![CDATA[<h2>DataFluss 0.1.2</h2>
 <ul>
   <li>DataFluss gibt es jetzt auch für Windows 10 und 11. Die Windows-Version hält sich wie die Mac-Version selbst aktuell.</li>
   <li>Kleine Anpassungen beim Archivieren und bei der PDF-Erzeugung, die für Windows nötig waren. Auf dem Mac ändert sich dadurch nichts.</li>
 </ul>]]></description>
-      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.1.2/DataFluss-0.1.2-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47042474" type="application/octet-stream" sparkle:edSignature="zG8UMND0Qj6OcxwHRYfVgDRTcQ3Vs5S0dzuAPKXVQPFmvEIQaNlHIhcbIQVTWsr1yyikXBtH5sIQpdTvRL8DAw=="/>
+      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.1.2/DataFluss-0.1.2-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47158848" type="application/octet-stream" sparkle:edSignature="EiWPQaJpSI0jvjZH1F5B/MzGkCn1YWknYIPCOgODGda3w+wlMzylE39rYftlR+JwDtRNOWUgnY/Juab0ySQBDQ=="/>
     </item>
   </channel>
 </rss>
