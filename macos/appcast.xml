@@ -3,21 +3,20 @@
     <channel>
         <title>DataFluss</title>
         <item>
-            <title>0.1.1</title>
-            <pubDate>Tue, 10 Nov 2026 18:36:56 +0000</pubDate>
+            <title>0.1.2</title>
+            <pubDate>Tue, 10 Nov 2026 19:58:10 +0000</pubDate>
             <link>https://github.com/rana-gmbh/DataFluss</link>
-            <sparkle:version>0.1.1</sparkle:version>
-            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <sparkle:version>0.1.2</sparkle:version>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<h2>DataFluss 0.1.1</h2>
+            <description><![CDATA[<h2>DataFluss 0.1.2</h2>
 <ul>
-  <li>Datenbanken der früheren Schulverwaltung-App werden ohne Rückfragen beim Start übernommen.</li>
-  <li>Ihre Schlüssel übernimmt DataFluss erst beim Öffnen der jeweiligen Datenbank. macOS fragt dabei einmal je Schlüssel; mit dem Anmeldepasswort und „Immer erlauben“ bleibt es dabei.</li>
-  <li>„Ablehnen“ lässt die Datenbank geschlossen, statt weiter zu fragen.</li>
+  <li>DataFluss gibt es jetzt auch für Windows 10 und 11. Die Windows-Version hält sich wie die Mac-Version selbst aktuell.</li>
+  <li>Kleine Anpassungen beim Archivieren und bei der PDF-Erzeugung, die für Windows nötig waren. Auf dem Mac ändert sich dadurch nichts.</li>
 </ul>
 ]]></description>
-            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.1.1/DataFluss-0.1.1.zip" length="62837905" type="application/octet-stream" sparkle:edSignature="JGTTl+q0UDmHXzpG7mDBtNOlXbRDEz+sX+yZiR344aLOK6Wyih1fPVefXWQAiJN1w0NLfhFfpnccLOlYfImpDg=="/>
+            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.1.2/DataFluss-0.1.2.zip" length="62841781" type="application/octet-stream" sparkle:edSignature="t/7ThBJsILGm8ecmLGKgZRpRLp78Ec1xRKxjCFwyfiLMcVL/zBLyS2KeZu5Ck6DFLBoaXpHXX36gKOojwmK6CA=="/>
         </item>
     </channel>
 </rss>
