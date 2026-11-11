@@ -4,16 +4,18 @@
     <title>DataFluss</title>
     <link>https://github.com/rana-gmbh/DataFluss</link>
     <item>
-      <title>DataFluss 0.1.3</title>
-      <pubDate>Tue, 10 Nov 2026 23:22:40 +0000</pubDate>
-      <sparkle:version>0.1.3</sparkle:version>
-      <description><![CDATA[<h2>DataFluss 0.1.3</h2>
+      <title>DataFluss 0.2.0</title>
+      <pubDate>Wed, 11 Nov 2026 12:16:44 +0000</pubDate>
+      <sparkle:version>0.2.0</sparkle:version>
+      <description><![CDATA[<h2>DataFluss 0.2.0</h2>
 <ul>
-  <li>Windows: Fotos, Logos, Dokumente und andere Dateien lassen sich wieder hochladen. Bisher kam nur ein leerer Inhalt an, und DataFluss meldete zum Beispiel „Diese Datei ist kein gültiges Bild.“</li>
-  <li>Windows: Das Installationsprogramm ist jetzt mit dem Zertifikat der Rana GmbH signiert.</li>
-  <li>Auf dem Mac ändert sich nichts.</li>
+  <li>Neu: Unterricht und Noten. Lehrkräfte sehen ihren Unterricht und ihre Klassen, tragen Zeugnisnoten, das Notenbuch, Verhalten, Fehltage und die Lernentwicklung ein, auch ohne Verbindung.</li>
+  <li>Auf dem Rechner einer Lehrkraft liegen nur ihr Unterricht und ihre Klassen; von den Schülern nur Name, Klasse, Foto und was für die Noten wichtig ist, keine Adressen und keine Eltern.</li>
+  <li>Der Server nimmt nur Änderungen an, die die Lehrkraft auch im Browser machen dürfte. Noten, die vor dem Ende des Eingabezeitraums ohne Verbindung eingetragen wurden, zählen noch bis zu zwei Wochen später.</li>
+  <li>Zeugnisse, Konferenz, Checkliste und Notenlisten lassen sich auch in DataFluss drucken.</li>
+  <li>Diese Version passt zur neuen Server-Version mit Unterricht und Noten. Erst den Server aktualisieren, dann DataFluss auf Mac und Windows; bis dahin pausiert der Abgleich.</li>
 </ul>]]></description>
-      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.1.3/DataFluss-0.1.3-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47163680" type="application/octet-stream" sparkle:edSignature="dvJkn+IKSWBdvqRdlwPn72GJMfX0T13QV+JfTbOTgUTozK3+hsnrWVMZr8k75JaN7MpVBCoTFeeeW8XgHm07CA=="/>
+      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.2.0/DataFluss-0.2.0-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47455152" type="application/octet-stream" sparkle:edSignature="alvIbpV/Qofh1mYbQDemWHuSwKLCfIXfjk2AMGPCl+4kdQdTnc0KgqNbiwnYPfU3Iva8OnzyrQEyyr0SY2XaCA=="/>
     </item>
   </channel>
 </rss>
