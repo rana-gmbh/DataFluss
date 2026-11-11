@@ -3,20 +3,19 @@
     <channel>
         <title>DataFluss</title>
         <item>
-            <title>0.2.2</title>
-            <pubDate>Wed, 11 Nov 2026 15:12:44 +0000</pubDate>
+            <title>0.2.3</title>
+            <pubDate>Wed, 11 Nov 2026 21:47:05 +0000</pubDate>
             <link>https://github.com/rana-gmbh/DataFluss</link>
-            <sparkle:version>0.2.2</sparkle:version>
-            <sparkle:shortVersionString>0.2.2</sparkle:shortVersionString>
+            <sparkle:version>0.2.3</sparkle:version>
+            <sparkle:shortVersionString>0.2.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<h2>DataFluss 0.2.2</h2>
+            <description><![CDATA[<h2>DataFluss 0.2.3</h2>
 <ul>
-  <li>Auf einem mit dem Server verbundenen Mac kann sich nur das Konto anmelden, mit dem die Datenbank verbunden wurde. Versucht man es mit einem anderen Konto, nennt die Anmeldeseite jetzt dieses Konto und den Weg zu einer eigenen Datenbank über „Mit Server verbinden“, statt „Passwort falsch“ zu melden.</li>
-  <li>Ein auf dem Server zurückgesetztes Passwort sperrt den Mac nicht mehr auf der Seite „Das geht nur in der Webversion“. Das neue Passwort wird im Browser festgelegt.</li>
+  <li>Windows: Die Druck-Buttons im Bereich Unterricht (Zeugnisse, Zweitschrift, Konferenzliste, Lernentwicklungsbericht) und der Druck eines DaZ-Berichts öffnen die PDF wieder in einem eigenen Fenster, statt „Keine Verbindung zum Server“ zu melden.</li>
 </ul>
 ]]></description>
-            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.2.2/DataFluss-0.2.2.zip" length="63245493" type="application/octet-stream" sparkle:edSignature="+3gzSc+PbvgjCUmJO+iSPWSq5q5/PpbXsrk85lQZ0y+n01l0QGes7VPw8h4v98x4V0W374TORZlcJd/zy3AqBQ=="/>
+            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.2.3/DataFluss-0.2.3.zip" length="63245727" type="application/octet-stream" sparkle:edSignature="8BD7Kh2bxZ1ZIDG91UiVqM6P0E47MY9qhjcZaZnkU99eUwqGlCOrbQt3QlIDzdNkpHW9b39VG3vR3PMYzWICAQ=="/>
         </item>
     </channel>
 </rss>
