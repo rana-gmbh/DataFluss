@@ -3,23 +3,20 @@
     <channel>
         <title>DataFluss</title>
         <item>
-            <title>0.2.0</title>
-            <pubDate>Wed, 11 Nov 2026 12:14:54 +0000</pubDate>
+            <title>0.2.1</title>
+            <pubDate>Wed, 11 Nov 2026 12:53:36 +0000</pubDate>
             <link>https://github.com/rana-gmbh/DataFluss</link>
-            <sparkle:version>0.2.0</sparkle:version>
-            <sparkle:shortVersionString>0.2.0</sparkle:shortVersionString>
+            <sparkle:version>0.2.1</sparkle:version>
+            <sparkle:shortVersionString>0.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<h2>DataFluss 0.2.0</h2>
+            <description><![CDATA[<h2>DataFluss 0.2.1</h2>
 <ul>
-  <li>Neu: Unterricht und Noten. Lehrkräfte sehen ihren Unterricht und ihre Klassen, tragen Zeugnisnoten, das Notenbuch, Verhalten, Fehltage und die Lernentwicklung ein, auch ohne Verbindung.</li>
-  <li>Auf dem Rechner einer Lehrkraft liegen nur ihr Unterricht und ihre Klassen; von den Schülern nur Name, Klasse, Foto und was für die Noten wichtig ist, keine Adressen und keine Eltern.</li>
-  <li>Der Server nimmt nur Änderungen an, die die Lehrkraft auch im Browser machen dürfte. Noten, die vor dem Ende des Eingabezeitraums ohne Verbindung eingetragen wurden, zählen noch bis zu zwei Wochen später.</li>
-  <li>Zeugnisse, Konferenz, Checkliste und Notenlisten lassen sich auch in DataFluss drucken.</li>
-  <li>Diese Version passt zur neuen Server-Version mit Unterricht und Noten. Erst den Server aktualisieren, dann DataFluss auf Mac und Windows; bis dahin pausiert der Abgleich.</li>
+  <li>„Zeugnisse“ und die Klassenseiten im Bereich Unterricht zeigen einen Hinweis, wenn in der Datenbank noch kein Schuljahr angelegt ist, statt mit einem Serverfehler abzubrechen.</li>
+  <li>„Alle Unterrichte“ listet keine Klassen ohne Schuljahr mehr auf.</li>
 </ul>
 ]]></description>
-            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.2.0/DataFluss-0.2.0.zip" length="63242458" type="application/octet-stream" sparkle:edSignature="9vNdfs5O7i8WgD8is6Yiefpzuha/jGOR/OiAu8Rvnp3Pqi0tZ0RjVbQrplukhhnfg+kDPBopK9qmu5X3/0EDAw=="/>
+            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.2.1/DataFluss-0.2.1.zip" length="63243582" type="application/octet-stream" sparkle:edSignature="SASgeWdx8LjSfK70rfFyiZfEHX0xigUpc7lYvLT7kXoWiS8+lfpC2BaMwoOp3Vmn/oERnxZOTQPW4PbrSfosCw=="/>
         </item>
     </channel>
 </rss>
