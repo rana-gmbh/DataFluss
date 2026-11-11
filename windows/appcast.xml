@@ -4,15 +4,14 @@
     <title>DataFluss</title>
     <link>https://github.com/rana-gmbh/DataFluss</link>
     <item>
-      <title>DataFluss 0.2.2</title>
-      <pubDate>Wed, 11 Nov 2026 15:15:10 +0000</pubDate>
-      <sparkle:version>0.2.2</sparkle:version>
-      <description><![CDATA[<h2>DataFluss 0.2.2</h2>
+      <title>DataFluss 0.2.3</title>
+      <pubDate>Wed, 11 Nov 2026 21:49:40 +0000</pubDate>
+      <sparkle:version>0.2.3</sparkle:version>
+      <description><![CDATA[<h2>DataFluss 0.2.3</h2>
 <ul>
-  <li>Auf einem mit dem Server verbundenen Mac kann sich nur das Konto anmelden, mit dem die Datenbank verbunden wurde. Versucht man es mit einem anderen Konto, nennt die Anmeldeseite jetzt dieses Konto und den Weg zu einer eigenen Datenbank über „Mit Server verbinden“, statt „Passwort falsch“ zu melden.</li>
-  <li>Ein auf dem Server zurückgesetztes Passwort sperrt den Mac nicht mehr auf der Seite „Das geht nur in der Webversion“. Das neue Passwort wird im Browser festgelegt.</li>
+  <li>Windows: Die Druck-Buttons im Bereich Unterricht (Zeugnisse, Zweitschrift, Konferenzliste, Lernentwicklungsbericht) und der Druck eines DaZ-Berichts öffnen die PDF wieder in einem eigenen Fenster, statt „Keine Verbindung zum Server“ zu melden.</li>
 </ul>]]></description>
-      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.2.2/DataFluss-0.2.2-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47455640" type="application/octet-stream" sparkle:edSignature="XL613ZCQ07UuznL747VlhZsMZZN0lgHtokAeBJG4TxT6lmlFd9s2o+ZWLzcX3qZwTq20B73wIv/NNug9JUzECg=="/>
+      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.2.3/DataFluss-0.2.3-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47456176" type="application/octet-stream" sparkle:edSignature="Qx4KVaJveCXzJH0zK0OqoAobXfDiyX/2rnCjSK9IZHe3iTuNc+NTjz4o6bJdv96gLSRH78hooAjmiSlMTflVBg=="/>
     </item>
   </channel>
 </rss>
