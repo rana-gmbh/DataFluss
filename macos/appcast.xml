@@ -3,20 +3,21 @@
     <channel>
         <title>DataFluss</title>
         <item>
-            <title>0.5.1</title>
-            <pubDate>Sun, 15 Nov 2026 17:57:29 +0000</pubDate>
+            <title>1.0.0</title>
+            <pubDate>Sun, 15 Nov 2026 20:43:54 +0000</pubDate>
             <link>https://github.com/rana-gmbh/DataFluss</link>
-            <sparkle:version>0.5.1</sparkle:version>
-            <sparkle:shortVersionString>0.5.1</sparkle:shortVersionString>
+            <sparkle:version>1.0.0</sparkle:version>
+            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<h2>DataFluss 0.5.1</h2>
+            <description><![CDATA[<h2>DataFluss 1.0.0</h2>
 <ul>
-  <li>„Mit erfundenen Daten ausprobieren“ legt eine Demo mit der Schulverwaltung an, ohne Unterricht, DaZ und Kindergarten. Im Assistenten für eine neue Datenbank sind zusätzliche Module zuerst nicht ausgewählt.</li>
-  <li>Eine Demo, die mit 0.5.0 angelegt wurde, behält ihre Daten. Wer sie ohne diese Bereiche möchte, legt sie in den Papierkorb und erstellt eine neue.</li>
+  <li><strong>DataFluss ist jetzt Open Source</strong> (AGPL-3.0): <a href="https://github.com/rana-gmbh/DataFluss">github.com/rana-gmbh/DataFluss</a>.</li>
+  <li>Die App enthält die Plattform und das Modul Schulverwaltung. Weitere Module kommen als signierte Dateien dazu: von dem Server, mit dem eine Datenbank verbunden ist, oder über „Modul installieren …“ auf der Startseite.</li>
+  <li>Verbundene Datenbanken, die ein solches Modul nutzen, öffnen sich wie bisher; das Modul hat der Computer schon vom Server geholt.</li>
 </ul>
 ]]></description>
-            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.5.1/DataFluss-0.5.1.zip" length="63699574" type="application/octet-stream" sparkle:edSignature="HKxqi/MhEQGoq87OKlto0sKvg+G38+GNF+RDPAXwloel850ZYvw/5MCH7QWm6xcIQtN+0Bj1uXVfqUpUyQtpBw=="/>
+            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.0.0/DataFluss-1.0.0.zip" length="63103909" type="application/octet-stream" sparkle:edSignature="FClXr0m7YgX9s3PZCsR2zKAv2YbYp+0sC3Ntumuiog2dNPgYvVzpv9StUlx83ughCthvmZXeSmKEs+h6lUlhCA=="/>
         </item>
     </channel>
 </rss>

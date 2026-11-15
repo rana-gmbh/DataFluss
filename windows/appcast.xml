@@ -4,15 +4,16 @@
     <title>DataFluss</title>
     <link>https://github.com/rana-gmbh/DataFluss</link>
     <item>
-      <title>DataFluss 0.5.1</title>
-      <pubDate>Sun, 15 Nov 2026 18:02:56 +0000</pubDate>
-      <sparkle:version>0.5.1</sparkle:version>
-      <description><![CDATA[<h2>DataFluss 0.5.1</h2>
+      <title>DataFluss 1.0.0</title>
+      <pubDate>Sun, 15 Nov 2026 20:49:31 +0000</pubDate>
+      <sparkle:version>1.0.0</sparkle:version>
+      <description><![CDATA[<h2>DataFluss 1.0.0</h2>
 <ul>
-  <li>„Mit erfundenen Daten ausprobieren“ legt eine Demo mit der Schulverwaltung an, ohne Unterricht, DaZ und Kindergarten. Im Assistenten für eine neue Datenbank sind zusätzliche Module zuerst nicht ausgewählt.</li>
-  <li>Eine Demo, die mit 0.5.0 angelegt wurde, behält ihre Daten. Wer sie ohne diese Bereiche möchte, legt sie in den Papierkorb und erstellt eine neue.</li>
+  <li><strong>DataFluss ist jetzt Open Source</strong> (AGPL-3.0): <a href="https://github.com/rana-gmbh/DataFluss">github.com/rana-gmbh/DataFluss</a>.</li>
+  <li>Die App enthält die Plattform und das Modul Schulverwaltung. Weitere Module kommen als signierte Dateien dazu: von dem Server, mit dem eine Datenbank verbunden ist, oder über „Modul installieren …“ auf der Startseite.</li>
+  <li>Verbundene Datenbanken, die ein solches Modul nutzen, öffnen sich wie bisher; das Modul hat der Computer schon vom Server geholt.</li>
 </ul>]]></description>
-      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v0.5.1/DataFluss-0.5.1-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47896224" type="application/octet-stream" sparkle:edSignature="FsdUt3IpRppjoIKfmREvUbX5GUUiqWDpB6JeazuoKVtDxkG4juO5HY//IMPzVOsjT2RTusMteL04XLjLF5bsCQ=="/>
+      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.0.0/DataFluss-1.0.0-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47451792" type="application/octet-stream" sparkle:edSignature="SEafwHSbjDpkc4KuIPspzsb4JWBhXl9QspCyr3vkKzV3x5ZM2cwOtxMa532sin+6Hjfl37v/B9kxO5v3tgvmBQ=="/>
     </item>
   </channel>
 </rss>
