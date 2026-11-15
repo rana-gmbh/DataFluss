@@ -151,7 +151,8 @@ def register(request):
 @require_http_methods(["GET"])
 def info(request):
     """What a computer checks before it connects: this server's DataFluss version and modules."""
-    return JsonResponse({"api": API, "version": settings.DATAFLUSS_VERSION, "modules": modules.manifest(), "schema": schema()})
+    return JsonResponse({"api": API, "version": settings.DATAFLUSS_VERSION, "modules": modules.manifest(), "schema": schema(),
+                         "transfer": True})  # takes a database from a computer (archive/transfer.py), since 1.1
 
 
 @csrf_exempt

@@ -5,9 +5,11 @@ import os
 from django.shortcuts import render
 from django.urls import resolve
 
+# The backup page stays open: it fetches the server's full backup (archive/transfer.py) and lists the
+# files here, but a copy neither makes nor restores backups of its own.
 SERVER_ONLY = {"password_change", "totp_setup", "users", "user_update", "two_factor_switch", "school_settings", "school_languages",
-               "updates", "update_status", "update_request", "backups", "backup_status", "backup_create",
-               "backup_upload", "backup_check", "backup_restore", "backup_delete", "backup_download"}
+               "updates", "update_status", "update_request", "backup_create", "backup_upload", "backup_check", "backup_restore",
+               "backup_plan", "backup_plan_run", "backup_plan_off", "backup_transfer_check", "backup_transfer_run"}
 
 
 class ConnectedMacMiddleware:

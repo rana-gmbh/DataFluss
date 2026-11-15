@@ -276,7 +276,7 @@ def dashboard(request):
 
 def _checklist(request, people):
     """First steps on the start page: each item ticks itself off; hidden when all are done or put away."""
-    from archive import nightly
+    from archive import nightly, plan
 
     user = request.user
     if "checklist" in (user.tours_seen or []) or not (user.can("admin.school") or user.can("data.import")):
@@ -287,8 +287,10 @@ def _checklist(request, people):
         items.append((_("Name und Logo eintragen"), reverse("school_settings"), bool(school.logo) or school.name != "Meine Schule"))
     if user.can("data.import"):
         items.append((_("Personen aufnehmen oder aus einer Datei importieren"), reverse("transfer"), people > 0))
-    if user.can("admin.backup") and not os.environ.get("SCHULE_CLIENT_DB_NAME"):  # the desktop client has no backups of its own yet
+    if user.can("admin.backup") and not plan.is_client():
         items.append((_("Nächtliche Sicherung einrichten"), reverse("backups"), nightly.is_set_up()))
+    elif user.can("admin.backup") and plan.applies():
+        items.append((_("Regelmäßige Sicherung einrichten"), reverse("backups"), plan.is_set_up()))
     if user.can("admin.users"):
         items.append((_("Konten für weitere Personen anlegen"), reverse("users"), User.objects.filter(is_active=True).count() > 1))
     done = sum(1 for _label, _url, ticked in items if ticked)

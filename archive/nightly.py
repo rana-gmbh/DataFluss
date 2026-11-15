@@ -131,6 +131,14 @@ def run():
 
 def summary():
     """What the backup page says: level ok, warn or bad, and one sentence."""
+    from . import plan
+
+    if plan.is_client():  # a database on a computer: its own plan, or the server's backups for a copy
+        if plan.applies():
+            return plan.summary()
+        if plan.is_connected():
+            return {"level": "ok", "text": _("Diese Datenbank ist eine Kopie vom Server. Gesichert wird auf dem Server.")}
+        return {"level": "ok", "text": _("Eine Demo mit erfundenen Personen braucht keine Sicherung.")}
     if not is_set_up():
         return {"level": "warn", "text": _("Die automatische Sicherung ist nicht eingerichtet: BACKUP_PASSWORD fehlt.")}
     result = last()

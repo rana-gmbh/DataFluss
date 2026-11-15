@@ -14,6 +14,76 @@
 </div>
 <p id="b-result" class="hidden rounded-lg px-3 py-2 text-[13px] mb-4 max-w-3xl" role="status"></p>
 
+{% if plan is not None %}
+<section class="surface p-5 mb-4 max-w-3xl" id="b-plan-section">
+  <h2 class="section-title mb-1">{% translate "Regelmäßige Sicherung" %}</h2>
+  <p class="muted text-[12px] mb-3">{% translate "DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die Datenbank geöffnet ist." %}</p>
+  <form id="b-plan" class="space-y-3">
+    <div><label class="label" for="b-plan-folder">{% translate "Ordner" %}</label>
+      <div class="flex gap-2"><input class="input flex-1" id="b-plan-folder" name="folder" value="{{ plan.folder|default:'' }}" required autocomplete="off" spellcheck="false">
+      <button type="button" class="btn" id="b-plan-pick">{% translate "Ordner wählen …" %}</button></div></div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="label" for="b-plan-every">{% translate "Wie oft" %}</label><select class="input" id="b-plan-every" name="every">{% for value, label in plan_choices.every %}<option value="{{ value }}"{% if plan.every == value %} selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+      <div><label class="label" for="b-plan-keep">{% translate "Aufbewahren" %}</label><select class="input" id="b-plan-keep" name="keep">{% for n in plan_choices.keep %}<option value="{{ n }}"{% if plan.keep == n or not plan and n == plan_default_keep %} selected{% endif %}>{% blocktranslate count n=n %}die letzte Sicherung{% plural %}die letzten {{ n }} Sicherungen{% endblocktranslate %}</option>{% endfor %}</select></div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="label" for="b-plan-password">{% if plan %}{% translate "Neues Passwort (leer lassen: unverändert)" %}{% else %}{% translate "Passwort für die Sicherungen" %}{% endif %}</label><input class="input" id="b-plan-password" type="password" name="password" minlength="{{ min_password }}" autocomplete="new-password"{% if not plan %} required{% endif %}></div>
+      <div><label class="label" for="b-plan-repeat">{% translate "Passwort wiederholen" %}</label><input class="input" id="b-plan-repeat" type="password" name="repeat" autocomplete="new-password"{% if not plan %} required{% endif %}></div>
+    </div>
+    <p class="muted text-[12px]">{% blocktranslate trimmed with n=min_password %}Mindestens {{ n }} Zeichen. DataFluss bewahrt das Passwort verschlüsselt auf, damit die Sicherung von selbst entsteht. <strong>Notieren Sie es an einem anderen Ort:</strong> Geht dieser Computer verloren, öffnet nur dieses Passwort die Sicherung.{% endblocktranslate %}</p>
+    <div class="flex flex-wrap gap-2">
+      <button class="btn btn-primary" data-while-idle>{% if plan %}{% translate "Speichern" %}{% else %}{% translate "Einrichten" %}{% endif %}</button>
+      {% if plan %}<button type="button" class="btn" id="b-plan-run" data-while-idle>{% icon 'archive' %}{% translate "Jetzt sichern" %}</button>{% endif %}
+    </div>
+  </form>
+  {% if plan %}<form method="post" action="{% url 'backup_plan_off' %}" class="mt-3">{% csrf_token %}<button class="btn btn-sm btn-ghost" data-confirm="{% translate 'Die regelmäßige Sicherung ausschalten? Die Dateien im Ordner bleiben.' %}" data-while-idle>{% translate "Ausschalten" %}</button></form>{% endif %}
+</section>
+{% endif %}
+
+{% if plan is not None %}
+<section class="surface p-5 mb-4 max-w-3xl" id="b-transfer-section">
+  <h2 class="section-title mb-1">{% translate "Auf einen Server übertragen" %}</h2>
+  {% if transferred %}
+  <p class="badge-ok rounded-lg px-3 py-2 text-[13px] mb-3">{% blocktranslate trimmed with url=transferred.url %}Diese Datenbank wurde auf {{ url }} übertragen. Arbeiten Sie ab jetzt mit dem Server: Änderungen hier erreichen ihn nicht mehr.{% endblocktranslate %}
+    <button type="button" class="btn btn-sm ml-2" id="b-connect" data-url="{{ transferred.url }}">{% translate "Mit dem Server verbinden …" %}</button></p>
+  {% endif %}
+  <p class="muted text-[12px] mb-3">{% translate "Die ganze Datenbank mit allen Konten, Bildern und Dokumenten wird zu den Daten eines DataFluss-Servers. Danach gelten auf dem Server die Konten dieser Datenbank. Am besten auf einem neuen Server, auf dem bisher nur das erste IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss nach und legt vorher eine Sicherung davon auf dem Server ab." %}</p>
+  <form id="b-transfer" class="space-y-3">
+    <div><label class="label" for="b-t-url">{% translate "Adresse des Servers" %}</label><input class="input" id="b-t-url" name="url" required autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="datafluss.meine-schule.de"></div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="label" for="b-t-user">{% translate "Ihr Benutzername auf dem Server" %}</label><input class="input" id="b-t-user" name="username" required autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+      <div><label class="label" for="b-t-password">{% translate "Passwort" %}</label><input class="input" id="b-t-password" name="password" type="password" required autocomplete="off"></div>
+    </div>
+    <div><label class="label" for="b-t-code">{% translate "Code aus der Authenticator-App" %}</label><input class="input" id="b-t-code" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="8"></div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="label" for="b-t-backup">{% translate "Passwort für die übertragene Sicherung" %}</label><input class="input" id="b-t-backup" name="backup_password" type="password" minlength="{{ min_password }}" required autocomplete="new-password"></div>
+      <div><label class="label" for="b-t-repeat">{% translate "Passwort wiederholen" %}</label><input class="input" id="b-t-repeat" name="backup_repeat" type="password" required autocomplete="new-password"></div>
+    </div>
+    <p class="muted text-[12px]">{% blocktranslate trimmed with n=min_password %}Mindestens {{ n }} Zeichen. Es schützt die Datei unterwegs und die Sicherung, die der Server vorher von seinem bisherigen Stand anlegt.{% endblocktranslate %}</p>
+    <button class="btn btn-primary" data-while-idle>{% icon 'upload' %}{% translate "Übertragen …" %}</button>
+  </form>
+</section>
+{% endif %}
+
+{% if connected %}
+<section class="surface p-5 mb-4 max-w-3xl" id="b-server-section">
+  <h2 class="section-title mb-1">{% translate "Vollständige Sicherung vom Server" %}</h2>
+  <p class="muted text-[12px] mb-3">{% translate "Diese Datenbank enthält nur, was Ihr Konto sehen darf. Die vollständige Sicherung des Servers mit allen Daten lässt sich hierher laden. Dafür noch einmal mit Passwort und Code bestätigen." %}</p>
+  <form id="b-from-server" class="space-y-3">
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="label" for="b-s-password">{% translate "Ihr Passwort" %}</label><input class="input" id="b-s-password" name="password" type="password" required autocomplete="current-password"></div>
+      <div><label class="label" for="b-s-code">{% translate "Code aus der Authenticator-App" %}</label><input class="input" id="b-s-code" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="8"></div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="label" for="b-s-backup">{% translate "Passwort für diese Sicherung" %}</label><input class="input" id="b-s-backup" name="backup_password" type="password" minlength="{{ min_password }}" required autocomplete="new-password"></div>
+      <div><label class="label" for="b-s-repeat">{% translate "Passwort wiederholen" %}</label><input class="input" id="b-s-repeat" name="backup_repeat" type="password" required autocomplete="new-password"></div>
+    </div>
+    <button class="btn btn-primary" data-while-idle>{% icon 'download' %}{% translate "Vom Server laden" %}</button>
+  </form>
+</section>
+{% endif %}
+
+{% if not connected %}
 <div class="grid lg:grid-cols-2 gap-4 items-start mb-4">
   <section class="surface p-5">
     <h2 class="section-title mb-3">{% translate "Neue Sicherung erstellen" %}</h2>
@@ -31,18 +101,19 @@
     <p id="b-upload-text" class="hidden text-[13px] mt-3" aria-live="polite"></p>
   </section>
 </div>
+{% endif %}
 
 <section class="surface overflow-x-auto">
-  <h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Sicherungen auf diesem Server" %}</h2>
+  <h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% if on_client %}{% translate "Sicherungen in dieser Datenbank" %}{% else %}{% translate "Sicherungen auf diesem Server" %}{% endif %}</h2>
   <table class="data-table"><thead><tr><th>{% translate "Datei" %}</th><th>{% translate "Stand" %}</th><th>{% translate "Größe" %}</th><th>{% translate "Inhalt" %}</th><th></th></tr></thead><tbody>
   {% for c in containers %}<tr>
-    <td><span class="mono text-[12px]">{{ c.name }}</span>{% if c.details.origin == 'automatisch' %} <span class="badge">{% translate "Vor dem Einspielen" %}</span>{% elif c.details.origin == 'hochgeladen' or not c.details %} <span class="badge">{% translate "Hochgeladen" %}</span>{% endif %}</td>
+    <td><span class="mono text-[12px]">{{ c.name }}</span>{% if c.details.origin == 'automatisch' %} <span class="badge">{% translate "Vor dem Einspielen" %}</span>{% elif c.details.origin == 'server' %} <span class="badge">{% translate "Vom Server" %}</span>{% elif c.details.origin == 'hochgeladen' or not c.details %} <span class="badge">{% translate "Hochgeladen" %}</span>{% endif %}</td>
     <td class="whitespace-nowrap">{{ c.created|date:"d.m.Y H:i" }}</td>
     <td class="whitespace-nowrap">{{ c.size|filesizeformat }}</td>
     <td class="soft">{% if c.details %}{% blocktranslate trimmed with school=c.details.school people=c.details.people files=c.details.files %}{{ school }}: {{ people }} Personen, {{ files }} Dateien{% endblocktranslate %}{% else %}{% translate "Noch nicht geprüft" %}{% endif %}</td>
     <td class="text-right whitespace-nowrap">
       <a class="btn btn-sm" href="{% url 'backup_download' c.name %}" download>{% icon 'download' %}{% translate "Herunterladen" %}</a>
-      <button class="btn btn-sm" data-restore="{{ c.name }}" data-while-idle>{% icon 'archive-restore' %}{% translate "Einspielen" %}</button>
+      {% if not connected %}<button class="btn btn-sm" data-restore="{{ c.name }}" data-while-idle>{% icon 'archive-restore' %}{% translate "Einspielen" %}</button>{% endif %}
       <form method="post" action="{% url 'backup_delete' %}" class="inline">{% csrf_token %}<input type="hidden" name="name" value="{{ c.name }}"><button class="btn btn-sm btn-ghost btn-icon btn-danger" aria-label="{% translate 'Löschen' %}" title="{% translate 'Löschen' %}" data-confirm="{% translate 'Diese Sicherung vom Server löschen?' %}" data-while-idle>{% icon 'trash' %}</button></form>
     </td></tr>
   {% empty %}<tr><td colspan="5" class="muted text-center py-6">{% translate "Noch keine Sicherungen." %}</td></tr>{% endfor %}

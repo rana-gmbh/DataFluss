@@ -131,3 +131,11 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-so
 .module-choices .check { margin-top: 4px; }
 .welcome ul { margin: 6px 0 12px; padding-left: 18px; display: grid; gap: 6px; }
 .welcome p { margin: 0 0 10px; }
+
+.backup-flag {
+  color: #b45309;
+  font-weight: 600;
+}
+@media (prefers-color-scheme: dark) {
+  .backup-flag { color: #fbbf24; }
+}

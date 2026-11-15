@@ -46,6 +46,19 @@ Then create the first account:
 docker compose exec app python manage.py create_admin yourname
 ```
 
+## Moving a database from the app to the server
+
+A database that started in the desktop app can become the server's data, with all its accounts,
+pictures and documents (DataFluss 1.1 on both sides). Create the first account on the new server as
+above and sign in once in the browser to set up its second factor. Then, in the app, open the database
+and go to **Verwaltung → Sicherung → Auf einen Server übertragen**: the server's address, that account
+with its code, and a password for the backup. The app packs the database, uploads it and the server
+restores it. Afterwards the server has the database's accounts; connect the app anew with
+**Mit Server verbinden** and work with the server from then on.
+
+If the server holds data already, the app names it and asks before replacing it; the server keeps a
+backup of its previous state under **Sicherung**, with the same password.
+
 To update: `docker compose pull && docker compose up -d`. The database migrates when the new version
 starts, after a backup of it in `/data/backups`. Update the server before the desktop apps: computers
 only sync with a server on the same version.

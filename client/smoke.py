@@ -5,7 +5,7 @@
 
 It talks to the sidecar exactly as the shell does (frames over stdin and stdout, see sidecar.py):
 1. a demo database: sign in as IT and open the main pages,
-2. a backup of it, restored into a new database: sign in and open the same pages,
+2. a backup of it, restored into a new database: sign in, open the same pages, and run its regular backup,
 3. a new, empty database: the sign-in page answers and the first account must set up 2FA.
 
 Everything happens in a temporary folder that is removed afterwards. Exit code 0 means all passed.
@@ -34,20 +34,24 @@ PREMIUM_PAGES = ["/unterricht/", "/unterricht/alle/", "/daz/", "/kindergarten/"]
 
 
 def premium_installed():
-    modules = os.environ.get("DATAFLUSS_MODULES")
-    return modules is None or "premium" in modules.replace(" ", "").split(",")
+    """Whether the sidecar loads the premium module: from a module's source or bundle (schule/modules.py)."""
+    sys.path.insert(0, str(ROOT))
+    from schule import modules
+
+    return modules.installed("premium")
 
 
 class Sidecar:
     def __init__(self, command, db_dir, keys, task=None, env=None):
         # REQUIRE_2FA as in the built app, whatever a developer's .env says.
         extra = env
-        env = {**os.environ, "SCHULE_DB_DIR": str(db_dir), "PYTHONPATH": str(ROOT), "REQUIRE_2FA": "1", **keys}
+        env = {**os.environ, "SCHULE_DB_DIR": str(db_dir), "PYTHONPATH": str(ROOT), "REQUIRE_2FA": "1",
+               "SCHULE_CLIENT_DB_NAME": db_dir.name, **keys}
         env.pop("DJANGO_SETTINGS_MODULE", None)
         if task:
             env["SIDECAR_TASK"] = task
-        if task == "demo":
-            env["ALLOW_DEMO_DATA"] = "1"  # as the shell sets it for demo databases (main.rs)
+        # As the shell sets it, only for demo databases (main.rs), whatever a developer's .env says.
+        env["ALLOW_DEMO_DATA"] = "1" if task == "demo" else ""
         env.update(extra or {})
         self.log = open(db_dir.parent / f"{db_dir.name}.log", "wb")
         self.proc = subprocess.Popen(command, cwd=ROOT, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.log)
@@ -117,6 +121,11 @@ class Sidecar:
                 location = value
         return header["status"], content, location
 
+    def page_token(self, path):
+        """The CSRF token a page carries, for a form posted from it."""
+        _, page, _ = self.request("GET", path)
+        return re.search(rb'name="csrf-token" content="([^"]+)"|name="csrfmiddlewaretoken" value="([^"]+)"', page).group(0).split(b'"')[3].decode()
+
     def sign_in(self, username, password):
         status, page, _ = self.request("GET", "/anmelden/")
         check("sign-in page", status, 200)
@@ -159,6 +168,27 @@ def open_pages(sidecar, label):
         _, page, _ = sidecar.request("GET", "/unterricht/")
         check(f"{label}: the bundle's stylesheet is linked", b"/static/css/premium.css" in page, True)
         check(f"{label}: the bundle's stylesheet is served", sidecar.request("GET", "/static/css/premium.css")[0], 200)
+
+
+def regular_backup(sidecar, folder, password):
+    """The backup plan of a database of its own (archive/plan.py): set up on the page, then run now."""
+    folder.mkdir()
+    token = sidecar.page_token("/einstellungen/sicherung/")
+    form = {"folder": str(folder), "every": "day", "keep": "7", "password": password, "repeat": password, "csrfmiddlewaretoken": token}
+    status, body, _ = sidecar.request("POST", "/einstellungen/sicherung/plan/", form)
+    check("regular backup: set up", status, 200)
+    if status != 200:
+        print(f"     {body.decode(errors='replace')[:300]}")
+    status, _, _ = sidecar.request("POST", "/einstellungen/sicherung/plan/jetzt/", {"csrfmiddlewaretoken": token})
+    check("regular backup: started", status, 200)
+    for _ in range(240):
+        _, body, _ = sidecar.request("GET", "/einstellungen/sicherung/status/")
+        job = json.loads(body or b"{}")
+        if job.get("state") != "running":
+            break
+        time.sleep(0.5)
+    check("regular backup: done", job.get("state"), "done")
+    check("regular backup: one file in the folder", len(list(folder.glob("*.svbackup"))), 1)
 
 
 def make_backup(python, db_dir, keys, target, password):
@@ -208,6 +238,7 @@ def main():
         status, location = sidecar.sign_in("it", logins["it"])
         check("restore: IT signs in", (status, location), (302, "/"))
         open_pages(sidecar, "restore")
+        regular_backup(sidecar, work / "regular", password)
         sidecar.close()
 
         # The premium module missing: a database with its data stays closed and unchanged, a backup with it is refused.
@@ -237,7 +268,6 @@ def main():
         check("new: first account must set up 2FA", (status, location), (302, "/anmelden/zwei-faktor/einrichten/"))
         sidecar.close()
 
-      -start
         # 4. A new database that leaves out the premium module (the start screen's wizard)
         if premium_installed():
             plain_dir = work / "plain"
@@ -251,7 +281,6 @@ def main():
             check("without premium in the database: no Unterricht in the menu", (status, b'href="/unterricht/"' in page), (200, False))
             check("without premium in the database: DaZ is closed", sidecar.request("GET", "/daz/")[0], 403)
             sidecar.close()
-      -end
         finished = True
     finally:
         if finished and not failures:

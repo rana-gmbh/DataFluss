@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-15 21:21+0100\n"
+"POT-Creation-Date: 2026-11-15 22:44+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -61,6 +61,13 @@ msgid "BACKUP_PASSWORD fehlt oder hat weniger als %(n)s Zeichen."
 msgstr "BACKUP_PASSWORD 缺失或少于 %(n)s 个字符。"
 
 msgid ""
+"Diese Datenbank ist eine Kopie vom Server. Gesichert wird auf dem Server."
+msgstr "此数据库是服务器的副本。备份在服务器上进行。"
+
+msgid "Eine Demo mit erfundenen Personen braucht keine Sicherung."
+msgstr "包含虚构人员的演示无需备份。"
+
+msgid ""
 "Die automatische Sicherung ist nicht eingerichtet: BACKUP_PASSWORD fehlt."
 msgstr "自动备份尚未设置：缺少 BACKUP_PASSWORD。"
 
@@ -93,8 +100,7 @@ msgstr "%(day)s 的备份仅存于此服务器，异地副本失败：%(problem)
 msgid ""
 "Letzte automatische Sicherung: %(day)s, geprüft. Sie liegt nur auf diesem "
 "Server, weil keine Kopie außer Haus eingerichtet ist."
-msgstr ""
-"最近一次自动备份：%(day)s，已校验。由于未设置异地副本，备份仅存于此服务器。"
+msgstr "最近一次自动备份：%(day)s，已校验。由于未设置异地副本，备份仅存于此服务器。"
 
 #, python-format
 msgid "Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
@@ -105,6 +111,63 @@ msgstr "正在传输副本"
 
 msgid "Die Kopie ist nicht vollständig angekommen."
 msgstr "副本未完整接收。"
+
+msgid "Bitte einen Ordner wählen."
+msgstr "请选择一个文件夹。"
+
+msgid "Bitte angeben, wie oft gesichert werden soll."
+msgstr "请指定备份频率。"
+
+msgid "Bitte angeben, wie viele Sicherungen bleiben sollen."
+msgstr "请指定保留多少份备份。"
+
+#, python-format
+msgid "Das Passwort braucht mindestens %(n)s Zeichen."
+msgstr "密码至少需要 %(n)s 个字符。"
+
+msgid "Bitte ein Passwort für die Sicherungen festlegen."
+msgstr "请为备份设置密码。"
+
+#, python-format
+msgid ""
+"Der Ordner %(folder)s ist nicht erreichbar. Ist das Laufwerk angeschlossen?"
+msgstr "无法访问文件夹 %(folder)s。驱动器是否已连接？"
+
+#, python-format
+msgid "In den Ordner %(folder)s darf DataFluss nicht schreiben."
+msgstr "DataFluss 无权写入文件夹 %(folder)s。"
+
+msgid ""
+"Bitte einen Ordner außerhalb der Datenbank wählen, am besten auf einem "
+"anderen Laufwerk."
+msgstr "请选择数据库以外的文件夹，最好在另一个驱动器上。"
+
+msgid "Die Sicherung liegt geprüft im gewählten Ordner."
+msgstr "备份已校验，位于所选文件夹中。"
+
+msgid ""
+"Für diese Datenbank ist keine regelmäßige Sicherung eingerichtet. Geht dieser"
+" Computer verloren, sind die Daten weg."
+msgstr "此数据库未设置定期备份。如果这台电脑丢失，数据也将丢失。"
+
+#, python-format
+msgid "Die Sicherung vom %(day)s ist fehlgeschlagen: %(problem)s"
+msgstr "%(day)s 的备份失败：%(problem)s"
+
+msgid ""
+"Die regelmäßige Sicherung ist eingerichtet. Die erste entsteht in den "
+"nächsten Minuten."
+msgstr "定期备份已设置。第一份备份将在几分钟内生成。"
+
+#, python-format
+msgid ""
+"Die letzte Sicherung ist vom %(day)s. Sie entsteht nur, während die Datenbank"
+" geöffnet ist."
+msgstr "最近一次备份是 %(day)s。只有在数据库打开时才会备份。"
+
+#, python-format
+msgid "Letzte Sicherung: %(day)s, geprüft, in %(folder)s."
+msgstr "最近一次备份：%(day)s，已校验，位于 %(folder)s。"
 
 #, python-format
 msgid "Sicherung abgebrochen bei %(name)s."
@@ -127,11 +190,9 @@ msgstr "此备份来自较新的版本。请先更新本系统。"
 #, python-format
 msgid ""
 "Diese Sicherung enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
-"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem "
-"Modul einspielen."
-msgstr ""
-"此备份包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。只能在带有"
-"该模块的 DataFluss 版本中恢复。"
+"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem Modul"
+" einspielen."
+msgstr "此备份包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。只能在带有该模块的 DataFluss 版本中恢复。"
 
 msgid "Diese Sicherungsdatei enthält ungültige Einträge."
 msgstr "此备份文件包含无效条目。"
@@ -142,12 +203,100 @@ msgstr "正在恢复数据库"
 msgid "Datenbank wird angepasst"
 msgstr "正在更新数据库结构"
 
+msgid ""
+"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht "
+"es die Rolle IT."
+msgstr "此账户无权在服务器上恢复备份。这需要 IT 角色。"
+
+msgid "Ungültige Anfrage."
+msgstr "无效请求。"
+
+msgid ""
+"Auf dem Server läuft gerade eine Aktualisierung. Bitte später noch einmal."
+msgstr "服务器正在更新。请稍后再试。"
+
+msgid ""
+"Auf dem Server läuft gerade ein Sicherungsvorgang. Bitte später noch einmal."
+msgstr "服务器正在执行备份任务。请稍后再试。"
+
+msgid "Die Übertragung ist abgelaufen. Bitte neu beginnen."
+msgstr "传输已过期。请重新开始。"
+
+msgid "Auf dem Server ist nicht genug Platz für diese Datenbank."
+msgstr "服务器空间不足，无法容纳此数据库。"
+
+msgid ""
+"Auf dem Server liegen inzwischen Daten. Bitte die Übertragung neu beginnen."
+msgstr "服务器上现已有数据。请重新开始传输。"
+
+msgid "Dieses Gerät ist unbekannt oder getrennt."
+msgstr "此设备未知或已断开。"
+
+#, python-format
+msgid "Das Passwort der Sicherung braucht mindestens %(n)s Zeichen."
+msgstr "备份密码至少需要 %(n)s 个字符。"
+
+msgid "Die Anfrage ist abgelaufen. Bitte neu beginnen."
+msgstr "请求已过期。请重新开始。"
+
+msgid "Die Sicherung ist noch nicht fertig."
+msgstr "备份尚未完成。"
+
+msgid "Unter dieser Adresse antwortet kein DataFluss-Server."
+msgstr "此地址没有 DataFluss 服务器响应。"
+
+#, python-format
+msgid ""
+"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version "
+"1.1 oder neuer."
+msgstr "服务器的 DataFluss 版本为 %(version)s。传输需要 1.1 或更高版本。"
+
+msgid "Wird auf den Server übertragen"
+msgstr "正在传输到服务器"
+
+msgid "Server"
+msgstr "服务器"
+
+#, python-format
+msgid "Der Server konnte die Datenbank nicht einspielen: %(reason)s"
+msgstr "服务器无法恢复数据库：%(reason)s"
+
+msgid ""
+"Die Datenbank ist auf dem Server. Arbeiten Sie ab jetzt mit dem Server: "
+"Änderungen in dieser Datenbank auf dem Computer erreichen ihn nicht mehr."
+msgstr "数据库已在服务器上。从现在起请使用服务器：在这台电脑上对此数据库的更改不会再同步到服务器。"
+
+#, python-format
+msgid "Der Server antwortet mit %(code)s."
+msgstr "服务器返回 %(code)s。"
+
+#, python-format
+msgid "Der Server ist nicht erreichbar (%(reason)s)."
+msgstr "无法连接服务器（%(reason)s）。"
+
+msgid "Diese Datenbank ist mit keinem Server verbunden."
+msgstr "此数据库未连接到任何服务器。"
+
+#, python-format
+msgid "Der Server konnte keine Sicherung erstellen: %(reason)s"
+msgstr "服务器无法创建备份：%(reason)s"
+
+msgid "Sicherung wird geladen"
+msgstr "正在下载备份"
+
+msgid ""
+"Die vollständige Sicherung des Servers liegt in der Liste unten. Bitte "
+"herunterladen und an einem anderen Ort aufbewahren."
+msgstr "服务器的完整备份在下方列表中。请下载并保存在其他地方。"
+
 msgid "Es läuft bereits ein Sicherungsvorgang."
 msgstr "已有备份操作正在进行。"
 
-#, python-format
-msgid "Das Passwort braucht mindestens %(n)s Zeichen."
-msgstr "密码至少需要 %(n)s 个字符。"
+msgid "Täglich"
+msgstr "每天"
+
+msgid "Wöchentlich"
+msgstr "每周"
 
 msgid "Die beiden Passwörter stimmen nicht überein."
 msgstr "两次输入的密码不一致。"
@@ -164,6 +313,19 @@ msgstr "备份进行期间无法删除任何内容。"
 
 msgid "Die Sicherung wurde gelöscht."
 msgstr "备份已删除。"
+
+msgid "Nur für eine eigene Datenbank auf diesem Computer."
+msgstr "仅适用于这台电脑上的独立数据库。"
+
+msgid "Bitte zuerst die regelmäßige Sicherung einrichten."
+msgstr "请先设置定期备份。"
+
+msgid ""
+"Die regelmäßige Sicherung ist ausgeschaltet. Die Dateien im Ordner bleiben."
+msgstr "定期备份已关闭。文件夹中的文件将保留。"
+
+msgid "Nur für eine Datenbank, die mit einem Server verbunden ist."
+msgstr "仅适用于已连接到服务器的数据库。"
 
 msgid "Zwei-Faktor eingerichtet"
 msgstr "双重验证已设置"
@@ -353,8 +515,7 @@ msgid ""
 "Version fehlt. Sie bleibt unverändert und lässt sich mit einer DataFluss-"
 "Version mit diesem Modul öffnen."
 msgstr ""
-"此数据库包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。数据库保"
-"持不变，可用带有该模块的 DataFluss 版本打开。"
+"此数据库包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。数据库保持不变，可用带有该模块的 DataFluss 版本打开。"
 
 msgid ""
 "Voller Zugriff, inklusive Masken, Vorlagen, Benutzer und Export von "
@@ -422,8 +583,8 @@ msgid "Abgleich"
 msgstr "同步比对"
 
 msgid ""
-"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung "
-"gehen nicht verloren, sie folgen später."
+"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung gehen"
+" nicht verloren, sie folgen später."
 msgstr "显示与服务器的同步是否正在进行。离线时的修改不会丢失，稍后会同步。"
 
 msgid "Ihr Konto"
@@ -465,8 +626,7 @@ msgstr "无法连接 Coolify。未做任何更改。"
 msgid ""
 "Coolify hat unerwartet geantwortet. Bitte dort unter Deployments prüfen, ob "
 "die Aktualisierung gestartet ist."
-msgstr ""
-"Coolify 返回了意外的响应。请在 Coolify 的 Deployments 中检查更新是否已开始。"
+msgstr "Coolify 返回了意外的响应。请在 Coolify 的 Deployments 中检查更新是否已开始。"
 
 msgid "Es gibt nichts zurückzusetzen."
 msgstr "没有可回滚的内容。"
@@ -494,8 +654,8 @@ msgstr "数据库已回滚到更新前的状态。"
 
 #, python-format
 msgid ""
-"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung "
-"%(name)s von Hand einspielen."
+"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung %(name)s"
+" von Hand einspielen."
 msgstr "数据库无法回滚。请手动恢复备份 %(name)s。"
 
 #, python-format
@@ -507,11 +667,9 @@ msgstr "数据库正在回滚。如果几分钟后仍显示此消息，请手动
 #, python-format
 msgid ""
 "Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand "
-"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
-"geht dabei verloren."
-msgstr ""
-"新版本已更改数据库。可将其回滚到 %(when)s 的状态。此后保存的所有内容都将丢"
-"失。"
+"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, geht"
+" dabei verloren."
+msgstr "新版本已更改数据库。可将其回滚到 %(when)s 的状态。此后保存的所有内容都将丢失。"
 
 #, python-format
 msgid ""
@@ -519,8 +677,7 @@ msgid ""
 "verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit "
 "„Mit Server verbinden“ eine eigene Datenbank anlegen."
 msgstr ""
-"此 Mac 上只能登录连接此数据库的账户（%(owners)s）。如需使用 %(name)s，请在启"
-"动界面通过“连接到服务器”创建一个单独的数据库。"
+"此 Mac 上只能登录连接此数据库的账户（%(owners)s）。如需使用 %(name)s，请在启动界面通过“连接到服务器”创建一个单独的数据库。"
 
 msgid "Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen."
 msgstr "失败次数过多。请 15 分钟后重试。"
@@ -566,6 +723,9 @@ msgstr "添加人员或从文件导入"
 
 msgid "Nächtliche Sicherung einrichten"
 msgstr "设置夜间备份"
+
+msgid "Regelmäßige Sicherung einrichten"
+msgstr "设置定期备份"
 
 msgid "Konten für weitere Personen anlegen"
 msgstr "为其他人员创建账户"
@@ -1115,14 +1275,6 @@ msgid "Dieses Gerät wurde getrennt."
 msgstr "此设备已断开连接。"
 
 #, python-format
-msgid "Der Server antwortet mit %(code)s."
-msgstr "服务器返回 %(code)s。"
-
-#, python-format
-msgid "Der Server ist nicht erreichbar (%(reason)s)."
-msgstr "无法连接服务器（%(reason)s）。"
-
-#, python-format
 msgid "Das Modul vom Server ließ sich nicht prüfen (%(reason)s)."
 msgstr "无法验证来自服务器的模块（%(reason)s）。"
 
@@ -1130,8 +1282,7 @@ msgstr "无法验证来自服务器的模块（%(reason)s）。"
 msgid ""
 "Das Modul %(names)s wurde vom Server geladen. Bitte noch einmal verbinden, "
 "mit einem neuen Code aus der Authenticator-App."
-msgstr ""
-"已从服务器加载模块 %(names)s。请使用身份验证器应用中的新验证码再次连接。"
+msgstr "已从服务器加载模块 %(names)s。请使用身份验证器应用中的新验证码再次连接。"
 
 #, python-format
 msgid ""
@@ -1142,8 +1293,7 @@ msgstr "服务器使用模块 %(names)s，而当前 DataFluss 版本没有该模
 msgid ""
 "Der Server hat DataFluss %(server)s, dieser Computer %(here)s. Bitte beide "
 "auf dieselbe Version bringen."
-msgstr ""
-"服务器为 DataFluss %(server)s，本电脑为 %(here)s。请将两者更新到同一版本。"
+msgstr "服务器为 DataFluss %(server)s，本电脑为 %(here)s。请将两者更新到同一版本。"
 
 msgid "Daten werden übertragen"
 msgstr "正在传输数据"
@@ -1155,8 +1305,7 @@ msgstr "正在加载图片和文档"
 msgid ""
 "Dieser Computer hat DataFluss %(theirs)s, der Server %(ours)s. Bitte beide "
 "auf dieselbe Version bringen."
-msgstr ""
-"本电脑为 DataFluss %(theirs)s，服务器为 %(ours)s。请将两者更新到同一版本。"
+msgstr "本电脑为 DataFluss %(theirs)s，服务器为 %(ours)s。请将两者更新到同一版本。"
 
 msgid ""
 "Computer und Server haben verschiedene Versionen. Bitte beide aktualisieren."
@@ -1164,12 +1313,10 @@ msgstr "电脑和服务器的版本不同。请更新两者。"
 
 msgid ""
 "Der Server wurde aus einer Sicherung wiederhergestellt. Diese Kopie gleicht "
-"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen "
-"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server "
+"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen notieren,"
+" die Datenbank auf diesem Computer entfernen und neu mit dem Server "
 "verbinden."
-msgstr ""
-"服务器已从备份恢复，因此此副本不再同步：请记下尚未上传的修改，从本电脑删除该"
-"数据库，然后重新连接服务器。"
+msgstr "服务器已从备份恢复，因此此副本不再同步：请记下尚未上传的修改，从本电脑删除该数据库，然后重新连接服务器。"
 
 msgid "Kein Gerät angemeldet."
 msgstr "未注册设备。"
@@ -1194,12 +1341,6 @@ msgstr "请先登录网页版并设置双重验证登录。"
 
 msgid "Der Code aus der Authenticator-App stimmt nicht."
 msgstr "身份验证器应用中的验证码不正确。"
-
-msgid "Ungültige Anfrage."
-msgstr "无效请求。"
-
-msgid "Dieses Gerät ist unbekannt oder getrennt."
-msgstr "此设备未知或已断开。"
 
 msgid "Dieses Modul gibt der Server nicht heraus."
 msgstr "服务器不提供此模块。"
@@ -1235,9 +1376,6 @@ msgstr "%(kind)s（已删除）"
 msgid "(leer)"
 msgstr "（空）"
 
-msgid "Server"
-msgstr "服务器"
-
 #, python-format
 msgid ""
 "%(name)s ist getrennt. Beim nächsten Kontakt löscht der Mac seine Kopie."
@@ -1272,8 +1410,8 @@ msgid "Hier ist etwas schiefgegangen"
 msgstr "出错了"
 
 msgid ""
-"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert "
-"haben, prüfen Sie bitte, ob es angekommen ist."
+"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert haben,"
+" prüfen Sie bitte, ob es angekommen ist."
 msgstr "已为 IT 记录此错误。如果您刚才保存了内容，请检查是否已保存成功。"
 
 msgid "Zur Startseite"
@@ -1284,18 +1422,134 @@ msgid ""
 "Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
 "einem anderen Ort auf. Sie lässt sich in jeder Installation der "
 "Schulverwaltung einspielen."
-msgstr ""
-"备份包含整个数据库（含所有账号）以及所有图片和文档。请下载该文件并存放在其他"
-"地方。它可以恢复到任何一个学校管理系统中。"
+msgstr "备份包含整个数据库（含所有账号）以及所有图片和文档。请下载该文件并存放在其他地方。它可以恢复到任何一个学校管理系统中。"
 
-msgid "Neue Sicherung erstellen"
-msgstr "新建备份"
+msgid "Regelmäßige Sicherung"
+msgstr "定期备份"
+
+msgid ""
+"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem "
+"anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
+"Datenbank geöffnet ist."
+msgstr "DataFluss 会把备份存放在您选择的文件夹中，最好位于另一个驱动器或云文件夹中。备份在数据库打开时进行。"
+
+msgid "Ordner"
+msgstr "文件夹"
+
+msgid "Ordner wählen …"
+msgstr "选择文件夹 …"
+
+msgid "Wie oft"
+msgstr "频率"
+
+msgid "Aufbewahren"
+msgstr "保留"
+
+#, python-format
+msgid "die letzte Sicherung"
+msgid_plural "die letzten %(n)s Sicherungen"
+msgstr[0] "最近 %(n)s 份备份"
+
+msgid "Neues Passwort (leer lassen: unverändert)"
+msgstr "新密码（留空则不变）"
+
+msgid "Passwort für die Sicherungen"
+msgstr "备份密码"
+
+msgid "Passwort wiederholen"
+msgstr "再次输入密码"
+
+#, python-format
+msgid ""
+"Mindestens %(n)s Zeichen. DataFluss bewahrt das Passwort verschlüsselt auf, "
+"damit die Sicherung von selbst entsteht. <strong>Notieren Sie es an einem "
+"anderen Ort:</strong> Geht dieser Computer verloren, öffnet nur dieses "
+"Passwort die Sicherung."
+msgstr ""
+"至少 %(n)s 个字符。DataFluss "
+"会加密保存密码，以便自动备份。<strong>请把密码记在别处：</strong>如果这台电脑丢失，只有此密码能打开备份。"
+
+msgid "Speichern"
+msgstr "保存"
+
+msgid "Einrichten"
+msgstr "设置"
+
+msgid "Jetzt sichern"
+msgstr "立即备份"
+
+msgid "Die regelmäßige Sicherung ausschalten? Die Dateien im Ordner bleiben."
+msgstr "关闭定期备份？文件夹中的文件将保留。"
+
+msgid "Ausschalten"
+msgstr "关闭"
+
+msgid "Auf einen Server übertragen"
+msgstr "传输到服务器"
+
+#, python-format
+msgid ""
+"Diese Datenbank wurde auf %(url)s übertragen. Arbeiten Sie ab jetzt mit dem "
+"Server: Änderungen hier erreichen ihn nicht mehr."
+msgstr "此数据库已传输到 %(url)s。从现在起请使用服务器：这里的更改不会再同步到服务器。"
+
+msgid "Mit dem Server verbinden …"
+msgstr "连接到服务器 …"
+
+msgid ""
+"Die ganze Datenbank mit allen Konten, Bildern und Dokumenten wird zu den "
+"Daten eines DataFluss-Servers. Danach gelten auf dem Server die Konten dieser"
+" Datenbank. Am besten auf einem neuen Server, auf dem bisher nur das erste "
+"IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss nach und "
+"legt vorher eine Sicherung davon auf dem Server ab."
+msgstr ""
+"整个数据库（包括所有账户、图片和文档）将成为 DataFluss 服务器的数据。之后服务器将使用此数据库的账户。最好用于只创建了第一个 IT "
+"账户的新服务器。如果服务器上已有数据，DataFluss 会先询问，并事先在服务器上保存一份备份。"
+
+msgid "Adresse des Servers"
+msgstr "服务器地址"
+
+msgid "Ihr Benutzername auf dem Server"
+msgstr "您在服务器上的用户名"
+
+msgid "Passwort"
+msgstr "密码"
+
+msgid "Code aus der Authenticator-App"
+msgstr "身份验证器应用中的验证码"
+
+msgid "Passwort für die übertragene Sicherung"
+msgstr "所传输备份的密码"
+
+#, python-format
+msgid ""
+"Mindestens %(n)s Zeichen. Es schützt die Datei unterwegs und die Sicherung, "
+"die der Server vorher von seinem bisherigen Stand anlegt."
+msgstr "至少 %(n)s 个字符。它保护传输中的文件，以及服务器事先为其原有数据创建的备份。"
+
+msgid "Übertragen …"
+msgstr "传输 …"
+
+msgid "Vollständige Sicherung vom Server"
+msgstr "来自服务器的完整备份"
+
+msgid ""
+"Diese Datenbank enthält nur, was Ihr Konto sehen darf. Die vollständige "
+"Sicherung des Servers mit allen Daten lässt sich hierher laden. Dafür noch "
+"einmal mit Passwort und Code bestätigen."
+msgstr "此数据库只包含您的账户有权查看的内容。可以在此下载包含全部数据的服务器完整备份。请再次用密码和验证码确认。"
+
+msgid "Ihr Passwort"
+msgstr "您的密码"
 
 msgid "Passwort für diese Sicherung"
 msgstr "此备份的密码"
 
-msgid "Passwort wiederholen"
-msgstr "再次输入密码"
+msgid "Vom Server laden"
+msgstr "从服务器下载"
+
+msgid "Neue Sicherung erstellen"
+msgstr "新建备份"
 
 #, python-format
 msgid ""
@@ -1303,8 +1557,7 @@ msgid ""
 "nirgends gespeichert. <strong>Ohne dieses Passwort lässt sich die Sicherung "
 "nicht mehr öffnen.</strong> Bewahren Sie es getrennt von der Datei auf."
 msgstr ""
-"至少 %(n)s 个字符。该密码用于加密文件，不会保存在任何地方。<strong>没有此密码"
-"将无法再打开备份。</strong>请将密码与文件分开保管。"
+"至少 %(n)s 个字符。该密码用于加密文件，不会保存在任何地方。<strong>没有此密码将无法再打开备份。</strong>请将密码与文件分开保管。"
 
 msgid "Sicherung erstellen"
 msgstr "创建备份"
@@ -1315,11 +1568,13 @@ msgstr "上传备份"
 msgid ""
 "Eine Sicherung von dieser oder einer anderen Installation. Das Hochladen "
 "ändert noch nichts, eingespielt wird erst in der Liste unten."
-msgstr ""
-"来自本系统或其他系统的备份。上传本身不会做任何更改，需在下方列表中执行恢复。"
+msgstr "来自本系统或其他系统的备份。上传本身不会做任何更改，需在下方列表中执行恢复。"
 
 msgid "Datei auswählen"
 msgstr "选择文件"
+
+msgid "Sicherungen in dieser Datenbank"
+msgstr "此数据库中的备份"
 
 msgid "Sicherungen auf diesem Server"
 msgstr "此服务器上的备份"
@@ -1338,6 +1593,9 @@ msgstr "内容"
 
 msgid "Vor dem Einspielen"
 msgstr "恢复前"
+
+msgid "Vom Server"
+msgstr "来自服务器"
 
 msgid "Hochgeladen"
 msgstr "已上传"
@@ -1383,9 +1641,7 @@ msgid ""
 "Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der "
 "Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
 "automatisch als Sicherung mit demselben Passwort abgelegt."
-msgstr ""
-"这也包括用户账户：之后将使用备份中的登录信息，所有人都会被退出登录。在此之"
-"前，当前数据会自动保存为一个使用相同密码的备份。"
+msgstr "这也包括用户账户：之后将使用备份中的登录信息，所有人都会被退出登录。在此之前，当前数据会自动保存为一个使用相同密码的备份。"
 
 #, python-format
 msgid "Zur Bestätigung %(word)s eingeben"
@@ -1467,8 +1723,8 @@ msgid "Für alle Sprachen"
 msgstr "所有语言"
 
 msgid ""
-"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben "
-"wurden, werden ersetzt."
+"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben wurden,"
+" werden ersetzt."
 msgstr "新名称将在所有地方生效。为单独语言设置的名称将被替换。"
 
 msgid "Entscheidung merken und nicht mehr fragen"
@@ -1622,9 +1878,6 @@ msgstr "仅为当前语言重命名"
 msgid "Immer für alle Sprachen umbenennen"
 msgstr "始终为所有语言重命名"
 
-msgid "Speichern"
-msgstr "保存"
-
 msgid "Anmelden"
 msgstr "登录"
 
@@ -1641,9 +1894,6 @@ msgstr "或"
 
 msgid "Benutzername"
 msgstr "用户名"
-
-msgid "Passwort"
-msgstr "密码"
 
 msgid ""
 "Bitte vergeben Sie jetzt ein eigenes Passwort. Das bisherige kennt auch die "
@@ -1690,20 +1940,16 @@ msgid "Sprachen, die in dieser Datenbank zur Auswahl stehen"
 msgstr "此数据库中可选的语言"
 
 msgid ""
-"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, "
-"oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene "
-"Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
-msgstr ""
-"选择了不再允许的语言的用户将看到德语；如果德语不被允许，则看到第一个允许的语"
-"言。用户自己的选择会被保留，一旦该语言重新被允许即再次生效。"
+"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, oder"
+" die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene Wahl "
+"bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
+msgstr "选择了不再允许的语言的用户将看到德语；如果德语不被允许，则看到第一个允许的语言。用户自己的选择会被保留，一旦该语言重新被允许即再次生效。"
 
 msgid ""
 "Ist nur eine Sprache erlaubt, verschwindet die Sprachauswahl, und beim "
 "Umbenennen wird nicht mehr nachgefragt: Die übrigen Sprachen behalten ihre "
 "Namen."
-msgstr ""
-"如果只允许一种语言，语言菜单将不再显示，重命名时也不再询问：其他语言保留各自"
-"的名称。"
+msgstr "如果只允许一种语言，语言菜单将不再显示，重命名时也不再询问：其他语言保留各自的名称。"
 
 msgid "Verbundene Macs übernehmen diese Auswahl beim nächsten Abgleich."
 msgstr "已连接的 Mac 会在下次同步时采用此设置。"
@@ -1792,16 +2038,12 @@ msgid ""
 "Installiert die neueste Version von GitHub über Coolify. Vorher wird die "
 "Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit "
 "ist, alle können also normal weiterarbeiten."
-msgstr ""
-"通过 Coolify 从 GitHub 安装最新版本。安装前会先备份数据库。在新版本就绪之前，"
-"当前版本会继续运行，因此所有人都可以照常工作。"
+msgstr "通过 Coolify 从 GitHub 安装最新版本。安装前会先备份数据库。在新版本就绪之前，当前版本会继续运行，因此所有人都可以照常工作。"
 
 msgid ""
-"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
-"in <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
-msgstr ""
-"尚未设置与 Coolify 的连接。说明见 <span class=\"mono\">docs/INSTALL-"
-"COOLIFY.md</span>。"
+"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht in"
+" <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
+msgstr "尚未设置与 Coolify 的连接。说明见 <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>。"
 
 msgid "Installiert"
 msgstr "已安装"
@@ -1834,8 +2076,8 @@ msgstr "此版本新增内容"
 
 #, python-format
 msgid ""
-"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt "
-"und muss bei der nächsten Anmeldung geändert werden."
+"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt und"
+" muss bei der nächsten Anmeldung geändert werden."
 msgstr "<strong>%(name)s</strong> 的新密码。仅在此时显示，下次登录时必须修改。"
 
 msgid "Kopieren"
@@ -1889,15 +2131,10 @@ msgid ""
 "Passwort."
 msgstr "要为所有用户关闭双重验证登录吗？之后仅需密码即可登录。"
 
-msgid "Ausschalten"
-msgstr "关闭"
-
 msgid ""
 "Zur Anmeldung genügt das Passwort. Nur für Demos ohne echte Daten gedacht. "
 "Bereits eingerichtete Apps gelten nach dem Einschalten weiter."
-msgstr ""
-"登录时只需密码。仅适用于不含真实数据的演示。重新开启后，已设置的验证器应用仍"
-"然有效。"
+msgstr "登录时只需密码。仅适用于不含真实数据的演示。重新开启后，已设置的验证器应用仍然有效。"
 
 msgid "Einschalten"
 msgstr "开启"
@@ -2329,9 +2566,7 @@ msgid ""
 msgid_plural ""
 "Gelöschte Personen bleiben %(days)s Tage hier. Danach sind sie endgültig "
 "gelöscht, mit ihren Zugängen, Karten, Kommentaren und Dateien."
-msgstr[0] ""
-"已删除的人员会在此保留 %(days)s 天，之后将连同其账号、证件卡、评论和文件一起"
-"被永久删除。"
+msgstr[0] "已删除的人员会在此保留 %(days)s 天，之后将连同其账号、证件卡、评论和文件一起被永久删除。"
 
 msgid "Gelöscht am"
 msgstr "删除时间"
@@ -2519,8 +2754,7 @@ msgstr "新生入学登记"
 msgid ""
 "Eine Aufnahme in einem Durchgang: Daten eingeben, Zugänge erzeugen, danach "
 "Eltern, Gerät und Druck auf der Personenseite."
-msgstr ""
-"一次完成入学登记：录入数据、生成账号，然后在人员页面处理家长、设备和打印。"
+msgstr "一次完成入学登记：录入数据、生成账号，然后在人员页面处理家长、设备和打印。"
 
 msgid "Stammdaten"
 msgstr "基本信息"
@@ -2550,9 +2784,7 @@ msgstr "变为"
 msgid ""
 "%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das "
 "lässt sich nur über eine Sicherung zurücknehmen."
-msgstr ""
-"将 %(total)s 名学生升级，并将其中 %(leaving)s 名作为离校归档？此操作只能通过"
-"备份撤销。"
+msgstr "将 %(total)s 名学生升级，并将其中 %(leaving)s 名作为离校归档？此操作只能通过备份撤销。"
 
 msgid "Wechsel durchführen"
 msgstr "执行学年切换"
@@ -2645,10 +2877,9 @@ msgid "Abgleich prüfen"
 msgstr "检查同步冲突"
 
 msgid ""
-"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere "
-"Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen."
-msgstr ""
-"同一字段在两处被改成了不同的值。较新的更改已生效。请确认，或采用另一版本。"
+"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere Änderung"
+" gilt bereits. Bestätigen oder die andere Fassung übernehmen."
+msgstr "同一字段在两处被改成了不同的值。较新的更改已生效。请确认，或采用另一版本。"
 
 msgid "Datensatz und Feld"
 msgstr "记录和字段"
@@ -2705,8 +2936,7 @@ msgstr "断开连接"
 msgid ""
 "Noch kein Mac verbunden. Ein Mac verbindet sich in der App über „Mit Server "
 "verbinden“, mit dem eigenen Konto."
-msgstr ""
-"尚未连接任何 Mac。在 App 中通过“连接服务器”并使用自己的账号即可连接 Mac。"
+msgstr "尚未连接任何 Mac。在 App 中通过“连接服务器”并使用自己的账号即可连接 Mac。"
 
 msgid "Nur auf dem Server"
 msgstr "仅限服务器"
@@ -2719,17 +2949,15 @@ msgid ""
 "Faktor-Anmeldung, die Einstellungen der Schule, Sicherungen und Updates "
 "verwaltet der Server. Eine Änderung hier würde bei der nächsten "
 "Synchronisation wieder ersetzt."
-msgstr ""
-"此数据库已连接到服务器。账号、密码、双重验证登录、学校设置、备份和更新均由服"
-"务器管理。在此处所做的更改会在下次同步时被覆盖。"
+msgstr "此数据库已连接到服务器。账号、密码、双重验证登录、学校设置、备份和更新均由服务器管理。在此处所做的更改会在下次同步时被覆盖。"
 
 #, python-format
 msgid ""
 "Bitte dafür die Schulverwaltung im Browser öffnen: <a class=\"underline\" "
 "href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>."
 msgstr ""
-"请在浏览器中打开学校管理系统进行此操作：<a class=\"underline\" "
-"href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>。"
+"请在浏览器中打开学校管理系统进行此操作：<a class=\"underline\" href=\"%(url)s\" target=\"_blank\""
+" rel=\"noopener\">%(url)s</a>。"
 
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "请在浏览器中打开学校管理系统进行此操作。"
@@ -2738,8 +2966,8 @@ msgid "Importieren"
 msgstr "导入"
 
 msgid ""
-"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
-"etwas gespeichert wird."
+"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor etwas"
+" gespeichert wird."
 msgstr "CSV 或 Excel。您先对应各列，并在保存前查看检查结果。"
 
 msgid "In welchen Bereich?"
@@ -2833,8 +3061,8 @@ msgstr "检查"
 
 #, python-format
 msgid ""
-"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern "
-"vorhandene Werte nicht."
+"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern vorhandene"
+" Werte nicht."
 msgstr "%(filename)s。尚未保存任何内容。空单元格不会更改现有值。"
 
 msgid "Geändert"

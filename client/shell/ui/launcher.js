@@ -38,6 +38,18 @@ function when(seconds) {
   return `zuletzt ${new Date(seconds * 1000).toLocaleDateString("de-DE")}`;
 }
 
+// A database of its own says when its regular backup (archive/plan.py) is missing or overdue.
+const BACKUP_DAYS = { day: 1, week: 7 };
+
+function backupWarning(backup) {
+  if (!backup) return "";
+  if (!backup.every) return "Keine Sicherung eingerichtet";
+  if (backup.state === "failed") return "Letzte Sicherung fehlgeschlagen";
+  if (!backup.ok_at) return "";
+  const days = (Date.now() - Date.parse(backup.ok_at)) / 86400000;
+  return days > BACKUP_DAYS[backup.every] + 1 ? `Sicherung seit ${Math.floor(days)} Tagen überfällig` : "";
+}
+
 function size(bytes) {
   return bytes > 1e9 ? `${(bytes / 1e9).toFixed(1)} GB` : `${Math.max(1, Math.round(bytes / 1e6))} MB`;
 }
@@ -92,6 +104,14 @@ function render() {
     const host = db.kind === "connected" && db.server ? db.server.replace(/^https?:\/\//, "") : "";
     details.textContent = [db.school && db.school !== db.name ? db.school : "", host, when(db.last_opened), size(db.size)].filter(Boolean).join(" · ");
     meta.append(details);
+    const warning = backupWarning(db.backup);
+    if (warning) {
+      const flag = document.createElement("span");
+      flag.className = "backup-flag";
+      flag.textContent = warning;
+      flag.title = "Die regelmäßige Sicherung lässt sich in der Datenbank unter Verwaltung → Sicherung einrichten.";
+      meta.append(flag);
+    }
     text.append(name, meta);
     const open = document.createElement("button");
     open.className = "btn open-btn";
@@ -304,7 +324,7 @@ async function create() {
   }
 }
 
-function startConnect() {
+function startConnect(url = "") {
   openSheet("Mit Server verbinden", {
     template: "#t-connect",
     actions: [
@@ -312,6 +332,10 @@ function startConnect() {
       { label: "Verbinden", kind: "primary", submit: true, run: connect },
     ],
   });
+  if (url) {
+    field("url").value = url;
+    field("username").focus();
+  }
 }
 
 async function connect() {
@@ -552,6 +576,8 @@ listen("launcher-action", ({ payload }) => {
   if (payload === "welcome") showWelcome();
 });
 listen("databases-changed", refresh);
+// After a database went to a server (archive/transfer.py), the copy to work with is one connection away.
+listen("launcher-connect", ({ payload }) => { if (!working) startConnect(payload.url || ""); });
 listen("database-wiped", ({ payload }) => {
   refresh();
   const text = document.createElement("p");

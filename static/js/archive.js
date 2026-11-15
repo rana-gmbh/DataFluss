@@ -27,8 +27,10 @@
       result.textContent = job.message || FINISHED[job.kind];
     }
     document.querySelectorAll("[data-while-idle]").forEach((el) => { el.disabled = running; });
-    $("b-upload").disabled = running || uploading;
-    $("b-upload-button").classList.toggle("opacity-50", running || uploading);
+    if ($("b-upload")) {
+      $("b-upload").disabled = running || uploading;
+      $("b-upload-button").classList.toggle("opacity-50", running || uploading);
+    }
   }
 
   async function poll() {
@@ -59,7 +61,80 @@
     setTimeout(poll, 1000);
   }
 
-  $("b-create").addEventListener("submit", async (e) => {
+  const on = (id, event, handler) => { const el = $(id); if (el) el.addEventListener(event, handler); };
+
+  // The regular backup of a database in the desktop client (archive/plan.py).
+  on("b-plan", "submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const res = await App.post(`${BASE}plan/`, { folder: form.folder.value, every: form.every.value, keep: form.keep.value, password: form.password.value, repeat: form.repeat.value });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      App.toast(body.error || gettext("Das hat nicht geklappt."), { ms: 6000 });
+      return;
+    }
+    location.reload();
+  });
+
+  on("b-plan-run", "click", async () => {
+    const res = await App.post(`${BASE}plan/jetzt/`, {});
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      App.toast(body.error || gettext("Das hat nicht geklappt."), { ms: 6000 });
+      return;
+    }
+    started(body);
+  });
+
+  // The shell of the desktop client opens its folder dialog (client/shell/src-tauri/src/main.rs).
+  on("b-plan-pick", "click", async () => {
+    const res = await fetch("/__client/pick-folder", { method: "POST" }).catch(() => null);
+    if (!res?.ok) return;
+    const { path } = await res.json();
+    if (path) $("b-plan-folder").value = path;
+  });
+
+  async function postForm(url, data) {
+    const res = await App.post(url, data);
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) App.toast(body.error || gettext("Das hat nicht geklappt."), { ms: 8000 });
+    return res.ok ? body : null;
+  }
+
+  // Moving this database to a server (archive/transfer.py): sign in there, confirm if it holds data, then go.
+  on("b-transfer", "submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const button = form.querySelector(".btn-primary");
+    const fields = Object.fromEntries(new FormData(form));
+    const answer = await whileBusy(button, gettext("Anmeldung am Server …"), () => postForm(`${BASE}server/pruefen/`, fields));
+    if (!answer) return;
+    if (answer.has_data) {
+      const h = answer.holdings;
+      const text = interpolate(gettext("Auf dem Server liegen schon Daten: %(people)s Personen, %(assets)s Geräte, %(users)s Benutzerkonten. Sie werden durch diese Datenbank ersetzt. Vorher legt der Server eine Sicherung davon an. Wirklich ersetzen?"), h, true);
+      if (!confirm(text)) return;
+    }
+    const job = await postForm(`${BASE}server/uebertragen/`, { url: answer.url, ticket: answer.ticket, backup_password: fields.backup_password, replace: answer.has_data ? "1" : "" });
+    if (!job) return;
+    form.reset();
+    started(job);
+  });
+
+  on("b-connect", "click", (e) => {
+    fetch("/__client/connect", { method: "POST", body: JSON.stringify({ url: e.currentTarget.dataset.url }) }).catch(() => {});
+  });
+
+  on("b-from-server", "submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const button = form.querySelector(".btn-primary");
+    const job = await whileBusy(button, gettext("Anmeldung am Server …"), () => postForm(`${BASE}vom-server/`, Object.fromEntries(new FormData(form))));
+    if (!job) return;
+    form.reset();
+    started(job);
+  });
+
+  on("b-create", "submit", async (e) => {
     e.preventDefault();
     const form = e.target;
     const res = await App.post(`${BASE}erstellen/`, { password: form.password.value, repeat: form.repeat.value });
@@ -110,7 +185,7 @@
     }
   }
 
-  $("b-upload").addEventListener("change", (e) => {
+  on("b-upload", "change", (e) => {
     if (e.target.files[0]) upload(e.target.files[0]);
   });
 

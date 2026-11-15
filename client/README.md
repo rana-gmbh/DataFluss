@@ -89,7 +89,8 @@ DATABASE_URL=sqlcipher:// SQLCIPHER_KEY=$(python3 -c "import secrets;print(secre
 ## Smoke test of the sidecar
 
 `client/smoke.py` talks to the sidecar as the shell does: it makes a demo database, signs in and opens
-the main pages, restores a backup of it into a new database, and creates an empty one (about 30 s).
+the main pages, restores a backup of it into a new database and runs that one's regular backup, and
+creates an empty one (about 30 s).
 
 ```bash
 client/.venv/bin/python client/smoke.py
@@ -101,6 +102,16 @@ client/.venv/bin/python client/smoke.py --sidecar client/dist/schule-sidecar/sch
 
 With `--bundles <folder>` the premium module is expected from a bundle in that folder (for a sidecar built
 with `DATAFLUSS_MODULES=`, see docs/modules.md). The app keeps bundles in `<app data>/modules`.
+
+## Backups of a database on a computer
+
+A database of its own (not a demo, not a copy of a server) backs itself up into a folder the user
+picks under **Verwaltung → Sicherung** (`archive/plan.py`): daily or weekly, while the database is
+open, keeping the newest few. The plan lives in `backups/plan.json` beside the database, with the
+password encrypted by the database's vault key; the start screen reads `plan.json` and
+`plan-last.json` to flag a missing or overdue backup. The same page moves the database to a server,
+and a connected copy fetches the server's full backup there (`archive/transfer.py`). The smoke test
+runs the regular backup; the transfer is tested in `tests/test_db_transfer.py`.
 
 ## Sync with a server
 

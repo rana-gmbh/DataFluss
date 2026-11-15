@@ -21,7 +21,10 @@ log = logging.getLogger(__name__)
 SIGNED_OUT = gettext_lazy("Sie sind nicht mehr angemeldet.")
 PUBLIC_NAMES = {"login", "set_language", "js_catalog", "oidc_authentication_init", "oidc_authentication_callback", "manifest", "service_worker", "healthz", "school_logo",
                 # The sync API checks a device token instead of a session.
-                "sync_info", "sync_register", "sync_module", "sync_pull", "sync_push", "sync_media", "sync_media_batch", "sync_whoami"}
+                "sync_info", "sync_register", "sync_module", "sync_pull", "sync_push", "sync_media", "sync_media_batch", "sync_whoami",
+                # Moving a database to the server and a full backup to a computer (archive/transfer.py), with a ticket.
+                "sync_transfer_start", "sync_transfer_chunk", "sync_transfer_finish", "sync_transfer_status",
+                "sync_backup_start", "sync_backup_file"}
 
 
 def _refuse(request, target):

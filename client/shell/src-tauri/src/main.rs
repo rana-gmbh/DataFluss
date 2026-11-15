@@ -524,6 +524,23 @@ struct Entry {
     node: Node,
     open: bool,
     size: u64,
+    /// The regular backup of a database of its own (archive/plan.py): interval and last results, or null.
+    backup: Value,
+}
+
+/// What the start screen needs from a database's backup plan. The plan's password stays in its file.
+fn backup_status(dir: &std::path::Path, node: &Node) -> Value {
+    if node.kind != "local" {
+        return Value::Null;
+    }
+    let read = |name: &str| std::fs::read(dir.join("backups").join(name)).ok().and_then(|raw| serde_json::from_slice::<Value>(&raw).ok());
+    let plan = read("plan.json");
+    let last = read("plan-last.json").unwrap_or(Value::Null);
+    json!({
+        "every": plan.as_ref().and_then(|p| p.get("every").cloned()).unwrap_or(Value::Null),
+        "ok_at": last.get("ok_at").cloned().unwrap_or(Value::Null),
+        "state": last.get("state").cloned().unwrap_or(Value::Null),
+    })
 }
 
 /// Errors of the start screen's scripts, so they show up in the app's log.
@@ -541,7 +558,10 @@ fn list_databases(app: AppHandle, window: WebviewWindow) -> Result<Vec<Entry>, S
     let root = databases::root(&app)?;
     Ok(databases::list(&app)?
         .into_iter()
-        .map(|node| Entry { open: open.contains(&node.id), size: databases::size_bytes(&root.join(&node.id)), node })
+        .map(|node| {
+            let dir = root.join(&node.id);
+            Entry { open: open.contains(&node.id), size: databases::size_bytes(&dir), backup: backup_status(&dir, &node), node }
+        })
         .collect())
 }
 
@@ -789,6 +809,29 @@ async fn client_endpoint(app: &AppHandle, current: &str, request: &Request<Vec<u
     if path == "launcher" {
         let app2 = app.clone();
         let _ = app.run_on_main_thread(move || show_launcher(&app2, None));
+        return Response::builder().status(204).body(Vec::new()).unwrap();
+    }
+    if path == "pick-folder" {
+        // The folder of the regular backup (archive/plan.py). The page gets the path, never a file.
+        let (tx, rx) = tokio::sync::oneshot::channel();
+        let mut dialog = app.dialog().file().set_title("Ordner für die Sicherungen");
+        if let Some(window) = app.get_webview_window(&window_label(current)) {
+            dialog = dialog.set_parent(&window);
+        }
+        dialog.pick_folder(move |folder| {
+            let _ = tx.send(folder.and_then(|f| f.into_path().ok()));
+        });
+        let path = rx.await.ok().flatten().map(|p| p.to_string_lossy().into_owned());
+        return json_response(json!({"path": path}));
+    }
+    if path == "connect" {
+        // After a transfer to a server (archive/transfer.py): the start screen's connect sheet, with its address.
+        let url = serde_json::from_slice::<Value>(request.body()).ok().and_then(|v| v.get("url").and_then(|u| u.as_str()).map(str::to_string)).unwrap_or_default();
+        let app2 = app.clone();
+        let _ = app.run_on_main_thread(move || {
+            show_launcher(&app2, None);
+            let _ = app2.emit_to(LAUNCHER, "launcher-connect", json!({"url": url}));
+        });
         return Response::builder().status(204).body(Vec::new()).unwrap();
     }
     if let Some(id) = path.strip_prefix("open/") {

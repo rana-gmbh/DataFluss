@@ -11,7 +11,7 @@ from django.views.decorators.http import require_GET, require_POST
 from core import audit, updates
 from core.permissions import require
 
-from . import jobs, nightly, snapshot
+from . import jobs, nightly, plan, snapshot, transfer
 from .container import ContainerError
 
 SHOW_RESULT_FOR = 600
@@ -43,6 +43,13 @@ def home(request):
         "min_password": jobs.MIN_PASSWORD,
         "nightly": nightly.summary(),
         "confirm_word": CONFIRM_WORD,
+        # The desktop client: a database of its own gets a plan, a copy of a server only the server's backups.
+        "on_client": plan.is_client(),
+        "connected": plan.is_connected(),
+        "plan": plan.load() if plan.applies() else None,
+        "plan_choices": {"every": [("day", _("Täglich")), ("week", _("Wöchentlich"))], "keep": plan.KEEP_CHOICES},
+        "plan_default_keep": plan.DEFAULT_KEEP,
+        "transferred": transfer.transferred() if plan.applies() else {},
         "active_nav": "backups",
     })
 
@@ -156,3 +163,123 @@ def download(request, name):
         raise Http404
     audit.log("backup", f"Sicherung {name} heruntergeladen", request=request)
     return FileResponse(path.open("rb"), as_attachment=True, filename=name, content_type="application/octet-stream")
+
+
+def _only_own_database():
+    if not plan.applies():
+        return JsonResponse({"error": _("Nur für eine eigene Datenbank auf diesem Computer.")}, status=400)
+    return None
+
+
+@require("admin.backup")
+@require_POST
+def plan_save(request):
+    refusal = _only_own_database()
+    if refusal:
+        return refusal
+    password = request.POST.get("password", "")
+    if password != request.POST.get("repeat", ""):
+        return JsonResponse({"error": _("Die beiden Passwörter stimmen nicht überein.")}, status=400)
+    try:
+        keep = int(request.POST.get("keep", ""))
+    except ValueError:
+        keep = 0
+    try:
+        plan.save(request.POST.get("folder", ""), request.POST.get("every", ""), keep, password)
+    except ValueError as exc:
+        return JsonResponse({"error": str(exc)}, status=400)
+    audit.log("backup", f"Regelmäßige Sicherung eingerichtet: {request.POST.get('folder', '')}"[:200], request=request)
+    return JsonResponse({"ok": True})
+
+
+@require("admin.backup")
+@require_POST
+def plan_run(request):
+    """Backs up into the plan's folder now, in the background like every backup."""
+    refusal = _only_own_database()
+    if refusal:
+        return refusal
+    if not plan.is_set_up():
+        return JsonResponse({"error": _("Bitte zuerst die regelmäßige Sicherung einrichten.")}, status=400)
+    try:
+        job = plan.start()
+    except jobs.Busy:
+        return _busy()
+    return JsonResponse(job)
+
+
+@require("admin.backup")
+@require_POST
+def plan_off(request):
+    refusal = _only_own_database()
+    if refusal:
+        return refusal
+    plan.turn_off()
+    audit.log("backup", "Regelmäßige Sicherung ausgeschaltet", request=request)
+    messages.success(request, _("Die regelmäßige Sicherung ist ausgeschaltet. Die Dateien im Ordner bleiben."))
+    return redirect("backups")
+
+
+def _sync_error():
+    from sync.client import SyncError
+
+    return SyncError
+
+
+@require("admin.backup")
+@require_POST
+def transfer_check(request):
+    """Step one of moving this database to a server: sign in there and learn what the server holds."""
+    refusal = _only_own_database()
+    if refusal:
+        return refusal
+    password = request.POST.get("backup_password", "")
+    if len(password) < jobs.MIN_PASSWORD:
+        return JsonResponse({"error": _("Das Passwort der Sicherung braucht mindestens %(n)s Zeichen.") % {"n": jobs.MIN_PASSWORD}}, status=400)
+    if password != request.POST.get("backup_repeat"):
+        return JsonResponse({"error": _("Die beiden Passwörter stimmen nicht überein.")}, status=400)
+    if jobs.is_running():
+        return _busy()
+    try:
+        answer = transfer.check(request.POST.get("url", ""), request.POST.get("username", "").strip(),
+                                request.POST.get("password", ""), request.POST.get("code", ""))
+    except _sync_error() as exc:
+        return JsonResponse({"error": str(exc)}, status=400)
+    return JsonResponse({key: answer[key] for key in ("ticket", "has_data", "holdings", "url")})
+
+
+@require("admin.backup")
+@require_POST
+def transfer_run(request):
+    refusal = _only_own_database()
+    if refusal:
+        return refusal
+    try:
+        job = transfer.start(request.POST.get("url", ""), request.POST.get("ticket", ""),
+                             request.POST.get("backup_password", ""), request.POST.get("replace") == "1")
+    except jobs.Busy:
+        return _busy()
+    audit.log("backup", f"Übertragung auf {request.POST.get('url', '')} gestartet"[:200], request=request)
+    return JsonResponse(job)
+
+
+@require("admin.backup")
+@require_POST
+def server_backup(request):
+    """A connected copy fetches the server's full backup (archive/transfer.py)."""
+    if not plan.is_connected():
+        return JsonResponse({"error": _("Nur für eine Datenbank, die mit einem Server verbunden ist.")}, status=400)
+    password = request.POST.get("backup_password", "")
+    if len(password) < jobs.MIN_PASSWORD:
+        return JsonResponse({"error": _("Das Passwort der Sicherung braucht mindestens %(n)s Zeichen.") % {"n": jobs.MIN_PASSWORD}}, status=400)
+    if password != request.POST.get("backup_repeat"):
+        return JsonResponse({"error": _("Die beiden Passwörter stimmen nicht überein.")}, status=400)
+    if jobs.is_running():
+        return _busy()
+    try:
+        job = transfer.fetch_server_backup(request.POST.get("password", ""), request.POST.get("code", ""), password)
+    except _sync_error() as exc:
+        return JsonResponse({"error": str(exc)}, status=400)
+    except jobs.Busy:
+        return _busy()
+    return JsonResponse(job)

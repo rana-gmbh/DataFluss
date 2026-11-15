@@ -400,6 +400,11 @@ def main():
         client.WORKER = client.Worker(os.environ["SYNC_TOKEN"], on_revoked=wipe)
         client.WORKER.start()
 
+    from archive import plan
+
+    if plan.applies():
+        plan.Scheduler().start()  # the regular backup and the nightly work, while this database is open
+
     from django.db import connection
 
     connection.close()  # Each worker thread opens its own.

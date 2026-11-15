@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-15 21:21+0100\n"
+"POT-Creation-Date: 2026-11-15 22:44+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -61,6 +61,14 @@ msgid "BACKUP_PASSWORD fehlt oder hat weniger als %(n)s Zeichen."
 msgstr "BACKUP_PASSWORD is missing or has fewer than %(n)s characters."
 
 msgid ""
+"Diese Datenbank ist eine Kopie vom Server. Gesichert wird auf dem Server."
+msgstr ""
+"This database is a copy from the server. Backups are made on the server."
+
+msgid "Eine Demo mit erfundenen Personen braucht keine Sicherung."
+msgstr "A demo with invented people needs no backup."
+
+msgid ""
 "Die automatische Sicherung ist nicht eingerichtet: BACKUP_PASSWORD fehlt."
 msgstr "Automatic backup is not set up: BACKUP_PASSWORD is missing."
 
@@ -111,6 +119,69 @@ msgstr "Transferring copy"
 msgid "Die Kopie ist nicht vollständig angekommen."
 msgstr "The copy did not arrive completely."
 
+msgid "Bitte einen Ordner wählen."
+msgstr "Please choose a folder."
+
+msgid "Bitte angeben, wie oft gesichert werden soll."
+msgstr "Please say how often to back up."
+
+msgid "Bitte angeben, wie viele Sicherungen bleiben sollen."
+msgstr "Please say how many backups to keep."
+
+#, python-format
+msgid "Das Passwort braucht mindestens %(n)s Zeichen."
+msgstr "The password needs at least %(n)s characters."
+
+msgid "Bitte ein Passwort für die Sicherungen festlegen."
+msgstr "Please set a password for the backups."
+
+#, python-format
+msgid ""
+"Der Ordner %(folder)s ist nicht erreichbar. Ist das Laufwerk angeschlossen?"
+msgstr "The folder %(folder)s can't be reached. Is the drive connected?"
+
+#, python-format
+msgid "In den Ordner %(folder)s darf DataFluss nicht schreiben."
+msgstr "DataFluss may not write to the folder %(folder)s."
+
+msgid ""
+"Bitte einen Ordner außerhalb der Datenbank wählen, am besten auf einem "
+"anderen Laufwerk."
+msgstr "Please choose a folder outside the database, ideally on another drive."
+
+msgid "Die Sicherung liegt geprüft im gewählten Ordner."
+msgstr "The backup is in the chosen folder and has been verified."
+
+msgid ""
+"Für diese Datenbank ist keine regelmäßige Sicherung eingerichtet. Geht dieser"
+" Computer verloren, sind die Daten weg."
+msgstr ""
+"No regular backup is set up for this database. If this computer is lost, the "
+"data is gone."
+
+#, python-format
+msgid "Die Sicherung vom %(day)s ist fehlgeschlagen: %(problem)s"
+msgstr "The backup from %(day)s failed: %(problem)s"
+
+msgid ""
+"Die regelmäßige Sicherung ist eingerichtet. Die erste entsteht in den "
+"nächsten Minuten."
+msgstr ""
+"The regular backup is set up. The first one will be made in the next few "
+"minutes."
+
+#, python-format
+msgid ""
+"Die letzte Sicherung ist vom %(day)s. Sie entsteht nur, während die Datenbank"
+" geöffnet ist."
+msgstr ""
+"The last backup is from %(day)s. Backups are only made while the database is "
+"open."
+
+#, python-format
+msgid "Letzte Sicherung: %(day)s, geprüft, in %(folder)s."
+msgstr "Last backup: %(day)s, verified, in %(folder)s."
+
 #, python-format
 msgid "Sicherung abgebrochen bei %(name)s."
 msgstr "Backup stopped at %(name)s."
@@ -134,8 +205,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Diese Sicherung enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
-"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem "
-"Modul einspielen."
+"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem Modul"
+" einspielen."
 msgstr ""
 "This backup contains data of the module %(names)s, which this DataFluss "
 "version lacks. It can only be restored in a DataFluss version with that "
@@ -150,12 +221,107 @@ msgstr "Restoring database"
 msgid "Datenbank wird angepasst"
 msgstr "Updating database structure"
 
+msgid ""
+"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht "
+"es die Rolle IT."
+msgstr ""
+"This account may not restore backups on the server. That needs the IT role."
+
+msgid "Ungültige Anfrage."
+msgstr "Invalid request."
+
+msgid ""
+"Auf dem Server läuft gerade eine Aktualisierung. Bitte später noch einmal."
+msgstr "An update is running on the server. Please try again later."
+
+msgid ""
+"Auf dem Server läuft gerade ein Sicherungsvorgang. Bitte später noch einmal."
+msgstr "A backup task is running on the server. Please try again later."
+
+msgid "Die Übertragung ist abgelaufen. Bitte neu beginnen."
+msgstr "The transfer has expired. Please start again."
+
+msgid "Auf dem Server ist nicht genug Platz für diese Datenbank."
+msgstr "There is not enough space on the server for this database."
+
+msgid ""
+"Auf dem Server liegen inzwischen Daten. Bitte die Übertragung neu beginnen."
+msgstr "The server now holds data. Please start the transfer again."
+
+msgid "Dieses Gerät ist unbekannt oder getrennt."
+msgstr "This device is unknown or disconnected."
+
+#, python-format
+msgid "Das Passwort der Sicherung braucht mindestens %(n)s Zeichen."
+msgstr "The backup's password needs at least %(n)s characters."
+
+msgid "Die Anfrage ist abgelaufen. Bitte neu beginnen."
+msgstr "The request has expired. Please start again."
+
+msgid "Die Sicherung ist noch nicht fertig."
+msgstr "The backup isn't finished yet."
+
+msgid "Unter dieser Adresse antwortet kein DataFluss-Server."
+msgstr "No DataFluss server answers at this address."
+
+#, python-format
+msgid ""
+"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version "
+"1.1 oder neuer."
+msgstr ""
+"The server has DataFluss %(version)s. The transfer needs version 1.1 or "
+"newer."
+
+msgid "Wird auf den Server übertragen"
+msgstr "Transferring to the server"
+
+msgid "Server"
+msgstr "Server"
+
+#, python-format
+msgid "Der Server konnte die Datenbank nicht einspielen: %(reason)s"
+msgstr "The server couldn't restore the database: %(reason)s"
+
+msgid ""
+"Die Datenbank ist auf dem Server. Arbeiten Sie ab jetzt mit dem Server: "
+"Änderungen in dieser Datenbank auf dem Computer erreichen ihn nicht mehr."
+msgstr ""
+"The database is on the server. From now on, work with the server: changes in "
+"this database on the computer no longer reach it."
+
+#, python-format
+msgid "Der Server antwortet mit %(code)s."
+msgstr "The server responded with %(code)s."
+
+#, python-format
+msgid "Der Server ist nicht erreichbar (%(reason)s)."
+msgstr "The server can't be reached (%(reason)s)."
+
+msgid "Diese Datenbank ist mit keinem Server verbunden."
+msgstr "This database is not connected to a server."
+
+#, python-format
+msgid "Der Server konnte keine Sicherung erstellen: %(reason)s"
+msgstr "The server couldn't create a backup: %(reason)s"
+
+msgid "Sicherung wird geladen"
+msgstr "Downloading backup"
+
+msgid ""
+"Die vollständige Sicherung des Servers liegt in der Liste unten. Bitte "
+"herunterladen und an einem anderen Ort aufbewahren."
+msgstr ""
+"The server's full backup is in the list below. Please download it and keep it"
+" somewhere else."
+
 msgid "Es läuft bereits ein Sicherungsvorgang."
 msgstr "A backup is already running."
 
-#, python-format
-msgid "Das Passwort braucht mindestens %(n)s Zeichen."
-msgstr "The password needs at least %(n)s characters."
+msgid "Täglich"
+msgstr "Daily"
+
+msgid "Wöchentlich"
+msgstr "Weekly"
 
 msgid "Die beiden Passwörter stimmen nicht überein."
 msgstr "The two passwords do not match."
@@ -172,6 +338,19 @@ msgstr "Nothing can be deleted while a backup is running."
 
 msgid "Die Sicherung wurde gelöscht."
 msgstr "The backup was deleted."
+
+msgid "Nur für eine eigene Datenbank auf diesem Computer."
+msgstr "Only for a database of its own on this computer."
+
+msgid "Bitte zuerst die regelmäßige Sicherung einrichten."
+msgstr "Please set up the regular backup first."
+
+msgid ""
+"Die regelmäßige Sicherung ist ausgeschaltet. Die Dateien im Ordner bleiben."
+msgstr "The regular backup is turned off. The files in the folder stay."
+
+msgid "Nur für eine Datenbank, die mit einem Server verbunden ist."
+msgstr "Only for a database connected to a server."
 
 msgid "Zwei-Faktor eingerichtet"
 msgstr "Two-factor set up"
@@ -414,8 +593,8 @@ msgid ""
 "In den Listen ändert ein Doppelklick eine Zelle. Spalten, Filter und "
 "Sortierung lassen sich als eigene Ansicht speichern."
 msgstr ""
-"In the lists, a double click changes a cell. Columns, filters and sorting "
-"can be saved as your own view."
+"In the lists, a double click changes a cell. Columns, filters and sorting can"
+" be saved as your own view."
 
 msgid "Drucken"
 msgstr "Print"
@@ -440,8 +619,8 @@ msgid "Abgleich"
 msgstr "Comparison"
 
 msgid ""
-"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung "
-"gehen nicht verloren, sie folgen später."
+"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung gehen"
+" nicht verloren, sie folgen später."
 msgstr ""
 "Shows whether sync with the server is running. Changes made without a "
 "connection are not lost; they follow later."
@@ -453,8 +632,8 @@ msgid ""
 "Sprache, hell oder dunkel, Passwort und Abmelden. Mit dem Fragezeichen "
 "startet dieser Rundgang wieder."
 msgstr ""
-"Language, light or dark, password and sign-out. The question mark starts "
-"this tour again."
+"Language, light or dark, password and sign-out. The question mark starts this"
+" tour again."
 
 msgid "Erste Schritte"
 msgstr "Getting started"
@@ -521,8 +700,8 @@ msgstr "The database was rolled back to its state before the update."
 
 #, python-format
 msgid ""
-"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung "
-"%(name)s von Hand einspielen."
+"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung %(name)s"
+" von Hand einspielen."
 msgstr ""
 "The database could not be rolled back. Please restore the backup %(name)s "
 "manually."
@@ -532,14 +711,14 @@ msgid ""
 "Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch "
 "hier, bitte die Sicherung %(name)s von Hand einspielen."
 msgstr ""
-"The database is being rolled back. If this is still here after a few "
-"minutes, please restore the backup %(name)s manually."
+"The database is being rolled back. If this is still here after a few minutes,"
+" please restore the backup %(name)s manually."
 
 #, python-format
 msgid ""
 "Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand "
-"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
-"geht dabei verloren."
+"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, geht"
+" dabei verloren."
 msgstr ""
 "The new version has already changed the database. It can be rolled back to "
 "its state from %(when)s. Everything saved since then will be lost."
@@ -598,6 +777,9 @@ msgstr "Add people or import them from a file"
 
 msgid "Nächtliche Sicherung einrichten"
 msgstr "Set up the nightly backup"
+
+msgid "Regelmäßige Sicherung einrichten"
+msgstr "Set up regular backups"
 
 msgid "Konten für weitere Personen anlegen"
 msgstr "Create accounts for more people"
@@ -1151,14 +1333,6 @@ msgid "Dieses Gerät wurde getrennt."
 msgstr "This device was disconnected."
 
 #, python-format
-msgid "Der Server antwortet mit %(code)s."
-msgstr "The server responded with %(code)s."
-
-#, python-format
-msgid "Der Server ist nicht erreichbar (%(reason)s)."
-msgstr "The server can't be reached (%(reason)s)."
-
-#, python-format
 msgid "Das Modul vom Server ließ sich nicht prüfen (%(reason)s)."
 msgstr "The module from the server could not be verified (%(reason)s)."
 
@@ -1167,8 +1341,8 @@ msgid ""
 "Das Modul %(names)s wurde vom Server geladen. Bitte noch einmal verbinden, "
 "mit einem neuen Code aus der Authenticator-App."
 msgstr ""
-"The module %(names)s was loaded from the server. Please connect again, with "
-"a new code from the authenticator app."
+"The module %(names)s was loaded from the server. Please connect again, with a"
+" new code from the authenticator app."
 
 #, python-format
 msgid ""
@@ -1204,8 +1378,8 @@ msgstr "Computer and server have different versions. Please update both."
 
 msgid ""
 "Der Server wurde aus einer Sicherung wiederhergestellt. Diese Kopie gleicht "
-"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen "
-"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server "
+"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen notieren,"
+" die Datenbank auf diesem Computer entfernen und neu mit dem Server "
 "verbinden."
 msgstr ""
 "The server was restored from a backup, so this copy no longer syncs: please "
@@ -1236,12 +1410,6 @@ msgstr "Please sign in to the web version first and set up two-factor sign-in."
 
 msgid "Der Code aus der Authenticator-App stimmt nicht."
 msgstr "The code from the authenticator app is incorrect."
-
-msgid "Ungültige Anfrage."
-msgstr "Invalid request."
-
-msgid "Dieses Gerät ist unbekannt oder getrennt."
-msgstr "This device is unknown or disconnected."
 
 msgid "Dieses Modul gibt der Server nicht heraus."
 msgstr "The server does not hand out this module."
@@ -1276,9 +1444,6 @@ msgstr "%(kind)s (deleted)"
 
 msgid "(leer)"
 msgstr "(empty)"
-
-msgid "Server"
-msgstr "Server"
 
 #, python-format
 msgid ""
@@ -1318,8 +1483,8 @@ msgid "Hier ist etwas schiefgegangen"
 msgstr "Something went wrong"
 
 msgid ""
-"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert "
-"haben, prüfen Sie bitte, ob es angekommen ist."
+"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert haben,"
+" prüfen Sie bitte, ob es angekommen ist."
 msgstr ""
 "The error has been logged for IT. If you were just saving something, please "
 "check whether it went through."
@@ -1337,14 +1502,146 @@ msgstr ""
 "documents. Download the file and keep it in a different place. It can be "
 "restored into any installation of the school administration."
 
-msgid "Neue Sicherung erstellen"
-msgstr "Create new backup"
+msgid "Regelmäßige Sicherung"
+msgstr "Regular backup"
+
+msgid ""
+"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem "
+"anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
+"Datenbank geöffnet ist."
+msgstr ""
+"DataFluss puts the backup in a folder of your choice, ideally on another "
+"drive or in a cloud folder. It is made while the database is open."
+
+msgid "Ordner"
+msgstr "Folder"
+
+msgid "Ordner wählen …"
+msgstr "Choose folder …"
+
+msgid "Wie oft"
+msgstr "How often"
+
+msgid "Aufbewahren"
+msgstr "Keep"
+
+#, python-format
+msgid "die letzte Sicherung"
+msgid_plural "die letzten %(n)s Sicherungen"
+msgstr[0] "the last backup"
+msgstr[1] "the last %(n)s backups"
+
+msgid "Neues Passwort (leer lassen: unverändert)"
+msgstr "New password (leave empty to keep it)"
+
+msgid "Passwort für die Sicherungen"
+msgstr "Password for the backups"
+
+msgid "Passwort wiederholen"
+msgstr "Repeat password"
+
+#, python-format
+msgid ""
+"Mindestens %(n)s Zeichen. DataFluss bewahrt das Passwort verschlüsselt auf, "
+"damit die Sicherung von selbst entsteht. <strong>Notieren Sie es an einem "
+"anderen Ort:</strong> Geht dieser Computer verloren, öffnet nur dieses "
+"Passwort die Sicherung."
+msgstr ""
+"At least %(n)s characters. DataFluss keeps the password encrypted so the "
+"backup runs on its own. <strong>Write it down somewhere else:</strong> if "
+"this computer is lost, only this password opens the backup."
+
+msgid "Speichern"
+msgstr "Save"
+
+msgid "Einrichten"
+msgstr "Set up"
+
+msgid "Jetzt sichern"
+msgstr "Back up now"
+
+msgid "Die regelmäßige Sicherung ausschalten? Die Dateien im Ordner bleiben."
+msgstr "Turn off the regular backup? The files in the folder stay."
+
+msgid "Ausschalten"
+msgstr "Turn off"
+
+msgid "Auf einen Server übertragen"
+msgstr "Transfer to a server"
+
+#, python-format
+msgid ""
+"Diese Datenbank wurde auf %(url)s übertragen. Arbeiten Sie ab jetzt mit dem "
+"Server: Änderungen hier erreichen ihn nicht mehr."
+msgstr ""
+"This database was transferred to %(url)s. From now on, work with the server: "
+"changes here no longer reach it."
+
+msgid "Mit dem Server verbinden …"
+msgstr "Connect to the server …"
+
+msgid ""
+"Die ganze Datenbank mit allen Konten, Bildern und Dokumenten wird zu den "
+"Daten eines DataFluss-Servers. Danach gelten auf dem Server die Konten dieser"
+" Datenbank. Am besten auf einem neuen Server, auf dem bisher nur das erste "
+"IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss nach und "
+"legt vorher eine Sicherung davon auf dem Server ab."
+msgstr ""
+"The whole database with all accounts, pictures and documents becomes the data"
+" of a DataFluss server. Afterwards the server uses this database's accounts. "
+"Best on a new server that only has its first IT account. If the server "
+"already holds data, DataFluss asks first and stores a backup of it on the "
+"server beforehand."
+
+msgid "Adresse des Servers"
+msgstr "Server address"
+
+msgid "Ihr Benutzername auf dem Server"
+msgstr "Your username on the server"
+
+msgid "Passwort"
+msgstr "Password"
+
+msgid "Code aus der Authenticator-App"
+msgstr "Code from the authenticator app"
+
+msgid "Passwort für die übertragene Sicherung"
+msgstr "Password for the transferred backup"
+
+#, python-format
+msgid ""
+"Mindestens %(n)s Zeichen. Es schützt die Datei unterwegs und die Sicherung, "
+"die der Server vorher von seinem bisherigen Stand anlegt."
+msgstr ""
+"At least %(n)s characters. It protects the file on its way and the backup the"
+" server makes of its previous state beforehand."
+
+msgid "Übertragen …"
+msgstr "Transfer …"
+
+msgid "Vollständige Sicherung vom Server"
+msgstr "Full backup from the server"
+
+msgid ""
+"Diese Datenbank enthält nur, was Ihr Konto sehen darf. Die vollständige "
+"Sicherung des Servers mit allen Daten lässt sich hierher laden. Dafür noch "
+"einmal mit Passwort und Code bestätigen."
+msgstr ""
+"This database only holds what your account may see. The server's full backup "
+"with all data can be downloaded here. Confirm once more with your password "
+"and code."
+
+msgid "Ihr Passwort"
+msgstr "Your password"
 
 msgid "Passwort für diese Sicherung"
 msgstr "Password for this backup"
 
-msgid "Passwort wiederholen"
-msgstr "Repeat password"
+msgid "Vom Server laden"
+msgstr "Download from the server"
+
+msgid "Neue Sicherung erstellen"
+msgstr "Create new backup"
 
 #, python-format
 msgid ""
@@ -1353,8 +1650,8 @@ msgid ""
 "nicht mehr öffnen.</strong> Bewahren Sie es getrennt von der Datei auf."
 msgstr ""
 "At least %(n)s characters. The password encrypts the file and is not stored "
-"anywhere. <strong>Without this password the backup can never be opened again."
-"</strong> Keep it separate from the file."
+"anywhere. <strong>Without this password the backup can never be opened "
+"again.</strong> Keep it separate from the file."
 
 msgid "Sicherung erstellen"
 msgstr "Create backup"
@@ -1366,11 +1663,14 @@ msgid ""
 "Eine Sicherung von dieser oder einer anderen Installation. Das Hochladen "
 "ändert noch nichts, eingespielt wird erst in der Liste unten."
 msgstr ""
-"A backup from this or another installation. Uploading doesn't change "
-"anything yet; restoring happens in the list below."
+"A backup from this or another installation. Uploading doesn't change anything"
+" yet; restoring happens in the list below."
 
 msgid "Datei auswählen"
 msgstr "Choose file"
+
+msgid "Sicherungen in dieser Datenbank"
+msgstr "Backups in this database"
 
 msgid "Sicherungen auf diesem Server"
 msgstr "Backups on this server"
@@ -1389,6 +1689,9 @@ msgstr "Content"
 
 msgid "Vor dem Einspielen"
 msgstr "Before restore"
+
+msgid "Vom Server"
+msgstr "From the server"
 
 msgid "Hochgeladen"
 msgstr "Uploaded"
@@ -1519,8 +1822,8 @@ msgid "Für alle Sprachen"
 msgstr "For all languages"
 
 msgid ""
-"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben "
-"wurden, werden ersetzt."
+"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben wurden,"
+" werden ersetzt."
 msgstr ""
 "The new name applies everywhere. Names set for individual languages are "
 "replaced."
@@ -1679,9 +1982,6 @@ msgstr "Rename only for the current language"
 msgid "Immer für alle Sprachen umbenennen"
 msgstr "Always rename for all languages"
 
-msgid "Speichern"
-msgstr "Save"
-
 msgid "Anmelden"
 msgstr "Sign in"
 
@@ -1699,9 +1999,6 @@ msgstr "or"
 
 msgid "Benutzername"
 msgstr "Username"
-
-msgid "Passwort"
-msgstr "Password"
 
 msgid ""
 "Bitte vergeben Sie jetzt ein eigenes Passwort. Das bisherige kennt auch die "
@@ -1748,21 +2045,21 @@ msgid "Sprachen, die in dieser Datenbank zur Auswahl stehen"
 msgstr "Languages available in this database"
 
 msgid ""
-"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, "
-"oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene "
-"Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
+"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, oder"
+" die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene Wahl "
+"bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
 msgstr ""
 "Anyone who chose a language that is no longer allowed sees German, or the "
-"first allowed language if German is not allowed. Their own choice is kept "
-"and applies again as soon as the language is allowed."
+"first allowed language if German is not allowed. Their own choice is kept and"
+" applies again as soon as the language is allowed."
 
 msgid ""
 "Ist nur eine Sprache erlaubt, verschwindet die Sprachauswahl, und beim "
 "Umbenennen wird nicht mehr nachgefragt: Die übrigen Sprachen behalten ihre "
 "Namen."
 msgstr ""
-"If only one language is allowed, the language menu disappears and renaming "
-"no longer asks: the other languages keep their names."
+"If only one language is allowed, the language menu disappears and renaming no"
+" longer asks: the other languages keep their names."
 
 msgid "Verbundene Macs übernehmen diese Auswahl beim nächsten Abgleich."
 msgstr "Connected Macs take over this choice at the next sync."
@@ -1857,8 +2154,8 @@ msgstr ""
 "everyone can keep working as usual."
 
 msgid ""
-"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
-"in <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
+"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht in"
+" <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
 msgstr ""
 "The connection to Coolify hasn't been set up yet. Instructions are in <span "
 "class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
@@ -1888,16 +2185,16 @@ msgid ""
 "Die Anwendung bleibt während der Aktualisierung normalerweise erreichbar. "
 "Sehr selten kann es beim Umschalten eine kurze Unterbrechung geben."
 msgstr ""
-"The application normally stays available during the update. Very rarely "
-"there may be a short interruption during the switchover."
+"The application normally stays available during the update. Very rarely there"
+" may be a short interruption during the switchover."
 
 msgid "Neu in dieser Version"
 msgstr "New in this version"
 
 #, python-format
 msgid ""
-"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt "
-"und muss bei der nächsten Anmeldung geändert werden."
+"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt und"
+" muss bei der nächsten Anmeldung geändert werden."
 msgstr ""
 "New password for <strong>%(name)s</strong>. It's only shown now and must be "
 "changed at the next sign-in."
@@ -1954,9 +2251,6 @@ msgid ""
 "Passwort."
 msgstr ""
 "Turn off two-factor sign-in for all users? After that, a password is enough."
-
-msgid "Ausschalten"
-msgstr "Turn off"
 
 msgid ""
 "Zur Anmeldung genügt das Passwort. Nur für Demos ohne echte Daten gedacht. "
@@ -2635,8 +2929,8 @@ msgid ""
 "%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das "
 "lässt sich nur über eine Sicherung zurücknehmen."
 msgstr ""
-"Move up %(total)s pupils and archive %(leaving)s of them as leavers? This "
-"can only be undone from a backup."
+"Move up %(total)s pupils and archive %(leaving)s of them as leavers? This can"
+" only be undone from a backup."
 
 msgid "Wechsel durchführen"
 msgstr "Run the changeover"
@@ -2731,8 +3025,8 @@ msgid "Abgleich prüfen"
 msgstr "Review sync conflicts"
 
 msgid ""
-"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere "
-"Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen."
+"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere Änderung"
+" gilt bereits. Bestätigen oder die andere Fassung übernehmen."
 msgstr ""
 "The same field was changed differently in two places. The newer change "
 "already applies. Confirm it or use the other version."
@@ -2831,8 +3125,8 @@ msgid "Importieren"
 msgstr "Import"
 
 msgid ""
-"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
-"etwas gespeichert wird."
+"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor etwas"
+" gespeichert wird."
 msgstr ""
 "CSV or Excel. You map the columns and see a review before anything is saved."
 
@@ -2930,8 +3224,8 @@ msgstr "Review"
 
 #, python-format
 msgid ""
-"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern "
-"vorhandene Werte nicht."
+"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern vorhandene"
+" Werte nicht."
 msgstr ""
 "%(filename)s. Nothing has been saved yet. Empty cells do not change existing "
 "values."
@@ -2995,8 +3289,8 @@ msgstr "Manage platforms"
 msgid ""
 "Passwörter sind verschlüsselt. Jede Anzeige wird im Protokoll festgehalten."
 msgstr ""
-"Passwords are encrypted. Every time one is shown, it is recorded in the "
-"audit log."
+"Passwords are encrypted. Every time one is shown, it is recorded in the audit"
+" log."
 
 #, python-format
 msgid "%(have)s von %(expected)s Zugängen"
