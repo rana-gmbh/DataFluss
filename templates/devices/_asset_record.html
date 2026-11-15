@@ -1,0 +1,31 @@
+{% load i18n ui %}
+<div class="record-wrap"><div class="record-columns">
+<form method="post" action="{% url 'asset_action' asset.pk %}" data-panel-form class="surface p-4 space-y-3">{% csrf_token %}<input type="hidden" name="action" value="save"><h2 class="section-title">{% translate "Gerät" %}</h2>
+  <fieldset class="space-y-3" {% if not request.user|can:'device.edit' %}disabled{% endif %}>
+  <div><label class="label" for="f-serial">{% translate "Seriennummer" %}</label><input id="f-serial" class="input mono" name="serial" value="{{ asset.serial }}"></div>
+  <div><label class="label" for="f-hardware_uuid">UUID</label><input id="f-hardware_uuid" class="input mono" name="hardware_uuid" value="{{ asset.hardware_uuid }}"></div>
+  <div><label class="label">{% translate "Product Key" %}</label>
+    {% if asset.product_key_enc %}<div class="flex items-center gap-2 mb-1" id="pk-box"><span class="mono muted">••••••••</span>{% if request.user|can:'vault.reveal' %}<button type="button" class="btn btn-sm" hx-post="{% url 'asset_key' asset.pk %}" hx-target="#pk-box">{% icon 'eye' %}{% translate "Anzeigen" %}</button>{% endif %}</div>{% endif %}
+    <input class="input mono" name="product_key" type="password" autocomplete="off" placeholder="{% translate 'Neuen Key eingeben' %}" aria-label="{% translate 'Neuer Product Key' %}"></div>
+  <div><label class="label" for="f-notes">{% translate "Bemerkungen" %}</label><textarea id="f-notes" class="input" name="notes">{{ asset.notes }}</textarea></div>
+  </fieldset>
+  {% if request.user|can:'device.edit' %}<button class="btn btn-primary">{% translate "Speichern" %}</button>{% endif %}</form>
+<div class="space-y-4">
+{% if request.user|can:'device.edit' %}<section class="surface p-4"><h2 class="section-title mb-3">{% translate "Aktionen" %}</h2>
+  {% with current=asset.open_assignment %}
+  {% if current %}<p class="text-[13px] mb-2">{% blocktranslate trimmed with holder=current.holder since=current.issued_at|date:"d.m.Y" %}Ausgegeben an <strong>{{ holder }}</strong> seit {{ since }}.{% endblocktranslate %}</p>
+  <form method="post" action="{% url 'asset_action' asset.pk %}" data-panel-form class="inline">{% csrf_token %}<button class="btn" name="action" value="return" data-confirm="{% blocktranslate trimmed with holder=current.holder %}Gerät von {{ holder }} zurücknehmen?{% endblocktranslate %}">{% translate "Rücknahme" %}</button></form>
+  {% elif not asset.sold and not asset.retired %}
+  <form method="post" action="{% url 'asset_action' asset.pk %}" data-panel-form class="flex flex-wrap gap-2 items-end">{% csrf_token %}<input type="hidden" name="action" value="issue">
+    <div class="flex-1 min-w-40"><label class="label" for="f-person_name">{% translate "An Person (Name oder E-Mail)" %}</label><input id="f-person_name" class="input" name="person_name"></div>
+    <div class="min-w-36"><label class="label" for="f-place">{% translate "oder Raum/Gruppe" %}</label><select id="f-place" class="input" name="place"><option value="">–</option>{% for p in places %}<option value="{{ p.pk }}">{{ p.name }}</option>{% endfor %}</select></div>
+    <button class="btn btn-primary">{% translate "Ausgeben" %}</button></form>{% endif %}
+  {% endwith %}
+  <div class="flex flex-wrap gap-2 mt-3 pt-3 border-t" style="border-color: var(--line)"><form method="post" action="{% url 'asset_action' asset.pk %}" data-panel-form class="flex gap-2">{% csrf_token %}
+    <button class="btn btn-sm" name="action" value="toggle_damaged">{% if asset.damaged %}{% translate "Als repariert markieren" %}{% else %}{% translate "Als beschädigt markieren" %}{% endif %}</button>
+    {% if not asset.sold %}<button class="btn btn-sm" name="action" value="sell" data-confirm="{% translate 'Gerät als verkauft markieren?' %}">{% translate "Verkauft" %}</button>{% endif %}
+    {% if not asset.retired %}<button class="btn btn-sm" name="action" value="retire" data-confirm="{% translate 'Gerät ausmustern?' %}">{% translate "Ausmustern" %}</button>{% endif %}</form></div>
+</section>{% endif %}
+<section class="surface overflow-hidden"><h2 class="section-title px-4 py-3">{% translate "Verlauf" %}</h2><table class="data-table"><tbody>{% for a in assignments %}<tr><td>{% if a.person %}<a class="hover:underline font-medium" href="{% url 'person_detail' a.person.pk %}">{{ a.person.display_name }}</a>{% else %}{{ a.place }}{% endif %}</td><td class="muted whitespace-nowrap">{{ a.issued_at|date:"d.m.Y" }} – {% translate "heute" as today_label %}{{ a.returned_at|date:"d.m.Y"|default:today_label }}</td></tr>{% empty %}<tr><td class="muted">{% translate "Noch nie ausgegeben." %}</td></tr>{% endfor %}</tbody></table></section>
+{% if cases %}<section class="surface overflow-hidden"><h2 class="section-title px-4 py-3">{% translate "Schäden" %}</h2><table class="data-table"><tbody>{% for c in cases %}<tr><td><a class="hover:underline" href="{% url 'case_detail' c.pk %}">{{ c.description|truncatechars:60 }}</a></td><td class="muted">{{ c.date|date:"d.m.Y" }}</td><td><span class="badge">{{ c.status_label }}</span></td></tr>{% endfor %}</tbody></table></section>{% endif %}
+</div></div></div>

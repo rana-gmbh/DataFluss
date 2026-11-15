@@ -1,0 +1,75 @@
+"""Sections of a record page that hold related data, placed by the mask."""
+from django.core.exceptions import PermissionDenied
+
+from core.models import ChangeLog
+from devices.models import Place, SupportCase
+from vault.models import Credential, Platform
+
+
+def photo(request, person):
+    return {}
+
+
+def card(request, person):
+    return {"cards": list(person.cards.all())}
+
+
+def enrollments(request, person):
+    return {"enrollments": person.enrollments.select_related("class_group")}
+
+
+def guardians(request, person):
+    rows = []
+    platforms = Platform.active_for(Platform.GUARDIAN)
+    for link in person.guardianships.select_related("guardian"):
+        logins = []
+        if request.user.can("vault.view"):
+            existing = {c.platform_id: c for c in Credential.objects.filter(guardian=link.guardian).select_related("platform")}
+            for platform in platforms:
+                logins.append({"platform": platform, "credential": existing.get(platform.pk)})
+        rows.append({"link": link, "logins": logins})
+    return {"links": rows}
+
+
+def devices(request, person):
+    assignments = list(person.assignments.select_related("asset", "asset__category"))
+    return {"current": [a for a in assignments if a.returned_at is None], "past": [a for a in assignments if a.returned_at]}
+
+
+def cases(request, person):
+    return {"cases": person.support_cases.select_related("asset")}
+
+
+def logins(request, person):
+    if not request.user.can("vault.view"):
+        raise PermissionDenied
+    platforms = Platform.active_for(person.kind)
+    existing = {c.platform_id: c for c in person.credentials.select_related("platform")}
+    rows = []
+    for platform in platforms:
+        credential = existing.get(platform.pk)
+        fields = credential.read_all() if credential else [
+            {"key": f["key"], "label": f["label"], "secret": bool(f.get("secret")), "value": ""} for f in platform.fields
+        ]
+        rows.append({"platform": platform, "credential": credential, "fields": fields})
+    return {"rows": rows}
+
+
+def attachments(request, person):
+    return {"attachments": person.attachments.all()}
+
+
+def comments(request, person):
+    return {"comments": person.comments.select_related("author")}
+
+
+def history(request, person):
+    fields = {f.name: f.verbose_name for f in person._meta.concrete_fields}
+    rows = ChangeLog.objects.filter(entity="people.person", record_id=person.pk).exclude(field="custom").select_related("user")[:25]
+    return {"changes": [{"row": r, "label": fields.get(r.field, r.field)} for r in rows]}
+
+
+BLOCK_VIEWS = {
+    "photo": photo, "card": card, "enrollments": enrollments, "guardians": guardians, "devices": devices,
+    "cases": cases, "logins": logins, "attachments": attachments, "comments": comments, "history": history,
+}  # modules add theirs (core/modules.py add_block)

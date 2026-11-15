@@ -1,0 +1,36 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path("schueler/", views.pupils, name="pupils"),
+    path("personal/", views.staff, name="staff"),
+    path("api/personen/", views.api_persons, name="api_persons"),
+    path("api/personen/<uuid:pk>/feld/<slug:key>/", views.api_person_field, name="api_person_field"),
+    path("api/ansichten/", views.api_views, name="api_views"),
+    path("api/ansichten/<uuid:pk>/loeschen/", views.api_view_delete, name="api_view_delete"),
+    path("personen/neu/<str:entity>/", views.person_new, name="person_new"),
+    path("personen/duplikate/", views.person_duplicates, name="person_duplicates"),
+    path("personen/aktion/", views.bulk_action, name="bulk_action"),
+    path("personen/papierkorb/", views.person_bin, name="person_bin"),
+    path("personen/<uuid:pk>/", views.person_detail, name="person_detail"),
+    path("personen/<uuid:pk>/form/", views.person_form, name="person_form"),
+    path("personen/<uuid:pk>/duplizieren/", views.person_duplicate, name="person_duplicate"),
+    path("personen/<uuid:pk>/panel/", views.person_panel, name="person_panel"),
+    path("personen/<uuid:pk>/feld/<slug:key>/", views.person_field, name="person_field"),
+    path("personen/<uuid:pk>/geheim/<slug:key>/", views.person_secret_reveal, name="person_secret_reveal"),
+    path("personen/<uuid:pk>/block/<str:name>/", views.person_block, name="person_block"),
+    path("personen/<uuid:pk>/foto/", views.person_photo, name="person_photo"),
+    path("personen/<uuid:pk>/karte/", views.person_card, name="person_card"),
+    path("personen/<uuid:pk>/kommentar/", views.person_comment, name="person_comment"),
+    path("personen/<uuid:pk>/datei/", views.person_attachment, name="person_attachment"),
+    path("personen/<uuid:pk>/datei/<uuid:attachment>/", views.attachment_download, name="attachment_download"),
+    path("personen/<uuid:pk>/eltern/", views.person_guardian, name="person_guardian"),
+    path("karte/", views.card_lookup, name="card_lookup"),
+    path("eltern/", views.guardians, name="guardians"),
+    path("eltern/<uuid:pk>/", views.guardian_detail, name="guardian_detail"),
+    path("eltern/<uuid:pk>/panel/", views.guardian_panel, name="guardian_panel"),
+    path("klassen/", views.classes, name="classes"),
+    path("klassen/schuljahreswechsel/", views.rollover, name="rollover"),
+    path("klassen/<uuid:pk>/", views.class_detail, name="class_detail"),
+]

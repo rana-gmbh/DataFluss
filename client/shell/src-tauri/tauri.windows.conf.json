@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "mainBinaryName": "DataFluss",
+  "bundle": {
+    "targets": ["nsis"],
+    "resources": { "../../build/winsparkle/x64/Release/WinSparkle.dll": "WinSparkle.dll" },
+    "windows": {
+      "webviewInstallMode": { "type": "downloadBootstrapper", "silent": true },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["German"],
+        "displayLanguageSelector": false,
+        "installerHooks": "windows/installer-hooks.nsh"
+      }
+    }
+  }
+}

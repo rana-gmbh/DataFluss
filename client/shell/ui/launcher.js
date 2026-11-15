@@ -1,0 +1,562 @@
+// Start screen: lists the databases on this computer and creates, imports, opens and removes them.
+// Every action is a command of the shell (src-tauri/src/main.rs), which only this window may call.
+const { invoke } = window.__TAURI__.core;
+const { listen } = window.__TAURI__.event;
+
+window.addEventListener("error", (e) => invoke("report_error", { message: `${e.message} (${e.filename}:${e.lineno})` }));
+window.addEventListener("unhandledrejection", (e) => invoke("report_error", { message: `Unhandled: ${e.reason}` }));
+
+const $ = (selector, root = document) => root.querySelector(selector);
+// The same start screen on macOS and Windows; only the names of the computer and its tools differ.
+const WINDOWS = navigator.userAgent.includes("Windows");
+const HERE = WINDOWS ? "diesem PC" : "diesem Mac";
+const FILE_MANAGER = WINDOWS ? "Explorer" : "Finder";
+
+// Elements with data-win get their Windows wording (in the page and in templates when they are used).
+function localize(root) {
+  if (!WINDOWS) return;
+  for (const el of root.querySelectorAll("[data-win]")) el.textContent = el.dataset.win;
+  for (const el of root.querySelectorAll("[data-win-label]")) el.setAttribute("aria-label", el.dataset.winLabel);
+}
+localize(document);
+const list = $("#databases");
+const sheet = $("#sheet");
+let databases = [];
+let selected = null;
+let working = false;
+
+const COLORS = ["#2553eb", "#0f766e", "#7c3aed", "#c2410c", "#be185d", "#4d7c0f", "#0369a1", "#a16207"];
+const colorOf = (id) => COLORS[[...id].reduce((sum, c) => sum + c.charCodeAt(0), 0) % COLORS.length];
+const initial = (name) => (name.trim()[0] || "?").toUpperCase();
+
+function when(seconds) {
+  if (!seconds) return "noch nie geöffnet";
+  const days = Math.floor((Date.now() / 1000 - seconds) / 86400);
+  if (days < 1) return "heute geöffnet";
+  if (days < 2) return "gestern geöffnet";
+  if (days < 30) return `vor ${days} Tagen geöffnet`;
+  return `zuletzt ${new Date(seconds * 1000).toLocaleDateString("de-DE")}`;
+}
+
+function size(bytes) {
+  return bytes > 1e9 ? `${(bytes / 1e9).toFixed(1)} GB` : `${Math.max(1, Math.round(bytes / 1e6))} MB`;
+}
+
+// ------------------------------------------------------------ list
+
+async function refresh() {
+  try {
+    databases = await invoke("list_databases");
+  } catch (error) {
+    databases = [];
+    console.error(error);
+  }
+  render();
+}
+
+function render() {
+  list.replaceChildren();
+  $("#empty").hidden = databases.length > 0;
+  list.hidden = databases.length === 0;
+  $("#count").textContent = databases.length ? `${databases.length} auf ${HERE}` : "";
+  if (selected && !databases.some((d) => d.id === selected)) selected = null;
+  for (const db of databases) {
+    const item = document.createElement("li");
+    item.className = "db";
+    item.role = "option";
+    item.dataset.id = db.id;
+    item.setAttribute("aria-selected", String(db.id === selected));
+    const avatar = document.createElement("span");
+    avatar.className = "avatar";
+    avatar.style.background = colorOf(db.id);
+    avatar.textContent = initial(db.name);
+    const text = document.createElement("div");
+    text.className = "db-text";
+    const name = document.createElement("div");
+    name.className = "db-name";
+    name.textContent = db.name;
+    const meta = document.createElement("div");
+    meta.className = "db-meta";
+    if (db.open) {
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.title = "Geöffnet";
+      meta.append(dot);
+    }
+    const badge = document.createElement("span");
+    badge.className = db.kind === "demo" ? "badge demo" : db.kind === "connected" ? "badge server" : "badge";
+    badge.textContent = db.kind === "demo" ? "Demo" : db.kind === "connected" ? "Server" : "Lokal";
+    if (db.kind === "connected" && db.server) badge.title = db.server;
+    meta.append(badge);
+    const details = document.createElement("span");
+    const host = db.kind === "connected" && db.server ? db.server.replace(/^https?:\/\//, "") : "";
+    details.textContent = [db.school && db.school !== db.name ? db.school : "", host, when(db.last_opened), size(db.size)].filter(Boolean).join(" · ");
+    meta.append(details);
+    text.append(name, meta);
+    const open = document.createElement("button");
+    open.className = "btn open-btn";
+    open.textContent = db.open ? "Anzeigen" : "Öffnen";
+    open.addEventListener("click", (e) => { e.stopPropagation(); openDatabase(db.id); });
+    const more = document.createElement("button");
+    more.className = "icon-btn";
+    more.setAttribute("aria-label", `Mehr zu ${db.name}`);
+    more.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>';
+    more.addEventListener("click", (e) => { e.stopPropagation(); select(db.id); showMenu(db, more.getBoundingClientRect()); });
+    item.append(avatar, text, open, more);
+    item.addEventListener("click", () => select(db.id));
+    item.addEventListener("dblclick", () => openDatabase(db.id));
+    item.addEventListener("contextmenu", (e) => { e.preventDefault(); select(db.id); showMenu(db, { left: e.clientX, bottom: e.clientY }); });
+    list.append(item);
+  }
+}
+
+function select(id) {
+  selected = id;
+  for (const item of list.children) item.setAttribute("aria-selected", String(item.dataset.id === id));
+  list.focus();
+}
+
+list.addEventListener("keydown", (e) => {
+  const index = databases.findIndex((d) => d.id === selected);
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    const next = databases[Math.max(0, Math.min(databases.length - 1, index + (e.key === "ArrowDown" ? 1 : -1)))];
+    if (next) select(next.id);
+  } else if (e.key === "Enter" && selected) {
+    openDatabase(selected);
+  } else if (((e.key === "Backspace" || e.key === "Delete") && e.metaKey || e.key === "Delete" && WINDOWS) && selected) {
+    confirmRemove(databases[index]);
+  }
+});
+
+// ------------------------------------------------------------ menu
+
+const menu = $("#menu");
+
+function showMenu(db, at) {
+  menu.replaceChildren();
+  const add = (label, action, danger = false) => {
+    const button = document.createElement("button");
+    button.textContent = label;
+    button.role = "menuitem";
+    if (danger) button.className = "danger";
+    button.addEventListener("click", () => { hideMenu(); action(); });
+    menu.append(button);
+  };
+  add(db.open ? "Anzeigen" : "Öffnen", () => openDatabase(db.id));
+  add(`Im ${FILE_MANAGER} zeigen`, () => invoke("reveal_database", { id: db.id }));
+  if (db.kind === "demo") add("Anmeldedaten zeigen …", () => showLogins(db.id));
+  menu.append(document.createElement("hr"));
+  add("In den Papierkorb legen …", () => confirmRemove(db), true);
+  menu.hidden = false;
+  const box = menu.getBoundingClientRect();
+  menu.style.left = `${Math.min(at.left, innerWidth - box.width - 8)}px`;
+  menu.style.top = `${Math.min(at.bottom + 4, innerHeight - box.height - 8)}px`;
+  menu.querySelector("button").focus();
+}
+
+function hideMenu() { menu.hidden = true; }
+document.addEventListener("click", (e) => { if (!menu.contains(e.target)) hideMenu(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") hideMenu(); });
+
+// ------------------------------------------------------------ sheets
+
+function openSheet(title, { template, html, actions }) {
+  if (sheet.open) sheet.close(); // showModal() refuses a dialog that is still open.
+  $("#sheet-title").textContent = title;
+  const body = $("#sheet-body");
+  body.replaceChildren();
+  if (template) {
+    const content = $(template).content.cloneNode(true);
+    localize(content);
+    body.append(content);
+  }
+  if (html) body.append(html);
+  $("#sheet-error").hidden = true;
+  $("#sheet-busy").hidden = true;
+  const footer = $("#sheet-actions");
+  footer.replaceChildren();
+  for (const { label, kind = "", run, submit } of actions) {
+    const button = document.createElement("button");
+    button.className = `btn ${kind}`;
+    button.textContent = label;
+    button.type = submit ? "submit" : "button";
+    if (!submit) button.addEventListener("click", run || closeSheet);
+    else sheet.onsubmit = (e) => { e.preventDefault(); run(); };
+    footer.append(button);
+  }
+  if (!actions.some((a) => a.submit)) sheet.onsubmit = (e) => e.preventDefault();
+  sheet.showModal();
+  const first = body.querySelector("input:not([type=checkbox]), button")
+    || footer.querySelector("button[type=submit]:not(.danger)") || footer.querySelector("button");
+  if (first) first.focus();
+}
+
+function closeSheet() { if (!working) sheet.close(); }
+sheet.addEventListener("cancel", (e) => { if (working) e.preventDefault(); });
+
+function showError(message) {
+  const box = $("#sheet-error");
+  box.textContent = message;
+  box.hidden = false;
+}
+
+async function busy(text, task) {
+  working = true;
+  $("#sheet-error").hidden = true;
+  $("#busy-text").textContent = text;
+  $("#busy-bar").hidden = true;
+  $("#sheet-busy").hidden = false;
+  for (const el of sheet.querySelectorAll("input, button")) el.disabled = true;
+  try {
+    return await task();
+  } finally {
+    working = false;
+    $("#sheet-busy").hidden = true;
+    for (const el of sheet.querySelectorAll("input, button")) el.disabled = false;
+  }
+}
+
+listen("task-progress", ({ payload }) => {
+  const { text, done, total } = payload.step || {};
+  if (text) $("#busy-text").textContent = `${text} …`;
+  const bar = $("#busy-bar");
+  if (total) {
+    bar.hidden = false;
+    bar.firstElementChild.style.width = `${Math.round((100 * (done || 0)) / total)}%`;
+  } else {
+    bar.hidden = true;
+  }
+});
+
+const field = (name) => sheet.querySelector(`[name="${name}"]`);
+
+// ------------------------------------------------------------ new database (wizard)
+
+let offered = null; // optional modules this installation has: [{id, title}]
+
+async function offeredModules() {
+  if (offered === null) {
+    try { offered = await invoke("available_modules"); } catch { offered = []; }
+  }
+  return offered;
+}
+
+let chosenModules = null;
+
+async function startCreate() {
+  const modules = await offeredModules();
+  openSheet("Neue Datenbank", {
+    template: "#t-start",
+    actions: [
+      { label: "Abbrechen" },
+      { label: "Weiter", kind: "primary", submit: true, run: afterStart },
+    ],
+  });
+  const box = $("#module-choices");
+  for (const { id, title } of modules) {
+    const label = document.createElement("label");
+    label.className = "check";
+    const input = Object.assign(document.createElement("input"), { type: "checkbox", name: "module", value: id, checked: false });
+    const text = document.createElement("span");
+    text.append(Object.assign(document.createElement("strong"), { textContent: title }));
+    label.append(input, text);
+    box.append(label);
+  }
+  box.hidden = modules.length === 0;
+}
+
+function afterStart() {
+  chosenModules = [...sheet.querySelectorAll('[name="module"]:checked')].map((input) => input.value);
+  if (field("demo").checked) {
+    openSheet("Neue Datenbank mit Beispieldaten", {
+      template: "#t-demo-name",
+      actions: [
+        { label: "Zurück", run: startCreate },
+        { label: "Anlegen", kind: "primary", submit: true, run: () => createDemo(field("name").value.trim(), chosenModules) },
+      ],
+    });
+    return;
+  }
+  openSheet("Neue Datenbank", {
+    template: "#t-create",
+    actions: [
+      { label: "Zurück", run: startCreate },
+      { label: "Anlegen", kind: "primary", submit: true, run: create },
+    ],
+  });
+}
+
+async function create() {
+  const school = field("school").value.trim();
+  const name = field("name").value.trim() || school;
+  const username = field("username").value.trim();
+  const password = field("password").value;
+  if (!school || !username) return showError("Bitte den Namen der Schule und einen Benutzernamen angeben.");
+  if (password.length < 12) return showError("Das Passwort braucht mindestens 12 Zeichen.");
+  if (password !== field("password2").value) return showError("Die beiden Passwörter stimmen nicht überein.");
+  try {
+    const id = await busy("Datenbank wird angelegt …", () => invoke("create_database", { name, school, username, password, modules: chosenModules }));
+    sheet.close();
+    await openDatabase(id);
+  } catch (error) {
+    showError(String(error));
+  }
+}
+
+function startConnect() {
+  openSheet("Mit Server verbinden", {
+    template: "#t-connect",
+    actions: [
+      { label: "Abbrechen" },
+      { label: "Verbinden", kind: "primary", submit: true, run: connect },
+    ],
+  });
+}
+
+async function connect() {
+  const url = field("url").value.trim();
+  const username = field("username").value.trim();
+  const password = field("password").value;
+  if (!url || !username || !password) return showError("Bitte Adresse, Benutzername und Passwort angeben.");
+  try {
+    const id = await busy("Verbindung zum Server …", () => invoke("connect_server", {
+      name: field("name").value.trim(), url, username, password, code: field("code").value.trim(),
+    }));
+    sheet.close();
+    await openDatabase(id);
+  } catch (error) {
+    showError(String(error));
+    if (/Code/.test(String(error))) field("code").focus();
+  }
+}
+
+let backupPath = "";
+
+function startImport() {
+  backupPath = "";
+  openSheet("Sicherung importieren", {
+    template: "#t-import",
+    actions: [
+      { label: "Abbrechen" },
+      { label: "Importieren", kind: "primary", submit: true, run: importBackup },
+    ],
+  });
+  $("#pick").addEventListener("click", async () => {
+    const path = await invoke("pick_backup");
+    if (!path) return;
+    backupPath = path;
+    const file = path.split(/[\\/]/).pop();
+    $("#picked").textContent = file;
+    $("#picked").title = path;
+    if (!field("name").value) field("name").value = file.replace(/\.svbackup$/, "").replace(/[-_]+/g, " ");
+    field("password").focus();
+  });
+}
+
+async function importBackup() {
+  const name = field("name").value.trim();
+  const password = field("password").value;
+  if (!backupPath) return showError("Bitte zuerst die Sicherungsdatei wählen.");
+  if (!password) return showError("Bitte das Passwort der Sicherung eingeben.");
+  if (!name) return showError("Bitte der Datenbank einen Namen geben.");
+  try {
+    const id = await busy("Sicherung wird geprüft …", () =>
+      invoke("import_backup", { name, path: backupPath, password, keepSecrets: field("keep_secrets").checked }));
+    sheet.close();
+    await openDatabase(id);
+  } catch (error) {
+    showError(String(error));
+  }
+}
+
+async function startDemo() {
+  openSheet("Demo anlegen", {
+    html: Object.assign(document.createElement("p"), {
+      className: "muted",
+      textContent: "Die Schulverwaltung mit rund 600 erfundenen Personen, Geräten und Zugängen, zum Ausprobieren. Ein Konto für jede Rolle, ohne Zwei-Faktor-Anmeldung. Keine echten Daten eintragen.",
+    }),
+    actions: [
+      { label: "Abbrechen" },
+      { label: "Demo anlegen", kind: "primary", submit: true, run: createDemo },
+    ],
+  });
+}
+
+async function createDemo(name = null, modules = null) {
+  try {
+    const result = await busy("Demo wird angelegt …", () => invoke("create_demo", { name, modules }));
+    await refresh();
+    showLoginsSheet(result.id, result.logins);
+  } catch (error) {
+    showError(String(error));
+  }
+}
+
+async function showLogins(id) {
+  try {
+    showLoginsSheet(id, await invoke("demo_logins", { id }));
+  } catch (error) {
+    openSheet("Anmeldedaten", { html: document.createTextNode(String(error)), actions: [{ label: "Schließen" }] });
+  }
+}
+
+const ROLES = { it: "IT", sekretariat: "Sekretariat", leitung: "Schulleitung", daz: "DaZ-Lehrkraft", kiga: "Kindergarten", lehrer: "Lehrkraft" };
+
+function showLoginsSheet(id, logins) {
+  const wrap = document.createElement("div");
+  wrap.append(Object.assign(document.createElement("p"), { className: "muted", textContent: "Mit diesen Konten anmelden. Sie stehen auch im Ordner der Datenbank." }));
+  const table = document.createElement("table");
+  table.className = "logins";
+  for (const { username, password } of logins) {
+    const row = table.insertRow();
+    row.insertCell().textContent = ROLES[username] || username;
+    const user = document.createElement("code");
+    user.textContent = username;
+    row.insertCell().append(user);
+    const pass = document.createElement("code");
+    pass.textContent = password;
+    row.insertCell().append(pass);
+  }
+  wrap.append(table);
+  openSheet("Demo-Anmeldedaten", {
+    html: wrap,
+    actions: [
+      { label: "Schließen" },
+      { label: "Demo öffnen", kind: "primary", submit: true, run: () => { sheet.close(); openDatabase(id); } },
+    ],
+  });
+}
+
+function confirmRemove(db) {
+  if (!db) return;
+  const text = document.createElement("p");
+  text.textContent = `„${db.name}“ wird mit allen Daten in den Papierkorb gelegt.${db.open ? " Ihr Fenster wird geschlossen." : ""} Solange der Ordner im Papierkorb liegt, lässt er sich zurücklegen.`;
+  openSheet("In den Papierkorb legen?", {
+    html: text,
+    actions: [
+      { label: "Abbrechen" },
+      { label: "In den Papierkorb", kind: "danger", submit: true, run: async () => {
+        try {
+          await invoke("remove_database", { id: db.id });
+          sheet.close();
+          refresh();
+        } catch (error) {
+          showError(String(error));
+        }
+      } },
+    ],
+  });
+}
+
+// ------------------------------------------------------------ open
+
+async function openDatabase(id) {
+  const db = databases.find((d) => d.id === id);
+  if (!sheet.open) {
+    openSheet(db ? db.name : "Datenbank", { html: document.createElement("span"), actions: [] });
+  }
+  try {
+    await busy("Datenbank wird geöffnet …", () => invoke("open_db", { id }));
+    sheet.close();
+    refresh();
+  } catch (error) {
+    if (!sheet.open) openSheet(db ? db.name : "Datenbank", { html: document.createElement("span"), actions: [] });
+    $("#sheet-actions").replaceChildren(Object.assign(document.createElement("button"), { className: "btn", type: "button", textContent: "Schließen", onclick: closeSheet }));
+    showError(String(error));
+  }
+}
+
+for (const button of document.querySelectorAll("[data-action]")) {
+  button.addEventListener("click", () => {
+    const action = button.dataset.action;
+    if (action === "create") startCreate();
+    if (action === "connect") startConnect();
+    if (action === "import") startImport();
+    if (action === "demo") startDemo();
+    if (action === "module") installModule();
+  });
+}
+
+async function installModule() {
+  try {
+    const name = await invoke("install_module");
+    if (!name) return;
+    const text = document.createElement("p");
+    text.textContent = `${name} liegt bereit. DataFluss prüft die Signatur beim nächsten Öffnen einer Datenbank und lädt das Modul nur, wenn sie stimmt und das Modul zu dieser Version passt.`;
+    openSheet("Modul installiert", { html: text, actions: [{ label: "OK", kind: "primary" }] });
+  } catch (error) {
+    openSheet("Modul installieren", { html: document.createElement("span"), actions: [{ label: "Schließen" }] });
+    showError(String(error));
+  }
+}
+
+// ------------------------------------------------------------ first steps (welcome on the first start)
+
+const WELCOME = [
+  {
+    title: "Willkommen bei DataFluss",
+    text: [`DataFluss hält Daten in eigenen Datenbanken: auf ${HERE}, verschlüsselt, und auf Wunsch im Abgleich mit einem Server, auch nach einer Zeit ohne Verbindung.`,
+      "Eine Datenbank beginnt mit einem Ausgangspunkt wie der Schulverwaltung und lässt sich dann mit eigenen Feldern, Masken und Druckvorlagen anpassen."],
+  },
+  {
+    title: "Vier Wege zum Anfang",
+    list: [
+      ["Mit erfundenen Daten ausprobieren", "der schnellste Weg, alles kennenzulernen"],
+      ["Neue Datenbank", "für die eigenen Daten, mit einem Ausgangspunkt"],
+      ["Mit Server verbinden", "eine Kopie, die sich mit dem Server Ihrer Organisation abgleicht"],
+      ["Sicherung importieren", `von einem Server oder einem anderen ${WINDOWS ? "PC" : "Mac"}`],
+    ],
+  },
+  {
+    title: "Sicher von Anfang an",
+    text: [`Jede Datenbank ist verschlüsselt. Die Schlüssel liegen ${WINDOWS ? "in der Anmeldeinformationsverwaltung dieses PCs" : "im Schlüsselbund dieses Macs"}, nie im Ordner der Datenbank.`,
+      "Beim ersten Anmelden zeigt ein kurzer Rundgang, wo was ist. Diese Seiten und den Rundgang gibt es jederzeit wieder im Menü Hilfe."],
+  },
+];
+
+function showWelcome(index = 0) {
+  const step = WELCOME[index];
+  const wrap = document.createElement("div");
+  wrap.className = "welcome";
+  for (const paragraph of step.text || []) wrap.append(Object.assign(document.createElement("p"), { textContent: paragraph }));
+  if (step.list) {
+    const list = document.createElement("ul");
+    for (const [title, detail] of step.list) {
+      const item = document.createElement("li");
+      item.append(Object.assign(document.createElement("strong"), { textContent: title }), document.createTextNode(` – ${detail}`));
+      list.append(item);
+    }
+    wrap.append(list);
+  }
+  wrap.append(Object.assign(document.createElement("p"), { className: "muted small", textContent: `${index + 1} von ${WELCOME.length}` }));
+  const done = () => { invoke("welcome_done").catch(() => {}); };
+  const last = index === WELCOME.length - 1;
+  openSheet(step.title, {
+    html: wrap,
+    actions: last
+      ? [{ label: "Selbst anfangen", run: () => { done(); closeSheet(); } },
+         { label: "Erst die Demo ansehen", kind: "primary", submit: true, run: () => { done(); startDemo(); } }]
+      : [{ label: "Überspringen", run: () => { done(); closeSheet(); } },
+         ...(index ? [{ label: "Zurück", run: () => showWelcome(index - 1) }] : []),
+         { label: "Weiter", kind: "primary", submit: true, run: () => showWelcome(index + 1) }],
+  });
+}
+
+invoke("welcome_seen").then((seen) => { if (!seen && !sheet.open) showWelcome(); }).catch(() => {});
+
+listen("launcher-action", ({ payload }) => {
+  if (sheet.open) return;
+  if (payload === "create") startCreate();
+  if (payload === "import") startImport();
+  if (payload === "welcome") showWelcome();
+});
+listen("databases-changed", refresh);
+listen("database-wiped", ({ payload }) => {
+  refresh();
+  const text = document.createElement("p");
+  text.textContent = `Der Server hat die Verbindung von „${payload.name}“ zu ${HERE} getrennt. Die Kopie der Daten wurde von ${HERE} gelöscht. Zum weiteren Arbeiten ${WINDOWS ? "den PC" : "den Mac"} neu verbinden oder die Webversion benutzen.`;
+  openSheet("Verbindung getrennt", { html: text, actions: [{ label: "OK", kind: "primary", submit: true, run: closeSheet }] });
+});
+window.addEventListener("focus", refresh);
+refresh();

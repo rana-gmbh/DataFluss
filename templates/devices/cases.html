@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{% translate "Schäden" %}{% endblock %}
+{% block scripts %}<script src="{% static 'js/panel.js' %}" defer></script>{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-2 mb-4"><h1 class="page-title flex-1">{% translate "Schäden" %}</h1>
+<div class="flex gap-1"><a class="btn btn-sm {% if status == 'offen' %}btn-primary{% endif %}" href="?status=offen">{% translate "Offen" %}</a><a class="btn btn-sm {% if status == 'erledigt' %}btn-primary{% endif %}" href="?status=erledigt">{% translate "Erledigt" %}</a><a class="btn btn-sm {% if status == 'alle' %}btn-primary{% endif %}" href="?status=alle">{% translate "Alle" %}</a></div>
+{% if request.user|can:'device.edit' %}<a class="btn btn-primary" href="{% url 'case_new' %}">{% icon 'plus' %}{% translate "Schaden erfassen" %}</a>{% endif %}</div>
+<div class="flex gap-4 items-start">
+<div class="flex-1 min-w-0 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Datum" %}</th><th>{% translate "Name" %}</th><th>{% translate "Beschreibung" %}</th><th>{% translate "Schaden an" %}</th><th>{% translate "Gerät" %}</th><th>{% translate "Austausch" %}</th><th>{% translate "Status" %}</th></tr></thead><tbody id="record-rows" data-base="{% url 'cases' %}">
+{% for c in cases %}<tr data-record="{{ c.pk }}"><td class="muted whitespace-nowrap">{{ c.date|date:"d.m.Y" }}</td><td class="whitespace-nowrap">{% if c.person %}<a class="font-medium hover:underline" href="{% url 'person_detail' c.person.pk %}">{{ c.person.display_name }}</a>{% else %}–{% endif %}</td><td class="max-w-sm"><a class="hover:underline block truncate" data-record-link href="{% url 'case_detail' c.pk %}">{{ c.description }}</a></td><td>{% for p in c.part_labels %}<span class="badge mr-1">{{ p }}</span>{% endfor %}</td><td class="mono text-[12px]">{{ c.asset.number|default:"" }}</td><td class="mono text-[12px]">{{ c.replacement_number }}</td><td><span class="badge {% if c.status == 'Erledigt' %}badge-ok{% else %}badge-warn{% endif %}">{{ c.status_label }}</span>{% if c.person or c.asset %}<template data-menu-items>{% if c.person %}<a href="{% url 'person_detail' c.person.pk %}" data-icon="user">{% translate "Person öffnen" %}</a>{% endif %}{% if c.asset %}<a href="{% url 'asset_detail' c.asset.pk %}" data-icon="laptop">{% translate "Gerät öffnen" %}</a>{% endif %}</template>{% endif %}</td></tr>
+{% empty %}<tr><td colspan="7" class="muted text-center py-6">{% translate "Keine Schäden." %}</td></tr>{% endfor %}</tbody></table></div>
+{% include "core/_record_panel.html" %}
+</div>
+{% include "core/_pager.html" %}
+{% endblock %}

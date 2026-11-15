@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Plattformen" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{% translate "Plattformen" %}</h1>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Name" %}</th><th>{% translate "Felder" %}</th><th>{% translate "Gilt für" %}</th><th>{% translate "Blatt" %}</th><th>{% translate "Zugänge" %}</th></tr></thead><tbody>
+{% for p in platforms %}<tr><td><a class="font-medium hover:underline" href="{% url 'platform_edit' p.pk %}">{{ p.name }}</a>{% if not p.active %} <span class="badge">{% translate "Inaktiv" %}</span>{% endif %}</td><td class="muted">{% for f in p.fields %}{{ f.label }}{% if f.secret %} 🔒{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}</td><td class="muted">{% for a in p.applies_to %}{% if a == "pupil" %}{% translate "Schüler" %}{% elif a == "staff" %}{% translate "Personal" %}{% elif a == "guardian" %}{% translate "Eltern" %}{% else %}{{ a }}{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}</td><td>{% if p.on_sheet %}{% translate "Ja" %}{% else %}{% translate "Nein" %}{% endif %}</td><td>{{ p.total }}</td></tr>{% endfor %}</tbody></table></div>
+<form method="post" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Plattform" %}</h2>
+  <div><label class="label" for="f-name">{% translate "Name" %}</label><input id="f-name" class="input" name="name" required></div>
+  <div><label class="label" for="f-fields">{% translate "Felder, eines pro Zeile (* = geheim)" %}</label><textarea id="f-fields" class="input mono" name="fields" rows="3">{% translate "Benutzername" %}
+{% translate "Passwort" %}*</textarea></div>
+  <div><label class="label" for="f-login_url">{% translate "Anmelde-Adresse" %}</label><input id="f-login_url" class="input" name="login_url" type="url"></div>
+  <div class="flex gap-3 text-[13px]"><label class="flex gap-1.5 items-center"><input type="checkbox" name="applies_to" value="pupil" checked class="accent-[var(--accent)]">{% translate "Schüler" %}</label><label class="flex gap-1.5 items-center"><input type="checkbox" name="applies_to" value="staff" class="accent-[var(--accent)]">{% translate "Personal" %}</label><label class="flex gap-1.5 items-center"><input type="checkbox" name="applies_to" value="guardian" class="accent-[var(--accent)]">{% translate "Eltern" %}</label></div>
+  <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form></div>
+{% endblock %}

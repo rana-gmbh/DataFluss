@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Klassen" %}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-2 mb-4"><div class="flex-1"><h1 class="page-title">{% translate "Klassen" %}</h1><p class="muted text-[13px]">{% blocktranslate trimmed with year=year.name|default:"–" %}Schuljahr {{ year }}{% endblocktranslate %}</p></div>
+{% if request.user|can:'class.manage' %}<a class="btn" href="{% url 'rollover' %}">{% icon 'refresh' %}{% translate "Schuljahreswechsel" %}</a>{% endif %}</div>
+<div class="grid sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 mb-5">
+{% for g in groups %}<a href="{% url 'class_detail' g.pk %}" class="surface p-3 hover:border-[var(--line-strong)]" data-menu><template data-menu-items><a href="{% url 'class_detail' g.pk %}" data-icon="file">{% translate "Öffnen" %}</a><a href="{% url 'class_detail' g.pk %}" data-new-window data-icon="external">{% translate "In neuem Fenster öffnen" %}</a></template><div class="font-semibold flex items-center gap-2">{% if g.color %}<span class="h-2.5 w-2.5 rounded-full" style="background: {{ g.color }}"></span>{% endif %}{{ g.name }}</div><div class="muted text-[12px]">{% blocktranslate trimmed count n=g.count %}{{ n }} Schüler{% plural %}{{ n }} Schüler{% endblocktranslate %}</div></a>{% endfor %}
+</div>
+{% if request.user|can:'class.manage' %}
+<form method="post" class="surface p-3 flex flex-wrap gap-2 items-end max-w-lg">{% csrf_token %}
+  <div class="flex-1"><label class="label" for="f-name">{% translate "Neue Klasse oder Gruppe" %}</label><input id="f-name" class="input" name="name" placeholder="{% translate 'z. B. 5c' %}" required></div>
+  <div><label class="label" for="f-kind">{% translate "Art" %}</label><select id="f-kind" class="input" name="kind">{% for v, l in kinds %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+  <button class="btn btn-primary">{% translate "Anlegen" %}</button></form>
+{% endif %}
+{% endblock %}

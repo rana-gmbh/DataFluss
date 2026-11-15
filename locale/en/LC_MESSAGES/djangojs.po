@@ -1,0 +1,741 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Schulverwaltung\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 21:21+0100\n"
+"PO-Revision-Date: 2026-11-08 12:00+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid ""
+"Sie sind nicht mehr angemeldet. Ihre letzte Änderung wurde nicht gespeichert."
+msgstr "You are no longer signed in. Your last change was not saved."
+
+msgid ""
+"Keine Verbindung zum Server. Ihre letzte Änderung wurde nicht gespeichert."
+msgstr "No connection to the server. Your last change was not saved."
+
+msgid "Hinweis schließen"
+msgstr "Close notice"
+
+msgid "%(label)s gespeichert"
+msgstr "%(label)s saved"
+
+msgid "Rückgängig"
+msgstr "Undo"
+
+msgid "Das hat nicht geklappt."
+msgstr "That didn’t work."
+
+msgid "Ungespeicherte Änderungen verwerfen?"
+msgstr "Discard unsaved changes?"
+
+msgid "PDF wird erstellt …"
+msgstr "Creating PDF …"
+
+msgid "Strg K"
+msgstr "Ctrl K"
+
+msgid "Kopiert"
+msgstr "Copied"
+
+msgid ""
+"Die Sicherung ist fertig. Bitte laden Sie sie herunter und bewahren Sie sie "
+"an einem anderen Ort auf."
+msgstr ""
+"The backup is ready. Please download it and keep it in a different place."
+
+msgid "Die Sicherung wurde eingespielt."
+msgstr "The backup was restored."
+
+msgid "%(done)s von %(total)s"
+msgstr "%(done)s of %(total)s"
+
+msgid "%(name)s wird hochgeladen: %(percent)s"
+msgstr "Uploading %(name)s: %(percent)s"
+
+msgid "Das Hochladen hat nicht geklappt. Bitte erneut versuchen."
+msgstr "The upload failed. Please try again."
+
+msgid "Wird geprüft …"
+msgstr "Checking …"
+
+msgid "Schule"
+msgstr "School"
+
+msgid "Stand"
+msgstr "As of"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Personen"
+msgstr "People"
+
+msgid "Geräte"
+msgstr "Devices"
+
+msgid "Benutzer"
+msgstr "User"
+
+msgid "Dateien"
+msgstr "Files"
+
+msgid "Keine Geräte"
+msgstr "No devices"
+
+msgid "Gerätenummer"
+msgstr "Device number"
+
+msgid "Typ"
+msgstr "Type"
+
+msgid "Seriennummer"
+msgstr "Serial number"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Bei"
+msgstr "Held by"
+
+msgid "Ehemalig"
+msgstr "Former"
+
+msgid "Ausgabe"
+msgstr "Issue"
+
+msgid "Öffnen"
+msgstr "Open"
+
+msgid "Ganze Seite öffnen"
+msgstr "Open full page"
+
+msgid "In neuem Fenster öffnen"
+msgstr "Open in new window"
+
+msgid "%(n)s ausgewählt"
+msgstr "%(n)s selected"
+
+msgid "Stammdaten"
+msgstr "Basic data"
+
+msgid "%(n)s Element"
+msgid_plural "%(n)s Elementen"
+msgstr[0] "%(n)s item"
+msgstr[1] "%(n)s items"
+
+msgid "Veröffentlicht: Version %(n)s"
+msgstr "Published: version %(n)s"
+
+msgid "Noch nicht veröffentlicht"
+msgstr "Not published yet"
+
+msgid "Ungespeicherte Änderungen"
+msgstr "Unsaved changes"
+
+msgid "Entwurf gespeichert"
+msgstr "Draft saved"
+
+msgid "platziert"
+msgstr "placed"
+
+msgid "Baustein"
+msgstr "Block"
+
+msgid "Hinweistext"
+msgstr "Note text"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Reiter"
+msgstr "Tabs"
+
+msgid "Name des Reiters (leer lassen zum Löschen)"
+msgstr "Tab name (leave empty to delete)"
+
+msgid "Name des Reiters"
+msgstr "Tab name"
+
+msgid "Abschnitt ohne Titel"
+msgstr "Untitled section"
+
+msgid "Titel des Abschnitts"
+msgstr "Section title"
+
+msgid "Abschnitt entfernen"
+msgstr "Remove section"
+
+msgid "Abschnitt mit allen Feldern entfernen?"
+msgstr "Remove the section and all its fields?"
+
+msgid "bedingt"
+msgstr "conditional"
+
+msgid "Unbekannt"
+msgstr "Unknown"
+
+msgid "Entfernen"
+msgstr "Remove"
+
+msgid "Breite %(w)s"
+msgstr "Width %(w)s"
+
+msgid "Felder hierher ziehen"
+msgstr "Drag fields here"
+
+msgid "Element auswählen, um es anzupassen."
+msgstr "Select an element to adjust it."
+
+msgid "Bezeichnung"
+msgstr "Name"
+
+msgid "Hilfetext"
+msgstr "Help text"
+
+msgid "Nur anzeigen, wenn"
+msgstr "Only show if"
+
+msgid "Feld"
+msgstr "Field"
+
+msgid "immer anzeigen"
+msgstr "always show"
+
+msgid "Vergleich"
+msgstr "Comparison"
+
+msgid "gleich"
+msgstr "equals"
+
+msgid "ungleich"
+msgstr "does not equal"
+
+msgid "Wert, z. B. Kiga"
+msgstr "Value, e.g. Kiga"
+
+msgid "Wert"
+msgstr "Value"
+
+msgid "Nicht gespeichert"
+msgstr "Not saved"
+
+msgid "Veröffentlicht. Die Maske ist jetzt aktiv."
+msgstr "Published. The layout is now live."
+
+msgid "Maske veröffentlichen? Alle Benutzer sehen sie sofort."
+msgstr "Publish the layout? All users will see it immediately."
+
+msgid "Vorschau nicht möglich"
+msgstr "Preview not available"
+
+msgid "%(field)s angelegt. Jetzt in die Maske ziehen."
+msgstr "%(field)s created. Now drag it into the layout."
+
+msgid "Abschnitt %(n)s"
+msgstr "Section %(n)s"
+
+msgid "Das Feld ließ sich nicht duplizieren"
+msgstr "The field could not be duplicated"
+
+msgid ""
+"%(field)s angelegt und daneben platziert. Umbenennen über Rechtsklick → Feld "
+"bearbeiten."
+msgstr ""
+"%(field)s created and placed next to it. Rename via right-click → Edit field."
+
+msgid "%(field)s angelegt. Umbenennen über Rechtsklick → Feld bearbeiten."
+msgstr "%(field)s created. Rename via right-click → Edit field."
+
+msgid "Feld bearbeiten"
+msgstr "Edit field"
+
+msgid "Eigenschaften"
+msgstr "Properties"
+
+msgid "Breite"
+msgstr "Width"
+
+msgid "Ganze Zeile"
+msgstr "Full row"
+
+msgid "Nach vorne"
+msgstr "Move forward"
+
+msgid "Nach hinten"
+msgstr "Move back"
+
+msgid "Verschieben nach"
+msgstr "Move to"
+
+msgid "Feld duplizieren"
+msgstr "Duplicate field"
+
+msgid "Duplizieren"
+msgstr "Duplicate"
+
+msgid "Aus der Maske entfernen"
+msgstr "Remove from layout"
+
+msgid "Umbenennen"
+msgstr "Rename"
+
+msgid "Abschnitt darüber einfügen"
+msgstr "Insert section above"
+
+msgid "Abschnitt darunter einfügen"
+msgstr "Insert section below"
+
+msgid "Nach oben"
+msgstr "Move up"
+
+msgid "Nach unten"
+msgstr "Move down"
+
+msgid "In Reiter verschieben"
+msgstr "Move to tab"
+
+msgid "Abschnitt entfernen …"
+msgstr "Remove section …"
+
+msgid "%(section)s mit %(elements)s entfernen?"
+msgstr "Remove %(section)s with %(elements)s?"
+
+msgid "Nach links"
+msgstr "Move left"
+
+msgid "Nach rechts"
+msgstr "Move right"
+
+msgid "Reiter löschen …"
+msgstr "Delete tab …"
+
+msgid "Reiter %(tab)s mit %(elements)s löschen?"
+msgstr "Delete tab %(tab)s with %(elements)s?"
+
+msgid "Reiter %(tab)s löschen?"
+msgstr "Delete tab %(tab)s?"
+
+msgid "Einfügen in"
+msgstr "Insert into"
+
+msgid "schon platziert"
+msgstr "already placed"
+
+msgid "Name der Maske"
+msgstr "Layout name"
+
+msgid "Synchronisation …"
+msgstr "Sync …"
+
+msgid "noch nie"
+msgstr "never"
+
+msgid "gerade eben"
+msgstr "just now"
+
+msgid "vor %(n)s Min."
+msgid_plural "vor %(n)s Min."
+msgstr[0] "%(n)s min ago"
+msgstr[1] "%(n)s min ago"
+
+msgid "vor %(n)s Std."
+msgid_plural "vor %(n)s Std."
+msgstr[0] "%(n)s hr ago"
+msgstr[1] "%(n)s hrs ago"
+
+msgid "%(n)s Änderung wartet"
+msgid_plural "%(n)s Änderungen warten"
+msgstr[0] "%(n)s change pending"
+msgstr[1] "%(n)s changes pending"
+
+msgid "Vom Server getrennt"
+msgstr "Disconnected from server"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "Zuletzt synchronisiert: %(when)s."
+msgstr "Last synced: %(when)s."
+
+msgid "Synchronisiert %(when)s"
+msgstr "Synced %(when)s"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Überschrift"
+msgstr "Heading"
+
+msgid "Foto"
+msgstr "Photo"
+
+msgid "Logo"
+msgstr "Logo"
+
+msgid "QR-Code"
+msgstr "QR code"
+
+msgid "Zugangsdaten"
+msgstr "Login details"
+
+msgid "Geräteliste"
+msgstr "Device list"
+
+msgid "Schadensliste"
+msgstr "Damage report list"
+
+msgid "Klassenliste"
+msgstr "Class list"
+
+msgid "Unterschriften"
+msgstr "Signatures"
+
+msgid "Abstand"
+msgstr "Spacing"
+
+msgid "Linie"
+msgstr "Line"
+
+msgid "Zugangsdaten: %(platforms)s"
+msgstr "Login details: %(platforms)s"
+
+msgid "Zugangsdaten: alle für das Blatt"
+msgstr "Login details: all platforms on the sheet"
+
+msgid "QR-Code: %(value)s"
+msgstr "QR code: %(value)s"
+
+msgid "Oben ein Zeilen-Layout wählen und Elemente hineinziehen."
+msgstr "Choose a row layout above and drag elements into it."
+
+msgid "Zeile entfernen"
+msgstr "Remove row"
+
+msgid "Zeile mit %(n)s Spalten"
+msgstr "Row with %(n)s columns"
+
+msgid "Element anklicken, um es anzupassen."
+msgstr "Click an element to adjust it."
+
+msgid "Unterschriften, eine pro Zeile"
+msgstr "Signatures, one per line"
+
+msgid "Text (Felder als {{schluessel}})"
+msgstr "Text (fields as {{schluessel}})"
+
+msgid "Beispiele:"
+msgstr "Examples:"
+
+msgid "Als schlichte Überschrift"
+msgstr "As a plain heading"
+
+msgid "Bezeichnung anzeigen"
+msgstr "Show label"
+
+msgid "Ausblenden, wenn leer"
+msgstr "Hide if empty"
+
+msgid "Festbreitenschrift"
+msgstr "Monospace font"
+
+msgid "Schriftgröße (pt)"
+msgstr "Font size (pt)"
+
+msgid "Fett"
+msgstr "Bold"
+
+msgid "Farbe (#rrggbb)"
+msgstr "Color (#rrggbb)"
+
+msgid "Ausrichtung"
+msgstr "Alignment"
+
+msgid "Standard"
+msgstr "Default"
+
+msgid "Links"
+msgstr "Left"
+
+msgid "Mittig"
+msgstr "Center"
+
+msgid "Rechts"
+msgstr "Right"
+
+msgid "Breite (mm)"
+msgstr "Width (mm)"
+
+msgid "Höhe (mm)"
+msgstr "Height (mm)"
+
+msgid "Inhalt (z. B. Adresse oder {{number}})"
+msgstr "Content (e.g. address or {{number}})"
+
+msgid "Größe (mm)"
+msgstr "Size (mm)"
+
+msgid "Leere Plattformen ausblenden"
+msgstr "Hide empty platforms"
+
+msgid "Nur diese Plattformen (keine Auswahl = alle)"
+msgstr "Only these platforms (none selected = all)"
+
+msgid "Spalten"
+msgstr "Columns"
+
+msgid "Oben"
+msgstr "Top"
+
+msgid "Unten"
+msgstr "Bottom"
+
+msgid "Rand %(side)s"
+msgstr "%(side)s margin"
+
+msgid "%(n)s Seite"
+msgid_plural "%(n)s Seiten"
+msgstr[0] "%(n)s page"
+msgstr[1] "%(n)s pages"
+
+msgid "Gespeichert als Version %(version)s"
+msgstr "Saved as version %(version)s"
+
+msgid "Gespeichert"
+msgstr "Saved"
+
+msgid "(leer)"
+msgstr "(empty)"
+
+msgid "Ja"
+msgstr "Yes"
+
+msgid "Nein"
+msgstr "No"
+
+msgid "Keine Einträge"
+msgstr "No entries"
+
+msgid "Lädt"
+msgstr "Loading"
+
+msgid "Fehler"
+msgstr "Error"
+
+msgid "%(field)s gespeichert"
+msgstr "%(field)s saved"
+
+msgid "Ohne E-Mail"
+msgstr "No email"
+
+msgid "Neue Codes nötig"
+msgstr "New codes needed"
+
+msgid "Ohne Foto"
+msgstr "Without photo"
+
+msgid "Ohne Gerät"
+msgstr "No device"
+
+msgid "Filter entfernen"
+msgstr "Remove filter"
+
+msgid "Alle Filter löschen"
+msgstr "Clear all filters"
+
+msgid "Filter für %(field)s"
+msgstr "Filter for %(field)s"
+
+msgid "Werte suchen"
+msgstr "Search values"
+
+msgid "Aufsteigend sortieren"
+msgstr "Sort ascending"
+
+msgid "Absteigend sortieren"
+msgstr "Sort descending"
+
+msgid "Zurücksetzen"
+msgstr "Reset"
+
+msgid "%(n)s Wert"
+msgid_plural "%(n)s Werte"
+msgstr[0] "%(n)s value"
+msgstr[1] "%(n)s values"
+
+msgid "Keine Werte"
+msgstr "No values"
+
+msgid "(eigene)"
+msgstr "(personal)"
+
+msgid "Ansicht wählen"
+msgstr "Choose view"
+
+msgid "Name der Ansicht"
+msgstr "View name"
+
+msgid "Ansicht gespeichert"
+msgstr "View saved"
+
+msgid "Ansicht löschen?"
+msgstr "Delete view?"
+
+msgid "Erledigt: %(n)s Person"
+msgid_plural "Erledigt: %(n)s Personen"
+msgstr[0] "Done: %(n)s person"
+msgstr[1] "Done: %(n)s people"
+
+msgid "Das hat nicht geklappt"
+msgstr "That didn’t work"
+
+msgid "%(n)s Person"
+msgid_plural "%(n)s Personen"
+msgstr[0] "%(n)s person"
+msgstr[1] "%(n)s people"
+
+msgid "Klasse zuweisen"
+msgstr "Assign class"
+
+msgid "%(who)s in die Klasse %(klasse)s verschieben?"
+msgstr "Move %(who)s to class %(klasse)s?"
+
+msgid "Zugänge erzeugen"
+msgstr "Generate logins"
+
+msgid "%(platform)s: Zugänge für %(who)s erzeugen?"
+msgstr "%(platform)s: generate logins for %(who)s?"
+
+msgid "%(who)s archivieren?"
+msgstr "Archive %(who)s?"
+
+msgid "Bericht drucken"
+msgstr "Print report"
+
+msgid ""
+"%(what)s in den Papierkorb legen? Von dort lässt sich das 30 Tage lang "
+"zurückholen."
+msgstr ""
+"Move %(what)s to the recycle bin? It can be restored from there for 30 days."
+
+msgid "%(name)s liegt im Papierkorb"
+msgstr "%(name)s is now in the recycle bin"
+
+msgid "%(who)s im Papierkorb"
+msgstr "%(who)s moved to the recycle bin"
+
+msgid "Wiederhergestellt"
+msgstr "Restored"
+
+msgid ""
+"%(name)s duplizieren? Die Kopie bekommt Daten und Formularfelder, aber kein "
+"Bild, keine Karten, Zugänge oder Geräte."
+msgstr ""
+"Duplicate %(name)s? The copy gets the data and form fields, but no photo, ID "
+"cards, logins or devices."
+
+msgid "%(who)s ausgewählt"
+msgstr "%(who)s selected"
+
+msgid "Drucken"
+msgstr "Print"
+
+msgid "In Klasse verschieben"
+msgstr "Move to class"
+
+msgid "Wiederherstellen"
+msgstr "Restore"
+
+msgid "Archivieren"
+msgstr "Archive"
+
+msgid "Löschen …"
+msgstr "Delete …"
+
+msgid "%(who)s löschen …"
+msgstr "Delete %(who)s …"
+
+msgid "Gestalten"
+msgstr "Design"
+
+msgid "Umbenennen …"
+msgstr "Rename …"
+
+msgid "Maske löschen"
+msgstr "Delete layout"
+
+msgid "Maske löschen?"
+msgstr "Delete the layout?"
+
+msgid "Nur für %(language)s"
+msgstr "Only for %(language)s"
+
+msgid "Dieser Name wurde schon für einzelne Sprachen vergeben."
+msgstr "This name has already been set for individual languages."
+
+msgid "Die Oberfläche ist gerade auf %(language)s eingestellt."
+msgstr "The interface is currently set to %(language)s."
+
+msgid "Neuer Name"
+msgstr "New name"
+
+msgid "Datensatz konnte nicht geladen werden"
+msgstr "The record could not be loaded"
+
+msgid "%(n)s von %(m)s"
+msgstr "%(n)s of %(m)s"
+
+msgid "Überspringen"
+msgstr "Skip"
+
+msgid "Zurück"
+msgstr "Back"
+
+msgid "Fertig"
+msgstr "Done"
+
+msgid "Weiter"
+msgstr "Next"
+
+msgid "In der Warteschlange von Coolify"
+msgstr "Queued in Coolify"
+
+msgid "Neue Version wird gebaut und geprüft"
+msgstr "Building and checking the new version"
+
+msgid "Jetzt aktualisieren (%(n)s)"
+msgstr "Update now (%(n)s)"
+
+msgid "Neueste Version installieren"
+msgstr "Install latest version"
+
+msgid "Ist aktuell"
+msgstr "Up to date"
+
+msgid "Das dauert meist ein bis drei Minuten. Sie können weiterarbeiten."
+msgstr "This usually takes one to three minutes. You can keep working."
+
+msgid "Keine neuen Änderungen."
+msgstr "No new changes."
+
+msgid ""
+"Datenbank auf den Stand von %(when)s zurücksetzen? Alles, was seitdem "
+"gespeichert wurde, geht verloren."
+msgstr ""
+"Reset the database to its state from %(when)s? Everything saved since then "
+"will be lost."
+
+msgid "Jetzt aktualisieren? Vorher wird die Datenbank gesichert."
+msgstr "Update now? The database will be backed up first."

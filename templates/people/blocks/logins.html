@@ -1,0 +1,10 @@
+{% load i18n ui %}
+<div class="grid @lg:grid-cols-2 gap-3">
+{% for row in rows %}
+<div class="rounded-lg border" style="border-color: var(--line)">
+  <div class="flex items-center gap-2 px-3 py-2 border-b" style="border-color: var(--line); background: var(--surface-2); border-radius: .5rem .5rem 0 0"><span class="font-semibold text-[13px] flex-1">{{ row.platform.name }}</span>
+  {% if row.platform.login_url %}<a href="{{ row.platform.login_url }}" target="_blank" rel="noopener" class="muted" aria-label="{% translate 'Anmeldeseite öffnen' %}">{% icon 'external' %}</a>{% endif %}</div>
+  <div class="p-3" id="login-{{ row.platform.pk }}">{% include "vault/_login_card.html" with platform=row.platform credential=row.credential fields=row.fields owner_kind="person" owner_id=person.pk %}</div>
+</div>
+{% endfor %}
+</div>

@@ -1,0 +1,51 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{{ title }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'vendor/tabulator.min.css' %}"><link rel="stylesheet" href="{% static 'css/app.css' %}">{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/tabulator.min.js' %}" defer></script><script src="{% static 'js/record.js' %}" defer></script><script src="{% static 'js/panel.js' %}" defer></script><script src="{% static 'js/grid.js' %}" defer></script>{% endblock %}
+{% block content %}
+{{ config|json_script:"grid-config" }}
+<div class="flex flex-wrap items-center gap-2 mb-3">
+  <h1 class="page-title mr-2">{{ title }}</h1>
+  <span class="badge" id="grid-count">0</span>
+  <div class="flex-1"></div>
+  {% if request.user|can:'person.archive' %}<a class="btn" href="{% url 'person_bin' %}">{% icon 'trash' %}{% translate "Papierkorb" %}</a>{% endif %}
+  {% if request.user|can:'person.edit' %}<a class="btn btn-primary" href="{% url 'person_new' entity %}">{% icon 'plus' %}{% translate "Neu anlegen" %}</a>{% endif %}
+</div>
+<p class="muted text-[12px] mb-2 hidden lg:block">{% translate "Klick öffnet den Datensatz, Doppelklick ändert die Zelle, ein Klick auf den Spaltentitel filtert." %}</p>
+<div class="flex gap-4 items-start">
+<div class="flex-1 min-w-0 surface overflow-hidden">
+  <div class="flex flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line)">
+    {% translate "In der Liste filtern" as filter_label %}{% translate "Ansicht löschen" as delete_view_label %}
+    <div class="relative w-56"><span class="absolute left-2.5 top-2.5 muted">{% icon 'search' %}</span><input id="grid-search" class="input pl-8 h-[2.125rem]" placeholder="{{ filter_label }}" aria-label="{{ filter_label }}"></div>
+    <select id="grid-scope" class="input w-auto h-[2.125rem]" aria-label="{% translate 'Bestand' %}"><option value="active">{% translate "Aktiv" %}</option><option value="archived">{% translate "Ehemalige" %}</option><option value="all">{% translate "Alle" %}</option></select>
+    <select id="grid-views" class="input w-auto h-[2.125rem]" aria-label="{% translate 'Gespeicherte Ansicht' %}"></select>
+    <button class="btn" id="grid-save-view">{% icon 'save' %}{% translate "Ansicht speichern" %}</button>
+    <button class="btn btn-icon hidden" id="grid-delete-view" title="{{ delete_view_label }}" aria-label="{{ delete_view_label }}">{% icon 'trash' %}</button>
+    <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+      <button class="btn" @click="open = !open">{% icon 'columns' %}{% translate "Spalten" %}</button>
+      <div class="absolute z-30 mt-1 w-56 max-h-80 overflow-y-auto surface p-2 shadow-lg" x-show="open" x-cloak id="grid-columns"></div>
+    </div>
+    <div class="flex-1"></div>
+    {% if request.user|can:'data.export' %}
+    <button class="btn" id="grid-export-xlsx">{% icon 'download' %}Excel</button>
+    <button class="btn" id="grid-export-csv">{% icon 'download' %}CSV</button>
+    {% endif %}
+  </div>
+  <div id="grid-chips" class="hidden flex-wrap items-center gap-1.5 px-2 py-1.5 border-b" style="border-color: var(--line)"></div>
+  <div id="grid-bulk" class="hidden flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line); background: var(--accent-soft)">
+    <span class="font-medium text-[13px]" id="grid-bulk-count"></span>
+    {% if request.user|can:'person.edit' %}
+    <select id="bulk-class" class="input w-auto h-[1.9rem] text-[13px]" aria-label="{% translate 'Klasse zuweisen' %}"></select>
+    <select id="bulk-logins" class="input w-auto h-[1.9rem] text-[13px]" aria-label="{% translate 'Zugänge erzeugen' %}"></select>
+    <button class="btn btn-sm" id="bulk-archive">{% icon 'archive' %}{% translate "Archivieren" %}</button>
+    <button class="btn btn-sm" id="bulk-restore">{% icon 'archive-restore' %}{% translate "Wiederherstellen" %}</button>
+    {% endif %}
+    <select id="bulk-print" class="input w-auto h-[1.9rem] text-[13px]" aria-label="{% translate 'Bericht drucken' %}"></select>
+  </div>
+  <div id="grid"></div>
+</div>
+{% include "core/_record_panel.html" %}
+</div>
+<form id="export-form" method="post" action="{% url 'export_rows' %}" class="hidden">{% csrf_token %}<input type="hidden" name="payload"></form>
+<form id="print-form" method="post" action="{% url 'report_run' %}" target="_blank" class="hidden">{% csrf_token %}<input type="hidden" name="template"><input type="hidden" name="ids"></form>
+{% endblock %}

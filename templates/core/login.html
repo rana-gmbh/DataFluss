@@ -1,0 +1,16 @@
+{% extends "auth_base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Anmelden" %}{% endblock %}
+{% block auth %}
+{% if 'eingespielt' in request.GET %}<p class="badge-ok rounded-lg px-3 py-2 text-[13px] mb-4" role="status">{% translate "Die Sicherung wurde eingespielt. Bitte melden Sie sich mit einem Konto aus der Sicherung an." %}</p>{% endif %}
+{% if oidc_enabled %}
+<a class="btn w-full mb-4" href="{% url 'oidc_authentication_init' %}">{% icon 'external' %}{% translate "Mit Microsoft 365 anmelden" %}</a>
+<div class="flex items-center gap-3 mb-4 muted text-[12px]"><span class="h-px flex-1" style="background: var(--line)"></span>{% translate "oder" %}<span class="h-px flex-1" style="background: var(--line)"></span></div>
+{% endif %}
+<form method="post" class="space-y-3">{% csrf_token %}
+  <input type="hidden" name="next" value="{{ next }}">
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <div><label class="label" for="username">{% translate "Benutzername" %}</label><input class="input" id="username" name="username" autocomplete="username" required autofocus></div>
+  <div><label class="label" for="password">{% translate "Passwort" %}</label><input class="input" id="password" type="password" name="password" autocomplete="current-password" required></div>
+  <button class="btn btn-primary w-full">{% translate "Anmelden" %}</button>
+</form>
+{% endblock %}

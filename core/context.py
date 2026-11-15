@@ -1,0 +1,98 @@
+import os
+
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
+
+from . import modules
+from .models import SchoolSettings
+
+# Capabilities that open the search. Modules add theirs (core/modules.py).
+SEARCHERS = ["person.view"]
+# The menu. Modules add their sections (core/modules.py add_nav_section).
+NAV = [
+    (_("Übersicht"), [(_("Start"), "dashboard", "home", "person.view")]),
+    (
+        _("Personen"),
+        [
+            (_("Schüler"), "pupils", "users", "person.view"),
+            (_("Personal"), "staff", "briefcase", "person.view"),
+            (_("Eltern"), "guardians", "heart", "person.view"),
+            (_("Klassen"), "classes", "school", "person.view"),
+        ],
+    ),
+    (
+        _("IT"),
+        [
+            (_("Geräte"), "assets", "laptop", "device.view"),
+            (_("Schäden"), "cases", "wrench", "device.view"),
+            (_("Zugänge"), "credentials", "key", "vault.view"),
+            (_("Karte suchen"), "card_lookup", "card", "person.view"),
+        ],
+    ),
+    (
+        _("Drucken und Daten"),
+        [
+            (_("Druckvorlagen"), "reports", "printer", "print.run"),
+            (_("Import & Export"), "transfer", "swap", "data.export"),
+        ],
+    ),
+    (
+        _("Verwaltung"),
+        [
+            (_("Sicherung"), "backups", "archive", "admin.backup"),
+            (_("Einstellungen"), "settings_home", "settings", "admin.audit"),
+        ],
+    ),
+]
+
+
+def _tour(user):
+    """The guided tour's steps for this user, and whether it starts by itself (first sign-in)."""
+    if user is None or not user.is_authenticated:
+        return {}
+    from .tour import steps_for
+
+    return {"tour_steps": steps_for(user), "tour_auto": "platform" not in (user.tours_seen or [])}
+
+
+def _module_stylesheets():
+    """Stylesheets of modules loaded from bundles: the platform's CSS was built without their templates."""
+    from schule import bundles
+
+    return bundles.stylesheets()
+
+
+def _sync_server():
+    if not os.environ.get("SYNC_TOKEN"):
+        return ""
+    from sync.models import ClientState
+
+    state = ClientState.load()
+    return state.server_url if state else ""
+
+
+def app_context(request):
+    user = getattr(request, "user", None)
+    nav = []
+    if user is not None and user.is_authenticated:
+        using = modules.active()
+        for title, items in NAV:
+            if modules.NAV_MODULES.get(str(title), "platform") not in using | {"platform", None}:
+                continue  # a module this database does not use
+            visible = [i for i in items if user.can(i[3])]
+            if visible:
+                nav.append((title, visible))
+    return {
+        "school": SchoolSettings.load(),
+        "nav": nav,
+        "can_search": bool(user is not None and user.is_authenticated and any(user.can(c) for c in SEARCHERS)),
+        "oidc_enabled": settings.OIDC_ENABLED,
+        "server_id": settings.SERVER_ID,
+        # Set by the desktop client, which shows a switcher between its databases in the sidebar.
+        "client": {"db_name": os.environ["SCHULE_CLIENT_DB_NAME"], "synced": bool(os.environ.get("SYNC_TOKEN"))}
+        if os.environ.get("SCHULE_CLIENT_DB_NAME") else None,
+        "sync_server": _sync_server(),
+        "person_badges": modules.hooks("person_badges"),  # links beside a person's name to a module's section
+        "module_stylesheets": _module_stylesheets(),
+        **_tour(user),
+    }

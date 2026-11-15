@@ -1,0 +1,6 @@
+{% extends "core/_panel.html" %}{% load i18n ui %}
+{% block heading %}{{ guardian.display_name }}{% endblock %}
+{% block badges %}<span class="badge">{% blocktranslate trimmed count n=children|length %}{{ n }} Kind{% plural %}{{ n }} Kinder{% endblocktranslate %}</span>{% endblock %}
+{% block record_id %}{{ guardian.pk }}{% endblock %}
+{% block page_url %}{% url 'guardian_detail' guardian.pk %}{% endblock %}
+{% block body %}{% include "people/_guardian_record.html" %}{% endblock %}

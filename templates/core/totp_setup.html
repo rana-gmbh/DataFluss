@@ -1,0 +1,13 @@
+{% extends "auth_base.html" %}{% load i18n %}
+{% block title %}{% translate "Zwei-Faktor einrichten" %}{% endblock %}
+{% block auth %}
+<form method="post" class="space-y-3">{% csrf_token %}
+  <h2 class="font-semibold">{% translate "Zwei-Faktor-Anmeldung einrichten" %}</h2>
+  <p class="text-[13px] soft">{% translate "Scannen Sie den Code mit einer Authenticator-App und geben Sie danach den angezeigten Code ein." %}</p>
+  <img src="{{ qr }}" alt="{% translate 'QR-Code für die Authenticator-App' %}" class="mx-auto w-44 h-44 rounded-lg bg-white p-1">
+  <details class="text-[12px] muted"><summary class="cursor-pointer">{% translate "Code manuell eingeben" %}</summary><p class="mono mt-1 break-all">{{ secret }}</p></details>
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <input class="input mono text-center text-lg tracking-widest" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" required autofocus aria-label="{% translate 'Code' %}">
+  <button class="btn btn-primary w-full">{% translate "Einrichtung abschließen" %}</button>
+</form>
+{% endblock %}

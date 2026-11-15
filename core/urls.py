@@ -1,0 +1,35 @@
+from django.urls import path
+
+from . import views, views_language
+
+urlpatterns = [
+    path("", views.dashboard, name="dashboard"),
+    path("anmelden/", views.login_view, name="login"),
+    path("abmelden/", views.logout_view, name="logout"),
+    path("anmelden/zwei-faktor/", views.totp_verify, name="totp_verify"),
+    path("anmelden/zwei-faktor/einrichten/", views.totp_setup, name="totp_setup"),
+    path("konto/passwort/", views.password_change, name="password_change"),
+    path("konto/sitzung/", views.session_check, name="session_check"),
+    path("konto/rundgang/", views.tour_seen, name="tour_seen"),
+    path("suche/", views.global_search, name="global_search"),
+    path("einstellungen/", views.settings_home, name="settings_home"),
+    path("einstellungen/benutzer/", views.users, name="users"),
+    path("einstellungen/benutzer/zwei-faktor/", views.two_factor_switch, name="two_factor_switch"),
+    path("einstellungen/benutzer/<uuid:pk>/", views.user_update, name="user_update"),
+    path("einstellungen/protokoll/", views.audit_log, name="audit_log"),
+    path("einstellungen/schule/", views.school_settings, name="school_settings"),
+    path("einstellungen/sprachen/", views_language.school_languages, name="school_languages"),
+    path("einstellungen/aktualisierung/", views.updates_page, name="updates"),
+    path("einstellungen/aktualisierung/status/", views.update_status, name="update_status"),
+    path("einstellungen/aktualisierung/starten/", views.update_request, name="update_request"),
+    path("sprache/", views_language.set_language, name="set_language"),
+    path("sprache/namen/", views_language.name_scope, name="name_scope"),
+    path("konto/sprache/", views_language.language_settings, name="language_settings"),
+    path("jsi18n/", views_language.js_catalog, name="js_catalog"),
+    path("healthz/", views.healthz, name="healthz"),
+    path("schullogo/", views.school_logo, name="school_logo"),
+    path("media/<path:path>", views.media_file, name="media_file"),
+    path("foto/<uuid:pk>/klein/", views.person_thumb, name="person_thumb"),
+    path("manifest.json", views.manifest, name="manifest"),
+    path("sw.js", views.service_worker, name="service_worker"),
+]

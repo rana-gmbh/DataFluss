@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ platform.name }}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{{ platform.name }}</h1>
+<form method="post" class="surface p-5 space-y-3 max-w-lg">{% csrf_token %}
+  <div><label class="label" for="f-name">{% translate "Name" %}</label><input id="f-name" class="input" name="name" value="{{ platform.name }}"></div>
+  <div><label class="label" for="f-order">{% translate "Reihenfolge" %}</label><input id="f-order" class="input" type="number" name="order" value="{{ platform.order }}"></div>
+  <div><label class="label" for="f-fields">{% translate "Felder (* = geheim)" %}</label><textarea id="f-fields" class="input mono" name="fields" rows="4" {% if locked %}readonly{% endif %}>{{ fields_text }}</textarea>{% if locked %}<p class="muted text-[12px] mt-1">{% translate "Felder lassen sich nicht ändern, solange Zugänge bestehen." %}</p>{% endif %}</div>
+  <div><label class="label" for="f-login_url">{% translate "Anmelde-Adresse" %}</label><input id="f-login_url" class="input" type="url" name="login_url" value="{{ platform.login_url }}"></div>
+  <div class="flex flex-wrap gap-3 text-[13px]">
+    <label class="flex gap-1.5 items-center"><input type="checkbox" name="applies_to" value="pupil" {% if 'pupil' in platform.applies_to %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Schüler" %}</label>
+    <label class="flex gap-1.5 items-center"><input type="checkbox" name="applies_to" value="staff" {% if 'staff' in platform.applies_to %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Personal" %}</label>
+    <label class="flex gap-1.5 items-center"><input type="checkbox" name="applies_to" value="guardian" {% if 'guardian' in platform.applies_to %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Eltern" %}</label>
+    <label class="flex gap-1.5 items-center"><input type="checkbox" name="on_sheet" {% if platform.on_sheet %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Auf dem Zugangsblatt" %}</label>
+    <label class="flex gap-1.5 items-center"><input type="checkbox" name="active" {% if platform.active %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Aktiv" %}</label></div>
+  <div class="flex gap-2"><button class="btn btn-primary">{% translate "Speichern" %}</button><a class="btn" href="{% url 'platforms' %}">{% translate "Zurück" %}</a></div>
+</form>
+{% endblock %}

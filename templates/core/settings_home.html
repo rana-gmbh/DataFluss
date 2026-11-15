@@ -1,0 +1,28 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Einstellungen" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-5">{% translate "Einstellungen" %}</h1>
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+{% if request.user|can:'admin.masks' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'mask_list' %}">{% icon 'layout' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Masken" %}</h2><p class="muted text-[13px]">{% translate "Eingabemasken per Drag & Drop gestalten" %}</p></a>
+{% endif %}{% if request.user|can:'admin.fields' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'field_list' %}">{% icon 'rows' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Felder" %}</h2><p class="muted text-[13px]">{% translate "Eigene Felder anlegen und verwalten" %}</p></a>
+{% endif %}{% if request.user|can:'admin.platforms' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'platforms' %}">{% icon 'key' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Plattformen" %}</h2><p class="muted text-[13px]">{% translate "Anbieter für Zugangsdaten verwalten" %}</p></a>
+{% endif %}{% if request.user|can:'admin.users' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'users' %}">{% icon 'shield' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Benutzer und Rollen" %}</h2><p class="muted text-[13px]">{% translate "Konten, Rollen und Zwei-Faktor" %}</p></a>
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'sync_overview' %}">{% icon 'swap' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2 flex items-center gap-2">{% translate "Synchronisation" %}{% if sync_conflicts %}<span class="badge badge-warn">{{ sync_conflicts }}</span>{% endif %}</h2><p class="muted text-[13px]">{% translate "Verbundene Macs und Abgleich" %}</p></a>
+{% endif %}{% if request.user|can:'admin.school' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'school_settings' %}">{% icon 'school' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Schule" %}</h2><p class="muted text-[13px]">{% translate "Name, Logo und Fußzeile für Blätter" %}</p></a>
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'school_languages' %}">{% icon 'globe' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Sprachen" %}</h2><p class="muted text-[13px]">{% translate "Welche Sprachen die Oberfläche anbietet" %}</p></a>
+{% endif %}
+{% if request.user|can:'admin.update' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'updates' %}">{% icon 'refresh' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2 flex items-center gap-2">{% translate "Aktualisierung" %}{% if update_available %}<span class="badge badge-warn">{% translate "Neu" %}</span>{% endif %}</h2><p class="muted text-[13px]">{% translate "Neueste Version über Coolify installieren" %}</p></a>
+{% endif %}
+{% if request.user|can:'admin.backup' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'backups' %}">{% icon 'archive' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Sicherung" %}</h2><p class="muted text-[13px]">{% translate "Alle Daten sichern und einspielen" %}</p></a>
+{% endif %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'audit_log' %}">{% icon 'history' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Protokoll" %}</h2><p class="muted text-[13px]">{% translate "Anmeldungen, angezeigte Passwörter, Ausdrucke" %}</p></a>
+</div>
+<p class="muted text-[12px] mt-6">DataFluss {{ datafluss_version }}</p>
+{% endblock %}

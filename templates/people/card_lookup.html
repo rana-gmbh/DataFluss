@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{% translate "Karte suchen" %}{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto mt-10 text-center">
+  {% icon 'card' 'text-[40px] text-[var(--accent)]' %}
+  <h1 class="page-title mt-3">{% translate "Karte suchen" %}</h1>
+  <p class="muted text-[13px] mb-5">{% translate "Karte an den Leser halten. Die Person wird sofort geöffnet." %}</p>
+  <form method="post">{% csrf_token %}
+    <input class="input mono text-center text-lg h-12" name="raw" autocomplete="off" autofocus data-keep-focus aria-label="{% translate 'Kartennummer' %}">
+    <button class="btn btn-primary w-full mt-3">{% translate "Suchen" %}</button>
+  </form>
+  {% if searched %}<p class="mt-4 badge-warn rounded-lg px-3 py-2 text-[13px]" role="alert">{% translate "Keine aktive Karte gefunden." %}</p>{% endif %}
+</div>
+{% endblock %}

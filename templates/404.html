@@ -1,0 +1,4 @@
+{% extends request.user.is_authenticated|yesno:"base.html,auth_base.html" %}{% load i18n %}
+{% block title %}{% translate "Nicht gefunden" %}{% endblock %}
+{% block content %}{% translate "Nicht gefunden" as err_title %}{% translate "Diese Seite oder dieser Datensatz existiert nicht mehr." as err_text %}{% include "core/_error.html" with title=err_title text=err_text %}{% endblock %}
+{% block auth %}{% translate "Nicht gefunden" as err_title %}{% translate "Diese Seite oder dieser Datensatz existiert nicht mehr." as err_text %}{% include "core/_error.html" with title=err_title text=err_text %}{% endblock %}

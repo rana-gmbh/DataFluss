@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{% translate "Eltern" %}{% endblock %}
+{% block scripts %}<script src="{% static 'js/panel.js' %}" defer></script>{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between gap-3 mb-4"><h1 class="page-title">{% translate "Eltern" %}</h1>
+<form method="get" class="w-64"><input class="input" name="q" value="{{ q }}" placeholder="{% translate 'Name oder E-Mail' %}" data-live-search autocomplete="off" aria-label="{% translate 'Eltern suchen' %}"></form></div>
+<div class="flex gap-4 items-start">
+<div class="flex-1 min-w-0 surface overflow-x-auto"><table class="data-table"><thead data-live><tr><th>{% translate "Name" %}</th><th>{% translate "E-Mail" %}</th><th>{% translate "Telefon" %}</th><th>{% translate "Kinder" %}</th></tr></thead><tbody id="record-rows" data-base="{% url 'guardians' %}" data-live>
+{% for g in guardians %}<tr data-record="{{ g.pk }}"><td><a class="font-medium hover:underline" data-record-link href="{% url 'guardian_detail' g.pk %}">{{ g.display_name }}</a></td><td class="soft">{{ g.email }}</td><td class="soft">{{ g.phone }}</td>
+<td>{% for link in g.guardianships.all %}<a class="badge mr-1" href="{% url 'person_detail' link.person.pk %}">{{ link.person.display_name }}</a>{% endfor %}</td></tr>
+{% empty %}<tr><td colspan="4" class="muted text-center py-6">{% translate "Keine Eltern gefunden." %}</td></tr>{% endfor %}</tbody></table>{% include "core/_pager.html" %}</div>
+{% include "core/_record_panel.html" %}
+</div>
+{% endblock %}

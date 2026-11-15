@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "launcher",
+  "description": "Only the start screen talks to the shell. Database windows get no IPC at all.",
+  "windows": ["launcher"],
+  "permissions": ["core:default"]
+}

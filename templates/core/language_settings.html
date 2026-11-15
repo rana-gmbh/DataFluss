@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Sprache" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{% translate "Sprache" %}</h1>
+<form method="post" class="surface p-5 space-y-5 max-w-xl">{% csrf_token %}
+  <fieldset><legend class="label">{% translate "Sprache der Oberfläche" %}</legend>
+    <div class="space-y-1.5 mt-1">{% for code, name in ui_languages %}
+      <label class="flex items-center gap-2 text-[13px]" lang="{{ code }}"><input type="radio" name="language" value="{{ code }}" {% if code == ui_language %}checked{% endif %} class="accent-[var(--accent)]">{{ name }}</label>{% endfor %}</div>
+  </fieldset>
+  {% if ui_single_language %}<input type="hidden" name="name_scope" value="{{ current_scope }}">{% else %}
+  <fieldset><legend class="label">{% translate "Felder, Auswahlwerte und Masken umbenennen" %}</legend>
+    <p class="muted text-[12px] mb-2">{% translate "Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für eine Sprache umbenennt." %}</p>
+    <div class="space-y-1.5">
+      <label class="flex items-center gap-2 text-[13px]"><input type="radio" name="name_scope" value="" {% if not current_scope %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Jedes Mal fragen" %}</label>
+      <label class="flex items-center gap-2 text-[13px]"><input type="radio" name="name_scope" value="this" {% if current_scope == "this" %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Nur für die Sprache umbenennen, die gerade eingestellt ist" %}</label>
+      <label class="flex items-center gap-2 text-[13px]"><input type="radio" name="name_scope" value="all" {% if current_scope == "all" %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Immer für alle Sprachen umbenennen" %}</label>
+    </div>
+  </fieldset>{% endif %}
+  <button class="btn btn-primary">{% translate "Speichern" %}</button>
+</form>
+{% endblock %}

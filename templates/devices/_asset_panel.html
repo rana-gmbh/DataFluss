@@ -1,0 +1,6 @@
+{% extends "core/_panel.html" %}{% load ui %}
+{% block heading %}<span class="mono">{{ asset.number }}</span>{% endblock %}
+{% block badges %}{% include "devices/_asset_badges.html" %}{% endblock %}
+{% block record_id %}{{ asset.pk }}{% endblock %}
+{% block page_url %}{% url 'asset_detail' asset.pk %}{% endblock %}
+{% block body %}{% include "devices/_asset_record.html" %}{% endblock %}

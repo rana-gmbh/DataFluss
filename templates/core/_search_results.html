@@ -1,0 +1,6 @@
+{% load ui i18n %}
+{% for r in results %}
+<a href="{{ r.url }}" class="flex items-center gap-3 px-3 py-2 hover:bg-[var(--surface-2)] focus:bg-[var(--surface-2)] outline-none" data-search-hit>
+  {% icon r.icon 'muted' %}<span class="font-medium truncate">{{ r.title }}</span><span class="muted text-[12px] ml-auto truncate">{{ r.sub }}</span>
+</a>
+{% empty %}{% if query|length >= 2 %}<p class="p-4 muted text-[13px]">{% blocktranslate trimmed %}Keine Treffer für „{{ query }}“.{% endblocktranslate %}</p>{% else %}<p class="p-4 muted text-[13px]">{% translate "Mindestens zwei Zeichen eingeben." %}</p>{% endif %}{% endfor %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{{ asset.number }}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-3 mb-4"><a class="btn btn-ghost btn-icon" href="{% url 'assets' %}" data-back aria-label="{% translate 'Zurück zur Liste' %}">{% icon 'chevron' 'rotate-180' %}</a><div class="flex-1 min-w-0"><h1 class="page-title mono">{{ asset.number }}</h1><div class="flex gap-1.5 mt-1">{% include "devices/_asset_badges.html" %}</div></div>
+{% for t in print_templates %}<form method="post" action="{% url 'report_run' %}" target="_blank">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}"><input type="hidden" name="ids" value="{{ asset.pk }}"><button class="btn">{% icon 'printer' %}{{ t.name }}</button></form>{% endfor %}</div>
+{% include "devices/_asset_record.html" %}
+{% endblock %}

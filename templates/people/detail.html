@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{{ person.display_name }}{% endblock %}
+{% block scripts %}<script src="{% static 'js/record.js' %}" defer></script>{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-3 mb-4">
+  <a class="btn btn-ghost btn-icon" href="{% if person.kind == 'pupil' %}{% url 'pupils' %}{% else %}{% url 'staff' %}{% endif %}" aria-label="{% translate 'Zurück zur Liste' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
+  {% avatar person 48 zoom=True %}
+  <div class="min-w-0 flex-1">
+    <h1 class="page-title truncate">{{ person.display_name }}</h1>
+    <div class="flex flex-wrap items-center gap-1.5 mt-0.5">
+      {% if person.kind == 'pupil' %}
+        {% if person.current_class %}<a href="{% url 'class_detail' person.current_class.pk %}" class="badge badge-accent">{{ person.current_class }}</a>{% endif %}
+        {% if person.school_type %}<span class="badge">{{ person.school_type }}</span>{% endif %}
+      {% else %}{% if person.category %}<span class="badge badge-accent">{{ person.category }}</span>{% endif %}{% endif %}
+      {% if person.archived %}<span class="badge badge-warn">{% translate "Archiviert" %}</span>{% endif %}
+  {% for badge in person_badges %}{% include badge %}{% endfor %}
+      {% if person.new_codes_needed %}<span class="badge badge-warn">{% translate "Neue Codes nötig" %}</span>{% endif %}
+    </div>
+  </div>
+  {% if print_templates %}
+  <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+    <button class="btn" @click="open = !open">{% icon 'printer' %}{% translate "Drucken" %}{% icon 'chevron-down' %}</button>
+    <div class="absolute right-0 z-30 mt-1 w-64 surface p-1 shadow-lg" x-show="open" x-cloak>
+      {% for t in print_templates %}<form method="post" action="{% url 'report_run' %}" target="_blank">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}"><input type="hidden" name="ids" value="{{ person.pk }}">
+        <button class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px]">{{ t.name }}</button></form>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% include "masks/_form.html" %}
+{% endblock %}

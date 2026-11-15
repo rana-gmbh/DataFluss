@@ -1,0 +1,17 @@
+{% load i18n ui %}
+<form method="post" {% if case %}action="{% url 'case_detail' case.pk %}" data-panel-form{% endif %} enctype="multipart/form-data" class="surface p-5 space-y-3 max-w-2xl">{% csrf_token %}
+  <fieldset class="space-y-3" {% if not request.user|can:'device.edit' %}disabled{% endif %}>
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  {% if person %}<input type="hidden" name="person" value="{{ person.pk }}">{% endif %}
+  {% if not case %}<div><label class="label" for="f-asset">{% translate "Gerätenummer" %}</label><input id="f-asset" class="input mono" name="asset" placeholder="{% translate 'Leer lassen: aktuelles Gerät der Person' %}"></div>{% endif %}
+  <div><label class="label" for="f-description">{% translate "Beschreibung des Schadens" %} *</label><textarea id="f-description" class="input" name="description" required>{{ case.description }}</textarea></div>
+  <div><span class="label">{% translate "Schaden an" %}</span><div class="flex flex-wrap gap-3">{% for p, p_label in parts %}<label class="flex gap-1.5 items-center text-[13px]"><input type="checkbox" name="parts" value="{{ p }}" class="accent-[var(--accent)]" {% if p in case.parts %}checked{% endif %}>{{ p_label }}</label>{% endfor %}</div></div>
+  <div class="grid sm:grid-cols-2 gap-3"><div><label class="label" for="f-date">{% translate "Datum" %}</label><input id="f-date" class="input" type="date" name="date" value="{% if case %}{{ case.date|date:'Y-m-d' }}{% else %}{{ today }}{% endif %}"></div>
+  <div><label class="label" for="f-status">{% translate "Status" %}</label><select id="f-status" class="input" name="status">{% for s, s_label in statuses %}<option value="{{ s }}" {% if case.status == s %}selected{% endif %}>{{ s_label }}</option>{% endfor %}</select></div>
+  <div><label class="label" for="f-replacement_number">{% translate "Gerätenummer Austauschgerät" %}</label><input id="f-replacement_number" class="input mono" name="replacement_number" value="{{ case.replacement_number }}"></div>
+  <div><label class="label" for="f-replacement_serial">{% translate "Seriennummer Austauschgerät" %}</label><input id="f-replacement_serial" class="input mono" name="replacement_serial" value="{{ case.replacement_serial }}"></div></div>
+  <div><label class="label" for="f-photos">{% translate "Bilder (bis zu 3)" %}</label><input id="f-photos" class="input pt-1.5" type="file" name="photos" multiple accept="image/*"></div>
+  {% if case.attachments.all %}<div class="flex gap-2">{% for a in case.attachments.all %}<button type="button" class="photo-zoom-trigger" data-zoom="{{ a.file.url }}" aria-label="{% translate 'Foto vergrößern' %}"><img src="{{ a.file.url }}" alt="{{ a.name }}" class="h-20 rounded-lg"></button>{% endfor %}</div>{% endif %}
+  </fieldset>
+  {% if request.user|can:'device.edit' %}<div class="flex gap-2"><button class="btn btn-primary">{% translate "Speichern" %}</button>{% if not panel %}<a class="btn" href="{% url 'cases' %}">{% translate "Zurück" %}</a>{% endif %}</div>{% endif %}
+</form>

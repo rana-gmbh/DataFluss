@@ -1,0 +1,27 @@
+{% load i18n ui %}
+{% with target="login-"|add:platform.pk|stringformat:"s" %}
+<div x-data="{ edit: false }">
+  <div x-show="!edit" class="space-y-1.5">
+    {% for f in fields %}
+    <div class="flex items-center gap-2 text-[13px] min-h-7"><span class="w-28 shrink-0 muted text-[12px]">{{ f.label }}</span>
+      {% if f.secret and f.value %}
+        <span>
+          <span class="mono muted">••••••••</span>
+          {% if request.user|can:'vault.reveal' %}<button type="button" class="btn btn-ghost btn-sm btn-icon" title="{% translate 'Anzeigen' %}" aria-label="{% blocktranslate trimmed with label=f.label %}{{ label }} anzeigen{% endblocktranslate %}" hx-post="{% url 'credential_reveal' credential.pk f.key %}" hx-target="closest span" hx-swap="innerHTML">{% icon 'eye' %}</button>{% endif %}
+        </span>
+      {% elif f.value %}<span class="mono truncate">{{ f.value }}</span>{% else %}<span class="muted">–</span>{% endif %}
+    </div>{% endfor %}
+    {% if credential.must_change %}<span class="badge badge-warn mt-1">{% translate "Muss beim ersten Login geändert werden" %}</span>{% endif %}
+    {% if request.user|can:'vault.edit' %}
+    <div class="flex gap-2 pt-2">
+      <button type="button" class="btn btn-sm" @click="edit = true">{% icon 'pen' %}{% translate "Bearbeiten" %}</button>
+      <button type="button" class="btn btn-sm" hx-post="{% url 'login_card' owner_kind owner_id platform.pk %}" hx-vals='{"action":"generate"}' hx-target="closest [x-data]" hx-swap="outerHTML" {% if credential.secrets %}data-confirm="{% translate 'Neuen Zugang erzeugen? Das bisherige Passwort wird ersetzt.' %}"{% endif %}>{% icon 'wand' %}{% if credential.secrets %}{% translate "Neu erzeugen" %}{% else %}{% translate "Erzeugen" %}{% endif %}</button>
+    </div>{% endif %}
+  </div>
+  {% if request.user|can:'vault.edit' %}
+  <form x-show="edit" x-cloak class="space-y-2" hx-post="{% url 'login_card' owner_kind owner_id platform.pk %}" hx-target="closest [x-data]" hx-swap="outerHTML">
+    {% for f in fields %}<div><label class="label">{{ f.label }}</label><input class="input mono" name="f_{{ f.key }}" {% if f.secret %}type="password" autocomplete="new-password" placeholder="{% translate 'Unverändert lassen' %}"{% else %}value="{{ f.value }}"{% endif %}></div>{% endfor %}
+    <div class="flex gap-2"><button class="btn btn-sm btn-primary">{% translate "Speichern" %}</button><button type="button" class="btn btn-sm" @click="edit = false">{% translate "Abbrechen" %}</button></div>
+  </form>{% endif %}
+</div>
+{% endwith %}

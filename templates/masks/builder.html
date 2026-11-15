@@ -1,0 +1,44 @@
+{% extends "base.html" %}{% load static ui i18n %}
+{% block title %}{{ mask.display_name }}{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/Sortable.min.js' %}" defer></script><script src="{% static 'js/builder.js' %}" defer></script>{% endblock %}
+{% block content %}
+{{ config|json_script:"builder-config" }}
+<div class="flex flex-wrap items-center gap-2 mb-4">
+  <a class="btn btn-ghost btn-icon" href="{% url 'mask_list' %}" aria-label="{% translate 'Zurück' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
+  <div class="flex-1 min-w-40"><h1 class="page-title flex items-center gap-1">{{ mask.display_name }}<button type="button" class="btn btn-ghost btn-sm btn-icon" id="builder-rename" title="{% translate 'Maske umbenennen' %}" aria-label="{% translate 'Maske umbenennen' %}">{% icon 'pen' 'text-[14px]' %}</button></h1><p class="muted text-[12px]" id="builder-status"></p></div>
+  <button class="btn" id="builder-undo" disabled>{% icon 'undo' %}{% translate "Rückgängig" %}</button>
+  <button class="btn" id="builder-preview">{% icon 'eye' %}{% translate "Vorschau" %}</button>
+  <button class="btn" id="builder-save">{% icon 'save' %}{% translate "Entwurf speichern" %}</button>
+  <button class="btn btn-primary" id="builder-publish">{% icon 'check' %}{% translate "Veröffentlichen" %}</button>
+</div>
+<div class="grid lg:grid-cols-[250px_minmax(0,1fr)_280px] gap-4 items-start">
+  <aside class="surface p-3 lg:sticky lg:top-[4.5rem] lg:max-h-[calc(100vh-6rem)] overflow-y-auto">
+    <div class="flex items-center justify-between mb-2"><h2 class="section-title">{% translate "Felder" %}</h2><button class="btn btn-sm" id="builder-new-field">{% icon 'plus' %}{% translate "Neu" %}</button></div>
+    <input id="palette-search" class="input h-8 mb-2 text-[13px]" placeholder="{% translate 'Feld suchen' %}" aria-label="{% translate 'Feld suchen' %}">
+    <div id="palette-fields" class="space-y-1 mb-4"></div>
+    <h2 class="section-title mb-2">{% translate "Bausteine" %}</h2>
+    <div id="palette-blocks" class="space-y-1"></div>
+  </aside>
+  <div class="min-w-0">
+    <div class="flex items-center gap-1 border-b mb-4 overflow-x-auto" style="border-color: var(--line)"><div id="builder-tabs" class="flex"></div><button class="btn btn-ghost btn-sm" id="builder-add-tab">{% icon 'plus' %}{% translate "Reiter" %}</button></div>
+    <div id="builder-sections" class="space-y-4"></div>
+    <button class="btn mt-4" id="builder-add-section">{% icon 'plus' %}{% translate "Abschnitt hinzufügen" %}</button>
+  </div>
+  <aside class="surface p-3 lg:sticky lg:top-[4.5rem]">
+    <h2 class="section-title mb-2">{% translate "Eigenschaften" %}</h2><div id="builder-props"><p class="muted text-[13px]">{% translate "Element auswählen, um es anzupassen." %}</p></div>
+    <details class="mt-4 pt-3 border-t" style="border-color: var(--line)"><summary class="section-title cursor-pointer">{% translate "Versionen" %}</summary>
+      <div class="mt-2 space-y-1">{% for v in versions %}<form method="post" action="{% url 'mask_action' mask.pk %}" class="flex items-center gap-2 text-[12.5px]">{% csrf_token %}<span class="flex-1">{% blocktranslate trimmed with number=v.number %}Version {{ number }}{% endblocktranslate %} <span class="muted">{{ v.created_at|date:"d.m.Y" }}</span></span>{% if v.status == 'published' %}<span class="badge badge-ok">{% translate "Aktiv" %}</span>{% elif v.status == 'draft' %}<span class="badge badge-warn">{% translate "Entwurf" %}</span>{% else %}<input type="hidden" name="action" value="restore"><input type="hidden" name="number" value="{{ v.number }}"><button class="btn btn-sm" data-confirm="{% blocktranslate trimmed with number=v.number %}Version {{ number }} wieder aktivieren?{% endblocktranslate %}">{% translate "Aktivieren" %}</button>{% endif %}</form>{% endfor %}</div>
+      {% if mask.draft %}<form method="post" action="{% url 'mask_action' mask.pk %}" class="mt-2">{% csrf_token %}<input type="hidden" name="action" value="discard"><button class="btn btn-sm w-full" data-confirm="{% translate 'Entwurf verwerfen?' %}">{% translate "Entwurf verwerfen" %}</button></form>{% endif %}
+      {% if not mask.is_default %}<form method="post" action="{% url 'mask_action' mask.pk %}" class="mt-2">{% csrf_token %}<input type="hidden" name="action" value="delete"><button class="btn btn-sm btn-danger w-full" data-confirm="{% translate 'Maske löschen?' %}">{% translate "Maske löschen" %}</button></form>{% endif %}
+    </details>
+  </aside>
+</div>
+<dialog id="field-dialog" class="surface p-5 w-[min(420px,calc(100vw-2rem))] m-auto backdrop:bg-black/40" style="color: var(--ink)">
+  <form method="dialog" id="field-form" class="space-y-3"><h2 class="font-semibold">{% translate "Neues Feld" %}</h2><p class="text-[13px] text-[var(--bad)]" id="field-error"></p>
+    <div><label class="label" for="f-label">{% translate "Bezeichnung" %}</label><input id="f-label" class="input" name="label" required></div>
+    <div><label class="label" for="f-type">{% translate "Typ" %}</label><select id="f-type" class="input" name="type"></select></div>
+    <div id="field-options" class="hidden"><label class="label" for="f-options">{% translate "Optionen, eine pro Zeile" %}</label><textarea id="f-options" class="input" name="options"></textarea></div>
+    <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="required" class="accent-[var(--accent)]">{% translate "Pflichtfeld" %}</label>
+    <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="in_grid" class="accent-[var(--accent)]">{% translate "In der Liste anzeigen" %}</label>
+    <div class="flex gap-2 justify-end"><button type="button" class="btn" id="field-cancel">{% translate "Abbrechen" %}</button><button type="submit" class="btn btn-primary">{% translate "Anlegen" %}</button></div></form></dialog>
+{% endblock %}

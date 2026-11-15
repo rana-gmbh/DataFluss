@@ -1,0 +1,4 @@
+{% load i18n ui %}
+<div id="block-comments"><h3 class="label">{% translate "Kommentare" %}</h3>
+<form hx-post="{% url 'person_comment' person.pk %}" hx-target="#block-comments" hx-swap="outerHTML" class="flex gap-2 mb-2"><input class="input" name="text" placeholder="{% translate 'Kommentar schreiben' %}" aria-label="{% translate 'Kommentar' %}"><button class="btn">{% translate "Senden" %}</button></form>
+{% for c in comments %}<div class="py-1.5 text-[13px] border-b last:border-0" style="border-color: var(--line)"><div class="muted text-[12px]">{{ c.author.display_name }} · {{ c.created_at|date:"d.m.Y H:i" }}</div><div class="whitespace-pre-wrap">{{ c.text }}</div></div>{% endfor %}</div>

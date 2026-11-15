@@ -1,0 +1,22 @@
+{% load ui i18n %}
+<div class="panel-head flex items-center gap-3 pb-3">
+  {% block lead %}{% endblock %}
+  <div class="min-w-0 flex-1">
+    <h2 class="font-semibold text-[16px] leading-tight truncate">{% block heading %}{% endblock %}</h2>
+    <div class="flex flex-wrap items-center gap-1.5 mt-1">{% block badges %}{% endblock %}</div>
+  </div>
+  <span class="panel-hint muted text-[11px] hidden xl:inline whitespace-nowrap"><span class="kbd">↑</span> <span class="kbd">↓</span> {% translate "blättern" %}</span>
+  {% if print_templates %}
+  <div class="relative" x-data="{ open: false }" @click.outside="open = false" @submit="open = false">
+    <button class="btn btn-icon" @click="open = !open" title="{% translate 'Drucken' %}" aria-label="{% translate 'Drucken' %}" :aria-expanded="open">{% icon 'printer' %}</button>
+    <div class="absolute right-0 z-30 mt-1 w-64 surface p-1 shadow-lg" x-show="open" x-cloak>
+      {% for t in print_templates %}<form method="post" action="{% url 'report_run' %}" target="_blank">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}"><input type="hidden" name="ids" value="{% block record_id %}{% endblock %}">
+        <button class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px]">{{ t.name }}</button></form>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <a class="btn btn-icon" href="{% block page_url %}{% endblock %}" title="{% translate 'Ganze Seite öffnen' %}" aria-label="{% translate 'Ganze Seite öffnen' %}">{% icon 'external' %}</a>
+  <button class="btn btn-icon" data-panel-close title="{% translate 'Schließen (Esc)' %}" aria-label="{% translate 'Schließen' %}">{% icon 'x' %}</button>
+</div>
+{% for message in messages %}<span hidden data-toast="{{ message }}" {% if message.level >= 40 %}data-error{% endif %}></span>{% endfor %}
+{% block body %}{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% load static ui i18n %}
+{% block title %}{% translate "Aktualisierung" %}{% endblock %}
+{% block scripts %}<script src="{% static 'js/updates.js' %}" defer></script>{% endblock %}
+{% block content %}
+{{ status|json_script:"update-status" }}
+<h1 class="page-title mb-1">{% translate "Aktualisierung" %}</h1>
+<p class="muted text-[13px] mb-4">{% translate "Installiert die neueste Version von GitHub über Coolify. Vorher wird die Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit ist, alle können also normal weiterarbeiten." %}</p>
+{% if not status.enabled %}
+<div class="surface p-5 max-w-2xl"><p class="text-[13px]">{% blocktranslate trimmed %}Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht in <span class="mono">docs/INSTALL-COOLIFY.md</span>.{% endblocktranslate %}</p></div>
+{% else %}
+<div class="grid lg:grid-cols-2 gap-4 items-start">
+  <section class="surface p-5 space-y-4">
+    <dl class="grid grid-cols-[9rem_1fr] gap-y-2 text-[13px]">
+      <dt class="muted">{% translate "Installiert" %}</dt><dd id="u-current" class="min-w-0"></dd>
+      <dt class="muted">{% translate "Auf GitHub" %}</dt><dd id="u-latest" class="min-w-0"></dd>
+      <dt class="muted">{% translate "Zuletzt geprüft" %}</dt><dd id="u-checked"></dd>
+    </dl>
+    <p id="u-result" class="hidden rounded-lg px-3 py-2 text-[13px]" role="status"></p>
+    <button class="btn btn-danger hidden" id="u-restore">{% icon 'undo' %}{% translate "Datenbank zurücksetzen" %}</button>
+    <a id="u-logs" class="hidden text-[13px] underline" href="#" target="_blank" rel="noopener">{% translate "Protokoll in Coolify öffnen" %}</a>
+    <div id="u-progress" class="hidden space-y-1.5" aria-live="polite"></div>
+    <div class="flex flex-wrap gap-2">
+      <button class="btn btn-primary" id="u-apply" disabled>{% icon 'download' %}{% translate "Jetzt aktualisieren" %}</button>
+      <button class="btn" id="u-check">{% icon 'refresh' %}{% translate "Nach Updates suchen" %}</button>
+    </div>
+    <p class="muted text-[12px]">{% translate "Die Anwendung bleibt während der Aktualisierung normalerweise erreichbar. Sehr selten kann es beim Umschalten eine kurze Unterbrechung geben." %}</p>
+  </section>
+  <section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Neu in dieser Version" %}</h2><div id="u-commits"></div></section>
+</div>
+{% endif %}
+{% endblock %}

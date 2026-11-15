@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Schuljahreswechsel" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-1">{% translate "Schuljahreswechsel" %}</h1><p class="muted text-[13px] mb-4">{% translate "Vorschau: Alle Schüler rücken eine Stufe auf. Der Klassenverlauf bleibt erhalten. Vorher wird die Datenbank gesichert." %}</p>
+<form method="post" class="space-y-4 max-w-2xl" data-once>{% csrf_token %}
+<div class="surface p-4 max-w-xs"><label class="label" for="f-name">{% translate "Neues Schuljahr" %}</label><input id="f-name" class="input" name="name" value="{{ name }}"></div>
+<div class="surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Bisher" %}</th><th>{% translate "Schüler" %}</th><th>{% translate "Wird zu" %}</th></tr></thead><tbody>
+{% for r in rows %}<tr><td class="font-medium">{{ r.group.name }}</td><td>{{ r.count }}</td><td>{% if r.target == 'Austritt' %}<span class="badge badge-warn">{% translate "Austritt" %}</span>{% else %}{{ r.target }}{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+<div class="flex gap-2"><button class="btn btn-primary" name="confirm" value="1" data-confirm="{% blocktranslate trimmed %}{{ total }} Schüler versetzen, davon {{ leaving }} als Austritt archivieren? Das lässt sich nur über eine Sicherung zurücknehmen.{% endblocktranslate %}">{% translate "Wechsel durchführen" %}</button><a class="btn" href="{% url 'classes' %}">{% translate "Abbrechen" %}</a></div></form>
+{% endblock %}

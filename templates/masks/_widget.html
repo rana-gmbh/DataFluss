@@ -1,0 +1,44 @@
+{% load ui i18n %}
+<div class="min-w-0">
+  {% if item.fd.type != 'bool' %}<label class="label" for="f-{{ item.fd.key }}">{{ item.label }}{% if item.fd.required %} <span class="text-[var(--bad)]">*</span>{% endif %}</label>{% endif %}
+  {% with key=item.fd.key type=item.fd.type %}
+  {% if not item.editable and type != 'secret' %}
+    {% if type == 'bool' %}<div class="label">{{ item.label }}</div><div class="text-[13px]">{% if item.value %}{% translate "Ja" %}{% else %}{% translate "Nein" %}{% endif %}</div>
+    {% elif type == 'class' %}<div class="input flex items-center" style="background: var(--surface-2)">{{ person.current_class|default:"–" }}</div>
+    {% elif type == 'textarea' %}<div class="input whitespace-pre-wrap py-2 h-auto min-h-9" style="background: var(--surface-2)">{{ item.value|default:"–" }}</div>
+    {% else %}<div class="input flex items-center truncate" style="background: var(--surface-2)" id="f-{{ key }}">{% if item.value and type == 'date' or item.value and type == 'choice' or item.value and type == 'multichoice' %}{{ item.display }}{% else %}{{ item.value|default:"–" }}{% endif %}</div>{% endif %}
+  {% elif type == 'textarea' %}
+    <textarea class="input" id="f-{{ key }}" name="value" data-field="{{ key }}" rows="3" hx-post="{% url 'person_field' person.pk key %}" hx-trigger="change" hx-swap="none">{{ item.value }}</textarea>
+  {% elif type == 'bool' %}
+    <label class="flex items-center gap-2 h-9 mt-[1.3rem] text-[13px] cursor-pointer select-none">
+      <input type="hidden" name="value" value="">
+      <input type="checkbox" class="h-4 w-4 accent-[var(--accent)]" id="f-{{ key }}" name="value" value="1" {% if item.value %}checked{% endif %} data-field="{{ key }}" hx-post="{% url 'person_field' person.pk key %}" hx-trigger="change" hx-swap="none">
+      {{ item.label }}
+    </label>
+  {% elif type == 'class' %}
+    <select class="input" id="f-{{ key }}" name="value" data-field="{{ key }}" hx-post="{% url 'person_field' person.pk key %}" hx-trigger="change" hx-swap="none">
+      <option value="">–</option>{% for c in item.classes %}<option value="{{ c.pk }}" {% if item.value == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+    </select>
+  {% elif type == 'choice' %}
+    <select class="input" id="f-{{ key }}" name="value" data-field="{{ key }}" hx-post="{% url 'person_field' person.pk key %}" hx-trigger="change" hx-swap="none">
+      <option value="">–</option>{% for value, label in item.choices %}<option value="{{ value }}" {% if item.value == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  {% elif type == 'multichoice' %}
+    <div class="flex flex-wrap gap-x-3 gap-y-1 min-h-9 items-center" data-field="{{ key }}">
+      {% for value, label in item.choices %}<label class="flex items-center gap-1.5 text-[13px]"><input type="checkbox" class="accent-[var(--accent)]" name="value" value="{{ value }}" {% if value in item.value %}checked{% endif %} hx-post="{% url 'person_field' person.pk key %}" hx-trigger="change" hx-include="closest [data-field]" hx-swap="none">{{ label }}</label>{% endfor %}
+    </div>
+  {% elif type == 'secret' %}
+    <div id="secret-{{ key }}" class="flex gap-2 items-center">
+      <span class="input mono flex items-center" style="background: var(--surface-2)">{{ item.value|default:"–" }}</span>
+      {% if item.value and request.user|can:'vault.reveal' %}<button class="btn" hx-post="{% url 'person_secret_reveal' person.pk key %}" hx-target="#secret-{{ key }}" title="{% translate 'Anzeigen' %}">{% icon 'eye' %}</button>{% endif %}
+      {% if item.editable %}<input class="input mono" name="value" type="password" autocomplete="new-password" placeholder="{% translate 'Neuer Wert' %}" data-field="{{ key }}" hx-post="{% url 'person_field' person.pk key %}" hx-trigger="change" hx-swap="none" aria-label="{{ item.label }}">{% endif %}
+    </div>
+  {% else %}
+    <input class="input" id="f-{{ key }}" name="value" data-field="{{ key }}" value="{{ item.value }}"
+      type="{% if type == 'date' %}date{% elif type == 'number' %}number{% elif type == 'email' %}email{% elif type == 'url' %}url{% elif type == 'phone' %}tel{% else %}text{% endif %}"
+      hx-post="{% url 'person_field' person.pk key %}" hx-trigger="change" hx-swap="none">
+  {% endif %}
+  {% endwith %}
+  {% if item.help %}<p class="muted text-[12px] mt-1">{{ item.help }}</p>{% endif %}
+  <p class="text-[12px] mt-1 text-[var(--bad)]" data-field-error="{{ item.fd.key }}"></p>
+</div>

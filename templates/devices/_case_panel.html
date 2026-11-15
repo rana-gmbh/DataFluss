@@ -1,0 +1,10 @@
+{% extends "core/_panel.html" %}{% load i18n ui %}
+{% block heading %}{% if case.person %}{{ case.person.display_name }}{% else %}{% translate "Schaden" %}{% endif %}{% endblock %}
+{% block badges %}
+  <span class="badge {% if case.status == 'Erledigt' %}badge-ok{% else %}badge-warn{% endif %}">{{ case.status_label }}</span>
+  <span class="badge">{{ case.date|date:"d.m.Y" }}</span>
+  {% if case.asset %}<a class="badge mono" href="{% url 'asset_detail' case.asset.pk %}">{{ case.asset.number }}</a>{% endif %}
+{% endblock %}
+{% block record_id %}{{ case.pk }}{% endblock %}
+{% block page_url %}{% url 'case_detail' case.pk %}{% endblock %}
+{% block body %}{% include "devices/_case_form.html" %}{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Sprachen" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{% translate "Sprachen" %}</h1>
+<form method="post" class="surface p-5 space-y-4 max-w-xl">{% csrf_token %}
+  <fieldset><legend class="label">{% translate "Sprachen, die in dieser Datenbank zur Auswahl stehen" %}</legend>
+    <div class="space-y-1.5 mt-1">{% for code, name, checked in all_languages %}
+      <label class="flex items-center gap-2 text-[13px]" lang="{{ code }}"><input type="checkbox" name="languages" value="{{ code }}" {% if checked %}checked{% endif %} class="accent-[var(--accent)]">{{ name }}</label>{% endfor %}</div>
+  </fieldset>
+  <div class="muted text-[12px] space-y-1">
+    <p>{% translate "Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist." %}</p>
+    <p>{% translate "Ist nur eine Sprache erlaubt, verschwindet die Sprachauswahl, und beim Umbenennen wird nicht mehr nachgefragt: Die übrigen Sprachen behalten ihre Namen." %}</p>
+    <p>{% translate "Verbundene Macs übernehmen diese Auswahl beim nächsten Abgleich." %}</p>
+  </div>
+  <button class="btn btn-primary">{% translate "Speichern" %}</button>
+</form>
+{% endblock %}

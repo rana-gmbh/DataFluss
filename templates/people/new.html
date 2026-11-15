@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Neuaufnahme" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-1">{% if entity == 'pupil' %}{% translate "Neuer Schüler" %}{% else %}{% translate "Neuer Mitarbeiter" %}{% endif %}</h1>
+<p class="muted text-[13px] mb-4">{% translate "Eine Aufnahme in einem Durchgang: Daten eingeben, Zugänge erzeugen, danach Eltern, Gerät und Druck auf der Personenseite." %}</p>
+<form method="post" class="max-w-2xl space-y-4">{% csrf_token %}
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <section class="surface p-4">
+    <h2 class="section-title mb-3">{% translate "Stammdaten" %}</h2>
+    <div class="grid sm:grid-cols-2 gap-3" hx-get="{% url 'person_duplicates' %}" hx-trigger="change from:input.dup" hx-target="#dupes" hx-include="input.dup">
+      <div><label class="label" for="first_name">{{ fields.first_name.display_label|default:_("Vorname") }} *</label><input class="input dup" id="first_name" name="first_name" value="{{ data.first_name }}" required autofocus></div>
+      <div><label class="label" for="last_name">{{ fields.last_name.display_label|default:_("Nachname") }} *</label><input class="input dup" id="last_name" name="last_name" value="{{ data.last_name }}" required></div>
+    </div>
+    <div id="dupes" class="mt-3"></div>
+    <div class="grid sm:grid-cols-2 gap-3 mt-3">
+      <div><label class="label" for="birth_date">{{ fields.birth_date.display_label|default:_("Geburtsdatum") }}</label><input class="input" type="date" id="birth_date" name="birth_date" value="{{ data.birth_date }}"></div>
+      <div><label class="label" for="entry_date">{{ fields.entry_date.display_label|default:_("Eintritt") }}</label><input class="input" type="date" id="entry_date" name="entry_date" value="{{ data.entry_date|default:today }}"></div>
+      <div><label class="label" for="gender">{{ fields.gender.display_label|default:_("Geschlecht") }}</label><select class="input" id="gender" name="gender"><option value="">–</option>{% for value, label in fields.gender.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
+      {% if entity == 'pupil' %}
+      <div><label class="label" for="klasse">{{ fields.klasse.display_label|default:_("Klasse") }}</label><select class="input" id="klasse" name="klasse"><option value="">–</option>{% for c in classes %}<option value="{{ c.pk }}">{{ c.name }}</option>{% endfor %}</select></div>
+      <div><label class="label" for="school_type">{{ fields.school_type.display_label|default:_("Schultyp") }}</label><select class="input" id="school_type" name="school_type"><option value="">–</option>{% for value, label in fields.school_type.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
+      {% else %}
+      <div><label class="label" for="category">{{ fields.category.display_label|default:_("Kategorie") }}</label><select class="input" id="category" name="category"><option value="">–</option>{% for value, label in fields.category.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
+      {% endif %}
+      <div class="sm:col-span-2"><label class="label" for="email">{% translate "Schul-E-Mail" %}</label><input class="input" type="email" id="email" name="email" value="{{ data.email }}"></div>
+    </div>
+  </section>
+  {% if platforms %}
+  <section class="surface p-4">
+    <h2 class="section-title mb-1">{% translate "Zugänge erzeugen" %}</h2>
+    <p class="muted text-[12px] mb-3">{% translate "Passwörter werden passend zum Alter erzeugt und verschlüsselt gespeichert." %}</p>
+    <div class="grid sm:grid-cols-2 gap-2">{% for p in platforms %}<label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="platforms" value="{{ p.pk }}" class="accent-[var(--accent)]" {% if p.key == 'm365' %}checked{% endif %}>{{ p.name }}</label>{% endfor %}</div>
+  </section>
+  {% endif %}
+  <div class="flex gap-2"><button class="btn btn-primary">{% translate "Anlegen" %}</button><a class="btn" href="{% if entity == 'pupil' %}{% url 'pupils' %}{% else %}{% url 'staff' %}{% endif %}">{% translate "Abbrechen" %}</a></div>
+</form>
+{% endblock %}

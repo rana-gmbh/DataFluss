@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Felder" %}{% endblock %}
+{% block content %}
+<div class="flex items-center gap-2 mb-4"><h1 class="page-title flex-1">{% translate "Felder" %}</h1><div class="flex gap-1">{% for v, l in entities %}<a class="btn btn-sm {% if entity == v %}btn-primary{% endif %}" href="?bereich={{ v }}">{{ l }}</a>{% endfor %}</div></div>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Bezeichnung" %}</th><th>{% translate "Typ" %}</th><th>{% translate "Herkunft" %}</th><th>{% translate "Liste" %}</th></tr></thead><tbody>
+{% for f in fields %}<tr data-menu><td><template data-menu-items><a href="{% url 'field_edit' f.pk %}" data-icon="pen">{% translate "Bearbeiten" %}</a><a data-post="{% url 'field_duplicate' f.pk %}" data-icon="copyplus">{% translate "Duplizieren" %}</a>{% if not f.is_core %}<hr>{% if f.archived %}<a data-post="{% url 'field_edit' f.pk %}" data-data='{"action": "restore"}' data-icon="archive-restore">{% translate "Wiederherstellen" %}</a>{% else %}<a data-post="{% url 'field_edit' f.pk %}" data-data='{"action": "archive"}' data-icon="archive" data-confirm="{% blocktranslate trimmed with field=f.display_label %}{{ field }} archivieren? Das Feld wird ausgeblendet, die eingetragenen Werte bleiben erhalten.{% endblocktranslate %}" data-danger>{% translate "Archivieren …" %}</a>{% endif %}{% endif %}</template><a class="font-medium hover:underline" href="{% url 'field_edit' f.pk %}">{{ f.display_label }}</a>{% if f.required %} <span class="text-[var(--bad)]">*</span>{% endif %}{% if f.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}</td><td class="muted">{{ f.get_type_display }}</td><td class="muted">{% if f.is_core %}{% translate "Eingebaut" %}{% else %}{% translate "Eigenes Feld" %}{% endif %}</td><td>{% if f.in_grid %}{% translate "Ja" %}{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+<form method="post" class="surface p-4 space-y-3" x-data="{ type: 'text' }">{% csrf_token %}<input type="hidden" name="entity" value="{{ entity }}"><h2 class="font-semibold">{% translate "Neues Feld" %}</h2>
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <div><label class="label" for="f-label">{% translate "Bezeichnung" %}</label><input id="f-label" class="input" name="label" required></div>
+  <div><label class="label" for="f-type">{% translate "Typ" %}</label><select id="f-type" class="input" name="type" x-model="type">{% for v, l in types %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+  <div x-show="type === 'choice' || type === 'multichoice'" x-cloak><label class="label" for="f-options">{% translate "Optionen, eine pro Zeile" %}</label><textarea id="f-options" class="input" name="options"></textarea></div>
+  <div><label class="label" for="f-help_text">{% translate "Hilfetext" %}</label><input id="f-help_text" class="input" name="help_text"></div>
+  <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="required" class="accent-[var(--accent)]">{% translate "Pflichtfeld" %}</label>
+  <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="in_grid" class="accent-[var(--accent)]">{% translate "In der Liste anzeigen" %}</label>
+  <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form></div>
+{% endblock %}

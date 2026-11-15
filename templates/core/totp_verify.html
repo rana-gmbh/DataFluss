@@ -1,0 +1,10 @@
+{% extends "auth_base.html" %}{% load i18n %}
+{% block title %}{% translate "Zwei-Faktor-Code" %}{% endblock %}
+{% block auth %}
+<form method="post" class="space-y-3">{% csrf_token %}
+  <p class="text-[13px] soft">{% translate "Bitte den 6-stelligen Code aus Ihrer Authenticator-App eingeben." %}</p>
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <input class="input mono text-center text-lg tracking-widest" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" required autofocus aria-label="{% translate 'Code' %}">
+  <button class="btn btn-primary w-full">{% translate "Bestätigen" %}</button>
+</form>
+{% endblock %}

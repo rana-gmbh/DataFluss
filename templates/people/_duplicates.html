@@ -1,0 +1,2 @@
+{% load i18n %}{% if found %}<div class="rounded-lg p-3 text-[13px]" style="background: color-mix(in srgb, var(--warn) 12%, transparent)"><p class="font-medium mb-1">{% translate "Mögliche Doppelung:" %}</p>
+<ul>{% for p in found %}<li><a class="underline" href="{% url 'person_detail' p.pk %}" target="_blank">{{ p.display_name }}</a> {% if p.birth_date %}<span class="muted">· {{ p.birth_date|date:"d.m.Y" }}</span>{% endif %}{% if p.archived %} <span class="muted">· {% translate "archiviert" %}</span>{% endif %}</li>{% endfor %}</ul></div>{% endif %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Import & Export" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{% translate "Import & Export" %}</h1>
+<div class="grid lg:grid-cols-2 gap-4 items-start">
+{% if can_import %}<form method="post" action="{% url 'transfer_upload' %}" enctype="multipart/form-data" class="surface p-5 space-y-3">{% csrf_token %}
+  <h2 class="font-semibold flex items-center gap-2">{% icon 'upload' %}{% translate "Importieren" %}</h2>
+  <p class="muted text-[13px]">{% translate "CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor etwas gespeichert wird." %}</p>
+  <div><label class="label" for="f-entity">{% translate "In welchen Bereich?" %}</label><select id="f-entity" class="input" name="entity"><option value="pupil">{% translate "Schüler" %}</option><option value="staff">{% translate "Personal" %}</option></select></div>
+  <div><label class="label" for="f-file">{% translate "Datei" %}</label><input id="f-file" class="input pt-1.5" type="file" name="file" accept=".csv,.txt,.xlsx" required></div>
+  <button class="btn btn-primary">{% translate "Weiter zur Zuordnung" %}</button></form>{% endif %}
+<section class="surface p-5"><h2 class="font-semibold flex items-center gap-2 mb-1">{% icon 'download' %}{% translate "Exportieren" %}</h2>
+  <p class="muted text-[13px] mb-3">{% translate "In den Listen exportiert „Excel“ oder „CSV“ genau die aktuelle Ansicht: Spalten, Filter und Reihenfolge." %}</p>
+  <div class="flex flex-wrap gap-2"><a class="btn" href="{% url 'pupils' %}">{% translate "Schüler" %}</a><a class="btn" href="{% url 'staff' %}">{% translate "Personal" %}</a><a class="btn" href="{% url 'export_assets' %}?format=xlsx" download>{% translate "Geräte als Excel" %}</a><a class="btn" href="{% url 'export_assets' %}?format=csv" download>{% translate "Geräte als CSV" %}</a></div>
+  <p class="muted text-[12px] mt-3">{% translate "Passwörter sind in diesen Exporten nie enthalten." %}</p></section>
+</div>
+<section class="surface overflow-hidden mt-4"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Letzte Importe" %}</h2><table class="data-table"><tbody>
+{% for s in sessions %}<tr><td class="font-medium">{{ s.filename }}</td><td class="muted">{{ s.created_at|date:"d.m.Y H:i" }} · {{ s.user.username }}</td>
+<td>{% if s.status == 'done' %}<span class="badge badge-ok">{% translate "Übernommen" %}</span>{% if s.report.result %} <span class="muted text-[12px]">{% blocktranslate trimmed with created=s.report.result.created updated=s.report.result.updated %}{{ created }} neu, {{ updated }} geändert{% endblocktranslate %}</span>{% endif %}{% elif s.status == 'undone' %}<span class="badge">{% translate "Zurückgenommen" %}</span>{% else %}<span class="badge badge-warn">{% translate "Offen" %}</span>{% endif %}</td>
+<td class="text-right">{% if s.undo_blocker %}<span class="muted text-[12px]">{{ s.undo_blocker }}</span>{% elif s.status == 'done' and can_import %}<form method="post" action="{% url 'transfer_undo' s.pk %}">{% csrf_token %}<button class="btn btn-sm" data-confirm="{% translate 'Diesen Import zurücknehmen? Dabei neu angelegte Personen und Geräte werden gelöscht.' %}">{% icon 'undo' %}{% translate "Rückgängig" %}</button></form>{% elif s.status == 'uploaded' or s.status == 'previewed' %}<a class="btn btn-sm" href="{% url 'transfer_mapping' s.pk %}">{% translate "Fortsetzen" %}</a>{% endif %}</td></tr>
+{% empty %}<tr><td class="muted text-center py-6">{% translate "Noch keine Importe." %}</td></tr>{% endfor %}</tbody></table></section>
+{% endblock %}

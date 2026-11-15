@@ -1,0 +1,3 @@
+{% load i18n %}{% translate "heute" as today_label %}<h3 class="label">{% translate "Klassenverlauf" %}</h3>
+{% for e in enrollments %}<div class="flex justify-between py-1.5 text-[13px] border-b last:border-0" style="border-color: var(--line)"><span class="font-medium">{{ e.class_group.name }}</span><span class="muted">{{ e.start|date:"d.m.Y" }} – {{ e.end|date:"d.m.Y"|default:today_label }}</span></div>
+{% empty %}<p class="muted text-[13px]">{% translate "Noch kein Verlauf." %}</p>{% endfor %}

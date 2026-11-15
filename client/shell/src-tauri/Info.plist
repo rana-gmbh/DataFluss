@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Merged into the app's Info.plist on macOS. Sparkle reads the feed from the public release
+     repository and accepts only updates signed with the private key that belongs to SUPublicEDKey. -->
+<plist version="1.0">
+<dict>
+  <key>SUFeedURL</key>
+  <string>https://raw.githubusercontent.com/rana-gmbh/DataFluss/main/macos/appcast.xml</string>
+  <key>SUPublicEDKey</key>
+  <string>VCaae7N3kGR9hjuBaPMzl1XUXjN8MPSeVBa7zlLQAjA=</string>
+  <key>SUEnableAutomaticChecks</key>
+  <true/>
+  <key>SUScheduledCheckInterval</key>
+  <integer>86400</integer>
+</dict>
+</plist>

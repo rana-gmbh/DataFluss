@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Synchronisation" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-1">{% translate "Synchronisation" %}</h1>
+<p class="muted text-[13px] mb-5">{% translate "Macs mit einer Kopie der Daten, und Änderungen, bei denen eine Person entscheiden sollte." %}</p>
+
+<section class="mb-6">
+  <h2 class="section-title mb-2">{% translate "Abgleich prüfen" %}{% if conflicts %} <span class="badge badge-warn">{{ conflicts|length }}</span>{% endif %}</h2>
+  {% if conflicts %}
+  <p class="muted text-[13px] mb-3">{% translate "Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen." %}</p>
+  <div class="surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Datensatz und Feld" %}</th><th>{% translate "Gilt jetzt" %}</th><th>{% translate "Andere Fassung" %}</th><th></th></tr></thead><tbody>
+  {% for row in conflicts %}<tr>
+    <td><div class="font-medium">{{ row.where }}</div><div class="muted text-[12px]">{{ row.field }}{% if row.c.reason == "deleted" %} · {% translate "auf dem Server gelöscht" %}{% endif %} · {{ row.c.created_at|date:"d.m.Y H:i" }}</div></td>
+    <td><div class="text-[13px] break-words max-w-xs">{{ row.kept }}</div><div class="muted text-[12px]">{{ row.kept_by }}</div></td>
+    <td><div class="text-[13px] break-words max-w-xs">{{ row.lost }}</div><div class="muted text-[12px]">{{ row.lost_by }}</div></td>
+    <td class="whitespace-nowrap"><form method="post" action="{% url 'sync_resolve' row.c.pk %}" class="flex gap-2 justify-end">{% csrf_token %}
+      <button class="btn btn-sm" name="take" value="kept">{% icon 'check' %}{% translate "Bestätigen" %}</button>
+      {% if row.exists %}<button class="btn btn-sm" name="take" value="other">{% translate "Andere übernehmen" %}</button>{% endif %}
+    </form></td>
+  </tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <div class="surface p-4 text-[13px] muted">{% translate "Nichts zu prüfen." %}{% if resolved %} {% blocktranslate trimmed count n=resolved %}{{ n }} entschieden.{% plural %}{{ n }} entschieden.{% endblocktranslate %}{% endif %}</div>
+  {% endif %}
+</section>
+
+<section>
+  <h2 class="section-title mb-2">{% translate "Verbundene Macs" %}</h2>
+  {% if devices %}
+  <div class="surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Mac" %}</th><th>{% translate "Benutzer" %}</th><th>{% translate "Zuletzt gesehen" %}</th><th>{% translate "Status" %}</th><th></th></tr></thead><tbody>
+  {% for d in devices %}<tr>
+    <td><div class="font-medium">{{ d.name }}</div><div class="muted text-[12px]">{% blocktranslate trimmed with date=d.created_at|date:"d.m.Y" %}verbunden {{ date }}{% endblocktranslate %}{% if d.app_version %} · {% blocktranslate trimmed with version=d.app_version %}Version {{ version }}{% endblocktranslate %}{% endif %}</div></td>
+    <td><div>{{ d.user.display_name }}</div><div class="muted text-[12px]">{{ d.user.get_role_display }}</div></td>
+    <td class="text-[13px]">{% if d.last_seen %}{{ d.last_seen|date:"d.m.Y H:i" }}{% if d.last_address %}<div class="muted text-[12px]">{{ d.last_address }}</div>{% endif %}{% else %}–{% endif %}</td>
+    <td>{% if d.revoked_at %}<span class="badge badge-bad">{% translate "Getrennt" %}</span>{% else %}<span class="badge badge-ok">{% translate "Aktiv" %}</span>{% endif %}</td>
+    <td class="text-right">{% if not d.revoked_at %}<form method="post" action="{% url 'sync_revoke' d.pk %}">{% csrf_token %}{% blocktranslate trimmed with name=d.name asvar revoke_confirm %}{{ name }} trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt mit dem Server.{% endblocktranslate %}<button class="btn btn-sm" data-confirm="{{ revoke_confirm }}">{% icon 'x' %}{% translate "Trennen" %}</button></form>{% endif %}</td>
+  </tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <div class="surface p-4 text-[13px] muted">{% translate "Noch kein Mac verbunden. Ein Mac verbindet sich in der App über „Mit Server verbinden“, mit dem eigenen Konto." %}</div>
+  {% endif %}
+</section>
+{% endblock %}

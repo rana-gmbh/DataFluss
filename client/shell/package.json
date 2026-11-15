@@ -1,0 +1,10 @@
+{
+  "name": "schulverwaltung-client",
+  "private": true,
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.3"
+  }
+}

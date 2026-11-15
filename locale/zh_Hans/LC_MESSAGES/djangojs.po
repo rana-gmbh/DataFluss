@@ -1,0 +1,727 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Schulverwaltung\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 21:21+0100\n"
+"PO-Revision-Date: 2026-11-08 12:00+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid ""
+"Sie sind nicht mehr angemeldet. Ihre letzte Änderung wurde nicht gespeichert."
+msgstr "登录已失效。您最后的更改未保存。"
+
+msgid ""
+"Keine Verbindung zum Server. Ihre letzte Änderung wurde nicht gespeichert."
+msgstr "无法连接服务器。您最后的更改未保存。"
+
+msgid "Hinweis schließen"
+msgstr "关闭提示"
+
+msgid "%(label)s gespeichert"
+msgstr "已保存 %(label)s"
+
+msgid "Rückgängig"
+msgstr "撤销"
+
+msgid "Das hat nicht geklappt."
+msgstr "操作未成功。"
+
+msgid "Ungespeicherte Änderungen verwerfen?"
+msgstr "放弃未保存的更改？"
+
+msgid "PDF wird erstellt …"
+msgstr "正在生成 PDF …"
+
+msgid "Strg K"
+msgstr "Ctrl K"
+
+msgid "Kopiert"
+msgstr "已复制"
+
+msgid ""
+"Die Sicherung ist fertig. Bitte laden Sie sie herunter und bewahren Sie sie "
+"an einem anderen Ort auf."
+msgstr "备份已完成。请下载并存放在其他位置。"
+
+msgid "Die Sicherung wurde eingespielt."
+msgstr "备份已恢复。"
+
+msgid "%(done)s von %(total)s"
+msgstr "%(done)s / %(total)s"
+
+msgid "%(name)s wird hochgeladen: %(percent)s"
+msgstr "正在上传 %(name)s：%(percent)s"
+
+msgid "Das Hochladen hat nicht geklappt. Bitte erneut versuchen."
+msgstr "上传失败，请重试。"
+
+msgid "Wird geprüft …"
+msgstr "正在检查 …"
+
+msgid "Schule"
+msgstr "学校"
+
+msgid "Stand"
+msgstr "数据时间"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Personen"
+msgstr "人员"
+
+msgid "Geräte"
+msgstr "设备"
+
+msgid "Benutzer"
+msgstr "用户"
+
+msgid "Dateien"
+msgstr "文件"
+
+msgid "Keine Geräte"
+msgstr "无设备"
+
+msgid "Gerätenummer"
+msgstr "设备编号"
+
+msgid "Typ"
+msgstr "类型"
+
+msgid "Seriennummer"
+msgstr "序列号"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Bei"
+msgstr "持有人"
+
+msgid "Ehemalig"
+msgstr "已离校"
+
+msgid "Ausgabe"
+msgstr "发放"
+
+msgid "Öffnen"
+msgstr "打开"
+
+msgid "Ganze Seite öffnen"
+msgstr "打开完整页面"
+
+msgid "In neuem Fenster öffnen"
+msgstr "在新窗口中打开"
+
+msgid "%(n)s ausgewählt"
+msgstr "已选择 %(n)s 项"
+
+msgid "Stammdaten"
+msgstr "基本信息"
+
+msgid "%(n)s Element"
+msgid_plural "%(n)s Elementen"
+msgstr[0] "%(n)s 个元素"
+
+msgid "Veröffentlicht: Version %(n)s"
+msgstr "已发布：版本 %(n)s"
+
+msgid "Noch nicht veröffentlicht"
+msgstr "尚未发布"
+
+msgid "Ungespeicherte Änderungen"
+msgstr "未保存的更改"
+
+msgid "Entwurf gespeichert"
+msgstr "草稿已保存"
+
+msgid "platziert"
+msgstr "已放置"
+
+msgid "Baustein"
+msgstr "模块"
+
+msgid "Hinweistext"
+msgstr "提示文字"
+
+msgid "Text"
+msgstr "文本"
+
+msgid "Reiter"
+msgstr "标签页"
+
+msgid "Name des Reiters (leer lassen zum Löschen)"
+msgstr "标签页名称（留空则删除）"
+
+msgid "Name des Reiters"
+msgstr "标签页名称"
+
+msgid "Abschnitt ohne Titel"
+msgstr "未命名分区"
+
+msgid "Titel des Abschnitts"
+msgstr "分区标题"
+
+msgid "Abschnitt entfernen"
+msgstr "移除分区"
+
+msgid "Abschnitt mit allen Feldern entfernen?"
+msgstr "移除该分区及其所有字段？"
+
+msgid "bedingt"
+msgstr "有条件"
+
+msgid "Unbekannt"
+msgstr "未知"
+
+msgid "Entfernen"
+msgstr "移除"
+
+msgid "Breite %(w)s"
+msgstr "宽度 %(w)s"
+
+msgid "Felder hierher ziehen"
+msgstr "将字段拖到此处"
+
+msgid "Element auswählen, um es anzupassen."
+msgstr "选择一个元素进行调整。"
+
+msgid "Bezeichnung"
+msgstr "名称"
+
+msgid "Hilfetext"
+msgstr "帮助文字"
+
+msgid "Nur anzeigen, wenn"
+msgstr "仅在以下情况显示"
+
+msgid "Feld"
+msgstr "字段"
+
+msgid "immer anzeigen"
+msgstr "始终显示"
+
+msgid "Vergleich"
+msgstr "比较"
+
+msgid "gleich"
+msgstr "等于"
+
+msgid "ungleich"
+msgstr "不等于"
+
+msgid "Wert, z. B. Kiga"
+msgstr "值，例如 Kiga"
+
+msgid "Wert"
+msgstr "值"
+
+msgid "Nicht gespeichert"
+msgstr "未保存"
+
+msgid "Veröffentlicht. Die Maske ist jetzt aktiv."
+msgstr "已发布。表单布局现已生效。"
+
+msgid "Maske veröffentlichen? Alle Benutzer sehen sie sofort."
+msgstr "发布表单布局？所有用户将立即看到。"
+
+msgid "Vorschau nicht möglich"
+msgstr "无法预览"
+
+msgid "%(field)s angelegt. Jetzt in die Maske ziehen."
+msgstr "已创建 %(field)s。现在请将其拖入表单布局。"
+
+msgid "Abschnitt %(n)s"
+msgstr "分区 %(n)s"
+
+msgid "Das Feld ließ sich nicht duplizieren"
+msgstr "无法复制该字段"
+
+msgid ""
+"%(field)s angelegt und daneben platziert. Umbenennen über Rechtsklick → Feld "
+"bearbeiten."
+msgstr "已创建 %(field)s 并放在旁边。如需重命名，请右键 → 编辑字段。"
+
+msgid "%(field)s angelegt. Umbenennen über Rechtsklick → Feld bearbeiten."
+msgstr "已创建 %(field)s。如需重命名，请右键 → 编辑字段。"
+
+msgid "Feld bearbeiten"
+msgstr "编辑字段"
+
+msgid "Eigenschaften"
+msgstr "属性"
+
+msgid "Breite"
+msgstr "宽度"
+
+msgid "Ganze Zeile"
+msgstr "整行"
+
+msgid "Nach vorne"
+msgstr "前移"
+
+msgid "Nach hinten"
+msgstr "后移"
+
+msgid "Verschieben nach"
+msgstr "移动到"
+
+msgid "Feld duplizieren"
+msgstr "复制字段"
+
+msgid "Duplizieren"
+msgstr "复制"
+
+msgid "Aus der Maske entfernen"
+msgstr "从表单布局中移除"
+
+msgid "Umbenennen"
+msgstr "重命名"
+
+msgid "Abschnitt darüber einfügen"
+msgstr "在上方插入分区"
+
+msgid "Abschnitt darunter einfügen"
+msgstr "在下方插入分区"
+
+msgid "Nach oben"
+msgstr "上移"
+
+msgid "Nach unten"
+msgstr "下移"
+
+msgid "In Reiter verschieben"
+msgstr "移到标签页"
+
+msgid "Abschnitt entfernen …"
+msgstr "移除分区 …"
+
+msgid "%(section)s mit %(elements)s entfernen?"
+msgstr "移除 %(section)s 及其 %(elements)s？"
+
+msgid "Nach links"
+msgstr "左移"
+
+msgid "Nach rechts"
+msgstr "右移"
+
+msgid "Reiter löschen …"
+msgstr "删除标签页 …"
+
+msgid "Reiter %(tab)s mit %(elements)s löschen?"
+msgstr "删除标签页 %(tab)s 及其 %(elements)s？"
+
+msgid "Reiter %(tab)s löschen?"
+msgstr "删除标签页 %(tab)s？"
+
+msgid "Einfügen in"
+msgstr "插入到"
+
+msgid "schon platziert"
+msgstr "已在布局中"
+
+msgid "Name der Maske"
+msgstr "表单布局名称"
+
+msgid "Synchronisation …"
+msgstr "同步 …"
+
+msgid "noch nie"
+msgstr "从未"
+
+msgid "gerade eben"
+msgstr "刚刚"
+
+msgid "vor %(n)s Min."
+msgid_plural "vor %(n)s Min."
+msgstr[0] "%(n)s 分钟前"
+
+msgid "vor %(n)s Std."
+msgid_plural "vor %(n)s Std."
+msgstr[0] "%(n)s 小时前"
+
+msgid "%(n)s Änderung wartet"
+msgid_plural "%(n)s Änderungen warten"
+msgstr[0] "%(n)s 项更改待同步"
+
+msgid "Vom Server getrennt"
+msgstr "已与服务器断开"
+
+msgid "Offline"
+msgstr "离线"
+
+msgid "Zuletzt synchronisiert: %(when)s."
+msgstr "上次同步：%(when)s。"
+
+msgid "Synchronisiert %(when)s"
+msgstr "同步于 %(when)s"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Überschrift"
+msgstr "标题"
+
+msgid "Foto"
+msgstr "照片"
+
+msgid "Logo"
+msgstr "标志"
+
+msgid "QR-Code"
+msgstr "二维码"
+
+msgid "Zugangsdaten"
+msgstr "账号信息"
+
+msgid "Geräteliste"
+msgstr "设备列表"
+
+msgid "Schadensliste"
+msgstr "损坏报告列表"
+
+msgid "Klassenliste"
+msgstr "班级名单"
+
+msgid "Unterschriften"
+msgstr "签名"
+
+msgid "Abstand"
+msgstr "间距"
+
+msgid "Linie"
+msgstr "分隔线"
+
+msgid "Zugangsdaten: %(platforms)s"
+msgstr "账号信息：%(platforms)s"
+
+msgid "Zugangsdaten: alle für das Blatt"
+msgstr "账号信息：账号单上的所有平台"
+
+msgid "QR-Code: %(value)s"
+msgstr "二维码：%(value)s"
+
+msgid "Oben ein Zeilen-Layout wählen und Elemente hineinziehen."
+msgstr "在上方选择行布局，然后将元素拖入其中。"
+
+msgid "Zeile entfernen"
+msgstr "移除行"
+
+msgid "Zeile mit %(n)s Spalten"
+msgstr "含 %(n)s 栏的行"
+
+msgid "Element anklicken, um es anzupassen."
+msgstr "单击一个元素进行调整。"
+
+msgid "Unterschriften, eine pro Zeile"
+msgstr "签名，每行一个"
+
+msgid "Text (Felder als {{schluessel}})"
+msgstr "文本（字段写作 {{schluessel}}）"
+
+msgid "Beispiele:"
+msgstr "示例："
+
+msgid "Als schlichte Überschrift"
+msgstr "作为普通标题"
+
+msgid "Bezeichnung anzeigen"
+msgstr "显示名称"
+
+msgid "Ausblenden, wenn leer"
+msgstr "为空时隐藏"
+
+msgid "Festbreitenschrift"
+msgstr "等宽字体"
+
+msgid "Schriftgröße (pt)"
+msgstr "字号（pt）"
+
+msgid "Fett"
+msgstr "粗体"
+
+msgid "Farbe (#rrggbb)"
+msgstr "颜色（#rrggbb）"
+
+msgid "Ausrichtung"
+msgstr "对齐"
+
+msgid "Standard"
+msgstr "默认"
+
+msgid "Links"
+msgstr "左对齐"
+
+msgid "Mittig"
+msgstr "居中"
+
+msgid "Rechts"
+msgstr "右对齐"
+
+msgid "Breite (mm)"
+msgstr "宽度（mm）"
+
+msgid "Höhe (mm)"
+msgstr "高度（mm）"
+
+msgid "Inhalt (z. B. Adresse oder {{number}})"
+msgstr "内容（例如地址或 {{number}}）"
+
+msgid "Größe (mm)"
+msgstr "尺寸（mm）"
+
+msgid "Leere Plattformen ausblenden"
+msgstr "隐藏无内容的平台"
+
+msgid "Nur diese Plattformen (keine Auswahl = alle)"
+msgstr "仅限这些平台（不选 = 全部）"
+
+msgid "Spalten"
+msgstr "列"
+
+msgid "Oben"
+msgstr "顶部"
+
+msgid "Unten"
+msgstr "底部"
+
+msgid "Rand %(side)s"
+msgstr "%(side)s 边距"
+
+msgid "%(n)s Seite"
+msgid_plural "%(n)s Seiten"
+msgstr[0] "%(n)s 页"
+
+msgid "Gespeichert als Version %(version)s"
+msgstr "已保存为版本 %(version)s"
+
+msgid "Gespeichert"
+msgstr "已保存"
+
+msgid "(leer)"
+msgstr "（空）"
+
+msgid "Ja"
+msgstr "是"
+
+msgid "Nein"
+msgstr "否"
+
+msgid "Keine Einträge"
+msgstr "无条目"
+
+msgid "Lädt"
+msgstr "加载中"
+
+msgid "Fehler"
+msgstr "错误"
+
+msgid "%(field)s gespeichert"
+msgstr "已保存 %(field)s"
+
+msgid "Ohne E-Mail"
+msgstr "无邮箱"
+
+msgid "Neue Codes nötig"
+msgstr "需要新代码"
+
+msgid "Ohne Foto"
+msgstr "无照片"
+
+msgid "Ohne Gerät"
+msgstr "无设备"
+
+msgid "Filter entfernen"
+msgstr "移除筛选"
+
+msgid "Alle Filter löschen"
+msgstr "清除所有筛选"
+
+msgid "Filter für %(field)s"
+msgstr "%(field)s 的筛选"
+
+msgid "Werte suchen"
+msgstr "搜索值"
+
+msgid "Aufsteigend sortieren"
+msgstr "升序排列"
+
+msgid "Absteigend sortieren"
+msgstr "降序排列"
+
+msgid "Zurücksetzen"
+msgstr "重置"
+
+msgid "%(n)s Wert"
+msgid_plural "%(n)s Werte"
+msgstr[0] "%(n)s 个值"
+
+msgid "Keine Werte"
+msgstr "无值"
+
+msgid "(eigene)"
+msgstr "（个人）"
+
+msgid "Ansicht wählen"
+msgstr "选择视图"
+
+msgid "Name der Ansicht"
+msgstr "视图名称"
+
+msgid "Ansicht gespeichert"
+msgstr "视图已保存"
+
+msgid "Ansicht löschen?"
+msgstr "删除视图？"
+
+msgid "Erledigt: %(n)s Person"
+msgid_plural "Erledigt: %(n)s Personen"
+msgstr[0] "已完成：%(n)s 人"
+
+msgid "Das hat nicht geklappt"
+msgstr "操作未成功"
+
+msgid "%(n)s Person"
+msgid_plural "%(n)s Personen"
+msgstr[0] "%(n)s 人"
+
+msgid "Klasse zuweisen"
+msgstr "分配班级"
+
+msgid "%(who)s in die Klasse %(klasse)s verschieben?"
+msgstr "将 %(who)s 移到班级 %(klasse)s？"
+
+msgid "Zugänge erzeugen"
+msgstr "生成账号"
+
+msgid "%(platform)s: Zugänge für %(who)s erzeugen?"
+msgstr "%(platform)s：为 %(who)s 生成账号？"
+
+msgid "%(who)s archivieren?"
+msgstr "归档 %(who)s？"
+
+msgid "Bericht drucken"
+msgstr "打印报告"
+
+msgid ""
+"%(what)s in den Papierkorb legen? Von dort lässt sich das 30 Tage lang "
+"zurückholen."
+msgstr "将 %(what)s 移到回收站？30 天内可从回收站恢复。"
+
+msgid "%(name)s liegt im Papierkorb"
+msgstr "%(name)s 已移到回收站"
+
+msgid "%(who)s im Papierkorb"
+msgstr "%(who)s 已移到回收站"
+
+msgid "Wiederhergestellt"
+msgstr "已恢复"
+
+msgid ""
+"%(name)s duplizieren? Die Kopie bekommt Daten und Formularfelder, aber kein "
+"Bild, keine Karten, Zugänge oder Geräte."
+msgstr ""
+"复制 %(name)s？副本包含数据和表单字段，但不包含照片、证件卡、账号或设备。"
+
+msgid "%(who)s ausgewählt"
+msgstr "已选择 %(who)s"
+
+msgid "Drucken"
+msgstr "打印"
+
+msgid "In Klasse verschieben"
+msgstr "移到班级"
+
+msgid "Wiederherstellen"
+msgstr "恢复"
+
+msgid "Archivieren"
+msgstr "归档"
+
+msgid "Löschen …"
+msgstr "删除 …"
+
+msgid "%(who)s löschen …"
+msgstr "删除 %(who)s …"
+
+msgid "Gestalten"
+msgstr "设计"
+
+msgid "Umbenennen …"
+msgstr "重命名 …"
+
+msgid "Maske löschen"
+msgstr "删除表单布局"
+
+msgid "Maske löschen?"
+msgstr "删除表单布局？"
+
+msgid "Nur für %(language)s"
+msgstr "仅限 %(language)s"
+
+msgid "Dieser Name wurde schon für einzelne Sprachen vergeben."
+msgstr "已为部分语言单独设置了名称。"
+
+msgid "Die Oberfläche ist gerade auf %(language)s eingestellt."
+msgstr "界面当前设置为 %(language)s。"
+
+msgid "Neuer Name"
+msgstr "新名称"
+
+msgid "Datensatz konnte nicht geladen werden"
+msgstr "无法加载记录"
+
+msgid "%(n)s von %(m)s"
+msgstr "%(n)s / %(m)s"
+
+msgid "Überspringen"
+msgstr "跳过"
+
+msgid "Zurück"
+msgstr "返回"
+
+msgid "Fertig"
+msgstr "完成"
+
+msgid "Weiter"
+msgstr "下一步"
+
+msgid "In der Warteschlange von Coolify"
+msgstr "在 Coolify 队列中等待"
+
+msgid "Neue Version wird gebaut und geprüft"
+msgstr "正在构建并检查新版本"
+
+msgid "Jetzt aktualisieren (%(n)s)"
+msgstr "立即更新（%(n)s）"
+
+msgid "Neueste Version installieren"
+msgstr "安装最新版本"
+
+msgid "Ist aktuell"
+msgstr "已是最新"
+
+msgid "Das dauert meist ein bis drei Minuten. Sie können weiterarbeiten."
+msgstr "通常需要一到三分钟，您可以继续工作。"
+
+msgid "Keine neuen Änderungen."
+msgstr "没有新的更改。"
+
+msgid ""
+"Datenbank auf den Stand von %(when)s zurücksetzen? Alles, was seitdem "
+"gespeichert wurde, geht verloren."
+msgstr "将数据库恢复到 %(when)s 的状态？此后保存的所有内容都将丢失。"
+
+msgid "Jetzt aktualisieren? Vorher wird die Datenbank gesichert."
+msgstr "立即更新？更新前会先备份数据库。"

@@ -1,0 +1,3152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Schulverwaltung\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 21:21+0100\n"
+"PO-Revision-Date: 2026-11-08 12:00+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Das Passwort stimmt nicht, oder die Datei ist beschädigt."
+msgstr "The password is wrong, or the file is damaged."
+
+msgid "Das ist keine Sicherungsdatei."
+msgstr "This is not a backup file."
+
+msgid ""
+"Diese Sicherungsdatei stammt aus einer neueren Version. Bitte zuerst "
+"aktualisieren."
+msgstr "This backup file comes from a newer version. Please update first."
+
+msgid "Der Vorgang wurde unterbrochen. Es wurde nichts geändert."
+msgstr "The process was interrupted. Nothing was changed."
+
+msgid ""
+"Das hat nicht geklappt. Es wurde nichts geändert. Details stehen im "
+"Serverprotokoll."
+msgstr "That didn't work. Nothing was changed. Details are in the server log."
+
+msgid "Wird vorbereitet"
+msgstr "Preparing"
+
+msgid "Ungültiges Hochladen."
+msgstr "Invalid upload."
+
+msgid "Auf dem Server ist nicht genug Platz für diese Datei."
+msgstr "There is not enough space on the server for this file."
+
+msgid "Die Datei ist nicht vollständig angekommen."
+msgstr "The file did not arrive completely."
+
+msgid "Auf dem Server ist nicht genug Platz für die Sicherung."
+msgstr "There is not enough space on the server for the backup."
+
+msgid ""
+"Die neue Sicherung ließ sich nicht vollständig lesen und wurde verworfen."
+msgstr "The new backup could not be read completely and was discarded."
+
+#, python-format
+msgid "BACKUP_PASSWORD fehlt oder hat weniger als %(n)s Zeichen."
+msgstr "BACKUP_PASSWORD is missing or has fewer than %(n)s characters."
+
+msgid ""
+"Die automatische Sicherung ist nicht eingerichtet: BACKUP_PASSWORD fehlt."
+msgstr "Automatic backup is not set up: BACKUP_PASSWORD is missing."
+
+msgid ""
+"Es gibt noch keine automatische Sicherung. Die erste entsteht ab 2 Uhr "
+"nachts."
+msgstr ""
+"There is no automatic backup yet. The first one will be made from 2 a.m."
+
+#, python-format
+msgid "%(date)s, %(time)s Uhr"
+msgstr "%(date)s, %(time)s"
+
+#, python-format
+msgid "Die automatische Sicherung vom %(day)s ist fehlgeschlagen: %(problem)s"
+msgstr "The automatic backup from %(day)s failed: %(problem)s"
+
+#, python-format
+msgid ""
+"Die letzte automatische Sicherung ist vom %(day)s. Seitdem ist keine neue "
+"entstanden."
+msgstr ""
+"The last automatic backup is from %(day)s. No new one has been made since."
+
+#, python-format
+msgid ""
+"Die Sicherung vom %(day)s liegt nur auf diesem Server, die Kopie außer Haus "
+"ist fehlgeschlagen: %(problem)s"
+msgstr ""
+"The backup from %(day)s is only on this server; the off-site copy failed: "
+"%(problem)s"
+
+#, python-format
+msgid ""
+"Letzte automatische Sicherung: %(day)s, geprüft. Sie liegt nur auf diesem "
+"Server, weil keine Kopie außer Haus eingerichtet ist."
+msgstr ""
+"Last automatic backup: %(day)s, verified. It is only on this server because "
+"no off-site copy is set up."
+
+#, python-format
+msgid "Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
+msgstr "Last automatic backup: %(day)s, verified and copied off-site."
+
+msgid "Kopie wird übertragen"
+msgstr "Transferring copy"
+
+msgid "Die Kopie ist nicht vollständig angekommen."
+msgstr "The copy did not arrive completely."
+
+#, python-format
+msgid "Sicherung abgebrochen bei %(name)s."
+msgstr "Backup stopped at %(name)s."
+
+msgid "Datenbank wird gesichert"
+msgstr "Backing up database"
+
+msgid "Bilder und Dokumente werden gesichert"
+msgstr "Backing up images and documents"
+
+msgid "Sicherung wird geprüft"
+msgstr "Checking backup"
+
+msgid ""
+"Diese Sicherung stammt aus einer neueren Version. Bitte zuerst diese "
+"Installation aktualisieren."
+msgstr ""
+"This backup comes from a newer version. Please update this installation "
+"first."
+
+#, python-format
+msgid ""
+"Diese Sicherung enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
+"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem "
+"Modul einspielen."
+msgstr ""
+"This backup contains data of the module %(names)s, which this DataFluss "
+"version lacks. It can only be restored in a DataFluss version with that "
+"module."
+
+msgid "Diese Sicherungsdatei enthält ungültige Einträge."
+msgstr "This backup file contains invalid entries."
+
+msgid "Datenbank wird eingespielt"
+msgstr "Restoring database"
+
+msgid "Datenbank wird angepasst"
+msgstr "Updating database structure"
+
+msgid "Es läuft bereits ein Sicherungsvorgang."
+msgstr "A backup is already running."
+
+#, python-format
+msgid "Das Passwort braucht mindestens %(n)s Zeichen."
+msgstr "The password needs at least %(n)s characters."
+
+msgid "Die beiden Passwörter stimmen nicht überein."
+msgstr "The two passwords do not match."
+
+#, python-format
+msgid "Bitte zur Bestätigung %(word)s eingeben."
+msgstr "Please type %(word)s to confirm."
+
+msgid "Es läuft gerade eine Aktualisierung."
+msgstr "An update is running right now."
+
+msgid "Während eines Sicherungsvorgangs kann nichts gelöscht werden."
+msgstr "Nothing can be deleted while a backup is running."
+
+msgid "Die Sicherung wurde gelöscht."
+msgstr "The backup was deleted."
+
+msgid "Zwei-Faktor eingerichtet"
+msgstr "Two-factor set up"
+
+msgid "Zwei-Faktor-Regel"
+msgstr "Two-factor rule"
+
+msgid "Zwei-Faktor zurückgesetzt"
+msgstr "Two-factor reset"
+
+msgid "Datei gelöscht"
+msgstr "File deleted"
+
+msgid "Sicherung"
+msgstr "Backup"
+
+msgid "Sammelaktion"
+msgstr "Bulk action"
+
+msgid "Karte"
+msgstr "ID card"
+
+msgid "Kartensuche"
+msgstr "ID card search"
+
+msgid "Zugang"
+msgstr "Login"
+
+msgid "DaZ"
+msgstr "DaZ"
+
+msgid "DaZ-PDF"
+msgstr "DaZ PDF"
+
+msgid "Gerät"
+msgstr "Device"
+
+msgid "Datei geöffnet"
+msgstr "File opened"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Export mit Passwörtern"
+msgstr "Export with passwords"
+
+msgid "Feld"
+msgstr "Field"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Kindergarten"
+msgstr "Kindergarten"
+
+msgid "Kindergarten-PDF"
+msgstr "Kindergarten PDF"
+
+msgid "Anmeldung"
+msgstr "Sign-in"
+
+msgid "Anmeldung fehlgeschlagen"
+msgstr "Sign-in failed"
+
+msgid "Abmeldung"
+msgstr "Sign-out"
+
+msgid "Maske"
+msgstr "Layout"
+
+msgid "Passwort geändert"
+msgstr "Password changed"
+
+msgid "Passwort neu erzeugt"
+msgstr "Password regenerated"
+
+msgid "Person angelegt"
+msgstr "Person created"
+
+msgid "Plattform"
+msgstr "Platform"
+
+msgid "Druck"
+msgstr "Print"
+
+msgid "Passwort angezeigt"
+msgstr "Password shown"
+
+msgid "Schuljahreswechsel"
+msgstr "School year rollover"
+
+msgid "Serverfehler"
+msgstr "Server error"
+
+msgid "Einstellungen"
+msgstr "Settings"
+
+msgid "Unterricht"
+msgstr "Lessons"
+
+msgid "Druckvorlage"
+msgstr "Print template"
+
+msgid "Aktualisierung"
+msgstr "Update"
+
+msgid "Benutzer geändert"
+msgstr "User changed"
+
+msgid "Benutzer angelegt"
+msgstr "User created"
+
+msgid "Übersicht"
+msgstr "Overview"
+
+msgid "Start"
+msgstr "Home"
+
+msgid "Personen"
+msgstr "People"
+
+msgid "Schüler"
+msgstr "Pupils"
+
+msgid "Personal"
+msgstr "Staff"
+
+msgid "Eltern"
+msgstr "Parents"
+
+msgid "Klassen"
+msgstr "Classes"
+
+msgid "IT"
+msgstr "IT"
+
+msgid "Geräte"
+msgstr "Devices"
+
+msgid "Schäden"
+msgstr "Damage reports"
+
+msgid "Zugänge"
+msgstr "Logins"
+
+msgid "Karte suchen"
+msgstr "Find ID card"
+
+msgid "Drucken und Daten"
+msgstr "Printing and data"
+
+msgid "Druckvorlagen"
+msgstr "Print templates"
+
+msgid "Import & Export"
+msgstr "Import & export"
+
+msgid "Verwaltung"
+msgstr "Administration"
+
+#, python-format
+msgid "Auf dem Server sind nur noch %(gb)s GB frei."
+msgstr "Only %(gb)s GB left on the server."
+
+#, python-format
+msgid "Serverfehler in den letzten 24 Stunden: %(n)s."
+msgstr "Server errors in the last 24 hours: %(n)s."
+
+msgid "Die Datei ist größer als 20 MB."
+msgstr "The file is larger than 20 MB."
+
+msgid "Sie sind nicht mehr angemeldet."
+msgstr "You are no longer signed in."
+
+msgid "Die Datei ist zu groß."
+msgstr "The file is too large."
+
+msgid "Sekretariat"
+msgstr "Secretary's office"
+
+msgid "Schulleitung"
+msgstr "School management"
+
+#, python-format
+msgid ""
+"Diese Datenbank enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
+"Version fehlt. Sie bleibt unverändert und lässt sich mit einer DataFluss-"
+"Version mit diesem Modul öffnen."
+msgstr ""
+"This database contains data of the module %(names)s, which this DataFluss "
+"version lacks. It stays unchanged and can be opened with a DataFluss version "
+"that has the module."
+
+msgid ""
+"Voller Zugriff, inklusive Masken, Vorlagen, Benutzer und Export von "
+"Passwörtern."
+msgstr ""
+"Full access, including layouts, templates, users and exporting passwords."
+
+msgid "Stammdaten pflegen, Passwörter anzeigen und Zugangsblätter drucken."
+msgstr "Maintain master data, view passwords and print login sheets."
+
+msgid "Daten und Berichte lesen, keine Passwörter."
+msgstr "Read data and reports, no passwords."
+
+msgid "Die Datei ist nicht verschlüsselt."
+msgstr "The file is not encrypted."
+
+msgid ""
+"Die Datei ist beschädigt oder mit einem anderen Schlüssel verschlüsselt."
+msgstr "The file is damaged or encrypted with a different key."
+
+msgid "Foto vergrößern"
+msgstr "Enlarge photo"
+
+msgid "Bereiche"
+msgstr "Sections"
+
+msgid ""
+"Links stehen alle Bereiche, die Ihre Rolle öffnen darf. Was Sie nicht sehen "
+"dürfen, erscheint gar nicht erst."
+msgstr ""
+"On the left are all sections your role may open. Anything you may not see "
+"does not appear at all."
+
+msgid "Suche"
+msgstr "Search"
+
+msgid ""
+"Personen, Klassen, Geräte und mehr finden: hier klicken oder ⌘K (unter "
+"Windows Strg+K) drücken."
+msgstr ""
+"Find people, classes, devices and more: click here or press ⌘K (Ctrl+K on "
+"Windows)."
+
+msgid "Listen"
+msgstr "Lists"
+
+msgid ""
+"In den Listen ändert ein Doppelklick eine Zelle. Spalten, Filter und "
+"Sortierung lassen sich als eigene Ansicht speichern."
+msgstr ""
+"In the lists, a double click changes a cell. Columns, filters and sorting "
+"can be saved as your own view."
+
+msgid "Drucken"
+msgstr "Print"
+
+msgid ""
+"Druckvorlagen für Ausweise, Listen und Briefe, mit einem Designer zum "
+"Anpassen."
+msgstr ""
+"Print templates for ID cards, lists and letters, with a designer to adapt "
+"them."
+
+msgid "Masken und eigene Felder, Benutzer, Sicherung und Synchronisation."
+msgstr "Forms and custom fields, users, backups and sync."
+
+msgid "Datenbanken"
+msgstr "Databases"
+
+msgid "Hier wechseln Sie zwischen den Datenbanken auf diesem Computer."
+msgstr "Switch between the databases on this computer here."
+
+msgid "Abgleich"
+msgstr "Comparison"
+
+msgid ""
+"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung "
+"gehen nicht verloren, sie folgen später."
+msgstr ""
+"Shows whether sync with the server is running. Changes made without a "
+"connection are not lost; they follow later."
+
+msgid "Ihr Konto"
+msgstr "Your account"
+
+msgid ""
+"Sprache, hell oder dunkel, Passwort und Abmelden. Mit dem Fragezeichen "
+"startet dieser Rundgang wieder."
+msgstr ""
+"Language, light or dark, password and sign-out. The question mark starts "
+"this tour again."
+
+msgid "Erste Schritte"
+msgstr "Getting started"
+
+msgid "Diese Liste führt durch die Einrichtung und hakt sich selbst ab."
+msgstr "This list guides you through the setup and ticks itself off."
+
+msgid "GitHub-Zugriff wurde abgelehnt. Bitte GITHUB_TOKEN prüfen."
+msgstr "GitHub denied access. Please check GITHUB_TOKEN."
+
+msgid "GitHub antwortet nicht."
+msgstr "GitHub is not responding."
+
+msgid "GitHub ist nicht erreichbar."
+msgstr "GitHub cannot be reached."
+
+msgid "Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
+msgstr "The database could not be backed up. Nothing was changed."
+
+msgid "Coolify lehnt das Token ab."
+msgstr "Coolify rejects the token."
+
+#, python-format
+msgid "Coolify meldet Fehler %(code)s."
+msgstr "Coolify reports error %(code)s."
+
+msgid "Coolify ist nicht erreichbar. Es wurde nichts verändert."
+msgstr "Coolify cannot be reached. Nothing was changed."
+
+msgid ""
+"Coolify hat unerwartet geantwortet. Bitte dort unter Deployments prüfen, ob "
+"die Aktualisierung gestartet ist."
+msgstr ""
+"Coolify gave an unexpected response. Please check under Deployments there "
+"whether the update has started."
+
+msgid "Es gibt nichts zurückzusetzen."
+msgstr "There is nothing to roll back."
+
+msgid ""
+"Coolify gibt keine Auskunft über diese Aktualisierung. Bitte dort unter "
+"Deployments nachsehen."
+msgstr ""
+"Coolify gives no information about this update. Please check under "
+"Deployments there."
+
+#, python-format
+msgid "Aktualisierung auf %(version)s abgeschlossen."
+msgstr "Update to %(version)s complete."
+
+msgid ""
+"Coolify meldet Erfolg, aber es läuft noch die bisherige Version. Bitte das "
+"Protokoll in Coolify prüfen."
+msgstr ""
+"Coolify reports success, but the previous version is still running. Please "
+"check the log in Coolify."
+
+msgid ""
+"Die neue Version wurde nicht übernommen. Die bisherige Version läuft weiter."
+msgstr "The new version was not applied. The previous version keeps running."
+
+msgid "Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
+msgstr "The database was rolled back to its state before the update."
+
+#, python-format
+msgid ""
+"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung "
+"%(name)s von Hand einspielen."
+msgstr ""
+"The database could not be rolled back. Please restore the backup %(name)s "
+"manually."
+
+#, python-format
+msgid ""
+"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch "
+"hier, bitte die Sicherung %(name)s von Hand einspielen."
+msgstr ""
+"The database is being rolled back. If this is still here after a few "
+"minutes, please restore the backup %(name)s manually."
+
+#, python-format
+msgid ""
+"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand "
+"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
+"geht dabei verloren."
+msgstr ""
+"The new version has already changed the database. It can be rolled back to "
+"its state from %(when)s. Everything saved since then will be lost."
+
+#, python-format
+msgid ""
+"Auf diesem Mac kann sich nur das Konto anmelden, mit dem diese Datenbank "
+"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit "
+"„Mit Server verbinden“ eine eigene Datenbank anlegen."
+msgstr ""
+"Only the account that connected this database can sign in on this Mac "
+"(%(owners)s). For %(name)s, please create a database of its own on the start "
+"screen with “Connect to server”."
+
+msgid "Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen."
+msgstr "Too many failed attempts. Please try again in 15 minutes."
+
+msgid "Benutzername oder Passwort ist falsch."
+msgstr "Username or password is incorrect."
+
+msgid "Das bisherige Passwort stimmt nicht."
+msgstr "The current password is incorrect."
+
+msgid "Die beiden neuen Passwörter stimmen nicht überein."
+msgstr "The two new passwords do not match."
+
+msgid "Das neue Passwort muss sich vom bisherigen unterscheiden."
+msgstr "The new password must be different from the current one."
+
+msgid "Ihr Passwort wurde geändert."
+msgstr "Your password has been changed."
+
+msgid "Der Code stimmt nicht. Bitte erneut versuchen."
+msgstr "The code is incorrect. Please try again."
+
+msgid "Der Code stimmt nicht."
+msgstr "The code is incorrect."
+
+msgid "Schüler ohne E-Mail"
+msgstr "Pupils without email"
+
+msgid "Ohne Foto"
+msgstr "Without photo"
+
+msgid "Neue Codes nötig"
+msgstr "New codes needed"
+
+msgid "Ehemalige mit offenem Gerät"
+msgstr "Former, device not returned"
+
+msgid "Name und Logo eintragen"
+msgstr "Enter name and logo"
+
+msgid "Personen aufnehmen oder aus einer Datei importieren"
+msgstr "Add people or import them from a file"
+
+msgid "Nächtliche Sicherung einrichten"
+msgstr "Set up the nightly backup"
+
+msgid "Konten für weitere Personen anlegen"
+msgstr "Create accounts for more people"
+
+msgid "archiviert"
+msgstr "archived"
+
+#, python-format
+msgid "Klasse %(year)s"
+msgstr "Class %(year)s"
+
+#, python-format
+msgid "Schaden %(date)s"
+msgstr "Damage report %(date)s"
+
+msgid "Bitte einen Benutzernamen eingeben."
+msgstr "Please enter a username."
+
+msgid "Dieser Benutzername ist vergeben."
+msgstr "This username is already taken."
+
+msgid "Unbekannte Rolle."
+msgstr "Unknown role."
+
+#, python-format
+msgid "%(name)s wurde angelegt."
+msgstr "%(name)s was created."
+
+msgid "Zwei-Faktor-Anmeldung eingeschaltet."
+msgstr "Two-factor sign-in turned on."
+
+msgid "Zwei-Faktor-Anmeldung ausgeschaltet."
+msgstr "Two-factor sign-in turned off."
+
+msgid "Das Logo muss ein Bild sein (JPEG, PNG, GIF oder WEBP)."
+msgstr "The logo must be an image (JPEG, PNG, GIF or WEBP)."
+
+msgid "Gespeichert."
+msgstr "Saved."
+
+msgid "Eine Aktualisierung läuft bereits."
+msgstr "An update is already running."
+
+msgid "Wählen Sie mindestens eine Sprache."
+msgstr "Choose at least one language."
+
+msgid "Gerätetyp"
+msgstr "Device type"
+
+msgid "Präfix"
+msgstr "Prefix"
+
+msgid "Trennzeichen"
+msgstr "Separator"
+
+msgid "Stellen"
+msgstr "Digits"
+
+msgid "Nächste Nummer"
+msgstr "Next number"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Art"
+msgstr "Type"
+
+msgid "Raum"
+msgstr "Room"
+
+msgid "Gruppe"
+msgstr "Group"
+
+msgid "Ausgegeben"
+msgstr "Issued"
+
+msgid "Verfügbar"
+msgstr "Available"
+
+msgid "Beschädigt"
+msgstr "Damaged"
+
+msgid "Verkauft"
+msgstr "Sold"
+
+msgid "Ausgemustert"
+msgstr "Retired"
+
+msgid "Gerätenummer"
+msgstr "Device number"
+
+msgid "Seriennummer"
+msgstr "Serial number"
+
+msgid "UUID"
+msgstr "UUID"
+
+msgid "Verkaufsdatum"
+msgstr "Sale date"
+
+msgid "Bemerkungen"
+msgstr "Remarks"
+
+msgid "Das Gerät ist noch ausgegeben."
+msgstr "The device is still issued."
+
+msgid "Bitte genau eine Person oder einen Ort wählen."
+msgstr "Please choose exactly one person or one location."
+
+msgid "Ausgabe"
+msgstr "Issue"
+
+msgid "Rückgabe"
+msgstr "Return"
+
+msgid "Stift"
+msgstr "Pen"
+
+msgid "Tastatur"
+msgstr "Keyboard"
+
+msgid "Offen"
+msgstr "Open"
+
+msgid "In Reparatur"
+msgstr "In repair"
+
+msgid "Wartet auf Ersatz"
+msgstr "Waiting for replacement"
+
+msgid "Erledigt"
+msgstr "Done"
+
+msgid "Display"
+msgstr "Display"
+
+msgid "Interne Hardware"
+msgstr "Internal hardware"
+
+msgid "Ständer/Scharnier"
+msgstr "Stand/hinge"
+
+msgid "Sonstiges"
+msgstr "Other"
+
+msgid "Beschreibung des Schadens"
+msgstr "Description of the damage"
+
+msgid "Schaden an"
+msgstr "Damage to"
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Gerätenummer Austauschgerät"
+msgstr "Replacement device number"
+
+msgid "Seriennummer Austauschgerät"
+msgstr "Replacement serial number"
+
+msgid "Ninox-ID"
+msgstr "Ninox ID"
+
+msgid "Stichtag"
+msgstr "Reference date"
+
+msgid "Abgeschlossen"
+msgstr "Closed"
+
+msgid "Zurückgegeben"
+msgstr "Returned"
+
+msgid "Bitte einen Gerätetyp wählen oder eine Nummer eingeben."
+msgstr "Please choose a device type or enter a number."
+
+#, python-format
+msgid "%(number)s gibt es bereits."
+msgstr "%(number)s already exists."
+
+#, python-format
+msgid "%(number)s wurde angelegt."
+msgstr "%(number)s was created."
+
+#, python-format
+msgid "Niemand gefunden: %(name)s."
+msgstr "No one found: %(name)s."
+
+msgid "ohne Klasse"
+msgstr "no class"
+
+#, python-format
+msgid ""
+"Mehrere Treffer für %(name)s: %(options)s. Bitte Vorname und Nachname oder "
+"die E-Mail eingeben."
+msgstr ""
+"Several matches for %(name)s: %(options)s. Please enter first and last name "
+"or the email."
+
+msgid "Zu viele Abrufe. Bitte kurz warten."
+msgstr "Too many requests. Please wait a moment."
+
+msgid "Dieses Gerät gibt es nicht."
+msgstr "This device does not exist."
+
+msgid "Bitte den Schaden beschreiben."
+msgstr "Please describe the damage."
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Text (mehrzeilig)"
+msgstr "Text (multi-line)"
+
+msgid "Zahl"
+msgstr "Number"
+
+msgid "Ja/Nein"
+msgstr "Yes/No"
+
+msgid "Auswahl"
+msgstr "Choice"
+
+msgid "Mehrfachauswahl"
+msgstr "Multiple choice"
+
+msgid "E-Mail"
+msgstr "Email"
+
+msgid "Telefon"
+msgstr "Phone"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Geheim (verschlüsselt)"
+msgstr "Secret (encrypted)"
+
+msgid "Klasse"
+msgstr "Class"
+
+msgid "Foto"
+msgstr "Photo"
+
+msgid "Ausweiskarte"
+msgstr "ID card"
+
+msgid "Klassenverlauf"
+msgstr "Class history"
+
+msgid "Schäden und Support"
+msgstr "Damage reports and support"
+
+msgid "Dateien"
+msgstr "Files"
+
+msgid "Kommentare"
+msgstr "Comments"
+
+msgid "Änderungsverlauf"
+msgstr "Change history"
+
+msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
+msgstr "Please enter a valid date, e.g. 24.12.2015."
+
+#, python-format
+msgid "%(field)s ist ein Pflichtfeld."
+msgstr "%(field)s is required."
+
+#, python-format
+msgid "%(field)s: Bitte eine ganze Zahl eingeben."
+msgstr "%(field)s: Please enter a whole number."
+
+msgid "Bitte eine gültige E-Mail-Adresse eingeben."
+msgstr "Please enter a valid email address."
+
+msgid "Bitte einen gültigen Link eingeben."
+msgstr "Please enter a valid link."
+
+msgid "Bitte eine gültige Telefonnummer eingeben."
+msgstr "Please enter a valid phone number."
+
+#, python-format
+msgid "%(field)s: Unbekannte Auswahl."
+msgstr "%(field)s: Unknown option."
+
+msgid "Ja"
+msgstr "Yes"
+
+msgid "Nein"
+msgstr "No"
+
+#, python-format
+msgid "%(field)s kann nicht geändert werden."
+msgstr "%(field)s cannot be changed."
+
+msgid "Diese Klasse gibt es nicht."
+msgstr "This class does not exist."
+
+msgid "Bericht"
+msgstr "Report"
+
+msgid "Ansicht"
+msgstr "View"
+
+msgid "Unbekannter Bereich."
+msgstr "Unknown area."
+
+msgid "Bitte eine Bezeichnung eingeben."
+msgstr "Please enter a name."
+
+msgid "Unbekannter Feldtyp."
+msgstr "Unknown field type."
+
+msgid "Bitte mindestens eine Option angeben."
+msgstr "Please enter at least one option."
+
+msgid "Eine Maske braucht mindestens einen Reiter."
+msgstr "A layout needs at least one tab."
+
+msgid "Für die Vorschau fehlt ein Datensatz."
+msgstr "No record is available for the preview."
+
+#, python-format
+msgid "Version %(number)s ist wieder aktiv."
+msgstr "Version %(number)s is active again."
+
+#, python-format
+msgid "%(field)s wurde angelegt. Ziehen Sie das Feld jetzt in eine Maske."
+msgstr "%(field)s was created. Now drag the field into a layout."
+
+#, python-format
+msgid "%(field)s (Kopie)"
+msgstr "%(field)s (copy)"
+
+msgid "Dieses eingebaute Feld lässt sich nicht duplizieren."
+msgstr "This built-in field can't be duplicated."
+
+#, python-format
+msgid "%(field)s angelegt."
+msgstr "%(field)s created."
+
+#, python-format
+msgid "%(field)s wurde archiviert. Die Daten bleiben erhalten."
+msgstr "%(field)s was archived. The data is kept."
+
+msgid "Schuljahr"
+msgstr "School year"
+
+msgid "Beginn"
+msgstr "Start"
+
+msgid "Ende"
+msgstr "End"
+
+msgid "Aktuell"
+msgstr "Current"
+
+msgid "Kindergartengruppe"
+msgstr "Kindergarten group"
+
+msgid "Austritt"
+msgstr "Exit"
+
+msgid "Klassenstufe"
+msgstr "Grade"
+
+msgid "Farbe"
+msgstr "Color"
+
+msgid "Vorname"
+msgstr "First name"
+
+msgid "Nachname"
+msgstr "Last name"
+
+msgid "Familienname zuerst"
+msgstr "Last name first"
+
+msgid "Geschlecht"
+msgstr "Gender"
+
+msgid "Geburtsdatum"
+msgstr "Date of birth"
+
+msgid "Geburtsort"
+msgstr "Place of birth"
+
+msgid "Eintritt"
+msgstr "Entry"
+
+msgid "Archiviert"
+msgstr "Archived"
+
+msgid "Bild"
+msgstr "Image"
+
+msgid "Neue Codes/Accounts"
+msgstr "New codes/accounts"
+
+msgid "Schultyp"
+msgstr "School type"
+
+msgid "Lese-/Rechtschreibschwäche"
+msgstr "Reading/spelling difficulty"
+
+msgid "Bus"
+msgstr "Bus"
+
+msgid "Kategorie"
+msgstr "Category"
+
+msgid "Anrede"
+msgstr "Salutation"
+
+msgid "Kürzel"
+msgstr "Initials"
+
+msgid "Mobiltelefon"
+msgstr "Mobile phone"
+
+msgid "Tel. privat"
+msgstr "Phone (home)"
+
+msgid "Tel. Büro"
+msgstr "Phone (office)"
+
+msgid "Tel. Notruf"
+msgstr "Emergency phone"
+
+msgid "E-Mail privat"
+msgstr "Personal email"
+
+msgid "Compound"
+msgstr "Compound"
+
+msgid "Straße / Nr."
+msgstr "Street / no."
+
+msgid "Bezirk"
+msgstr "District"
+
+msgid "Stadt / PLZ"
+msgstr "City / postcode"
+
+msgid "Straßenbüro"
+msgstr "Street office"
+
+msgid "DaZ-Fachkraft"
+msgstr "DaZ teacher"
+
+msgid "Kindergarten-Fachkraft"
+msgstr "Kindergarten educator"
+
+#, python-format
+msgid "%(name)s (Kopie)"
+msgstr "%(name)s (copy)"
+
+#, python-format
+msgid ""
+"Das Schuljahr %(name)s gibt es bereits. Der Wechsel wurde nicht noch einmal "
+"ausgeführt."
+msgstr "School year %(name)s already exists. The changeover was not run again."
+
+#, python-format
+msgid ""
+"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch "
+"einmal ausgeführt."
+msgstr ""
+"School year %(name)s hasn't started yet. The changeover was not run again."
+
+msgid "Diese Datei ist kein gültiges Bild."
+msgstr "This file is not a valid image."
+
+msgid "Diese Karte konnte nicht gelesen werden."
+msgstr "This ID card couldn't be read."
+
+#, python-format
+msgid "Diese Karte gehört bereits zu %(name)s."
+msgstr "This ID card already belongs to %(name)s."
+
+msgid "Bitte Vor- und Nachname eingeben."
+msgstr "Please enter first and last name."
+
+#, python-format
+msgid "%(name)s wurde angelegt. Zugänge erzeugt: %(platforms)s."
+msgstr "%(name)s was created. Logins generated: %(platforms)s."
+
+#, python-format
+msgid "Kopie von %(name)s angelegt. Bitte den Namen anpassen."
+msgstr "Copy of %(name)s created. Please adjust the name."
+
+#, python-format
+msgid "%(name)s ist wieder da."
+msgstr "%(name)s is back."
+
+#, python-format
+msgid ""
+"Schuljahr %(name)s gestartet: %(moved)s Schüler versetzt, %(left)s "
+"ausgetreten."
+msgstr ""
+"School year %(name)s started: %(moved)s pupils moved up, %(left)s left."
+
+msgid "Klassenliste"
+msgstr "Class list"
+
+msgid "Zeugnisse"
+msgstr "Reports"
+
+msgid "A4 Hochformat"
+msgstr "A4 portrait"
+
+msgid "A4 Querformat"
+msgstr "A4 landscape"
+
+msgid "A5 Hochformat"
+msgstr "A5 portrait"
+
+msgid "A4, 2 Blätter zum Schneiden"
+msgstr "A4, cut into 2 sheets"
+
+msgid "A4, 4 Blätter zum Schneiden"
+msgstr "A4, cut into 4 sheets"
+
+msgid "Etiketten 70 × 37 mm (3 × 8)"
+msgstr "Labels 70 × 37 mm (3 × 8)"
+
+msgid "Etiketten 63,5 × 38,1 mm (3 × 7)"
+msgstr "Labels 63.5 × 38.1 mm (3 × 7)"
+
+msgid "Ausweiskarte 85,6 × 54 mm"
+msgstr "ID card 85.6 × 54 mm"
+
+msgid "Keine Datensätze ausgewählt."
+msgstr "No records selected."
+
+msgid "Neue Vorlage"
+msgstr "New template"
+
+#, python-format
+msgid "Vorlage fehlerhaft: %(error)s"
+msgstr "Template has errors: %(error)s"
+
+#, python-format
+msgid "Version %(number)s wiederhergestellt."
+msgstr "Version %(number)s restored."
+
+msgid "Dieses Gerät wurde getrennt."
+msgstr "This device was disconnected."
+
+#, python-format
+msgid "Der Server antwortet mit %(code)s."
+msgstr "The server responded with %(code)s."
+
+#, python-format
+msgid "Der Server ist nicht erreichbar (%(reason)s)."
+msgstr "The server can't be reached (%(reason)s)."
+
+#, python-format
+msgid "Das Modul vom Server ließ sich nicht prüfen (%(reason)s)."
+msgstr "The module from the server could not be verified (%(reason)s)."
+
+#, python-format
+msgid ""
+"Das Modul %(names)s wurde vom Server geladen. Bitte noch einmal verbinden, "
+"mit einem neuen Code aus der Authenticator-App."
+msgstr ""
+"The module %(names)s was loaded from the server. Please connect again, with "
+"a new code from the authenticator app."
+
+#, python-format
+msgid ""
+"Der Server nutzt das Modul %(names)s, das in dieser DataFluss-Version fehlt."
+msgstr ""
+"The server uses the module %(names)s, which this DataFluss version lacks."
+
+#, python-format
+msgid ""
+"Der Server hat DataFluss %(server)s, dieser Computer %(here)s. Bitte beide "
+"auf dieselbe Version bringen."
+msgstr ""
+"The server has DataFluss %(server)s, this computer %(here)s. Please bring "
+"both to the same version."
+
+msgid "Daten werden übertragen"
+msgstr "Transferring data"
+
+msgid "Bilder und Dokumente werden geladen"
+msgstr "Loading images and documents"
+
+#, python-format
+msgid ""
+"Dieser Computer hat DataFluss %(theirs)s, der Server %(ours)s. Bitte beide "
+"auf dieselbe Version bringen."
+msgstr ""
+"This computer has DataFluss %(theirs)s, the server %(ours)s. Please bring "
+"both to the same version."
+
+msgid ""
+"Computer und Server haben verschiedene Versionen. Bitte beide aktualisieren."
+msgstr "Computer and server have different versions. Please update both."
+
+msgid ""
+"Der Server wurde aus einer Sicherung wiederhergestellt. Diese Kopie gleicht "
+"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen "
+"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server "
+"verbinden."
+msgstr ""
+"The server was restored from a backup, so this copy no longer syncs: please "
+"note any changes not yet sent, remove the database from this computer and "
+"connect to the server again."
+
+msgid "Kein Gerät angemeldet."
+msgstr "No device registered."
+
+msgid "Dieses Gerät ist unbekannt."
+msgstr "This device is unknown."
+
+msgid "Zu viele Versuche. Bitte in einer Viertelstunde noch einmal."
+msgstr "Too many attempts. Please try again in 15 minutes."
+
+msgid "Benutzername oder Passwort stimmen nicht."
+msgstr "Username or password is incorrect."
+
+msgid ""
+"Bitte zuerst in der Webversion anmelden und ein eigenes Passwort festlegen."
+msgstr ""
+"Please sign in to the web version first and choose a password of your own."
+
+msgid ""
+"Bitte zuerst in der Webversion anmelden und die Zwei-Faktor-Anmeldung "
+"einrichten."
+msgstr "Please sign in to the web version first and set up two-factor sign-in."
+
+msgid "Der Code aus der Authenticator-App stimmt nicht."
+msgstr "The code from the authenticator app is incorrect."
+
+msgid "Ungültige Anfrage."
+msgstr "Invalid request."
+
+msgid "Dieses Gerät ist unbekannt oder getrennt."
+msgstr "This device is unknown or disconnected."
+
+msgid "Dieses Modul gibt der Server nicht heraus."
+msgstr "The server does not hand out this module."
+
+msgid "Ungültiger Name."
+msgstr "Invalid name."
+
+msgid "Nicht gefunden."
+msgstr "Not found."
+
+msgid "[verschlüsselt]"
+msgstr "[encrypted]"
+
+msgid "Person"
+msgstr "Person"
+
+msgid "Schaden"
+msgstr "Damage report"
+
+msgid "DaZ-Bericht"
+msgstr "DaZ report"
+
+msgid "Kind"
+msgstr "Child"
+
+msgid "Kindergarten-Bericht"
+msgstr "Kindergarten report"
+
+#, python-format
+msgid "%(kind)s (gelöscht)"
+msgstr "%(kind)s (deleted)"
+
+msgid "(leer)"
+msgstr "(empty)"
+
+msgid "Server"
+msgstr "Server"
+
+#, python-format
+msgid ""
+"%(name)s ist getrennt. Beim nächsten Kontakt löscht der Mac seine Kopie."
+msgstr ""
+"%(name)s is disconnected. The Mac will delete its copy the next time it "
+"connects."
+
+msgid ""
+"Der Datensatz ist gelöscht, die andere Fassung lässt sich nicht mehr "
+"übernehmen."
+msgstr ""
+"The record has been deleted, so the other version can no longer be applied."
+
+msgid "Kein Zugriff"
+msgstr "No access"
+
+msgid ""
+"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich "
+"an die IT."
+msgstr ""
+"Your role doesn't allow access to this page. If you need it, contact IT."
+
+msgid "Nicht gefunden"
+msgstr "Not found"
+
+msgid "Diese Seite oder dieser Datensatz existiert nicht mehr."
+msgstr "This page or record no longer exists."
+
+msgid "Fehler"
+msgstr "Error"
+
+msgid "Schulverwaltung"
+msgstr "School administration"
+
+msgid "Hier ist etwas schiefgegangen"
+msgstr "Something went wrong"
+
+msgid ""
+"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert "
+"haben, prüfen Sie bitte, ob es angekommen ist."
+msgstr ""
+"The error has been logged for IT. If you were just saving something, please "
+"check whether it went through."
+
+msgid "Zur Startseite"
+msgstr "Go to home page"
+
+msgid ""
+"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle "
+"Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
+"einem anderen Ort auf. Sie lässt sich in jeder Installation der "
+"Schulverwaltung einspielen."
+msgstr ""
+"A backup contains the entire database with all logins, plus all images and "
+"documents. Download the file and keep it in a different place. It can be "
+"restored into any installation of the school administration."
+
+msgid "Neue Sicherung erstellen"
+msgstr "Create new backup"
+
+msgid "Passwort für diese Sicherung"
+msgstr "Password for this backup"
+
+msgid "Passwort wiederholen"
+msgstr "Repeat password"
+
+#, python-format
+msgid ""
+"Mindestens %(n)s Zeichen. Das Passwort verschlüsselt die Datei und wird "
+"nirgends gespeichert. <strong>Ohne dieses Passwort lässt sich die Sicherung "
+"nicht mehr öffnen.</strong> Bewahren Sie es getrennt von der Datei auf."
+msgstr ""
+"At least %(n)s characters. The password encrypts the file and is not stored "
+"anywhere. <strong>Without this password the backup can never be opened again."
+"</strong> Keep it separate from the file."
+
+msgid "Sicherung erstellen"
+msgstr "Create backup"
+
+msgid "Sicherung hochladen"
+msgstr "Upload backup"
+
+msgid ""
+"Eine Sicherung von dieser oder einer anderen Installation. Das Hochladen "
+"ändert noch nichts, eingespielt wird erst in der Liste unten."
+msgstr ""
+"A backup from this or another installation. Uploading doesn't change "
+"anything yet; restoring happens in the list below."
+
+msgid "Datei auswählen"
+msgstr "Choose file"
+
+msgid "Sicherungen auf diesem Server"
+msgstr "Backups on this server"
+
+msgid "Datei"
+msgstr "File"
+
+msgid "Stand"
+msgstr "As of"
+
+msgid "Größe"
+msgstr "Size"
+
+msgid "Inhalt"
+msgstr "Content"
+
+msgid "Vor dem Einspielen"
+msgstr "Before restore"
+
+msgid "Hochgeladen"
+msgstr "Uploaded"
+
+#, python-format
+msgid "%(school)s: %(people)s Personen, %(files)s Dateien"
+msgstr "%(school)s: %(people)s people, %(files)s files"
+
+msgid "Noch nicht geprüft"
+msgstr "Not checked yet"
+
+msgid "Herunterladen"
+msgstr "Download"
+
+msgid "Einspielen"
+msgstr "Restore"
+
+msgid "Löschen"
+msgstr "Delete"
+
+msgid "Diese Sicherung vom Server löschen?"
+msgstr "Delete this backup from the server?"
+
+msgid "Noch keine Sicherungen."
+msgstr "No backups yet."
+
+msgid "Sicherung einspielen"
+msgstr "Restore backup"
+
+msgid "Passwort dieser Sicherung"
+msgstr "This backup's password"
+
+msgid "Abbrechen"
+msgstr "Cancel"
+
+msgid "Prüfen"
+msgstr "Check"
+
+msgid "Alle Daten dieser Installation werden ersetzt."
+msgstr "All data in this installation will be replaced."
+
+msgid ""
+"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der "
+"Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
+"automatisch als Sicherung mit demselben Passwort abgelegt."
+msgstr ""
+"This also affects user accounts: afterwards the sign-in details from the "
+"backup apply, and everyone is signed out. Before that, the current state is "
+"automatically saved as a backup with the same password."
+
+#, python-format
+msgid "Zur Bestätigung %(word)s eingeben"
+msgstr "Type %(word)s to confirm"
+
+msgid "Jetzt einspielen"
+msgstr "Restore now"
+
+msgid "Zum Inhalt springen"
+msgstr "Skip to content"
+
+msgid "Datenbank wechseln (⇧⌘O für alle)"
+msgstr "Switch database (⇧⌘O for all)"
+
+msgid "Geöffnet"
+msgstr "Open"
+
+msgid "Alle Datenbanken …"
+msgstr "All databases …"
+
+msgid "Synchronisation …"
+msgstr "Sync …"
+
+msgid "Jetzt synchronisieren"
+msgstr "Sync now"
+
+msgid "Rundgang"
+msgstr "Tour"
+
+msgid "Rundgang durch diese Seite starten"
+msgstr "Start a tour of this page"
+
+msgid "Hell / Dunkel"
+msgstr "Light / dark"
+
+msgid "Farbschema wechseln"
+msgstr "Switch color scheme"
+
+msgid "Passwort ändern"
+msgstr "Change password"
+
+msgid "Abmelden"
+msgstr "Sign out"
+
+msgid "Menü"
+msgstr "Menu"
+
+msgid "Suchen"
+msgstr "Search"
+
+msgid "Name, E-Mail, Gerätenummer, Klasse …"
+msgstr "Name, email, device number, class …"
+
+msgid "In neuem Tab anmelden"
+msgstr "Sign in in a new tab"
+
+msgid "Hinweis schließen"
+msgstr "Close notice"
+
+msgid "Ja, fortfahren"
+msgstr "Yes, continue"
+
+msgid "Vergrößertes Foto"
+msgstr "Enlarged photo"
+
+msgid "Sprache"
+msgstr "Language"
+
+msgid "Spracheinstellungen …"
+msgstr "Language settings …"
+
+msgid "Für welche Sprachen umbenennen?"
+msgstr "Rename for which languages?"
+
+msgid "Die anderen Sprachen behalten ihren bisherigen Namen."
+msgstr "The other languages keep their current name."
+
+msgid "Für alle Sprachen"
+msgstr "For all languages"
+
+msgid ""
+"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben "
+"wurden, werden ersetzt."
+msgstr ""
+"The new name applies everywhere. Names set for individual languages are "
+"replaced."
+
+msgid "Entscheidung merken und nicht mehr fragen"
+msgstr "Remember my choice and don't ask again"
+
+msgid "Lässt sich unter Sprache → Spracheinstellungen wieder ändern."
+msgstr "You can change this later under Language → Language settings."
+
+msgid "Umbenennen"
+msgstr "Rename"
+
+#, python-format
+msgid "Seite %(number)s von %(pages)s · %(n)s Eintrag"
+msgid_plural "Seite %(number)s von %(pages)s · %(n)s Einträge"
+msgstr[0] "Page %(number)s of %(pages)s · %(n)s entry"
+msgstr[1] "Page %(number)s of %(pages)s · %(n)s entries"
+
+msgid "Zurück"
+msgstr "Back"
+
+msgid "Weiter"
+msgstr "Next"
+
+msgid "blättern"
+msgstr "browse"
+
+msgid "Ganze Seite öffnen"
+msgstr "Open full page"
+
+msgid "Schließen (Esc)"
+msgstr "Close (Esc)"
+
+msgid "Schließen"
+msgstr "Close"
+
+msgid "Breite der Bereiche ändern"
+msgstr "Resize panes"
+
+msgid "Ziehen ändert die Breite, Doppelklick stellt sie zurück"
+msgstr "Drag to change the width, double-click to reset"
+
+msgid "Details"
+msgstr "Details"
+
+#, python-format
+msgid "Keine Treffer für „%(query)s“."
+msgstr "No results for “%(query)s”."
+
+msgid "Mindestens zwei Zeichen eingeben."
+msgstr "Enter at least two characters."
+
+msgid "Im Personal gefunden"
+msgstr "Found in Staff"
+
+msgid "Hinzufügen"
+msgstr "Add"
+
+msgid ""
+"Niemand im Personal mit diesem Namen. Anlegen macht einen Eintrag ohne "
+"Personal."
+msgstr "Nobody in Staff with this name. Creating makes an entry without Staff."
+
+msgid "Protokoll"
+msgstr "Audit log"
+
+msgid "Aktion filtern"
+msgstr "Filter by action"
+
+msgid "Alle Aktionen"
+msgstr "All actions"
+
+msgid "Zeit"
+msgstr "Time"
+
+msgid "Benutzer"
+msgstr "User"
+
+msgid "Aktion"
+msgstr "Action"
+
+msgid "Beschreibung"
+msgstr "Description"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Noch keine Einträge."
+msgstr "No entries yet."
+
+#, python-format
+msgid "Seite %(number)s von %(pages)s"
+msgstr "Page %(number)s of %(pages)s"
+
+#, python-format
+msgid "Guten Tag, %(name)s"
+msgstr "Hello, %(name)s"
+
+msgid "Neuer Schüler"
+msgstr "New pupil"
+
+msgid "Neuer Mitarbeiter"
+msgstr "New staff member"
+
+msgid "Eine neue Version ist verfügbar."
+msgstr "A new version is available."
+
+msgid "Ansehen"
+msgstr "View"
+
+#, python-format
+msgid "%(done)s von %(total)s erledigt"
+msgstr "%(done)s of %(total)s done"
+
+msgid "Ausblenden"
+msgstr "Hide"
+
+msgid "Aktive Schüler"
+msgstr "Active pupils"
+
+msgid "Geräte ausgegeben"
+msgstr "Devices issued"
+
+msgid "Offene Schäden"
+msgstr "Open damage reports"
+
+msgid "Neue Schüler"
+msgstr "New pupils"
+
+msgid "Neue Mitarbeiter"
+msgstr "New staff"
+
+msgid "Zu erledigen"
+msgstr "To do"
+
+msgid "Sprache der Oberfläche"
+msgstr "Interface language"
+
+msgid "Felder, Auswahlwerte und Masken umbenennen"
+msgstr "Rename fields, options and layouts"
+
+msgid ""
+"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für "
+"eine Sprache umbenennt."
+msgstr ""
+"Names stay in the language they were entered in until someone renames them "
+"for a language."
+
+msgid "Jedes Mal fragen"
+msgstr "Ask every time"
+
+msgid "Nur für die Sprache umbenennen, die gerade eingestellt ist"
+msgstr "Rename only for the current language"
+
+msgid "Immer für alle Sprachen umbenennen"
+msgstr "Always rename for all languages"
+
+msgid "Speichern"
+msgstr "Save"
+
+msgid "Anmelden"
+msgstr "Sign in"
+
+msgid ""
+"Die Sicherung wurde eingespielt. Bitte melden Sie sich mit einem Konto aus "
+"der Sicherung an."
+msgstr ""
+"The backup has been restored. Please sign in with an account from the backup."
+
+msgid "Mit Microsoft 365 anmelden"
+msgstr "Sign in with Microsoft 365"
+
+msgid "oder"
+msgstr "or"
+
+msgid "Benutzername"
+msgstr "Username"
+
+msgid "Passwort"
+msgstr "Password"
+
+msgid ""
+"Bitte vergeben Sie jetzt ein eigenes Passwort. Das bisherige kennt auch die "
+"IT."
+msgstr "Please set your own password now. IT also knows the current one."
+
+msgid "Mindestens 12 Zeichen."
+msgstr "At least 12 characters."
+
+msgid "Bisheriges Passwort"
+msgstr "Current password"
+
+msgid "Neues Passwort"
+msgstr "New password"
+
+msgid "Neues Passwort wiederholen"
+msgstr "Repeat new password"
+
+msgid "Schule"
+msgstr "School"
+
+msgid "Name der Schule"
+msgstr "School name"
+
+msgid "Kurzname"
+msgstr "Short name"
+
+msgid "E-Mail-Domain"
+msgstr "Email domain"
+
+msgid "Der Import warnt bei Adressen außerhalb dieser Domain."
+msgstr "The import warns about addresses outside this domain."
+
+msgid "Fußzeile für vertrauliche Blätter"
+msgstr "Footer for confidential sheets"
+
+msgid "Logo"
+msgstr "Logo"
+
+msgid "Sprachen"
+msgstr "Languages"
+
+msgid "Sprachen, die in dieser Datenbank zur Auswahl stehen"
+msgstr "Languages available in this database"
+
+msgid ""
+"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, "
+"oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene "
+"Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
+msgstr ""
+"Anyone who chose a language that is no longer allowed sees German, or the "
+"first allowed language if German is not allowed. Their own choice is kept "
+"and applies again as soon as the language is allowed."
+
+msgid ""
+"Ist nur eine Sprache erlaubt, verschwindet die Sprachauswahl, und beim "
+"Umbenennen wird nicht mehr nachgefragt: Die übrigen Sprachen behalten ihre "
+"Namen."
+msgstr ""
+"If only one language is allowed, the language menu disappears and renaming "
+"no longer asks: the other languages keep their names."
+
+msgid "Verbundene Macs übernehmen diese Auswahl beim nächsten Abgleich."
+msgstr "Connected Macs take over this choice at the next sync."
+
+msgid "Masken"
+msgstr "Layouts"
+
+msgid "Eingabemasken per Drag & Drop gestalten"
+msgstr "Design input layouts by drag and drop"
+
+msgid "Felder"
+msgstr "Fields"
+
+msgid "Eigene Felder anlegen und verwalten"
+msgstr "Create and manage custom fields"
+
+msgid "Plattformen"
+msgstr "Platforms"
+
+msgid "Anbieter für Zugangsdaten verwalten"
+msgstr "Manage login providers"
+
+msgid "Benutzer und Rollen"
+msgstr "Users and roles"
+
+msgid "Konten, Rollen und Zwei-Faktor"
+msgstr "Accounts, roles and two-factor"
+
+msgid "Synchronisation"
+msgstr "Sync"
+
+msgid "Verbundene Macs und Abgleich"
+msgstr "Connected Macs and syncing"
+
+msgid "Name, Logo und Fußzeile für Blätter"
+msgstr "Name, logo and footer for sheets"
+
+msgid "Welche Sprachen die Oberfläche anbietet"
+msgstr "Which languages the interface offers"
+
+msgid "Neu"
+msgstr "New"
+
+msgid "Neueste Version über Coolify installieren"
+msgstr "Install the latest version via Coolify"
+
+msgid "Alle Daten sichern und einspielen"
+msgstr "Back up and restore all data"
+
+msgid "Anmeldungen, angezeigte Passwörter, Ausdrucke"
+msgstr "Sign-ins, revealed passwords, printouts"
+
+msgid "Zwei-Faktor einrichten"
+msgstr "Set up two-factor"
+
+msgid "Zwei-Faktor-Anmeldung einrichten"
+msgstr "Set up two-factor sign-in"
+
+msgid ""
+"Scannen Sie den Code mit einer Authenticator-App und geben Sie danach den "
+"angezeigten Code ein."
+msgstr "Scan the code with an authenticator app, then enter the code it shows."
+
+msgid "QR-Code für die Authenticator-App"
+msgstr "QR code for the authenticator app"
+
+msgid "Code manuell eingeben"
+msgstr "Enter code manually"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Einrichtung abschließen"
+msgstr "Finish setup"
+
+msgid "Zwei-Faktor-Code"
+msgstr "Two-factor code"
+
+msgid "Bitte den 6-stelligen Code aus Ihrer Authenticator-App eingeben."
+msgstr "Please enter the 6-digit code from your authenticator app."
+
+msgid "Bestätigen"
+msgstr "Confirm"
+
+msgid ""
+"Installiert die neueste Version von GitHub über Coolify. Vorher wird die "
+"Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit "
+"ist, alle können also normal weiterarbeiten."
+msgstr ""
+"Installs the latest version from GitHub via Coolify. The database is backed "
+"up first. The current version keeps running until the new one is ready, so "
+"everyone can keep working as usual."
+
+msgid ""
+"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
+"in <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
+msgstr ""
+"The connection to Coolify hasn't been set up yet. Instructions are in <span "
+"class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
+
+msgid "Installiert"
+msgstr "Installed"
+
+msgid "Auf GitHub"
+msgstr "On GitHub"
+
+msgid "Zuletzt geprüft"
+msgstr "Last checked"
+
+msgid "Datenbank zurücksetzen"
+msgstr "Reset database"
+
+msgid "Protokoll in Coolify öffnen"
+msgstr "Open log in Coolify"
+
+msgid "Jetzt aktualisieren"
+msgstr "Update now"
+
+msgid "Nach Updates suchen"
+msgstr "Check for updates"
+
+msgid ""
+"Die Anwendung bleibt während der Aktualisierung normalerweise erreichbar. "
+"Sehr selten kann es beim Umschalten eine kurze Unterbrechung geben."
+msgstr ""
+"The application normally stays available during the update. Very rarely "
+"there may be a short interruption during the switchover."
+
+msgid "Neu in dieser Version"
+msgstr "New in this version"
+
+#, python-format
+msgid ""
+"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt "
+"und muss bei der nächsten Anmeldung geändert werden."
+msgstr ""
+"New password for <strong>%(name)s</strong>. It's only shown now and must be "
+"changed at the next sign-in."
+
+msgid "Kopieren"
+msgstr "Copy"
+
+msgid "Rolle"
+msgstr "Role"
+
+msgid "2FA"
+msgstr "2FA"
+
+#, python-format
+msgid ""
+"Neues Passwort für %(name)s erzeugen? Das bisherige gilt dann nicht mehr."
+msgstr ""
+"Generate a new password for %(name)s? The current one will stop working."
+
+msgid "Aus"
+msgstr "Off"
+
+msgid "Aktiv"
+msgstr "Active"
+
+msgid "Gesperrt"
+msgstr "Locked"
+
+msgid "2FA zurücksetzen"
+msgstr "Reset 2FA"
+
+msgid "Sperren"
+msgstr "Lock"
+
+msgid "Entsperren"
+msgstr "Unlock"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "Two-factor sign-in"
+
+msgid "Eingeschaltet"
+msgstr "On"
+
+msgid "Ausgeschaltet"
+msgstr "Off"
+
+msgid ""
+"Alle Benutzer brauchen bei der Anmeldung einen Code aus ihrer Authenticator-"
+"App."
+msgstr "All users need a code from their authenticator app to sign in."
+
+msgid ""
+"Zwei-Faktor-Anmeldung für alle Benutzer ausschalten? Danach genügt das "
+"Passwort."
+msgstr ""
+"Turn off two-factor sign-in for all users? After that, a password is enough."
+
+msgid "Ausschalten"
+msgstr "Turn off"
+
+msgid ""
+"Zur Anmeldung genügt das Passwort. Nur für Demos ohne echte Daten gedacht. "
+"Bereits eingerichtete Apps gelten nach dem Einschalten weiter."
+msgstr ""
+"Signing in only needs the password. Intended only for demos without real "
+"data. Apps already set up keep working when it's turned back on."
+
+msgid "Einschalten"
+msgstr "Turn on"
+
+msgid "Neuer Benutzer"
+msgstr "New user"
+
+msgid "E-Mail (für Microsoft-Anmeldung)"
+msgstr "Email (for Microsoft sign-in)"
+
+msgid "Passwort (mind. 12 Zeichen)"
+msgstr "Password (min. 12 characters)"
+
+msgid "Leer lassen, wenn nur Microsoft 365 genutzt wird."
+msgstr "Leave empty if only Microsoft 365 is used."
+
+msgid "Anlegen"
+msgstr "Create"
+
+msgid "Rollen"
+msgstr "Roles"
+
+msgid "Das wurde nicht gespeichert"
+msgstr "This wasn't saved"
+
+msgid ""
+"Die Seite war zu lange offen oder Sie haben sich inzwischen neu angemeldet. "
+"Gehen Sie zurück, laden Sie die Seite neu und versuchen Sie es noch einmal."
+msgstr ""
+"The page was open too long or you have signed in again in the meantime. Go "
+"back, reload the page and try again."
+
+msgid "Product Key"
+msgstr "Product key"
+
+msgid "Anzeigen"
+msgstr "Show"
+
+msgid "Neuen Key eingeben"
+msgstr "Enter new key"
+
+msgid "Neuer Product Key"
+msgstr "New product key"
+
+msgid "Aktionen"
+msgstr "Actions"
+
+#, python-format
+msgid "Ausgegeben an <strong>%(holder)s</strong> seit %(since)s."
+msgstr "Issued to <strong>%(holder)s</strong> since %(since)s."
+
+#, python-format
+msgid "Gerät von %(holder)s zurücknehmen?"
+msgstr "Take back the device from %(holder)s?"
+
+msgid "Rücknahme"
+msgstr "Take back"
+
+msgid "An Person (Name oder E-Mail)"
+msgstr "To a person (name or email)"
+
+msgid "oder Raum/Gruppe"
+msgstr "or room/group"
+
+msgid "Ausgeben"
+msgstr "Issue"
+
+msgid "Als repariert markieren"
+msgstr "Mark as repaired"
+
+msgid "Als beschädigt markieren"
+msgstr "Mark as damaged"
+
+msgid "Gerät als verkauft markieren?"
+msgstr "Mark the device as sold?"
+
+msgid "Gerät ausmustern?"
+msgstr "Retire the device?"
+
+msgid "Ausmustern"
+msgstr "Retire"
+
+msgid "Verlauf"
+msgstr "History"
+
+msgid "heute"
+msgstr "today"
+
+msgid "Noch nie ausgegeben."
+msgstr "Never issued yet."
+
+msgid "Leer lassen: aktuelles Gerät der Person"
+msgstr "Leave empty: the person's current device"
+
+msgid "Bilder (bis zu 3)"
+msgstr "Images (up to 3)"
+
+msgid "Zurück zur Liste"
+msgstr "Back to list"
+
+msgid "Neues Gerät"
+msgstr "New device"
+
+msgid "Leer lassen: nächste Nummer des Typs"
+msgstr "Leave empty: next number for this type"
+
+msgid "Rückgabeaktionen"
+msgstr "Return campaigns"
+
+msgid "Räume und Gruppen"
+msgstr "Rooms and groups"
+
+msgid "Gerätetypen"
+msgstr "Device types"
+
+msgid "Nummer, Seriennummer, Person"
+msgstr "Number, serial number, person"
+
+msgid "Geräte filtern"
+msgstr "Filter devices"
+
+msgid "Alle Status"
+msgstr "All statuses"
+
+#, python-format
+msgid "Stichtag %(date)s"
+msgstr "Due date %(date)s"
+
+msgid "Bei"
+msgstr "Held by"
+
+msgctxt "Gerät zurückgegeben"
+msgid "Zurück"
+msgstr "Returned"
+
+msgid "Zurücksetzen"
+msgstr "Reset"
+
+msgid "Gerät öffnen"
+msgstr "Open device"
+
+msgid "In neuem Fenster öffnen"
+msgstr "Open in new window"
+
+msgid "Keine Geräte in dieser Aktion."
+msgstr "No devices in this campaign."
+
+msgid ""
+"Sammelt ausgegebene Geräte zu einem Stichtag, zum Beispiel am "
+"Schuljahresende."
+msgstr ""
+"Collects issued devices by a due date, for example at the end of the school "
+"year."
+
+#, python-format
+msgid "%(returned)s von %(total)s"
+msgstr "%(returned)s of %(total)s"
+
+msgid "Öffnen"
+msgstr "Open"
+
+msgid "Noch keine Aktion."
+msgstr "No campaign yet."
+
+msgid "Neue Aktion"
+msgstr "New campaign"
+
+msgid "Rückgabe Klasse 12"
+msgstr "Grade 12 return"
+
+msgid "Klassenstufe (leer = alle)"
+msgstr "Grade (empty = all)"
+
+msgid "Schaden erfassen"
+msgstr "Report damage"
+
+msgid "Alle"
+msgstr "All"
+
+msgid "Austausch"
+msgstr "Replacement"
+
+msgid "Person öffnen"
+msgstr "Open person"
+
+msgid "Keine Schäden."
+msgstr "No damage reports."
+
+msgid "Typ"
+msgstr "Type"
+
+msgid "Neuer Typ"
+msgstr "New type"
+
+msgid "Trenner"
+msgstr "Separator"
+
+msgid ""
+"Geräte, die keiner einzelnen Person gehören, zum Beispiel in der Bibliothek."
+msgstr ""
+"Devices that don't belong to a single person, for example in the library."
+
+#, python-format
+msgid "%(title)s wird geladen …"
+msgstr "Loading %(title)s …"
+
+msgid "Vorschau"
+msgstr "Preview"
+
+#, python-format
+msgid "Beispiel: %(name)s. Hier wird nichts gespeichert."
+msgstr "Example: %(name)s. Nothing is saved here."
+
+msgid "Neuer Wert"
+msgstr "New value"
+
+msgid "Maske umbenennen"
+msgstr "Rename layout"
+
+msgid "Rückgängig"
+msgstr "Undo"
+
+msgid "Entwurf speichern"
+msgstr "Save draft"
+
+msgid "Veröffentlichen"
+msgstr "Publish"
+
+msgid "Feld suchen"
+msgstr "Search fields"
+
+msgid "Bausteine"
+msgstr "Blocks"
+
+msgid "Reiter"
+msgstr "Tabs"
+
+msgid "Abschnitt hinzufügen"
+msgstr "Add section"
+
+msgid "Eigenschaften"
+msgstr "Properties"
+
+msgid "Element auswählen, um es anzupassen."
+msgstr "Select an element to adjust it."
+
+msgid "Versionen"
+msgstr "Versions"
+
+#, python-format
+msgid "Version %(number)s"
+msgstr "Version %(number)s"
+
+msgid "Entwurf"
+msgstr "Draft"
+
+#, python-format
+msgid "Version %(number)s wieder aktivieren?"
+msgstr "Reactivate version %(number)s?"
+
+msgid "Aktivieren"
+msgstr "Activate"
+
+msgid "Entwurf verwerfen?"
+msgstr "Discard the draft?"
+
+msgid "Entwurf verwerfen"
+msgstr "Discard draft"
+
+msgid "Maske löschen?"
+msgstr "Delete the layout?"
+
+msgid "Maske löschen"
+msgstr "Delete layout"
+
+msgid "Neues Feld"
+msgstr "New field"
+
+msgid "Bezeichnung"
+msgstr "Name"
+
+msgid "Optionen, eine pro Zeile"
+msgstr "Options, one per line"
+
+msgid "Pflichtfeld"
+msgstr "Required"
+
+msgid "In der Liste anzeigen"
+msgstr "Show in list"
+
+msgid "Eingebautes Feld"
+msgstr "Built-in field"
+
+#, python-format
+msgid "Zuerst eingegeben als „%(base)s“."
+msgstr "First entered as “%(base)s”."
+
+msgid "Hilfetext"
+msgstr "Help text"
+
+msgid "Optionen"
+msgstr "Options"
+
+msgid "Option"
+msgstr "Option"
+
+msgid "Option entfernen"
+msgstr "Remove option"
+
+msgid "Neue Option"
+msgstr "New option"
+
+msgid "Option hinzufügen"
+msgstr "Add option"
+
+msgid ""
+"Umbenennen ändert keine Einträge: Datensätze mit dieser Option zeigen den "
+"neuen Namen."
+msgstr ""
+"Renaming doesn't change any entries: records with this option show the new "
+"name."
+
+msgid "In der Liste"
+msgstr "In list"
+
+msgid "Nur lesen"
+msgstr "Read-only"
+
+msgid "Verwendung"
+msgstr "Used in"
+
+msgid "Wird noch nirgends verwendet."
+msgstr "Not used anywhere yet."
+
+msgid "Wiederherstellen"
+msgstr "Restore"
+
+msgid "Feld archivieren? Die Daten bleiben erhalten."
+msgstr "Archive the field? The data is kept."
+
+msgid "Archivieren"
+msgstr "Archive"
+
+msgid "Archivieren löscht keine Daten."
+msgstr "Archiving doesn't delete any data."
+
+msgid "Herkunft"
+msgstr "Source"
+
+msgid "Liste"
+msgstr "List"
+
+msgid "Bearbeiten"
+msgstr "Edit"
+
+msgid "Duplizieren"
+msgstr "Duplicate"
+
+#, python-format
+msgid ""
+"%(field)s archivieren? Das Feld wird ausgeblendet, die eingetragenen Werte "
+"bleiben erhalten."
+msgstr "Archive %(field)s? The field is hidden; the values entered are kept."
+
+msgid "Archivieren …"
+msgstr "Archive …"
+
+msgid "Eingebaut"
+msgstr "Built-in"
+
+msgid "Eigenes Feld"
+msgstr "Custom field"
+
+msgid ""
+"Eine Maske legt fest, wie ein Datensatz aussieht. Sie regelt keine "
+"Zugriffsrechte."
+msgstr ""
+"A layout defines how a record looks. It does not control access rights."
+
+msgid "Bereich"
+msgstr "Area"
+
+msgid "Gilt für"
+msgstr "Applies to"
+
+msgid "Standard"
+msgstr "Default"
+
+msgid "alle"
+msgstr "all"
+
+msgid "Gestalten"
+msgstr "Design"
+
+msgid "Neue Maske"
+msgstr "New layout"
+
+msgid "z. B. Gastschüler"
+msgstr "e.g. guest pupils"
+
+msgid "Gilt wenn Feld"
+msgstr "Applies when field"
+
+msgid "immer"
+msgstr "always"
+
+msgid "den Wert hat"
+msgstr "has the value"
+
+msgid "Mögliche Doppelung:"
+msgstr "Possible duplicate:"
+
+#, python-format
+msgid "%(n)s Kind"
+msgid_plural "%(n)s Kinder"
+msgstr[0] "%(n)s child"
+msgstr[1] "%(n)s children"
+
+msgid "Kontakt"
+msgstr "Contact"
+
+msgid "Kinder"
+msgstr "Children"
+
+msgid "Papierkorb"
+msgstr "Recycle bin"
+
+msgid "Zu den Schülern"
+msgstr "Go to pupils"
+
+msgid "Zum Personal"
+msgstr "Go to staff"
+
+#, python-format
+msgid ""
+"Gelöschte Personen bleiben %(days)s Tag hier. Danach sind sie endgültig "
+"gelöscht, mit ihren Zugängen, Karten, Kommentaren und Dateien."
+msgid_plural ""
+"Gelöschte Personen bleiben %(days)s Tage hier. Danach sind sie endgültig "
+"gelöscht, mit ihren Zugängen, Karten, Kommentaren und Dateien."
+msgstr[0] ""
+"Deleted people stay here for %(days)s day. After that they are deleted "
+"permanently, along with their logins, ID cards, comments and files."
+msgstr[1] ""
+"Deleted people stay here for %(days)s days. After that they are deleted "
+"permanently, along with their logins, ID cards, comments and files."
+
+msgid "Gelöscht am"
+msgstr "Deleted on"
+
+msgid "Der Papierkorb ist leer."
+msgstr "The recycle bin is empty."
+
+msgid "Datei hinzufügen"
+msgstr "Add file"
+
+msgid "Datei löschen?"
+msgstr "Delete the file?"
+
+msgid "Datei löschen"
+msgstr "Delete file"
+
+msgid "Keine Dateien."
+msgstr "No files."
+
+msgid "Keine aktive Karte."
+msgstr "No active ID card."
+
+msgid "Karte zuweisen"
+msgstr "Assign ID card"
+
+msgid "Karte sperren?"
+msgstr "Block the ID card?"
+
+msgid "Karte an den Leser halten"
+msgstr "Hold the card to the reader"
+
+msgid "Kartenwert"
+msgstr "Card code"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Kommentar schreiben"
+msgstr "Write a comment"
+
+msgid "Kommentar"
+msgstr "Comment"
+
+msgid "Senden"
+msgstr "Send"
+
+#, python-format
+msgid "Seriennummer %(serial)s · ausgegeben %(issued)s"
+msgstr "Serial number %(serial)s · issued %(issued)s"
+
+msgid "Gerät zurücknehmen?"
+msgstr "Take back the device?"
+
+msgid "Kein Gerät ausgegeben."
+msgstr "No device issued."
+
+msgid "Gerät ausgeben"
+msgstr "Issue device"
+
+#, python-format
+msgid "Frühere Geräte (%(n)s)"
+msgstr "Previous devices (%(n)s)"
+
+msgid "Noch kein Verlauf."
+msgstr "No history yet."
+
+msgid "Verknüpfung entfernen?"
+msgstr "Remove the link?"
+
+msgid "Verknüpfung entfernen"
+msgstr "Remove link"
+
+#, python-format
+msgid "%(platform)s: Zugang vorhanden"
+msgstr "%(platform)s: login exists"
+
+msgid "Noch keine Eltern verknüpft."
+msgstr "No parents linked yet."
+
+msgid "Eltern hinzufügen"
+msgstr "Add parents"
+
+msgid "Elternteil 1"
+msgstr "Parent 1"
+
+msgid "Elternteil 2"
+msgstr "Parent 2"
+
+msgid "Erziehungsberechtigt"
+msgstr "Guardian"
+
+msgid "Noch keine Änderungen."
+msgstr "No changes yet."
+
+msgid "Anmeldeseite öffnen"
+msgstr "Open sign-in page"
+
+msgid "Foto wählen"
+msgstr "Choose photo"
+
+msgid "Entfernen"
+msgstr "Remove"
+
+msgid "Karte an den Leser halten. Die Person wird sofort geöffnet."
+msgstr "Hold the card to the reader. The person opens right away."
+
+msgid "Kartennummer"
+msgstr "Card number"
+
+msgid "Keine aktive Karte gefunden."
+msgstr "No active ID card found."
+
+#, python-format
+msgid "%(n)s Schüler"
+msgid_plural "%(n)s Schüler"
+msgstr[0] "%(n)s pupil"
+msgstr[1] "%(n)s pupils"
+
+#, python-format
+msgid "Gerät %(number)s öffnen"
+msgstr "Open device %(number)s"
+
+msgid "Noch keine Schüler."
+msgstr "No pupils yet."
+
+#, python-format
+msgid "Schuljahr %(year)s"
+msgstr "School year %(year)s"
+
+msgid "Neue Klasse oder Gruppe"
+msgstr "New class or group"
+
+msgid "z. B. 5c"
+msgstr "e.g. 5c"
+
+msgid "Neu anlegen"
+msgstr "Create"
+
+msgid ""
+"Klick öffnet den Datensatz, Doppelklick ändert die Zelle, ein Klick auf den "
+"Spaltentitel filtert."
+msgstr ""
+"Click opens the record, double-click edits the cell, clicking a column title "
+"filters."
+
+msgid "In der Liste filtern"
+msgstr "Filter the list"
+
+msgid "Ansicht löschen"
+msgstr "Delete view"
+
+msgid "Bestand"
+msgstr "Show"
+
+msgid "Ehemalige"
+msgstr "Former"
+
+msgid "Gespeicherte Ansicht"
+msgstr "Saved view"
+
+msgid "Ansicht speichern"
+msgstr "Save view"
+
+msgid "Spalten"
+msgstr "Columns"
+
+msgid "Klasse zuweisen"
+msgstr "Assign class"
+
+msgid "Zugänge erzeugen"
+msgstr "Generate logins"
+
+msgid "Bericht drucken"
+msgstr "Print report"
+
+msgid "Name oder E-Mail"
+msgstr "Name or email"
+
+msgid "Eltern suchen"
+msgstr "Search parents"
+
+msgid "Keine Eltern gefunden."
+msgstr "No parents found."
+
+msgid "Neuaufnahme"
+msgstr "New enrolment"
+
+msgid ""
+"Eine Aufnahme in einem Durchgang: Daten eingeben, Zugänge erzeugen, danach "
+"Eltern, Gerät und Druck auf der Personenseite."
+msgstr ""
+"Enrol in one go: enter the data, generate logins, then add parents, device "
+"and printing on the person's page."
+
+msgid "Stammdaten"
+msgstr "Basic data"
+
+msgid "Schul-E-Mail"
+msgstr "School email"
+
+msgid ""
+"Passwörter werden passend zum Alter erzeugt und verschlüsselt gespeichert."
+msgstr "Passwords are generated to suit the age and stored encrypted."
+
+msgid ""
+"Vorschau: Alle Schüler rücken eine Stufe auf. Der Klassenverlauf bleibt "
+"erhalten. Vorher wird die Datenbank gesichert."
+msgstr ""
+"Preview: all pupils move up one grade. The class history is kept. The "
+"database is backed up first."
+
+msgid "Neues Schuljahr"
+msgstr "New school year"
+
+msgid "Bisher"
+msgstr "Before"
+
+msgid "Wird zu"
+msgstr "Becomes"
+
+#, python-format
+msgid ""
+"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das "
+"lässt sich nur über eine Sicherung zurücknehmen."
+msgstr ""
+"Move up %(total)s pupils and archive %(leaving)s of them as leavers? This "
+"can only be undone from a backup."
+
+msgid "Wechsel durchführen"
+msgstr "Run the changeover"
+
+msgid "Name der Vorlage"
+msgstr "Template name"
+
+msgid "Seite"
+msgstr "Page"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Fußzeile"
+msgstr "Footer"
+
+msgid "Standard der Schule"
+msgstr "School default"
+
+msgid "Elemente"
+msgstr "Elements"
+
+msgid "Datenfelder"
+msgstr "Data fields"
+
+#, python-format
+msgid "Version %(number)s wiederherstellen?"
+msgstr "Restore version %(number)s?"
+
+msgid "Laden"
+msgstr "Load"
+
+msgid "Noch keine älteren Versionen."
+msgstr "No older versions yet."
+
+msgid "Vorlage archivieren?"
+msgstr "Archive the template?"
+
+msgid "Vorlage archivieren"
+msgstr "Archive template"
+
+msgid "Neue Zeile:"
+msgstr "New line:"
+
+msgid "Code-Modus"
+msgstr "Code mode"
+
+msgid "HTML (Jinja2, je Datensatz). Verfügbar:"
+msgstr "HTML (Jinja2, per record). Available:"
+
+msgid "Element anklicken, um es anzupassen."
+msgstr "Click an element to adjust it."
+
+msgid "Vorschau (echtes PDF, Beispieldaten)"
+msgstr "Preview (real PDF, sample data)"
+
+msgid "Vorschau wird erstellt …"
+msgstr "Creating preview …"
+
+msgid "Berichte"
+msgstr "Reports"
+
+msgid "Datenquelle"
+msgstr "Data source"
+
+msgid "Passwörter"
+msgstr "Passwords"
+
+msgid "Zuletzt gedruckt"
+msgstr "Last printed"
+
+#, python-format
+msgid "%(n)s Datensatz"
+msgid_plural "%(n)s Datensätze"
+msgstr[0] "%(n)s record"
+msgstr[1] "%(n)s records"
+
+msgid "Noch nichts gedruckt."
+msgstr "Nothing printed yet."
+
+msgid ""
+"PDFs werden nicht gespeichert. Protokolliert wird nur, wer was gedruckt hat."
+msgstr "PDFs are not stored. Only who printed what is logged."
+
+msgid ""
+"Macs mit einer Kopie der Daten, und Änderungen, bei denen eine Person "
+"entscheiden sollte."
+msgstr ""
+"Macs with a copy of the data, and changes that someone should decide on."
+
+msgid "Abgleich prüfen"
+msgstr "Review sync conflicts"
+
+msgid ""
+"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere "
+"Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen."
+msgstr ""
+"The same field was changed differently in two places. The newer change "
+"already applies. Confirm it or use the other version."
+
+msgid "Datensatz und Feld"
+msgstr "Record and field"
+
+msgid "Gilt jetzt"
+msgstr "Current"
+
+msgid "Andere Fassung"
+msgstr "Other version"
+
+msgid "auf dem Server gelöscht"
+msgstr "deleted on the server"
+
+msgid "Andere übernehmen"
+msgstr "Use other"
+
+msgid "Nichts zu prüfen."
+msgstr "Nothing to review."
+
+#, python-format
+msgid "%(n)s entschieden."
+msgid_plural "%(n)s entschieden."
+msgstr[0] "%(n)s resolved."
+msgstr[1] "%(n)s resolved."
+
+msgid "Verbundene Macs"
+msgstr "Connected Macs"
+
+msgid "Mac"
+msgstr "Mac"
+
+msgid "Zuletzt gesehen"
+msgstr "Last seen"
+
+#, python-format
+msgid "verbunden %(date)s"
+msgstr "connected %(date)s"
+
+#, python-format
+msgid "Version %(version)s"
+msgstr "Version %(version)s"
+
+msgid "Getrennt"
+msgstr "Disconnected"
+
+#, python-format
+msgid ""
+"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt "
+"mit dem Server."
+msgstr ""
+"Disconnect %(name)s? The Mac will delete its copy of the data the next time "
+"it contacts the server."
+
+msgid "Trennen"
+msgstr "Disconnect"
+
+msgid ""
+"Noch kein Mac verbunden. Ein Mac verbindet sich in der App über „Mit Server "
+"verbinden“, mit dem eigenen Konto."
+msgstr ""
+"No Mac connected yet. A Mac connects in the app via “Connect to server”, "
+"signing in with its user’s own account."
+
+msgid "Nur auf dem Server"
+msgstr "Server only"
+
+msgid "Das geht nur in der Webversion"
+msgstr "This only works in the web version"
+
+msgid ""
+"Diese Datenbank ist mit dem Server verbunden. Konten, Passwörter, die Zwei-"
+"Faktor-Anmeldung, die Einstellungen der Schule, Sicherungen und Updates "
+"verwaltet der Server. Eine Änderung hier würde bei der nächsten "
+"Synchronisation wieder ersetzt."
+msgstr ""
+"This database is connected to the server. Accounts, passwords, two-factor "
+"sign-in, school settings, backups and updates are managed by the server. A "
+"change made here would be overwritten at the next sync."
+
+#, python-format
+msgid ""
+"Bitte dafür die Schulverwaltung im Browser öffnen: <a class=\"underline\" "
+"href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>."
+msgstr ""
+"For this, please open the school administration in your browser: <a "
+"class=\"underline\" href=\"%(url)s\" target=\"_blank\" "
+"rel=\"noopener\">%(url)s</a>."
+
+msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
+msgstr "For this, please open the school administration in your browser."
+
+msgid "Importieren"
+msgstr "Import"
+
+msgid ""
+"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
+"etwas gespeichert wird."
+msgstr ""
+"CSV or Excel. You map the columns and see a review before anything is saved."
+
+msgid "In welchen Bereich?"
+msgstr "Which area?"
+
+msgid "Weiter zur Zuordnung"
+msgstr "Continue to mapping"
+
+msgid "Exportieren"
+msgstr "Export"
+
+msgid ""
+"In den Listen exportiert „Excel“ oder „CSV“ genau die aktuelle Ansicht: "
+"Spalten, Filter und Reihenfolge."
+msgstr ""
+"In the lists, “Excel” or “CSV” exports exactly the current view: columns, "
+"filters and sort order."
+
+msgid "Geräte als Excel"
+msgstr "Devices as Excel"
+
+msgid "Geräte als CSV"
+msgstr "Devices as CSV"
+
+msgid "Passwörter sind in diesen Exporten nie enthalten."
+msgstr "These exports never contain passwords."
+
+msgid "Letzte Importe"
+msgstr "Recent imports"
+
+msgid "Übernommen"
+msgstr "Applied"
+
+#, python-format
+msgid "%(created)s neu, %(updated)s geändert"
+msgstr "%(created)s new, %(updated)s changed"
+
+msgid "Zurückgenommen"
+msgstr "Undone"
+
+msgid ""
+"Diesen Import zurücknehmen? Dabei neu angelegte Personen und Geräte werden "
+"gelöscht."
+msgstr "Undo this import? People and devices created by it will be deleted."
+
+msgid "Fortsetzen"
+msgstr "Continue"
+
+msgid "Noch keine Importe."
+msgstr "No imports yet."
+
+msgid "Zuordnung"
+msgstr "Mapping"
+
+msgid "Spalten zuordnen"
+msgstr "Map columns"
+
+#, python-format
+msgid "%(n)s Zeile."
+msgid_plural "%(n)s Zeilen."
+msgstr[0] "%(n)s row."
+msgstr[1] "%(n)s rows."
+
+msgid "Bekannte Ninox-Spalten sind bereits zugeordnet."
+msgstr "Known Ninox columns are already mapped."
+
+msgid "Spalte in der Datei"
+msgstr "Column in the file"
+
+msgid "Beispiele"
+msgstr "Examples"
+
+msgid "Ziel"
+msgstr "Target"
+
+#, python-format
+msgid "Ziel für %(header)s"
+msgstr "Target for %(header)s"
+
+msgid "Bestehende Personen erkennen über"
+msgstr "Match existing people by"
+
+msgid "Ninox-ID (aus dem Bildpfad)"
+msgstr "Ninox ID (from the image path)"
+
+msgid "Name und Geburtsdatum"
+msgstr "Name and date of birth"
+
+msgid "Verwerfen"
+msgstr "Discard"
+
+msgid "Prüfung"
+msgstr "Review"
+
+#, python-format
+msgid ""
+"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern "
+"vorhandene Werte nicht."
+msgstr ""
+"%(filename)s. Nothing has been saved yet. Empty cells do not change existing "
+"values."
+
+msgid "Geändert"
+msgstr "Changed"
+
+msgid "Unverändert"
+msgstr "Unchanged"
+
+msgid "Hinweise"
+msgstr "Notes"
+
+#, python-format
+msgid "Neue Klassen werden angelegt: %(classes)s"
+msgstr "New classes will be created: %(classes)s"
+
+#, python-format
+msgid "%(n)s Datensatz übernehmen"
+msgid_plural "%(n)s Datensätze übernehmen"
+msgstr[0] "Import %(n)s record"
+msgstr[1] "Import %(n)s records"
+
+msgid "Zuordnung ändern"
+msgstr "Change mapping"
+
+msgid "Zeile"
+msgstr "Row"
+
+msgid "Änderung"
+msgstr "Change"
+
+msgid "Hinweis"
+msgstr "Note"
+
+msgid "Keine Auffälligkeiten."
+msgstr "No issues found."
+
+#, python-format
+msgid "%(label)s anzeigen"
+msgstr "Show %(label)s"
+
+msgid "Muss beim ersten Login geändert werden"
+msgstr "Must be changed at first sign-in"
+
+msgid "Neuen Zugang erzeugen? Das bisherige Passwort wird ersetzt."
+msgstr "Generate a new login? The current password will be replaced."
+
+msgid "Neu erzeugen"
+msgstr "Regenerate"
+
+msgid "Erzeugen"
+msgstr "Generate"
+
+msgid "Unverändert lassen"
+msgstr "Leave unchanged"
+
+msgid "Plattformen verwalten"
+msgstr "Manage platforms"
+
+msgid ""
+"Passwörter sind verschlüsselt. Jede Anzeige wird im Protokoll festgehalten."
+msgstr ""
+"Passwords are encrypted. Every time one is shown, it is recorded in the "
+"audit log."
+
+#, python-format
+msgid "%(have)s von %(expected)s Zugängen"
+msgstr "%(have)s of %(expected)s logins"
+
+#, python-format
+msgid "%(have)s Zugang"
+msgid_plural "%(have)s Zugänge"
+msgstr[0] "%(have)s login"
+msgstr[1] "%(have)s logins"
+
+msgid "Reihenfolge"
+msgstr "Order"
+
+msgid "Felder (* = geheim)"
+msgstr "Fields (* = secret)"
+
+msgid "Felder lassen sich nicht ändern, solange Zugänge bestehen."
+msgstr "Fields cannot be changed while logins exist."
+
+msgid "Anmelde-Adresse"
+msgstr "Sign-in address"
+
+msgid "Auf dem Zugangsblatt"
+msgstr "On the login sheet"
+
+msgid ""
+"Export enthält lesbare Passwörter. Die Datei muss sicher behandelt werden. "
+"Fortfahren?"
+msgstr ""
+"The export contains readable passwords. Handle the file securely. Continue?"
+
+msgid "Mit Passwörtern exportieren"
+msgstr "Export with passwords"
+
+msgid "Name oder Benutzername"
+msgstr "Name or username"
+
+msgid ""
+"Noch keine Zugänge. In der Schülerliste lassen sie sich gesammelt erzeugen."
+msgstr "No logins yet. You can generate them in bulk from the pupil list."
+
+msgid "Blatt"
+msgstr "Sheet"
+
+msgid "Inaktiv"
+msgstr "Inactive"
+
+msgid "Neue Plattform"
+msgstr "New platform"
+
+msgid "Felder, eines pro Zeile (* = geheim)"
+msgstr "Fields, one per line (* = secret)"
+
+msgid "Daten"
+msgstr "Data"
+
+msgid "Nicht importieren"
+msgstr "Do not import"
+
+msgid "Bildpfad (Ninox)"
+msgstr "Image path (Ninox)"
+
+#, python-format
+msgid "E-Mail ungültig: %(value)s"
+msgstr "Invalid email: %(value)s"
+
+#, python-format
+msgid "%(field)s: unbekannter Wert „%(value)s“ wird übernommen"
+msgstr "%(field)s: unknown value “%(value)s” will be imported as is"
+
+msgid "Vorname fehlt"
+msgstr "First name missing"
+
+msgid "Nachname fehlt"
+msgstr "Last name missing"
+
+msgid "leer"
+msgstr "empty"
+
+#, python-format
+msgid "E-Mail außerhalb von %(domain)s: %(email)s"
+msgstr "Email outside %(domain)s: %(email)s"
+
+msgid "E-Mail wird kleingeschrieben"
+msgstr "Email will be lowercased"
+
+#, python-format
+msgid "Seriennummer %(serial)s: führende Nullen fehlen möglicherweise"
+msgstr "Serial number %(serial)s: leading zeros may be missing"
+
+msgid "Kommt in der Datei mehrfach vor"
+msgstr "Appears more than once in the file"
+
+msgid "Dieser Import wurde bereits bearbeitet."
+msgstr "This import has already been processed."
+
+msgid "Nur innerhalb von 24 Stunden möglich."
+msgstr "Only possible within 24 hours."
+
+msgid "Personen aus diesem Import wurden seither geändert."
+msgstr "People from this import have been changed since."
+
+msgid "Zugänge aus diesem Import wurden seither geändert."
+msgstr "Logins from this import have been changed since."
+
+msgid "Zu diesem Import gibt es inzwischen weitere Einträge."
+msgstr "There are now further entries for this import."
+
+#, python-format
+msgid "Der Import wurde nicht zurückgenommen. %(reason)s"
+msgstr "The import was not undone. %(reason)s"
+
+#, python-format
+msgid "Datum nicht lesbar: %(value)s"
+msgstr "Unreadable date: %(value)s"
+
+msgid "Über die Sicherung zurückzunehmen."
+msgstr "Can be undone through the backup."
+
+msgid "Bitte eine Datei wählen."
+msgstr "Please choose a file."
+
+msgid "Die Datei konnte nicht gelesen werden. Bitte CSV oder XLSX verwenden."
+msgstr "The file could not be read. Please use CSV or XLSX."
+
+msgid "In der Datei wurden keine Daten gefunden."
+msgstr "No data found in the file."
+
+#, python-format
+msgid ""
+"Import abgeschlossen: %(created)s neu, %(updated)s geändert, %(skipped)s "
+"übersprungen."
+msgstr ""
+"Import complete: %(created)s new, %(updated)s changed, %(skipped)s skipped."
+
+msgid "Der Import wurde zurückgenommen."
+msgstr "The import was undone."
+
+msgid "Einfach (Grundschule): gut lesbar, z. B. Tomika-47"
+msgstr "Simple (primary school): easy to read, e.g. Tomika-47"
+
+msgid "Mittel (ab Klasse 5): 12 Zeichen, gut lesbar"
+msgstr "Medium (grade 5 and up): 12 characters, easy to read"
+
+msgid "Stark (Oberstufe, Personal): 16 Zeichen mit Sonderzeichen"
+msgstr "Strong (upper school, staff): 16 characters with special characters"
+
+msgid "Kennung"
+msgstr "Key"
+
+msgid "Muss geändert werden"
+msgstr "Must be changed"

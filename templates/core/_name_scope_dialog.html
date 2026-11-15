@@ -1,0 +1,17 @@
+{% load i18n %}<dialog id="name-scope-dialog" class="confirm-dialog" aria-labelledby="name-scope-title">
+  <form method="dialog">
+    <h2 id="name-scope-title" class="text-[15px] font-semibold mb-1">{% translate "Für welche Sprachen umbenennen?" %}</h2>
+    <p class="text-[13px] muted mb-3" data-name-scope-text></p>
+    <div class="space-y-2 mb-3">
+      <label class="name-scope-choice"><input type="radio" name="scope" value="this" checked>
+        <span><span class="block font-medium" data-name-scope-this></span>
+        <span class="block text-[12px] muted">{% translate "Die anderen Sprachen behalten ihren bisherigen Namen." %}</span></span></label>
+      <label class="name-scope-choice"><input type="radio" name="scope" value="all">
+        <span><span class="block font-medium">{% translate "Für alle Sprachen" %}</span>
+        <span class="block text-[12px] muted">{% translate "Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben wurden, werden ersetzt." %}</span></span></label>
+    </div>
+    <label class="flex items-start gap-2 text-[13px] mb-4"><input type="checkbox" name="remember" class="mt-0.5">
+      <span>{% translate "Entscheidung merken und nicht mehr fragen" %}<span class="block text-[12px] muted">{% translate "Lässt sich unter Sprache → Spracheinstellungen wieder ändern." %}</span></span></label>
+    <div class="flex justify-end gap-2"><button class="btn" value="cancel">{% translate "Abbrechen" %}</button><button class="btn btn-primary" value="ok" autofocus>{% translate "Umbenennen" %}</button></div>
+  </form>
+</dialog>

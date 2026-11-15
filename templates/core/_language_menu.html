@@ -1,0 +1,18 @@
+{% load i18n ui %}<div class="relative" x-data="{ open: false }" @keydown.escape="open = false" @click.outside="open = false">
+  <button type="button" class="btn btn-ghost btn-sm{% if not wide %} btn-icon{% endif %}" @click="open = !open" :aria-expanded="open" aria-haspopup="menu"
+          title="{% translate 'Sprache' %}: {{ ui_language_name }}" aria-label="{% translate 'Sprache' %}: {{ ui_language_name }}">
+    {% icon 'globe' %}{% if wide %}<span>{{ ui_language_name }}</span>{% endif %}
+  </button>
+  <div class="lang-menu {% if up %}lang-menu-up{% endif %}" x-show="open" x-cloak x-transition.opacity.duration.100ms role="menu" aria-label="{% translate 'Sprache' %}">
+    {% for code, name in ui_languages %}
+    <form method="post" action="{% url 'set_language' %}">{% csrf_token %}
+      <input type="hidden" name="language" value="{{ code }}"><input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button type="submit" role="menuitemradio" lang="{{ code }}" class="lang-item" aria-checked="{% if code == ui_language %}true{% else %}false{% endif %}">
+        <span class="flex-1">{{ name }}</span>{% if code == ui_language %}{% icon 'check' 'text-[14px] text-[var(--accent)]' %}{% endif %}
+      </button>
+    </form>
+    {% endfor %}
+    {% if request.user.is_authenticated %}<div class="my-1 border-t" style="border-color: var(--line)"></div>
+    <a class="lang-item" href="{% url 'language_settings' %}" role="menuitem">{% translate "Spracheinstellungen …" %}</a>{% endif %}
+  </div>
+</div>

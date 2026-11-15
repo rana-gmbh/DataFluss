@@ -1,0 +1,11 @@
+.git
+.venv
+.pgdata
+.secrets
+.env
+data
+media
+staticfiles
+frontend/node_modules
+docs
+tests

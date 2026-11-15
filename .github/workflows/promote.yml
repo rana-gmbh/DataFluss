@@ -1,0 +1,42 @@
+name: Promote
+
+# The second step of a release (docs/releases.md): once your servers run the new version, this copies
+# the release's update feeds to macos/appcast.xml and windows/appcast.xml, which installed apps read.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to hand to the installed apps, e.g. 1.0.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Copy the feeds
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -e
+          gh release download "v$VERSION" --pattern 'appcast-*.xml' --dir "$RUNNER_TEMP/feeds"
+          changed=""
+          for platform in macos windows; do
+            if [ -f "$RUNNER_TEMP/feeds/appcast-$platform.xml" ]; then
+              mkdir -p "$platform"
+              cp "$RUNNER_TEMP/feeds/appcast-$platform.xml" "$platform/appcast.xml"
+              git add "$platform/appcast.xml"
+              changed="$changed $platform"
+            fi
+          done
+          if git diff --cached --quiet; then echo "The feeds already point to $VERSION."; exit 0; fi
+          git -c user.name="rana-gmbh" -c user.email="197282349+rana-gmbh@users.noreply.github.com" commit -q -m "Update feeds:$changed to DataFluss $VERSION"
+          git push -q origin HEAD:main

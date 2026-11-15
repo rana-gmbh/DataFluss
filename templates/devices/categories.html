@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Gerätetypen" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{% translate "Gerätetypen" %}</h1>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Typ" %}</th><th>{% translate "Nächste Nummer" %}</th><th>{% translate "Geräte" %}</th></tr></thead><tbody>{% for c in categories %}<tr><td class="font-medium">{{ c.name }}</td><td class="mono">{{ c.prefix }}{{ c.separator }}{{ c.next_number }}</td><td>{{ c.total }}</td></tr>{% endfor %}</tbody></table></div>
+{% if request.user|can:'device.edit' %}<form method="post" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neuer Typ" %}</h2>
+<div><label class="label" for="f-name">{% translate "Name" %}</label><input id="f-name" class="input" name="name" required></div>
+<div class="grid grid-cols-3 gap-2"><div><label class="label" for="f-prefix">{% translate "Präfix" %}</label><input id="f-prefix" class="input" name="prefix"></div><div><label class="label" for="f-separator">{% translate "Trenner" %}</label><input id="f-separator" class="input" name="separator"></div><div><label class="label" for="f-digits">{% translate "Stellen" %}</label><input id="f-digits" class="input" type="number" name="digits" value="4"></div></div>
+<div><label class="label" for="f-next_number">{% translate "Nächste Nummer" %}</label><input id="f-next_number" class="input" type="number" name="next_number" value="1"></div><button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form>{% endif %}</div>
+{% endblock %}

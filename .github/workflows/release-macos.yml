@@ -1,0 +1,116 @@
+name: Release macOS
+
+# A tag v<version> (matching "version" in client/shell/src-tauri/tauri.conf.json) builds DataFluss for
+# macOS, signs and notarizes it and publishes it in the public repository rana-gmbh/DataFluss:
+# DMG and update ZIP as assets of the release v<version>, then the update feed macos/appcast.xml.
+# Started by hand it only builds, unless "publish" is ticked. See client/README.md for the secrets.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish to rana-gmbh/DataFluss"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-macos-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  macos:
+    runs-on: macos-15
+    environment: release  # its secrets need an approval (Settings → Environments)
+    timeout-minutes: 120
+    env:
+      RELEASE_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version
+        id: version
+        run: |
+          version=$(python3 -c "import json;print(json.load(open('client/shell/src-tauri/tauri.conf.json'))['version'])")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [ "$(cat VERSION)" != "$version" ]; then
+            echo "::error::VERSION says $(cat VERSION), tauri.conf.json $version (scripts/set-version.sh sets both)"
+            exit 1
+          fi
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match version $version in tauri.conf.json"
+            exit 1
+          fi
+
+      - name: Tools
+        run: |
+          brew install python@3.14 pango
+          rustup default stable
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: client/shell/package-lock.json
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: client/shell/src-tauri
+
+      - name: Signing certificate
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          password=$(openssl rand -hex 24)
+          printf '%s' "$MACOS_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/certificate.p12"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          security import "$RUNNER_TEMP/certificate.p12" -P "$MACOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          security set-key-partition-list -S apple-tool:,apple: -k "$password" "$keychain" > /dev/null
+          security list-keychains -d user -s "$keychain" $(security list-keychains -d user | tr -d '"')
+          rm "$RUNNER_TEMP/certificate.p12"
+          security find-identity -v -p codesigning "$keychain"
+
+      - name: Build, sign and notarize
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: client/release-macos.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DataFluss-${{ steps.version.outputs.version }}-macos
+          path: client/release/${{ steps.version.outputs.version }}/
+          retention-days: 14
+
+      - name: Publish
+        if: github.ref_type == 'tag' || inputs.publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          dir="client/release/$VERSION"
+          tag="v$VERSION"
+          # The Windows workflow may have made the release already; both add their files to it.
+          if ! gh release view "$tag" --repo "$RELEASE_REPO" > /dev/null 2>&1; then
+            gh release create "$tag" --repo "$RELEASE_REPO" --title "DataFluss $VERSION" \
+              --notes "macOS: DataFluss-$VERSION.dmg öffnen und DataFluss in den Ordner Programme ziehen. Windows: DataFluss-$VERSION-setup.exe ausführen. Installierte Apps aktualisieren sich selbst." \
+              || gh release view "$tag" --repo "$RELEASE_REPO" > /dev/null
+          fi
+          gh release upload "$tag" --repo "$RELEASE_REPO" --clobber "$dir/DataFluss-$VERSION.dmg" "$dir/DataFluss-$VERSION.zip"
+          # The feed follows with the workflow Promote, once your servers run this version.
+          cp "$dir/appcast.xml" "$RUNNER_TEMP/appcast-macos.xml"
+          gh release upload "$tag" --repo "$RELEASE_REPO" --clobber "$RUNNER_TEMP/appcast-macos.xml"
+
+      - name: Remove the signing keychain
+        if: always()
+        run: security delete-keychain "$RUNNER_TEMP/signing.keychain-db" 2>/dev/null || true

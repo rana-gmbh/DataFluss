@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{% translate "Geräte" %}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'vendor/tabulator.min.css' %}"><link rel="stylesheet" href="{% static 'css/app.css' %}">{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/tabulator.min.js' %}" defer></script><script src="{% static 'js/panel.js' %}" defer></script><script src="{% static 'js/assets.js' %}" defer></script>{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-2 mb-3"><h1 class="page-title mr-1">{% translate "Geräte" %}</h1><span class="badge" id="asset-count">0</span><div class="flex-1"></div>
+<a class="btn" href="{% url 'campaigns' %}">{% icon 'refresh' %}{% translate "Rückgabeaktionen" %}</a><a class="btn" href="{% url 'places' %}">{% translate "Räume und Gruppen" %}</a><a class="btn" href="{% url 'asset_categories' %}">{% translate "Gerätetypen" %}</a>
+{% if request.user|can:'device.edit' %}<a class="btn btn-primary" href="{% url 'asset_new' %}">{% icon 'plus' %}{% translate "Neues Gerät" %}</a>{% endif %}</div>
+<div class="flex gap-4 items-start">
+<div class="flex-1 min-w-0 surface overflow-hidden"><div class="flex flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line)">
+  <input id="asset-search" class="input w-56 h-[2.125rem]" placeholder="{% translate 'Nummer, Seriennummer, Person' %}" aria-label="{% translate 'Geräte filtern' %}">
+  <select id="asset-status" class="input w-auto h-[2.125rem]" aria-label="{% translate 'Status' %}"><option value="">{% translate "Alle Status" %}</option><option value="Ausgegeben">{% translate "Ausgegeben" %}</option><option value="Verfügbar">{% translate "Verfügbar" %}</option><option value="Beschädigt">{% translate "Beschädigt" %}</option><option value="Verkauft">{% translate "Verkauft" %}</option><option value="Ausgemustert">{% translate "Ausgemustert" %}</option></select>
+  <span class="flex-1"></span>
+  <div id="asset-print" class="hidden items-center gap-2"><span class="text-[13px]" id="asset-selected"></span>
+  <form method="post" action="{% url 'report_run' %}" target="_blank" class="flex gap-2">{% csrf_token %}<input type="hidden" name="ids" id="asset-ids"><select class="input w-auto h-[2.125rem]" name="template" aria-label="{% translate 'Bericht' %}">{% for t in templates %}<option value="{{ t.pk }}">{{ t.name }}</option>{% endfor %}</select><button class="btn">{% icon 'printer' %}{% translate "Drucken" %}</button></form></div>
+</div><div id="asset-grid" data-preset="{{ preset }}"></div></div>
+{% include "core/_record_panel.html" %}
+</div>
+{% endblock %}

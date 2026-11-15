@@ -1,0 +1,11 @@
+{% load i18n ui %}
+<div id="block-photo"><div class="label">{% translate "Foto" %}</div>
+<div class="flex items-center gap-3">
+  {% if person.photo %}<button type="button" class="photo-zoom-trigger shrink-0" data-zoom="{{ person.photo.url }}" aria-label="{% translate 'Foto vergrößern' %}"><img src="{{ person.photo.url }}" alt="{% translate 'Foto' %}" class="w-24 h-32 object-cover rounded-lg border" style="border-color: var(--line)"></button>
+  {% else %}<div class="w-24 h-32 rounded-lg flex items-center justify-center muted" style="background: var(--surface-2)">{% icon 'image' 'text-[24px]' %}</div>{% endif %}
+  {% if request.user|can:'person.edit' %}<div class="space-y-2">
+    <form hx-post="{% url 'person_photo' person.pk %}" hx-target="#block-photo" hx-swap="outerHTML" hx-encoding="multipart/form-data" hx-trigger="change">
+      <label class="btn cursor-pointer">{% icon 'upload' %}{% translate "Foto wählen" %}<input type="file" name="photo" accept="image/*" class="hidden"></label></form>
+    {% if person.photo %}<form hx-post="{% url 'person_photo' person.pk %}" hx-target="#block-photo" hx-swap="outerHTML"><input type="hidden" name="remove" value="1"><button class="btn btn-sm btn-danger">{% translate "Entfernen" %}</button></form>{% endif %}
+  </div>{% endif %}
+</div></div>

@@ -1,0 +1,6 @@
+{% load i18n ui %}
+<div id="block-cases">
+{% for c in cases %}<a href="{% url 'case_detail' c.pk %}" class="flex items-start gap-3 py-2 border-b last:border-0 hover:bg-[var(--surface-2)] rounded" style="border-color: var(--line)"><span class="badge {% if c.status == 'Erledigt' %}badge-ok{% else %}badge-warn{% endif %}">{{ c.status_label }}</span><div class="min-w-0 text-[13px]"><div class="truncate">{{ c.description }}</div><div class="muted text-[12px]">{{ c.date|date:"d.m.Y" }}{% if c.asset %} · {{ c.asset.number }}{% endif %}{% if c.parts %} · {{ c.part_labels|join:", " }}{% endif %}</div></div></a>
+{% empty %}<p class="muted text-[13px] mb-2">{% translate "Keine Schäden." %}</p>{% endfor %}
+{% if request.user|can:'device.edit' %}<a class="btn mt-2" href="{% url 'case_new' %}?person={{ person.pk }}">{% icon 'plus' %}{% translate "Schaden erfassen" %}</a>{% endif %}
+</div>

@@ -1,0 +1,14 @@
+{% load i18n ui %}
+<div id="block-card" x-data="{ assign: false }"><div class="label">{% translate "Ausweiskarte" %}</div>
+{% with card=cards.0 %}
+{% if card and card.active %}<div class="flex items-center gap-2 mb-2"><span class="badge badge-ok">{% translate "Aktiv" %}</span><span class="mono text-[13px]">{{ card.code }}</span></div>
+{% else %}<p class="muted text-[13px] mb-2">{% translate "Keine aktive Karte." %}</p>{% endif %}
+{% if request.user|can:'person.edit' %}
+<div class="flex gap-2">
+  <button class="btn" @click="assign = true; $nextTick(() => $refs.reader.focus())" x-show="!assign">{% icon 'card' %}{% translate "Karte zuweisen" %}</button>
+  {% if card and card.active %}<form hx-post="{% url 'person_card' person.pk %}" hx-target="#block-card" hx-swap="outerHTML"><input type="hidden" name="action" value="revoke"><button class="btn btn-danger" data-confirm="{% translate 'Karte sperren?' %}">{% translate "Sperren" %}</button></form>{% endif %}
+</div>
+<form x-show="assign" x-cloak hx-post="{% url 'person_card' person.pk %}" hx-target="#block-card" hx-swap="outerHTML" class="flex gap-2">
+  <input x-ref="reader" class="input mono" name="raw" placeholder="{% translate 'Karte an den Leser halten' %}" autocomplete="off" aria-label="{% translate 'Kartenwert' %}"><button class="btn btn-primary">{% translate "OK" %}</button></form>
+{% endif %}{% endwith %}
+</div>

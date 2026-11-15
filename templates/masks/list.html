@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load static ui i18n %}
+{% block title %}{% translate "Masken" %}{% endblock %}
+{% block scripts %}<script src="{% static 'js/masklist.js' %}" defer></script>{% endblock %}
+{% block content %}
+<h1 class="page-title mb-1">{% translate "Masken" %}</h1><p class="muted text-[13px] mb-4">{% translate "Eine Maske legt fest, wie ein Datensatz aussieht. Sie regelt keine Zugriffsrechte." %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Maske" %}</th><th>{% translate "Bereich" %}</th><th>{% translate "Gilt für" %}</th><th>{% translate "Status" %}</th><th></th></tr></thead><tbody>
+{% for m in masks %}<tr data-mask data-name="{{ m.display_name }}" data-has-names="{% if m.names %}1{% endif %}" data-is-default="{% if m.is_default %}1{% endif %}" data-builder="{% url 'mask_builder' m.pk %}" data-action="{% url 'mask_action' m.pk %}"><td><a class="font-medium hover:underline" href="{% url 'mask_builder' m.pk %}">{{ m.display_name }}</a>{% if m.is_default %} <span class="badge">{% translate "Standard" %}</span>{% endif %}</td><td class="muted">{{ m.get_entity_display }}</td><td class="muted">{% if m.match_field %}{{ m.match_field }} = {{ m.match_value }}{% else %}{% translate "alle" %}{% endif %}</td>
+<td>{% if m.published %}<span class="badge badge-ok">{% blocktranslate trimmed with number=m.published.number %}Version {{ number }}{% endblocktranslate %}</span>{% endif %}{% if m.draft %} <span class="badge badge-warn">{% translate "Entwurf" %}</span>{% endif %}</td><td class="text-right"><a class="btn btn-sm" href="{% url 'mask_builder' m.pk %}">{% icon 'pen' %}{% translate "Gestalten" %}</a></td></tr>{% endfor %}</tbody></table></div>
+<form method="post" class="surface p-4 space-y-3" x-data="{ entity: 'pupil' }">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Maske" %}</h2>
+  <div><label class="label" for="f-name">{% translate "Name" %}</label><input id="f-name" class="input" name="name" required placeholder="{% translate 'z. B. Gastschüler' %}"></div>
+  <div><label class="label" for="f-entity">{% translate "Bereich" %}</label><select id="f-entity" class="input" name="entity" x-model="entity"><option value="pupil">{% translate "Schüler" %}</option><option value="staff">{% translate "Personal" %}</option></select></div>
+  <div class="grid grid-cols-2 gap-2"><div><label class="label" for="f-match_field">{% translate "Gilt wenn Feld" %}</label><select id="f-match_field" class="input" name="match_field"><option value="">{% translate "immer" %}</option><option value="school_type">{{ match_labels.school_type }}</option><option value="category">{{ match_labels.category }}</option></select></div><div><label class="label" for="f-match_value">{% translate "den Wert hat" %}</label><input id="f-match_value" class="input" name="match_value" placeholder="Gast"></div></div>
+  <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form></div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}{% load static ui i18n %}
+{% block title %}{% translate "Sicherung" %}{% endblock %}
+{% block scripts %}<script src="{% static 'js/archive.js' %}" defer></script>{% endblock %}
+{% block content %}
+{{ job|json_script:"backup-job" }}
+<h1 class="page-title mb-1">{% translate "Sicherung" %}</h1>
+<p class="muted text-[13px] mb-4 max-w-3xl">{% translate "Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an einem anderen Ort auf. Sie lässt sich in jeder Installation der Schulverwaltung einspielen." %}</p>
+
+<p class="rounded-lg px-3 py-2 text-[13px] mb-4 max-w-3xl badge-{{ nightly.level }}" {% if nightly.level == 'bad' %}role="alert"{% endif %}>{{ nightly.text }}</p>
+
+<div id="b-job" class="surface p-4 mb-4 hidden" aria-live="polite">
+  <p id="b-job-text" class="text-[13px] font-semibold"></p>
+  <div id="b-job-bar" class="hidden mt-2 h-1.5 rounded-full overflow-hidden" style="background: var(--line)"><div id="b-job-fill" class="h-full" style="background: var(--accent); width: 0"></div></div>
+</div>
+<p id="b-result" class="hidden rounded-lg px-3 py-2 text-[13px] mb-4 max-w-3xl" role="status"></p>
+
+<div class="grid lg:grid-cols-2 gap-4 items-start mb-4">
+  <section class="surface p-5">
+    <h2 class="section-title mb-3">{% translate "Neue Sicherung erstellen" %}</h2>
+    <form id="b-create" class="space-y-3">
+      <div><label class="label" for="b-password">{% translate "Passwort für diese Sicherung" %}</label><input class="input" id="b-password" type="password" name="password" minlength="{{ min_password }}" autocomplete="new-password" required></div>
+      <div><label class="label" for="b-repeat">{% translate "Passwort wiederholen" %}</label><input class="input" id="b-repeat" type="password" name="repeat" minlength="{{ min_password }}" autocomplete="new-password" required></div>
+      <p class="muted text-[12px]">{% blocktranslate trimmed with n=min_password %}Mindestens {{ n }} Zeichen. Das Passwort verschlüsselt die Datei und wird nirgends gespeichert. <strong>Ohne dieses Passwort lässt sich die Sicherung nicht mehr öffnen.</strong> Bewahren Sie es getrennt von der Datei auf.{% endblocktranslate %}</p>
+      <button class="btn btn-primary" data-while-idle>{% icon 'archive' %}{% translate "Sicherung erstellen" %}</button>
+    </form>
+  </section>
+  <section class="surface p-5">
+    <h2 class="section-title mb-3">{% translate "Sicherung hochladen" %}</h2>
+    <p class="muted text-[12px] mb-3">{% translate "Eine Sicherung von dieser oder einer anderen Installation. Das Hochladen ändert noch nichts, eingespielt wird erst in der Liste unten." %}</p>
+    <label class="btn" id="b-upload-button">{% icon 'upload' %}{% translate "Datei auswählen" %}<input id="b-upload" class="sr-only" type="file" accept=".svbackup"></label>
+    <p id="b-upload-text" class="hidden text-[13px] mt-3" aria-live="polite"></p>
+  </section>
+</div>
+
+<section class="surface overflow-x-auto">
+  <h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Sicherungen auf diesem Server" %}</h2>
+  <table class="data-table"><thead><tr><th>{% translate "Datei" %}</th><th>{% translate "Stand" %}</th><th>{% translate "Größe" %}</th><th>{% translate "Inhalt" %}</th><th></th></tr></thead><tbody>
+  {% for c in containers %}<tr>
+    <td><span class="mono text-[12px]">{{ c.name }}</span>{% if c.details.origin == 'automatisch' %} <span class="badge">{% translate "Vor dem Einspielen" %}</span>{% elif c.details.origin == 'hochgeladen' or not c.details %} <span class="badge">{% translate "Hochgeladen" %}</span>{% endif %}</td>
+    <td class="whitespace-nowrap">{{ c.created|date:"d.m.Y H:i" }}</td>
+    <td class="whitespace-nowrap">{{ c.size|filesizeformat }}</td>
+    <td class="soft">{% if c.details %}{% blocktranslate trimmed with school=c.details.school people=c.details.people files=c.details.files %}{{ school }}: {{ people }} Personen, {{ files }} Dateien{% endblocktranslate %}{% else %}{% translate "Noch nicht geprüft" %}{% endif %}</td>
+    <td class="text-right whitespace-nowrap">
+      <a class="btn btn-sm" href="{% url 'backup_download' c.name %}" download>{% icon 'download' %}{% translate "Herunterladen" %}</a>
+      <button class="btn btn-sm" data-restore="{{ c.name }}" data-while-idle>{% icon 'archive-restore' %}{% translate "Einspielen" %}</button>
+      <form method="post" action="{% url 'backup_delete' %}" class="inline">{% csrf_token %}<input type="hidden" name="name" value="{{ c.name }}"><button class="btn btn-sm btn-ghost btn-icon btn-danger" aria-label="{% translate 'Löschen' %}" title="{% translate 'Löschen' %}" data-confirm="{% translate 'Diese Sicherung vom Server löschen?' %}" data-while-idle>{% icon 'trash' %}</button></form>
+    </td></tr>
+  {% empty %}<tr><td colspan="5" class="muted text-center py-6">{% translate "Noch keine Sicherungen." %}</td></tr>{% endfor %}
+  </tbody></table>
+</section>
+
+<dialog id="b-dialog" class="backup-dialog" aria-labelledby="b-dialog-title" data-confirm-word="{{ confirm_word }}">
+  <h2 id="b-dialog-title" class="font-semibold mb-1">{% translate "Sicherung einspielen" %}</h2>
+  <p id="b-dialog-name" class="mono text-[12px] muted mb-3"></p>
+  <form id="b-check" class="space-y-3">
+    <div><label class="label" for="b-restore-password">{% translate "Passwort dieser Sicherung" %}</label><input class="input" id="b-restore-password" type="password" autocomplete="off" required></div>
+    <p id="b-check-error" class="hidden badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert"></p>
+    <div class="flex justify-end gap-2"><button type="button" class="btn" data-dialog-close>{% translate "Abbrechen" %}</button><button class="btn btn-primary">{% translate "Prüfen" %}</button></div>
+  </form>
+  <form id="b-confirm" class="hidden space-y-3">
+    <dl id="b-summary" class="grid grid-cols-[7rem_1fr] gap-y-1 text-[13px]"></dl>
+    <div id="b-warning" class="badge-bad rounded-lg px-3 py-2 text-[13px]">
+      <p class="font-semibold">{% translate "Alle Daten dieser Installation werden ersetzt." %}</p>
+      <p>{% translate "Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand automatisch als Sicherung mit demselben Passwort abgelegt." %}</p>
+    </div>
+    <div id="b-confirm-field"><label class="label" for="b-confirm-word">{% blocktranslate trimmed with word=confirm_word %}Zur Bestätigung {{ word }} eingeben{% endblocktranslate %}</label><input class="input" id="b-confirm-word" autocomplete="off" required></div>
+    <p id="b-confirm-error" class="hidden badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert"></p>
+    <div class="flex justify-end gap-2"><button type="button" class="btn" data-dialog-close>{% translate "Abbrechen" %}</button><button id="b-confirm-button" class="btn btn-primary" disabled>{% translate "Jetzt einspielen" %}</button></div>
+  </form>
+</dialog>
+{% endblock %}

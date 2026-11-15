@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Zugänge" %}{% endblock %}
+{% block content %}
+<div class="flex items-center gap-2 mb-1"><h1 class="page-title flex-1">{% translate "Zugänge" %}</h1>{% if request.user|can:'admin.platforms' %}<a class="btn" href="{% url 'platforms' %}">{% icon 'settings' %}{% translate "Plattformen verwalten" %}</a>{% endif %}</div>
+<p class="muted text-[13px] mb-4 flex items-center gap-1.5">{% icon 'lock' %}{% translate "Passwörter sind verschlüsselt. Jede Anzeige wird im Protokoll festgehalten." %}</p>
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+{% for r in rows %}<a href="{% url 'platform_list' r.platform.key %}" class="surface p-4 hover:border-[var(--line-strong)]">
+  <div class="font-semibold">{{ r.platform.name }}</div><div class="muted text-[12px] mb-2">{% if r.expected %}{% blocktranslate trimmed with have=r.have expected=r.expected %}{{ have }} von {{ expected }} Zugängen{% endblocktranslate %}{% else %}{% blocktranslate trimmed count have=r.have %}{{ have }} Zugang{% plural %}{{ have }} Zugänge{% endblocktranslate %}{% endif %}</div>
+  {% if r.percent != None %}<div class="h-1.5 rounded-full overflow-hidden" style="background: var(--surface-2)"><div class="h-full rounded-full" style="width: {{ r.percent }}%; background: var(--accent)"></div></div>{% endif %}
+</a>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% load i18n %}{% if found %}<div class="rounded-lg overflow-hidden border" style="border-color: var(--line); background: var(--surface-2)">
+<div class="label px-2.5 pt-2">{% translate "Im Personal gefunden" %}</div>
+{% for person, already in found %}<div class="flex items-center gap-2 px-2.5 py-2 border-t" style="border-color: var(--line)">
+  <div class="min-w-0 flex-1"><div class="font-medium truncate">{{ person.display_name }}</div>{% if person.category or person.abbreviation %}<div class="muted text-[12px]">{{ person.category }}{% if person.category and person.abbreviation %} · {% endif %}{{ person.abbreviation }}</div>{% endif %}</div>
+  {% if already %}<span class="muted text-[12px]">{{ said.already }}</span>{% else %}<button class="btn btn-sm btn-primary" name="person" value="{{ person.pk }}" formnovalidate>{% translate "Hinzufügen" %}</button>{% endif %}
+</div>{% endfor %}</div>{% elif found is not None %}<p class="muted text-[12px]">{% translate "Niemand im Personal mit diesem Namen. Anlegen macht einen Eintrag ohne Personal." %}</p>{% endif %}

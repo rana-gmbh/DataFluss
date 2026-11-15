@@ -1,0 +1,4 @@
+{% extends request.user.is_authenticated|yesno:"base.html,auth_base.html" %}{% load i18n %}
+{% block title %}{% translate "Das wurde nicht gespeichert" %}{% endblock %}
+{% block content %}{% translate "Das wurde nicht gespeichert" as err_title %}{% translate "Die Seite war zu lange offen oder Sie haben sich inzwischen neu angemeldet. Gehen Sie zurück, laden Sie die Seite neu und versuchen Sie es noch einmal." as err_text %}{% include "core/_error.html" with title=err_title text=err_text %}{% endblock %}
+{% block auth %}{% translate "Das wurde nicht gespeichert" as err_title %}{% translate "Die Seite war zu lange offen oder Sie haben sich inzwischen neu angemeldet. Gehen Sie zurück, laden Sie die Seite neu und versuchen Sie es noch einmal." as err_text %}{% include "core/_error.html" with title=err_title text=err_text %}{% endblock %}

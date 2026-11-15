@@ -1,0 +1,67 @@
+name: Prüfung
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: schule
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: schule
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U schule"
+          --health-interval 5s
+          --health-retries 10
+    env:
+      TESTING: "1"
+      DEBUG: "1"
+      REQUIRE_2FA: "0"
+      DATABASE_URL: postgres://schule:test@127.0.0.1:5432/schule
+      PGPASSWORD: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install system packages
+        run: |
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0 postgresql-client-17
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+      - run: pip install --require-hashes -r requirements.lock
+      - run: pip install pymupdf
+      - run: python manage.py makemigrations --check --dry-run
+      - run: python manage.py test tests
+
+  # The desktop client runs the same code on SQLCipher, so the suite runs there too.
+  tests-sqlcipher:
+    runs-on: ubuntu-latest
+    env:
+      TESTING: "1"
+      DEBUG: "1"
+      REQUIRE_2FA: "0"
+      DATABASE_URL: "sqlcipher://"
+      SQLCIPHER_KEY: "abababababababababababababababababababababababababababababababab"  # 32 bytes as hex, as the client uses
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: sudo apt-get update && sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
+      - run: pip install --require-hashes -r requirements.lock
+      - run: pip install pymupdf "$(grep '^sqlcipher3-wheels' client/requirements.txt)"
+      - run: python manage.py test tests
+
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t schulverwaltung .

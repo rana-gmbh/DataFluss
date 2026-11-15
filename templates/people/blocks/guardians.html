@@ -1,0 +1,18 @@
+{% load i18n ui %}
+<div id="block-guardians" x-data="{ add: false }">
+<div class="space-y-3">
+{% for row in links %}<div class="rounded-lg border p-3" style="border-color: var(--line)">
+  <div class="flex items-center gap-2"><a class="font-medium hover:underline" href="{% url 'guardian_detail' row.link.guardian.pk %}">{{ row.link.guardian.display_name }}</a><span class="badge">{% translate row.link.role %}</span><span class="muted text-[12px] truncate">{{ row.link.guardian.email }} {{ row.link.guardian.phone }}</span><span class="flex-1"></span>
+  {% if request.user|can:'person.edit' %}<form hx-post="{% url 'person_guardian' person.pk %}" hx-target="#block-guardians" hx-swap="outerHTML"><input type="hidden" name="action" value="unlink"><input type="hidden" name="link" value="{{ row.link.pk }}"><button class="btn btn-ghost btn-sm btn-icon" data-confirm="{% translate 'Verknüpfung entfernen?' %}" aria-label="{% translate 'Verknüpfung entfernen' %}">{% icon 'x' %}</button></form>{% endif %}</div>
+  {% for login in row.logins %}{% if login.credential %}<div class="mt-2 text-[12px] muted">{% blocktranslate trimmed with platform=login.platform.name %}{{ platform }}: Zugang vorhanden{% endblocktranslate %}</div>{% endif %}{% endfor %}
+</div>{% empty %}<p class="muted text-[13px]">{% translate "Noch keine Eltern verknüpft." %}</p>{% endfor %}
+</div>
+{% if request.user|can:'person.edit' %}
+<button class="btn mt-3" x-show="!add" @click="add = true">{% icon 'plus' %}{% translate "Eltern hinzufügen" %}</button>
+<form x-show="add" x-cloak hx-post="{% url 'person_guardian' person.pk %}" hx-target="#block-guardians" hx-swap="outerHTML" class="mt-3 grid sm:grid-cols-3 gap-2">
+  <input type="hidden" name="action" value="add">
+  {% translate "Vorname" as first_label %}{% translate "Nachname" as last_label %}{% translate "E-Mail" as email_label %}{% translate "Telefon" as phone_label %}
+  <input class="input" name="first_name" placeholder="{{ first_label }}" aria-label="{{ first_label }}" required><input class="input" name="last_name" placeholder="{{ last_label }}" aria-label="{{ last_label }}" value="{{ person.last_name }}" required>
+  <select class="input" name="role" aria-label="{% translate 'Rolle' %}"><option value="Elternteil 1">{% translate "Elternteil 1" %}</option><option value="Elternteil 2">{% translate "Elternteil 2" %}</option><option value="Erziehungsberechtigt">{% translate "Erziehungsberechtigt" %}</option></select>
+  <input class="input" name="email" placeholder="{{ email_label }}" type="email" aria-label="{{ email_label }}"><input class="input" name="phone" placeholder="{{ phone_label }}" aria-label="{{ phone_label }}"><button class="btn btn-primary">{% translate "Speichern" %}</button></form>
+{% endif %}</div>

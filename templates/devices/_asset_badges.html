@@ -1,0 +1,1 @@
+<span class="badge {% if asset.status == 'Verfügbar' %}badge-ok{% elif asset.status == 'Beschädigt' %}badge-bad{% elif asset.status == 'Ausgegeben' %}badge-accent{% endif %}">{{ asset.status_label }}</span>{% if asset.category %}<span class="badge">{{ asset.category }}</span>{% endif %}

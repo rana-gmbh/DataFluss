@@ -1,0 +1,152 @@
+name: Release Windows
+
+# A tag v<version> (matching "version" in client/shell/src-tauri/tauri.conf.json) builds DataFluss for
+# Windows and publishes it in the public repository rana-gmbh/DataFluss: the installer as an asset of
+# the release v<version> (shared with macOS, whichever workflow finishes first creates it), then the
+# update feed windows/appcast.xml. It never touches macos/appcast.xml.
+# Started by hand it only builds, unless "publish" is ticked. See docs/releases.md.
+#
+# Code signing with Azure Artifact Signing (formerly Trusted Signing), as Rana GmbH, with the account
+# and certificate profile NetFluss uses too. It switches itself on once the secret AZURE_CLIENT_SECRET
+# exists, with AZURE_TENANT_ID and AZURE_CLIENT_ID: the app registration "DataFluss GitHub signing",
+# which has the role "Artifact Signing Certificate Profile Signer" on the account. Without them the
+# installer is unsigned.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish to rana-gmbh/DataFluss"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-windows-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    environment: release  # its secrets need an approval (Settings → Environments)
+    timeout-minutes: 120
+    env:
+      RELEASE_REPO: ${{ github.repository }}
+      # Identifiers, not secrets. The account name is empty, and signing off, without the client secret.
+      AZURE_SIGNING_ACCOUNT: ${{ secrets.AZURE_CLIENT_SECRET != '' && 'ranagmbh' || '' }}
+      AZURE_SIGNING_ENDPOINT: https://neu.codesigning.azure.net
+      AZURE_SIGNING_PROFILE: rana-public
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version
+        id: version
+        run: |
+          $version = (Get-Content client/shell/src-tauri/tauri.conf.json -Raw | ConvertFrom-Json).version
+          "version=$version" >> $env:GITHUB_OUTPUT
+          $file = (Get-Content VERSION -Raw).Trim()
+          if ($file -ne $version) {
+            Write-Output "::error::VERSION says $file, tauri.conf.json $version (scripts/set-version.sh sets both)"
+            exit 1
+          }
+          if ($env:GITHUB_REF_TYPE -eq "tag" -and "v$version" -ne $env:GITHUB_REF_NAME) {
+            Write-Output "::error::Tag $env:GITHUB_REF_NAME does not match version $version in tauri.conf.json"
+            exit 1
+          }
+
+      - uses: actions/setup-python@v5
+        id: python
+        with:
+          python-version: "3.14"
+
+      - uses: msys2/setup-msys2@v2
+        id: msys2
+        with:
+          msystem: UCRT64
+          update: false
+          install: mingw-w64-ucrt-x86_64-pango
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: client/shell/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: client/shell/src-tauri
+
+      # artifact-signing-cli (formerly trusted-signing-cli) and the Microsoft signing client it drives
+      # through signtool, both pinned. The client goes where the CLI looks for it, because the CLI's
+      # own download does not notice a failed request and then cannot unzip what it got.
+      - name: Signing tool
+        if: env.AZURE_SIGNING_ACCOUNT != ''
+        run: |
+          function Fetch($url, $file, $sha256) {
+            for ($attempt = 1; $attempt -le 5; $attempt++) {
+              try { Invoke-WebRequest -Uri $url -OutFile $file -UseBasicParsing } catch { Write-Warning $_ }
+              if ((Test-Path $file) -and (Get-FileHash -Algorithm SHA256 $file).Hash -eq $sha256) { return }
+              Start-Sleep -Seconds (10 * $attempt)
+            }
+            throw "Could not download $url"
+          }
+          $bin = Join-Path $env:RUNNER_TEMP "signing"
+          New-Item -ItemType Directory -Force $bin | Out-Null
+          Fetch "https://github.com/levminer/trusted-signing-cli/releases/download/0.12.0/artifact-signing-cli.exe" `
+            "$bin\artifact-signing-cli.exe" "dd6fa95a0367cbd32ea520037c3df72d1ed8f523a5b07883b0c2a4034e918a53"
+          Fetch "https://www.nuget.org/api/v2/package/Microsoft.ArtifactSigning.Client/1.0.146" `
+            "$bin\client.zip" "7761e5d8f31e54b764da21d33cd8b0a2940e1b05526c7dfcb5e94b0431426f70"
+          Expand-Archive "$bin\client.zip" -DestinationPath (Join-Path $HOME ".artifact-signing-cli\lib") -Force
+          Add-Content -Path $env:GITHUB_PATH -Value $bin -Encoding utf8
+
+      - name: Build
+        env:
+          PYTHON: ${{ steps.python.outputs.python-path }}
+          MSYS2_ROOT: ${{ steps.msys2.outputs.msys2-location }}
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        run: ./client/release-windows.ps1
+
+      # After the build, because Tauri's build script needs the sidecar and WinSparkle.dll in place.
+      - name: Shell tests
+        working-directory: client/shell/src-tauri
+        run: cargo test --release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DataFluss-${{ steps.version.outputs.version }}-windows
+          path: client/release/${{ steps.version.outputs.version }}/
+          retention-days: 14
+
+      - name: Publish
+        if: github.ref_type == 'tag' || inputs.publish
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -e
+          dir="client/release/$VERSION"
+          tag="v$VERSION"
+          test -f "$dir/appcast.xml" || { echo "::error::No appcast.xml: is SPARKLE_PRIVATE_KEY set?"; exit 1; }
+          # The macOS workflow may have made the release already; both add their files to it.
+          if ! gh release view "$tag" --repo "$RELEASE_REPO" > /dev/null 2>&1; then
+            gh release create "$tag" --repo "$RELEASE_REPO" --title "DataFluss $VERSION" \
+              --notes "macOS: DataFluss-$VERSION.dmg öffnen und DataFluss in den Ordner Programme ziehen. Windows: DataFluss-$VERSION-setup.exe ausführen. Installierte Apps aktualisieren sich selbst." \
+              || gh release view "$tag" --repo "$RELEASE_REPO" > /dev/null
+          fi
+          gh release upload "$tag" --repo "$RELEASE_REPO" --clobber "$dir/DataFluss-$VERSION-setup.exe"
+          # The feed follows with the workflow Promote, once your servers run this version.
+          cp "$dir/appcast.xml" "$RUNNER_TEMP/appcast-windows.xml"
+          gh release upload "$tag" --repo "$RELEASE_REPO" --clobber "$RUNNER_TEMP/appcast-windows.xml"

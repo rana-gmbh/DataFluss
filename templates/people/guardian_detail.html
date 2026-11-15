@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{{ guardian.display_name }}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-3 mb-4"><a class="btn btn-ghost btn-icon" href="{% url 'guardians' %}" data-back aria-label="{% translate 'Zurück zur Liste' %}">{% icon 'chevron' 'rotate-180' %}</a><h1 class="page-title flex-1">{{ guardian.display_name }}</h1>
+{% for t in print_templates %}<form method="post" action="{% url 'report_run' %}" target="_blank">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}"><input type="hidden" name="ids" value="{{ guardian.pk }}"><button class="btn">{% icon 'printer' %}{{ t.name }}</button></form>{% endfor %}</div>
+{% include "people/_guardian_record.html" %}
+{% endblock %}

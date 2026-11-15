@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Protokoll" %}{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-4 gap-3 flex-wrap"><h1 class="page-title">{% translate "Protokoll" %}</h1>
+<form method="get"><select class="input" name="aktion" data-autosubmit aria-label="{% translate 'Aktion filtern' %}"><option value="">{% translate "Alle Aktionen" %}</option>{% for key, text in actions %}<option value="{{ key }}" {% if key == action %}selected{% endif %}>{{ text }}</option>{% endfor %}</select></form></div>
+<div class="surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Zeit" %}</th><th>{% translate "Benutzer" %}</th><th>{% translate "Aktion" %}</th><th>{% translate "Beschreibung" %}</th><th>{% translate "IP" %}</th><th>{% translate "Server" %}</th></tr></thead><tbody>
+{% for e in page %}<tr><td class="whitespace-nowrap muted">{{ e.at|date:"d.m.Y H:i:s" }}</td><td>{{ e.user.username|default:"–" }}</td><td><span class="badge">{{ e.label }}</span></td><td>{{ e.summary }}</td><td class="muted">{{ e.ip|default:"" }}</td><td class="muted">{{ e.server_id }}</td></tr>
+{% empty %}<tr><td colspan="6" class="muted text-center py-6">{% translate "Noch keine Einträge." %}</td></tr>{% endfor %}</tbody></table></div>
+<div class="flex items-center justify-between mt-3 text-[13px] muted"><span>{% blocktranslate trimmed with number=page.number pages=page.paginator.num_pages %}Seite {{ number }} von {{ pages }}{% endblocktranslate %}</span><span class="flex gap-2">
+{% if page.has_previous %}<a class="btn btn-sm" href="?seite={{ page.previous_page_number }}&aktion={{ action }}">{% translate "Zurück" %}</a>{% endif %}
+{% if page.has_next %}<a class="btn btn-sm" href="?seite={{ page.next_page_number }}&aktion={{ action }}">{% translate "Weiter" %}</a>{% endif %}</span></div>
+{% endblock %}

@@ -1,0 +1,3047 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Schulverwaltung\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-15 21:21+0100\n"
+"PO-Revision-Date: 2026-11-08 12:00+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Das Passwort stimmt nicht, oder die Datei ist beschädigt."
+msgstr "密码不正确，或文件已损坏。"
+
+msgid "Das ist keine Sicherungsdatei."
+msgstr "这不是备份文件。"
+
+msgid ""
+"Diese Sicherungsdatei stammt aus einer neueren Version. Bitte zuerst "
+"aktualisieren."
+msgstr "此备份文件来自较新的版本。请先更新。"
+
+msgid "Der Vorgang wurde unterbrochen. Es wurde nichts geändert."
+msgstr "操作已中断。未做任何更改。"
+
+msgid ""
+"Das hat nicht geklappt. Es wurde nichts geändert. Details stehen im "
+"Serverprotokoll."
+msgstr "操作失败。未做任何更改。详情请查看服务器日志。"
+
+msgid "Wird vorbereitet"
+msgstr "正在准备"
+
+msgid "Ungültiges Hochladen."
+msgstr "上传无效。"
+
+msgid "Auf dem Server ist nicht genug Platz für diese Datei."
+msgstr "服务器空间不足，无法存放此文件。"
+
+msgid "Die Datei ist nicht vollständig angekommen."
+msgstr "文件未完整接收。"
+
+msgid "Auf dem Server ist nicht genug Platz für die Sicherung."
+msgstr "服务器空间不足，无法存放备份。"
+
+msgid ""
+"Die neue Sicherung ließ sich nicht vollständig lesen und wurde verworfen."
+msgstr "新备份无法完整读取，已被丢弃。"
+
+#, python-format
+msgid "BACKUP_PASSWORD fehlt oder hat weniger als %(n)s Zeichen."
+msgstr "BACKUP_PASSWORD 缺失或少于 %(n)s 个字符。"
+
+msgid ""
+"Die automatische Sicherung ist nicht eingerichtet: BACKUP_PASSWORD fehlt."
+msgstr "自动备份尚未设置：缺少 BACKUP_PASSWORD。"
+
+msgid ""
+"Es gibt noch keine automatische Sicherung. Die erste entsteht ab 2 Uhr "
+"nachts."
+msgstr "尚无自动备份。第一次备份将于凌晨 2 点开始。"
+
+#, python-format
+msgid "%(date)s, %(time)s Uhr"
+msgstr "%(date)s %(time)s"
+
+#, python-format
+msgid "Die automatische Sicherung vom %(day)s ist fehlgeschlagen: %(problem)s"
+msgstr "%(day)s 的自动备份失败：%(problem)s"
+
+#, python-format
+msgid ""
+"Die letzte automatische Sicherung ist vom %(day)s. Seitdem ist keine neue "
+"entstanden."
+msgstr "最近一次自动备份为 %(day)s。此后没有新的备份。"
+
+#, python-format
+msgid ""
+"Die Sicherung vom %(day)s liegt nur auf diesem Server, die Kopie außer Haus "
+"ist fehlgeschlagen: %(problem)s"
+msgstr "%(day)s 的备份仅存于此服务器，异地副本失败：%(problem)s"
+
+#, python-format
+msgid ""
+"Letzte automatische Sicherung: %(day)s, geprüft. Sie liegt nur auf diesem "
+"Server, weil keine Kopie außer Haus eingerichtet ist."
+msgstr ""
+"最近一次自动备份：%(day)s，已校验。由于未设置异地副本，备份仅存于此服务器。"
+
+#, python-format
+msgid "Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
+msgstr "最近一次自动备份：%(day)s，已校验并已复制到异地。"
+
+msgid "Kopie wird übertragen"
+msgstr "正在传输副本"
+
+msgid "Die Kopie ist nicht vollständig angekommen."
+msgstr "副本未完整接收。"
+
+#, python-format
+msgid "Sicherung abgebrochen bei %(name)s."
+msgstr "备份在 %(name)s 处中止。"
+
+msgid "Datenbank wird gesichert"
+msgstr "正在备份数据库"
+
+msgid "Bilder und Dokumente werden gesichert"
+msgstr "正在备份图片和文档"
+
+msgid "Sicherung wird geprüft"
+msgstr "正在校验备份"
+
+msgid ""
+"Diese Sicherung stammt aus einer neueren Version. Bitte zuerst diese "
+"Installation aktualisieren."
+msgstr "此备份来自较新的版本。请先更新本系统。"
+
+#, python-format
+msgid ""
+"Diese Sicherung enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
+"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem "
+"Modul einspielen."
+msgstr ""
+"此备份包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。只能在带有"
+"该模块的 DataFluss 版本中恢复。"
+
+msgid "Diese Sicherungsdatei enthält ungültige Einträge."
+msgstr "此备份文件包含无效条目。"
+
+msgid "Datenbank wird eingespielt"
+msgstr "正在恢复数据库"
+
+msgid "Datenbank wird angepasst"
+msgstr "正在更新数据库结构"
+
+msgid "Es läuft bereits ein Sicherungsvorgang."
+msgstr "已有备份操作正在进行。"
+
+#, python-format
+msgid "Das Passwort braucht mindestens %(n)s Zeichen."
+msgstr "密码至少需要 %(n)s 个字符。"
+
+msgid "Die beiden Passwörter stimmen nicht überein."
+msgstr "两次输入的密码不一致。"
+
+#, python-format
+msgid "Bitte zur Bestätigung %(word)s eingeben."
+msgstr "请输入 %(word)s 以确认。"
+
+msgid "Es läuft gerade eine Aktualisierung."
+msgstr "正在进行更新。"
+
+msgid "Während eines Sicherungsvorgangs kann nichts gelöscht werden."
+msgstr "备份进行期间无法删除任何内容。"
+
+msgid "Die Sicherung wurde gelöscht."
+msgstr "备份已删除。"
+
+msgid "Zwei-Faktor eingerichtet"
+msgstr "双重验证已设置"
+
+msgid "Zwei-Faktor-Regel"
+msgstr "双重验证规则"
+
+msgid "Zwei-Faktor zurückgesetzt"
+msgstr "双重验证已重置"
+
+msgid "Datei gelöscht"
+msgstr "文件已删除"
+
+msgid "Sicherung"
+msgstr "备份"
+
+msgid "Sammelaktion"
+msgstr "批量操作"
+
+msgid "Karte"
+msgstr "证件卡"
+
+msgid "Kartensuche"
+msgstr "证件卡搜索"
+
+msgid "Zugang"
+msgstr "账号"
+
+msgid "DaZ"
+msgstr "DaZ"
+
+msgid "DaZ-PDF"
+msgstr "DaZ PDF"
+
+msgid "Gerät"
+msgstr "设备"
+
+msgid "Datei geöffnet"
+msgstr "文件已打开"
+
+msgid "Export"
+msgstr "导出"
+
+msgid "Export mit Passwörtern"
+msgstr "含密码导出"
+
+msgid "Feld"
+msgstr "字段"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Kindergarten"
+msgstr "幼儿园"
+
+msgid "Kindergarten-PDF"
+msgstr "幼儿园 PDF"
+
+msgid "Anmeldung"
+msgstr "登录"
+
+msgid "Anmeldung fehlgeschlagen"
+msgstr "登录失败"
+
+msgid "Abmeldung"
+msgstr "退出登录"
+
+msgid "Maske"
+msgstr "表单布局"
+
+msgid "Passwort geändert"
+msgstr "密码已更改"
+
+msgid "Passwort neu erzeugt"
+msgstr "密码已重新生成"
+
+msgid "Person angelegt"
+msgstr "人员已创建"
+
+msgid "Plattform"
+msgstr "平台"
+
+msgid "Druck"
+msgstr "打印"
+
+msgid "Passwort angezeigt"
+msgstr "密码已显示"
+
+msgid "Schuljahreswechsel"
+msgstr "学年切换"
+
+msgid "Serverfehler"
+msgstr "服务器错误"
+
+msgid "Einstellungen"
+msgstr "设置"
+
+msgid "Unterricht"
+msgstr "课程"
+
+msgid "Druckvorlage"
+msgstr "打印模板"
+
+msgid "Aktualisierung"
+msgstr "更新"
+
+msgid "Benutzer geändert"
+msgstr "用户已更改"
+
+msgid "Benutzer angelegt"
+msgstr "用户已创建"
+
+msgid "Übersicht"
+msgstr "概览"
+
+msgid "Start"
+msgstr "首页"
+
+msgid "Personen"
+msgstr "人员"
+
+msgid "Schüler"
+msgstr "学生"
+
+msgid "Personal"
+msgstr "教职工"
+
+msgid "Eltern"
+msgstr "家长"
+
+msgid "Klassen"
+msgstr "班级"
+
+msgid "IT"
+msgstr "IT"
+
+msgid "Geräte"
+msgstr "设备"
+
+msgid "Schäden"
+msgstr "损坏报告"
+
+msgid "Zugänge"
+msgstr "账号"
+
+msgid "Karte suchen"
+msgstr "查找证件卡"
+
+msgid "Drucken und Daten"
+msgstr "打印与数据"
+
+msgid "Druckvorlagen"
+msgstr "打印模板"
+
+msgid "Import & Export"
+msgstr "导入与导出"
+
+msgid "Verwaltung"
+msgstr "管理"
+
+#, python-format
+msgid "Auf dem Server sind nur noch %(gb)s GB frei."
+msgstr "服务器仅剩 %(gb)s GB 可用空间。"
+
+#, python-format
+msgid "Serverfehler in den letzten 24 Stunden: %(n)s."
+msgstr "过去 24 小时内的服务器错误：%(n)s。"
+
+msgid "Die Datei ist größer als 20 MB."
+msgstr "文件大于 20 MB。"
+
+msgid "Sie sind nicht mehr angemeldet."
+msgstr "登录已失效。"
+
+msgid "Die Datei ist zu groß."
+msgstr "文件过大。"
+
+msgid "Sekretariat"
+msgstr "教务处"
+
+msgid "Schulleitung"
+msgstr "校领导"
+
+#, python-format
+msgid ""
+"Diese Datenbank enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
+"Version fehlt. Sie bleibt unverändert und lässt sich mit einer DataFluss-"
+"Version mit diesem Modul öffnen."
+msgstr ""
+"此数据库包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。数据库保"
+"持不变，可用带有该模块的 DataFluss 版本打开。"
+
+msgid ""
+"Voller Zugriff, inklusive Masken, Vorlagen, Benutzer und Export von "
+"Passwörtern."
+msgstr "完全访问权限，包括表单布局、模板、用户和密码导出。"
+
+msgid "Stammdaten pflegen, Passwörter anzeigen und Zugangsblätter drucken."
+msgstr "维护基础数据、查看密码并打印账号单。"
+
+msgid "Daten und Berichte lesen, keine Passwörter."
+msgstr "查看数据和报告，不含密码。"
+
+msgid "Die Datei ist nicht verschlüsselt."
+msgstr "文件未加密。"
+
+msgid ""
+"Die Datei ist beschädigt oder mit einem anderen Schlüssel verschlüsselt."
+msgstr "文件已损坏，或使用了其他密钥加密。"
+
+msgid "Foto vergrößern"
+msgstr "放大照片"
+
+msgid "Bereiche"
+msgstr "功能区"
+
+msgid ""
+"Links stehen alle Bereiche, die Ihre Rolle öffnen darf. Was Sie nicht sehen "
+"dürfen, erscheint gar nicht erst."
+msgstr "左侧列出您的角色可以打开的所有功能区。您无权查看的内容根本不会显示。"
+
+msgid "Suche"
+msgstr "搜索"
+
+msgid ""
+"Personen, Klassen, Geräte und mehr finden: hier klicken oder ⌘K (unter "
+"Windows Strg+K) drücken."
+msgstr "查找人员、班级、设备等：点击此处或按 ⌘K（Windows 上为 Ctrl+K）。"
+
+msgid "Listen"
+msgstr "列表"
+
+msgid ""
+"In den Listen ändert ein Doppelklick eine Zelle. Spalten, Filter und "
+"Sortierung lassen sich als eigene Ansicht speichern."
+msgstr "在列表中双击单元格即可修改。列、筛选和排序可以保存为自己的视图。"
+
+msgid "Drucken"
+msgstr "打印"
+
+msgid ""
+"Druckvorlagen für Ausweise, Listen und Briefe, mit einem Designer zum "
+"Anpassen."
+msgstr "用于证件、列表和信函的打印模板，可用设计器调整。"
+
+msgid "Masken und eigene Felder, Benutzer, Sicherung und Synchronisation."
+msgstr "表单和自定义字段、用户、备份和同步。"
+
+msgid "Datenbanken"
+msgstr "数据库"
+
+msgid "Hier wechseln Sie zwischen den Datenbanken auf diesem Computer."
+msgstr "在此切换本电脑上的数据库。"
+
+msgid "Abgleich"
+msgstr "同步比对"
+
+msgid ""
+"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung "
+"gehen nicht verloren, sie folgen später."
+msgstr "显示与服务器的同步是否正在进行。离线时的修改不会丢失，稍后会同步。"
+
+msgid "Ihr Konto"
+msgstr "您的账户"
+
+msgid ""
+"Sprache, hell oder dunkel, Passwort und Abmelden. Mit dem Fragezeichen "
+"startet dieser Rundgang wieder."
+msgstr "语言、浅色或深色、密码和退出登录。点击问号可再次开始本导览。"
+
+msgid "Erste Schritte"
+msgstr "快速入门"
+
+msgid "Diese Liste führt durch die Einrichtung und hakt sich selbst ab."
+msgstr "此清单引导您完成设置，并会自动勾选已完成的项目。"
+
+msgid "GitHub-Zugriff wurde abgelehnt. Bitte GITHUB_TOKEN prüfen."
+msgstr "GitHub 拒绝访问。请检查 GITHUB_TOKEN。"
+
+msgid "GitHub antwortet nicht."
+msgstr "GitHub 无响应。"
+
+msgid "GitHub ist nicht erreichbar."
+msgstr "无法连接 GitHub。"
+
+msgid "Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
+msgstr "无法备份数据库。未做任何更改。"
+
+msgid "Coolify lehnt das Token ab."
+msgstr "Coolify 拒绝了该令牌。"
+
+#, python-format
+msgid "Coolify meldet Fehler %(code)s."
+msgstr "Coolify 报告错误 %(code)s。"
+
+msgid "Coolify ist nicht erreichbar. Es wurde nichts verändert."
+msgstr "无法连接 Coolify。未做任何更改。"
+
+msgid ""
+"Coolify hat unerwartet geantwortet. Bitte dort unter Deployments prüfen, ob "
+"die Aktualisierung gestartet ist."
+msgstr ""
+"Coolify 返回了意外的响应。请在 Coolify 的 Deployments 中检查更新是否已开始。"
+
+msgid "Es gibt nichts zurückzusetzen."
+msgstr "没有可回滚的内容。"
+
+msgid ""
+"Coolify gibt keine Auskunft über diese Aktualisierung. Bitte dort unter "
+"Deployments nachsehen."
+msgstr "Coolify 未提供此更新的信息。请在 Coolify 的 Deployments 中查看。"
+
+#, python-format
+msgid "Aktualisierung auf %(version)s abgeschlossen."
+msgstr "已更新至 %(version)s。"
+
+msgid ""
+"Coolify meldet Erfolg, aber es läuft noch die bisherige Version. Bitte das "
+"Protokoll in Coolify prüfen."
+msgstr "Coolify 报告成功，但仍在运行旧版本。请检查 Coolify 中的日志。"
+
+msgid ""
+"Die neue Version wurde nicht übernommen. Die bisherige Version läuft weiter."
+msgstr "新版本未生效。旧版本继续运行。"
+
+msgid "Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
+msgstr "数据库已回滚到更新前的状态。"
+
+#, python-format
+msgid ""
+"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung "
+"%(name)s von Hand einspielen."
+msgstr "数据库无法回滚。请手动恢复备份 %(name)s。"
+
+#, python-format
+msgid ""
+"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch "
+"hier, bitte die Sicherung %(name)s von Hand einspielen."
+msgstr "数据库正在回滚。如果几分钟后仍显示此消息，请手动恢复备份 %(name)s。"
+
+#, python-format
+msgid ""
+"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand "
+"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
+"geht dabei verloren."
+msgstr ""
+"新版本已更改数据库。可将其回滚到 %(when)s 的状态。此后保存的所有内容都将丢"
+"失。"
+
+#, python-format
+msgid ""
+"Auf diesem Mac kann sich nur das Konto anmelden, mit dem diese Datenbank "
+"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit "
+"„Mit Server verbinden“ eine eigene Datenbank anlegen."
+msgstr ""
+"此 Mac 上只能登录连接此数据库的账户（%(owners)s）。如需使用 %(name)s，请在启"
+"动界面通过“连接到服务器”创建一个单独的数据库。"
+
+msgid "Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen."
+msgstr "失败次数过多。请 15 分钟后重试。"
+
+msgid "Benutzername oder Passwort ist falsch."
+msgstr "用户名或密码错误。"
+
+msgid "Das bisherige Passwort stimmt nicht."
+msgstr "当前密码不正确。"
+
+msgid "Die beiden neuen Passwörter stimmen nicht überein."
+msgstr "两次输入的新密码不一致。"
+
+msgid "Das neue Passwort muss sich vom bisherigen unterscheiden."
+msgstr "新密码必须与当前密码不同。"
+
+msgid "Ihr Passwort wurde geändert."
+msgstr "您的密码已更改。"
+
+msgid "Der Code stimmt nicht. Bitte erneut versuchen."
+msgstr "验证码不正确。请重试。"
+
+msgid "Der Code stimmt nicht."
+msgstr "验证码不正确。"
+
+msgid "Schüler ohne E-Mail"
+msgstr "无电子邮箱的学生"
+
+msgid "Ohne Foto"
+msgstr "无照片"
+
+msgid "Neue Codes nötig"
+msgstr "需要新代码"
+
+msgid "Ehemalige mit offenem Gerät"
+msgstr "已离校但设备未归还"
+
+msgid "Name und Logo eintragen"
+msgstr "填写名称和标志"
+
+msgid "Personen aufnehmen oder aus einer Datei importieren"
+msgstr "添加人员或从文件导入"
+
+msgid "Nächtliche Sicherung einrichten"
+msgstr "设置夜间备份"
+
+msgid "Konten für weitere Personen anlegen"
+msgstr "为其他人员创建账户"
+
+msgid "archiviert"
+msgstr "已归档"
+
+#, python-format
+msgid "Klasse %(year)s"
+msgstr "%(year)s 学年班级"
+
+#, python-format
+msgid "Schaden %(date)s"
+msgstr "损坏报告 %(date)s"
+
+msgid "Bitte einen Benutzernamen eingeben."
+msgstr "请输入用户名。"
+
+msgid "Dieser Benutzername ist vergeben."
+msgstr "该用户名已被占用。"
+
+msgid "Unbekannte Rolle."
+msgstr "未知角色。"
+
+#, python-format
+msgid "%(name)s wurde angelegt."
+msgstr "已创建 %(name)s。"
+
+msgid "Zwei-Faktor-Anmeldung eingeschaltet."
+msgstr "双重验证登录已开启。"
+
+msgid "Zwei-Faktor-Anmeldung ausgeschaltet."
+msgstr "双重验证登录已关闭。"
+
+msgid "Das Logo muss ein Bild sein (JPEG, PNG, GIF oder WEBP)."
+msgstr "徽标必须是图片（JPEG、PNG、GIF 或 WEBP）。"
+
+msgid "Gespeichert."
+msgstr "已保存。"
+
+msgid "Eine Aktualisierung läuft bereits."
+msgstr "已有更新正在进行。"
+
+msgid "Wählen Sie mindestens eine Sprache."
+msgstr "请至少选择一种语言。"
+
+msgid "Gerätetyp"
+msgstr "设备类型"
+
+msgid "Präfix"
+msgstr "前缀"
+
+msgid "Trennzeichen"
+msgstr "分隔符"
+
+msgid "Stellen"
+msgstr "位数"
+
+msgid "Nächste Nummer"
+msgstr "下一个编号"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Art"
+msgstr "类型"
+
+msgid "Raum"
+msgstr "房间"
+
+msgid "Gruppe"
+msgstr "班组"
+
+msgid "Ausgegeben"
+msgstr "已发放"
+
+msgid "Verfügbar"
+msgstr "可用"
+
+msgid "Beschädigt"
+msgstr "已损坏"
+
+msgid "Verkauft"
+msgstr "已售出"
+
+msgid "Ausgemustert"
+msgstr "已报废"
+
+msgid "Gerätenummer"
+msgstr "设备编号"
+
+msgid "Seriennummer"
+msgstr "序列号"
+
+msgid "UUID"
+msgstr "UUID"
+
+msgid "Verkaufsdatum"
+msgstr "售出日期"
+
+msgid "Bemerkungen"
+msgstr "备注"
+
+msgid "Das Gerät ist noch ausgegeben."
+msgstr "该设备仍处于发放状态。"
+
+msgid "Bitte genau eine Person oder einen Ort wählen."
+msgstr "请只选择一个人员或一个地点。"
+
+msgid "Ausgabe"
+msgstr "发放"
+
+msgid "Rückgabe"
+msgstr "归还"
+
+msgid "Stift"
+msgstr "触控笔"
+
+msgid "Tastatur"
+msgstr "键盘"
+
+msgid "Offen"
+msgstr "待处理"
+
+msgid "In Reparatur"
+msgstr "维修中"
+
+msgid "Wartet auf Ersatz"
+msgstr "等待更换"
+
+msgid "Erledigt"
+msgstr "已完成"
+
+msgid "Display"
+msgstr "屏幕"
+
+msgid "Interne Hardware"
+msgstr "内部硬件"
+
+msgid "Ständer/Scharnier"
+msgstr "支架/铰链"
+
+msgid "Sonstiges"
+msgstr "其他"
+
+msgid "Beschreibung des Schadens"
+msgstr "损坏描述"
+
+msgid "Schaden an"
+msgstr "损坏部位"
+
+msgid "Datum"
+msgstr "日期"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Gerätenummer Austauschgerät"
+msgstr "替换设备编号"
+
+msgid "Seriennummer Austauschgerät"
+msgstr "替换设备序列号"
+
+msgid "Ninox-ID"
+msgstr "Ninox ID"
+
+msgid "Stichtag"
+msgstr "基准日期"
+
+msgid "Abgeschlossen"
+msgstr "已结案"
+
+msgid "Zurückgegeben"
+msgstr "已归还"
+
+msgid "Bitte einen Gerätetyp wählen oder eine Nummer eingeben."
+msgstr "请选择设备类型或输入编号。"
+
+#, python-format
+msgid "%(number)s gibt es bereits."
+msgstr "%(number)s 已存在。"
+
+#, python-format
+msgid "%(number)s wurde angelegt."
+msgstr "%(number)s 已创建。"
+
+#, python-format
+msgid "Niemand gefunden: %(name)s."
+msgstr "未找到：%(name)s。"
+
+msgid "ohne Klasse"
+msgstr "无班级"
+
+#, python-format
+msgid ""
+"Mehrere Treffer für %(name)s: %(options)s. Bitte Vorname und Nachname oder "
+"die E-Mail eingeben."
+msgstr "%(name)s 有多个匹配项：%(options)s。请输入名字和姓氏，或电子邮箱。"
+
+msgid "Zu viele Abrufe. Bitte kurz warten."
+msgstr "请求过多。请稍候。"
+
+msgid "Dieses Gerät gibt es nicht."
+msgstr "该设备不存在。"
+
+msgid "Bitte den Schaden beschreiben."
+msgstr "请描述损坏情况。"
+
+msgid "Text"
+msgstr "文本"
+
+msgid "Text (mehrzeilig)"
+msgstr "文本（多行）"
+
+msgid "Zahl"
+msgstr "数字"
+
+msgid "Ja/Nein"
+msgstr "是/否"
+
+msgid "Auswahl"
+msgstr "单选"
+
+msgid "Mehrfachauswahl"
+msgstr "多选"
+
+msgid "E-Mail"
+msgstr "电子邮箱"
+
+msgid "Telefon"
+msgstr "电话"
+
+msgid "Link"
+msgstr "链接"
+
+msgid "Geheim (verschlüsselt)"
+msgstr "机密（加密）"
+
+msgid "Klasse"
+msgstr "班级"
+
+msgid "Foto"
+msgstr "照片"
+
+msgid "Ausweiskarte"
+msgstr "证件卡"
+
+msgid "Klassenverlauf"
+msgstr "班级历史"
+
+msgid "Schäden und Support"
+msgstr "损坏报告与支持"
+
+msgid "Dateien"
+msgstr "文件"
+
+msgid "Kommentare"
+msgstr "评论"
+
+msgid "Änderungsverlauf"
+msgstr "修改记录"
+
+msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
+msgstr "请输入有效日期，例如 24.12.2015。"
+
+#, python-format
+msgid "%(field)s ist ein Pflichtfeld."
+msgstr "%(field)s 为必填项。"
+
+#, python-format
+msgid "%(field)s: Bitte eine ganze Zahl eingeben."
+msgstr "%(field)s：请输入整数。"
+
+msgid "Bitte eine gültige E-Mail-Adresse eingeben."
+msgstr "请输入有效的电子邮箱地址。"
+
+msgid "Bitte einen gültigen Link eingeben."
+msgstr "请输入有效的链接。"
+
+msgid "Bitte eine gültige Telefonnummer eingeben."
+msgstr "请输入有效的电话号码。"
+
+#, python-format
+msgid "%(field)s: Unbekannte Auswahl."
+msgstr "%(field)s：未知选项。"
+
+msgid "Ja"
+msgstr "是"
+
+msgid "Nein"
+msgstr "否"
+
+#, python-format
+msgid "%(field)s kann nicht geändert werden."
+msgstr "%(field)s 无法更改。"
+
+msgid "Diese Klasse gibt es nicht."
+msgstr "该班级不存在。"
+
+msgid "Bericht"
+msgstr "报告"
+
+msgid "Ansicht"
+msgstr "视图"
+
+msgid "Unbekannter Bereich."
+msgstr "未知板块。"
+
+msgid "Bitte eine Bezeichnung eingeben."
+msgstr "请输入名称。"
+
+msgid "Unbekannter Feldtyp."
+msgstr "未知的字段类型。"
+
+msgid "Bitte mindestens eine Option angeben."
+msgstr "请至少填写一个选项。"
+
+msgid "Eine Maske braucht mindestens einen Reiter."
+msgstr "表单布局至少需要一个标签页。"
+
+msgid "Für die Vorschau fehlt ein Datensatz."
+msgstr "预览缺少记录。"
+
+#, python-format
+msgid "Version %(number)s ist wieder aktiv."
+msgstr "版本 %(number)s 已重新启用。"
+
+#, python-format
+msgid "%(field)s wurde angelegt. Ziehen Sie das Feld jetzt in eine Maske."
+msgstr "已创建 %(field)s。现在请将该字段拖入表单布局。"
+
+#, python-format
+msgid "%(field)s (Kopie)"
+msgstr "%(field)s（副本）"
+
+msgid "Dieses eingebaute Feld lässt sich nicht duplizieren."
+msgstr "此内置字段无法复制。"
+
+#, python-format
+msgid "%(field)s angelegt."
+msgstr "已创建 %(field)s。"
+
+#, python-format
+msgid "%(field)s wurde archiviert. Die Daten bleiben erhalten."
+msgstr "%(field)s 已归档，数据会保留。"
+
+msgid "Schuljahr"
+msgstr "学年"
+
+msgid "Beginn"
+msgstr "开始"
+
+msgid "Ende"
+msgstr "结束"
+
+msgid "Aktuell"
+msgstr "当前"
+
+msgid "Kindergartengruppe"
+msgstr "幼儿园班组"
+
+msgid "Austritt"
+msgstr "离校"
+
+msgid "Klassenstufe"
+msgstr "年级"
+
+msgid "Farbe"
+msgstr "颜色"
+
+msgid "Vorname"
+msgstr "名字"
+
+msgid "Nachname"
+msgstr "姓氏"
+
+msgid "Familienname zuerst"
+msgstr "姓氏在前"
+
+msgid "Geschlecht"
+msgstr "性别"
+
+msgid "Geburtsdatum"
+msgstr "出生日期"
+
+msgid "Geburtsort"
+msgstr "出生地"
+
+msgid "Eintritt"
+msgstr "入校"
+
+msgid "Archiviert"
+msgstr "已归档"
+
+msgid "Bild"
+msgstr "图片"
+
+msgid "Neue Codes/Accounts"
+msgstr "新代码/账号"
+
+msgid "Schultyp"
+msgstr "学校类型"
+
+msgid "Lese-/Rechtschreibschwäche"
+msgstr "读写障碍"
+
+msgid "Bus"
+msgstr "校车"
+
+msgid "Kategorie"
+msgstr "类别"
+
+msgid "Anrede"
+msgstr "称谓"
+
+msgid "Kürzel"
+msgstr "缩写"
+
+msgid "Mobiltelefon"
+msgstr "手机"
+
+msgid "Tel. privat"
+msgstr "家庭电话"
+
+msgid "Tel. Büro"
+msgstr "办公电话"
+
+msgid "Tel. Notruf"
+msgstr "紧急电话"
+
+msgid "E-Mail privat"
+msgstr "个人邮箱"
+
+msgid "Compound"
+msgstr "小区"
+
+msgid "Straße / Nr."
+msgstr "街道/门牌号"
+
+msgid "Bezirk"
+msgstr "区"
+
+msgid "Stadt / PLZ"
+msgstr "城市/邮编"
+
+msgid "Straßenbüro"
+msgstr "街道办事处"
+
+msgid "DaZ-Fachkraft"
+msgstr "DaZ 教师"
+
+msgid "Kindergarten-Fachkraft"
+msgstr "幼教老师"
+
+#, python-format
+msgid "%(name)s (Kopie)"
+msgstr "%(name)s（副本）"
+
+#, python-format
+msgid ""
+"Das Schuljahr %(name)s gibt es bereits. Der Wechsel wurde nicht noch einmal "
+"ausgeführt."
+msgstr "学年 %(name)s 已存在，未再次执行学年切换。"
+
+#, python-format
+msgid ""
+"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch "
+"einmal ausgeführt."
+msgstr "学年 %(name)s 尚未开始，未再次执行学年切换。"
+
+msgid "Diese Datei ist kein gültiges Bild."
+msgstr "此文件不是有效的图片。"
+
+msgid "Diese Karte konnte nicht gelesen werden."
+msgstr "无法读取此证件卡。"
+
+#, python-format
+msgid "Diese Karte gehört bereits zu %(name)s."
+msgstr "此证件卡已属于 %(name)s。"
+
+msgid "Bitte Vor- und Nachname eingeben."
+msgstr "请输入名字和姓氏。"
+
+#, python-format
+msgid "%(name)s wurde angelegt. Zugänge erzeugt: %(platforms)s."
+msgstr "已创建 %(name)s。已生成账号：%(platforms)s。"
+
+#, python-format
+msgid "Kopie von %(name)s angelegt. Bitte den Namen anpassen."
+msgstr "已创建 %(name)s 的副本，请修改名称。"
+
+#, python-format
+msgid "%(name)s ist wieder da."
+msgstr "%(name)s 已恢复。"
+
+#, python-format
+msgid ""
+"Schuljahr %(name)s gestartet: %(moved)s Schüler versetzt, %(left)s "
+"ausgetreten."
+msgstr "学年 %(name)s 已开始：%(moved)s 名学生升级，%(left)s 名离校。"
+
+msgid "Klassenliste"
+msgstr "班级名单"
+
+msgid "Zeugnisse"
+msgstr "成绩单"
+
+msgid "A4 Hochformat"
+msgstr "A4 纵向"
+
+msgid "A4 Querformat"
+msgstr "A4 横向"
+
+msgid "A5 Hochformat"
+msgstr "A5 纵向"
+
+msgid "A4, 2 Blätter zum Schneiden"
+msgstr "A4，裁切为 2 张"
+
+msgid "A4, 4 Blätter zum Schneiden"
+msgstr "A4，裁切为 4 张"
+
+msgid "Etiketten 70 × 37 mm (3 × 8)"
+msgstr "标签 70 × 37 mm（3 × 8）"
+
+msgid "Etiketten 63,5 × 38,1 mm (3 × 7)"
+msgstr "标签 63.5 × 38.1 mm（3 × 7）"
+
+msgid "Ausweiskarte 85,6 × 54 mm"
+msgstr "证件卡 85.6 × 54 mm"
+
+msgid "Keine Datensätze ausgewählt."
+msgstr "未选择任何记录。"
+
+msgid "Neue Vorlage"
+msgstr "新模板"
+
+#, python-format
+msgid "Vorlage fehlerhaft: %(error)s"
+msgstr "模板有误：%(error)s"
+
+#, python-format
+msgid "Version %(number)s wiederhergestellt."
+msgstr "已恢复版本 %(number)s。"
+
+msgid "Dieses Gerät wurde getrennt."
+msgstr "此设备已断开连接。"
+
+#, python-format
+msgid "Der Server antwortet mit %(code)s."
+msgstr "服务器返回 %(code)s。"
+
+#, python-format
+msgid "Der Server ist nicht erreichbar (%(reason)s)."
+msgstr "无法连接服务器（%(reason)s）。"
+
+#, python-format
+msgid "Das Modul vom Server ließ sich nicht prüfen (%(reason)s)."
+msgstr "无法验证来自服务器的模块（%(reason)s）。"
+
+#, python-format
+msgid ""
+"Das Modul %(names)s wurde vom Server geladen. Bitte noch einmal verbinden, "
+"mit einem neuen Code aus der Authenticator-App."
+msgstr ""
+"已从服务器加载模块 %(names)s。请使用身份验证器应用中的新验证码再次连接。"
+
+#, python-format
+msgid ""
+"Der Server nutzt das Modul %(names)s, das in dieser DataFluss-Version fehlt."
+msgstr "服务器使用模块 %(names)s，而当前 DataFluss 版本没有该模块。"
+
+#, python-format
+msgid ""
+"Der Server hat DataFluss %(server)s, dieser Computer %(here)s. Bitte beide "
+"auf dieselbe Version bringen."
+msgstr ""
+"服务器为 DataFluss %(server)s，本电脑为 %(here)s。请将两者更新到同一版本。"
+
+msgid "Daten werden übertragen"
+msgstr "正在传输数据"
+
+msgid "Bilder und Dokumente werden geladen"
+msgstr "正在加载图片和文档"
+
+#, python-format
+msgid ""
+"Dieser Computer hat DataFluss %(theirs)s, der Server %(ours)s. Bitte beide "
+"auf dieselbe Version bringen."
+msgstr ""
+"本电脑为 DataFluss %(theirs)s，服务器为 %(ours)s。请将两者更新到同一版本。"
+
+msgid ""
+"Computer und Server haben verschiedene Versionen. Bitte beide aktualisieren."
+msgstr "电脑和服务器的版本不同。请更新两者。"
+
+msgid ""
+"Der Server wurde aus einer Sicherung wiederhergestellt. Diese Kopie gleicht "
+"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen "
+"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server "
+"verbinden."
+msgstr ""
+"服务器已从备份恢复，因此此副本不再同步：请记下尚未上传的修改，从本电脑删除该"
+"数据库，然后重新连接服务器。"
+
+msgid "Kein Gerät angemeldet."
+msgstr "未注册设备。"
+
+msgid "Dieses Gerät ist unbekannt."
+msgstr "无法识别此设备。"
+
+msgid "Zu viele Versuche. Bitte in einer Viertelstunde noch einmal."
+msgstr "尝试次数过多，请 15 分钟后再试。"
+
+msgid "Benutzername oder Passwort stimmen nicht."
+msgstr "用户名或密码不正确。"
+
+msgid ""
+"Bitte zuerst in der Webversion anmelden und ein eigenes Passwort festlegen."
+msgstr "请先登录网页版并设置您自己的密码。"
+
+msgid ""
+"Bitte zuerst in der Webversion anmelden und die Zwei-Faktor-Anmeldung "
+"einrichten."
+msgstr "请先登录网页版并设置双重验证登录。"
+
+msgid "Der Code aus der Authenticator-App stimmt nicht."
+msgstr "身份验证器应用中的验证码不正确。"
+
+msgid "Ungültige Anfrage."
+msgstr "无效请求。"
+
+msgid "Dieses Gerät ist unbekannt oder getrennt."
+msgstr "此设备未知或已断开。"
+
+msgid "Dieses Modul gibt der Server nicht heraus."
+msgstr "服务器不提供此模块。"
+
+msgid "Ungültiger Name."
+msgstr "名称无效。"
+
+msgid "Nicht gefunden."
+msgstr "未找到。"
+
+msgid "[verschlüsselt]"
+msgstr "[已加密]"
+
+msgid "Person"
+msgstr "人员"
+
+msgid "Schaden"
+msgstr "损坏报告"
+
+msgid "DaZ-Bericht"
+msgstr "DaZ 报告"
+
+msgid "Kind"
+msgstr "幼儿"
+
+msgid "Kindergarten-Bericht"
+msgstr "幼儿园报告"
+
+#, python-format
+msgid "%(kind)s (gelöscht)"
+msgstr "%(kind)s（已删除）"
+
+msgid "(leer)"
+msgstr "（空）"
+
+msgid "Server"
+msgstr "服务器"
+
+#, python-format
+msgid ""
+"%(name)s ist getrennt. Beim nächsten Kontakt löscht der Mac seine Kopie."
+msgstr "%(name)s 已断开连接。下次连接时，该 Mac 会删除其副本。"
+
+msgid ""
+"Der Datensatz ist gelöscht, die andere Fassung lässt sich nicht mehr "
+"übernehmen."
+msgstr "该记录已删除，无法再采用另一版本。"
+
+msgid "Kein Zugriff"
+msgstr "无权访问"
+
+msgid ""
+"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich "
+"an die IT."
+msgstr "您的角色无权访问此页面。如有需要，请联系 IT。"
+
+msgid "Nicht gefunden"
+msgstr "未找到"
+
+msgid "Diese Seite oder dieser Datensatz existiert nicht mehr."
+msgstr "此页面或记录已不存在。"
+
+msgid "Fehler"
+msgstr "错误"
+
+msgid "Schulverwaltung"
+msgstr "学校管理"
+
+msgid "Hier ist etwas schiefgegangen"
+msgstr "出错了"
+
+msgid ""
+"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert "
+"haben, prüfen Sie bitte, ob es angekommen ist."
+msgstr "已为 IT 记录此错误。如果您刚才保存了内容，请检查是否已保存成功。"
+
+msgid "Zur Startseite"
+msgstr "返回首页"
+
+msgid ""
+"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle "
+"Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
+"einem anderen Ort auf. Sie lässt sich in jeder Installation der "
+"Schulverwaltung einspielen."
+msgstr ""
+"备份包含整个数据库（含所有账号）以及所有图片和文档。请下载该文件并存放在其他"
+"地方。它可以恢复到任何一个学校管理系统中。"
+
+msgid "Neue Sicherung erstellen"
+msgstr "新建备份"
+
+msgid "Passwort für diese Sicherung"
+msgstr "此备份的密码"
+
+msgid "Passwort wiederholen"
+msgstr "再次输入密码"
+
+#, python-format
+msgid ""
+"Mindestens %(n)s Zeichen. Das Passwort verschlüsselt die Datei und wird "
+"nirgends gespeichert. <strong>Ohne dieses Passwort lässt sich die Sicherung "
+"nicht mehr öffnen.</strong> Bewahren Sie es getrennt von der Datei auf."
+msgstr ""
+"至少 %(n)s 个字符。该密码用于加密文件，不会保存在任何地方。<strong>没有此密码"
+"将无法再打开备份。</strong>请将密码与文件分开保管。"
+
+msgid "Sicherung erstellen"
+msgstr "创建备份"
+
+msgid "Sicherung hochladen"
+msgstr "上传备份"
+
+msgid ""
+"Eine Sicherung von dieser oder einer anderen Installation. Das Hochladen "
+"ändert noch nichts, eingespielt wird erst in der Liste unten."
+msgstr ""
+"来自本系统或其他系统的备份。上传本身不会做任何更改，需在下方列表中执行恢复。"
+
+msgid "Datei auswählen"
+msgstr "选择文件"
+
+msgid "Sicherungen auf diesem Server"
+msgstr "此服务器上的备份"
+
+msgid "Datei"
+msgstr "文件"
+
+msgid "Stand"
+msgstr "数据时间"
+
+msgid "Größe"
+msgstr "大小"
+
+msgid "Inhalt"
+msgstr "内容"
+
+msgid "Vor dem Einspielen"
+msgstr "恢复前"
+
+msgid "Hochgeladen"
+msgstr "已上传"
+
+#, python-format
+msgid "%(school)s: %(people)s Personen, %(files)s Dateien"
+msgstr "%(school)s：%(people)s 人，%(files)s 个文件"
+
+msgid "Noch nicht geprüft"
+msgstr "尚未检查"
+
+msgid "Herunterladen"
+msgstr "下载"
+
+msgid "Einspielen"
+msgstr "恢复"
+
+msgid "Löschen"
+msgstr "删除"
+
+msgid "Diese Sicherung vom Server löschen?"
+msgstr "要从服务器删除此备份吗？"
+
+msgid "Noch keine Sicherungen."
+msgstr "暂无备份。"
+
+msgid "Sicherung einspielen"
+msgstr "恢复备份"
+
+msgid "Passwort dieser Sicherung"
+msgstr "此备份的密码"
+
+msgid "Abbrechen"
+msgstr "取消"
+
+msgid "Prüfen"
+msgstr "检查"
+
+msgid "Alle Daten dieser Installation werden ersetzt."
+msgstr "此系统中的所有数据都将被替换。"
+
+msgid ""
+"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der "
+"Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
+"automatisch als Sicherung mit demselben Passwort abgelegt."
+msgstr ""
+"这也包括用户账户：之后将使用备份中的登录信息，所有人都会被退出登录。在此之"
+"前，当前数据会自动保存为一个使用相同密码的备份。"
+
+#, python-format
+msgid "Zur Bestätigung %(word)s eingeben"
+msgstr "输入 %(word)s 以确认"
+
+msgid "Jetzt einspielen"
+msgstr "立即恢复"
+
+msgid "Zum Inhalt springen"
+msgstr "跳至内容"
+
+msgid "Datenbank wechseln (⇧⌘O für alle)"
+msgstr "切换数据库（⇧⌘O 查看全部）"
+
+msgid "Geöffnet"
+msgstr "已打开"
+
+msgid "Alle Datenbanken …"
+msgstr "所有数据库 …"
+
+msgid "Synchronisation …"
+msgstr "同步 …"
+
+msgid "Jetzt synchronisieren"
+msgstr "立即同步"
+
+msgid "Rundgang"
+msgstr "导览"
+
+msgid "Rundgang durch diese Seite starten"
+msgstr "开始本页导览"
+
+msgid "Hell / Dunkel"
+msgstr "浅色/深色"
+
+msgid "Farbschema wechseln"
+msgstr "切换配色方案"
+
+msgid "Passwort ändern"
+msgstr "修改密码"
+
+msgid "Abmelden"
+msgstr "退出登录"
+
+msgid "Menü"
+msgstr "菜单"
+
+msgid "Suchen"
+msgstr "搜索"
+
+msgid "Name, E-Mail, Gerätenummer, Klasse …"
+msgstr "姓名、邮箱、设备编号、班级 …"
+
+msgid "In neuem Tab anmelden"
+msgstr "在新标签页中登录"
+
+msgid "Hinweis schließen"
+msgstr "关闭提示"
+
+msgid "Ja, fortfahren"
+msgstr "是，继续"
+
+msgid "Vergrößertes Foto"
+msgstr "放大的照片"
+
+msgid "Sprache"
+msgstr "语言"
+
+msgid "Spracheinstellungen …"
+msgstr "语言设置 …"
+
+msgid "Für welche Sprachen umbenennen?"
+msgstr "要为哪些语言重命名？"
+
+msgid "Die anderen Sprachen behalten ihren bisherigen Namen."
+msgstr "其他语言保留原有名称。"
+
+msgid "Für alle Sprachen"
+msgstr "所有语言"
+
+msgid ""
+"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben "
+"wurden, werden ersetzt."
+msgstr "新名称将在所有地方生效。为单独语言设置的名称将被替换。"
+
+msgid "Entscheidung merken und nicht mehr fragen"
+msgstr "记住我的选择，不再询问"
+
+msgid "Lässt sich unter Sprache → Spracheinstellungen wieder ändern."
+msgstr "可在“语言 → 语言设置”中重新更改。"
+
+msgid "Umbenennen"
+msgstr "重命名"
+
+#, python-format
+msgid "Seite %(number)s von %(pages)s · %(n)s Eintrag"
+msgid_plural "Seite %(number)s von %(pages)s · %(n)s Einträge"
+msgstr[0] "第 %(number)s 页，共 %(pages)s 页 · %(n)s 个条目"
+
+msgid "Zurück"
+msgstr "返回"
+
+msgid "Weiter"
+msgstr "下一页"
+
+msgid "blättern"
+msgstr "浏览"
+
+msgid "Ganze Seite öffnen"
+msgstr "打开完整页面"
+
+msgid "Schließen (Esc)"
+msgstr "关闭（Esc）"
+
+msgid "Schließen"
+msgstr "关闭"
+
+msgid "Breite der Bereiche ändern"
+msgstr "调整区域宽度"
+
+msgid "Ziehen ändert die Breite, Doppelklick stellt sie zurück"
+msgstr "拖动可调整宽度，双击可恢复"
+
+msgid "Details"
+msgstr "详细信息"
+
+#, python-format
+msgid "Keine Treffer für „%(query)s“."
+msgstr "未找到“%(query)s”的结果。"
+
+msgid "Mindestens zwei Zeichen eingeben."
+msgstr "请至少输入两个字符。"
+
+msgid "Im Personal gefunden"
+msgstr "在教职工中找到"
+
+msgid "Hinzufügen"
+msgstr "添加"
+
+msgid ""
+"Niemand im Personal mit diesem Namen. Anlegen macht einen Eintrag ohne "
+"Personal."
+msgstr "教职工中没有此姓名的人员。创建将生成一个不关联教职工的条目。"
+
+msgid "Protokoll"
+msgstr "操作日志"
+
+msgid "Aktion filtern"
+msgstr "按操作筛选"
+
+msgid "Alle Aktionen"
+msgstr "所有操作"
+
+msgid "Zeit"
+msgstr "时间"
+
+msgid "Benutzer"
+msgstr "用户"
+
+msgid "Aktion"
+msgstr "操作"
+
+msgid "Beschreibung"
+msgstr "描述"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Noch keine Einträge."
+msgstr "暂无条目。"
+
+#, python-format
+msgid "Seite %(number)s von %(pages)s"
+msgstr "第 %(number)s 页，共 %(pages)s 页"
+
+#, python-format
+msgid "Guten Tag, %(name)s"
+msgstr "您好，%(name)s"
+
+msgid "Neuer Schüler"
+msgstr "新学生"
+
+msgid "Neuer Mitarbeiter"
+msgstr "新教职工"
+
+msgid "Eine neue Version ist verfügbar."
+msgstr "有新版本可用。"
+
+msgid "Ansehen"
+msgstr "查看"
+
+#, python-format
+msgid "%(done)s von %(total)s erledigt"
+msgstr "已完成 %(done)s / %(total)s"
+
+msgid "Ausblenden"
+msgstr "隐藏"
+
+msgid "Aktive Schüler"
+msgstr "在读学生"
+
+msgid "Geräte ausgegeben"
+msgstr "已发放设备"
+
+msgid "Offene Schäden"
+msgstr "未处理的损坏报告"
+
+msgid "Neue Schüler"
+msgstr "新学生"
+
+msgid "Neue Mitarbeiter"
+msgstr "新教职工"
+
+msgid "Zu erledigen"
+msgstr "待办"
+
+msgid "Sprache der Oberfläche"
+msgstr "界面语言"
+
+msgid "Felder, Auswahlwerte und Masken umbenennen"
+msgstr "重命名字段、选项和表单布局"
+
+msgid ""
+"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für "
+"eine Sprache umbenennt."
+msgstr "名称会保持输入时所用的语言，直到有人为某种语言重命名。"
+
+msgid "Jedes Mal fragen"
+msgstr "每次询问"
+
+msgid "Nur für die Sprache umbenennen, die gerade eingestellt ist"
+msgstr "仅为当前语言重命名"
+
+msgid "Immer für alle Sprachen umbenennen"
+msgstr "始终为所有语言重命名"
+
+msgid "Speichern"
+msgstr "保存"
+
+msgid "Anmelden"
+msgstr "登录"
+
+msgid ""
+"Die Sicherung wurde eingespielt. Bitte melden Sie sich mit einem Konto aus "
+"der Sicherung an."
+msgstr "备份已恢复。请使用备份中的账户登录。"
+
+msgid "Mit Microsoft 365 anmelden"
+msgstr "使用 Microsoft 365 登录"
+
+msgid "oder"
+msgstr "或"
+
+msgid "Benutzername"
+msgstr "用户名"
+
+msgid "Passwort"
+msgstr "密码"
+
+msgid ""
+"Bitte vergeben Sie jetzt ein eigenes Passwort. Das bisherige kennt auch die "
+"IT."
+msgstr "请立即设置您自己的密码。IT 也知道当前密码。"
+
+msgid "Mindestens 12 Zeichen."
+msgstr "至少 12 个字符。"
+
+msgid "Bisheriges Passwort"
+msgstr "当前密码"
+
+msgid "Neues Passwort"
+msgstr "新密码"
+
+msgid "Neues Passwort wiederholen"
+msgstr "再次输入新密码"
+
+msgid "Schule"
+msgstr "学校"
+
+msgid "Name der Schule"
+msgstr "学校名称"
+
+msgid "Kurzname"
+msgstr "简称"
+
+msgid "E-Mail-Domain"
+msgstr "邮箱域名"
+
+msgid "Der Import warnt bei Adressen außerhalb dieser Domain."
+msgstr "导入时会对此域名以外的地址发出警告。"
+
+msgid "Fußzeile für vertrauliche Blätter"
+msgstr "机密文件页脚"
+
+msgid "Logo"
+msgstr "标志"
+
+msgid "Sprachen"
+msgstr "语言"
+
+msgid "Sprachen, die in dieser Datenbank zur Auswahl stehen"
+msgstr "此数据库中可选的语言"
+
+msgid ""
+"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, "
+"oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene "
+"Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
+msgstr ""
+"选择了不再允许的语言的用户将看到德语；如果德语不被允许，则看到第一个允许的语"
+"言。用户自己的选择会被保留，一旦该语言重新被允许即再次生效。"
+
+msgid ""
+"Ist nur eine Sprache erlaubt, verschwindet die Sprachauswahl, und beim "
+"Umbenennen wird nicht mehr nachgefragt: Die übrigen Sprachen behalten ihre "
+"Namen."
+msgstr ""
+"如果只允许一种语言，语言菜单将不再显示，重命名时也不再询问：其他语言保留各自"
+"的名称。"
+
+msgid "Verbundene Macs übernehmen diese Auswahl beim nächsten Abgleich."
+msgstr "已连接的 Mac 会在下次同步时采用此设置。"
+
+msgid "Masken"
+msgstr "表单布局"
+
+msgid "Eingabemasken per Drag & Drop gestalten"
+msgstr "通过拖放设计输入表单布局"
+
+msgid "Felder"
+msgstr "字段"
+
+msgid "Eigene Felder anlegen und verwalten"
+msgstr "创建和管理自定义字段"
+
+msgid "Plattformen"
+msgstr "平台"
+
+msgid "Anbieter für Zugangsdaten verwalten"
+msgstr "管理账号提供方"
+
+msgid "Benutzer und Rollen"
+msgstr "用户和角色"
+
+msgid "Konten, Rollen und Zwei-Faktor"
+msgstr "账户、角色和双重验证"
+
+msgid "Synchronisation"
+msgstr "同步"
+
+msgid "Verbundene Macs und Abgleich"
+msgstr "已连接的 Mac 与同步"
+
+msgid "Name, Logo und Fußzeile für Blätter"
+msgstr "名称、标志和文件页脚"
+
+msgid "Welche Sprachen die Oberfläche anbietet"
+msgstr "界面提供哪些语言"
+
+msgid "Neu"
+msgstr "新建"
+
+msgid "Neueste Version über Coolify installieren"
+msgstr "通过 Coolify 安装最新版本"
+
+msgid "Alle Daten sichern und einspielen"
+msgstr "备份和恢复所有数据"
+
+msgid "Anmeldungen, angezeigte Passwörter, Ausdrucke"
+msgstr "登录、显示过的密码、打印记录"
+
+msgid "Zwei-Faktor einrichten"
+msgstr "设置双重验证"
+
+msgid "Zwei-Faktor-Anmeldung einrichten"
+msgstr "设置双重验证登录"
+
+msgid ""
+"Scannen Sie den Code mit einer Authenticator-App und geben Sie danach den "
+"angezeigten Code ein."
+msgstr "请用身份验证器应用扫描二维码，然后输入显示的验证码。"
+
+msgid "QR-Code für die Authenticator-App"
+msgstr "身份验证器应用的 QR 码"
+
+msgid "Code manuell eingeben"
+msgstr "手动输入代码"
+
+msgid "Code"
+msgstr "验证码"
+
+msgid "Einrichtung abschließen"
+msgstr "完成设置"
+
+msgid "Zwei-Faktor-Code"
+msgstr "双重验证码"
+
+msgid "Bitte den 6-stelligen Code aus Ihrer Authenticator-App eingeben."
+msgstr "请输入身份验证器应用中的 6 位验证码。"
+
+msgid "Bestätigen"
+msgstr "确认"
+
+msgid ""
+"Installiert die neueste Version von GitHub über Coolify. Vorher wird die "
+"Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit "
+"ist, alle können also normal weiterarbeiten."
+msgstr ""
+"通过 Coolify 从 GitHub 安装最新版本。安装前会先备份数据库。在新版本就绪之前，"
+"当前版本会继续运行，因此所有人都可以照常工作。"
+
+msgid ""
+"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
+"in <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
+msgstr ""
+"尚未设置与 Coolify 的连接。说明见 <span class=\"mono\">docs/INSTALL-"
+"COOLIFY.md</span>。"
+
+msgid "Installiert"
+msgstr "已安装"
+
+msgid "Auf GitHub"
+msgstr "GitHub 上"
+
+msgid "Zuletzt geprüft"
+msgstr "上次检查"
+
+msgid "Datenbank zurücksetzen"
+msgstr "重置数据库"
+
+msgid "Protokoll in Coolify öffnen"
+msgstr "在 Coolify 中打开日志"
+
+msgid "Jetzt aktualisieren"
+msgstr "立即更新"
+
+msgid "Nach Updates suchen"
+msgstr "检查更新"
+
+msgid ""
+"Die Anwendung bleibt während der Aktualisierung normalerweise erreichbar. "
+"Sehr selten kann es beim Umschalten eine kurze Unterbrechung geben."
+msgstr "更新期间应用通常仍可正常使用。极少数情况下，切换时可能会短暂中断。"
+
+msgid "Neu in dieser Version"
+msgstr "此版本新增内容"
+
+#, python-format
+msgid ""
+"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt "
+"und muss bei der nächsten Anmeldung geändert werden."
+msgstr "<strong>%(name)s</strong> 的新密码。仅在此时显示，下次登录时必须修改。"
+
+msgid "Kopieren"
+msgstr "复制"
+
+msgid "Rolle"
+msgstr "角色"
+
+msgid "2FA"
+msgstr "双重验证"
+
+#, python-format
+msgid ""
+"Neues Passwort für %(name)s erzeugen? Das bisherige gilt dann nicht mehr."
+msgstr "要为 %(name)s 生成新密码吗？原密码将失效。"
+
+msgid "Aus"
+msgstr "关闭"
+
+msgid "Aktiv"
+msgstr "当前"
+
+msgid "Gesperrt"
+msgstr "已锁定"
+
+msgid "2FA zurücksetzen"
+msgstr "重置双重验证"
+
+msgid "Sperren"
+msgstr "锁定"
+
+msgid "Entsperren"
+msgstr "解锁"
+
+msgid "Zwei-Faktor-Anmeldung"
+msgstr "双重验证登录"
+
+msgid "Eingeschaltet"
+msgstr "已开启"
+
+msgid "Ausgeschaltet"
+msgstr "已关闭"
+
+msgid ""
+"Alle Benutzer brauchen bei der Anmeldung einen Code aus ihrer Authenticator-"
+"App."
+msgstr "所有用户登录时都需要输入身份验证器应用中的验证码。"
+
+msgid ""
+"Zwei-Faktor-Anmeldung für alle Benutzer ausschalten? Danach genügt das "
+"Passwort."
+msgstr "要为所有用户关闭双重验证登录吗？之后仅需密码即可登录。"
+
+msgid "Ausschalten"
+msgstr "关闭"
+
+msgid ""
+"Zur Anmeldung genügt das Passwort. Nur für Demos ohne echte Daten gedacht. "
+"Bereits eingerichtete Apps gelten nach dem Einschalten weiter."
+msgstr ""
+"登录时只需密码。仅适用于不含真实数据的演示。重新开启后，已设置的验证器应用仍"
+"然有效。"
+
+msgid "Einschalten"
+msgstr "开启"
+
+msgid "Neuer Benutzer"
+msgstr "新用户"
+
+msgid "E-Mail (für Microsoft-Anmeldung)"
+msgstr "邮箱（用于 Microsoft 登录）"
+
+msgid "Passwort (mind. 12 Zeichen)"
+msgstr "密码（至少 12 个字符）"
+
+msgid "Leer lassen, wenn nur Microsoft 365 genutzt wird."
+msgstr "如果只使用 Microsoft 365，请留空。"
+
+msgid "Anlegen"
+msgstr "创建"
+
+msgid "Rollen"
+msgstr "角色"
+
+msgid "Das wurde nicht gespeichert"
+msgstr "未保存"
+
+msgid ""
+"Die Seite war zu lange offen oder Sie haben sich inzwischen neu angemeldet. "
+"Gehen Sie zurück, laden Sie die Seite neu und versuchen Sie es noch einmal."
+msgstr "页面打开时间过长，或您在此期间重新登录过。请返回、刷新页面后再试一次。"
+
+msgid "Product Key"
+msgstr "产品密钥"
+
+msgid "Anzeigen"
+msgstr "显示"
+
+msgid "Neuen Key eingeben"
+msgstr "输入新密钥"
+
+msgid "Neuer Product Key"
+msgstr "新产品密钥"
+
+msgid "Aktionen"
+msgstr "操作"
+
+#, python-format
+msgid "Ausgegeben an <strong>%(holder)s</strong> seit %(since)s."
+msgstr "自 %(since)s 起发放给 <strong>%(holder)s</strong>。"
+
+#, python-format
+msgid "Gerät von %(holder)s zurücknehmen?"
+msgstr "从 %(holder)s 处收回设备？"
+
+msgid "Rücknahme"
+msgstr "收回"
+
+msgid "An Person (Name oder E-Mail)"
+msgstr "发给个人（姓名或电子邮箱）"
+
+msgid "oder Raum/Gruppe"
+msgstr "或房间/小组"
+
+msgid "Ausgeben"
+msgstr "发放"
+
+msgid "Als repariert markieren"
+msgstr "标记为已修复"
+
+msgid "Als beschädigt markieren"
+msgstr "标记为已损坏"
+
+msgid "Gerät als verkauft markieren?"
+msgstr "将设备标记为已售出？"
+
+msgid "Gerät ausmustern?"
+msgstr "报废此设备？"
+
+msgid "Ausmustern"
+msgstr "报废"
+
+msgid "Verlauf"
+msgstr "历史记录"
+
+msgid "heute"
+msgstr "今天"
+
+msgid "Noch nie ausgegeben."
+msgstr "从未发放过。"
+
+msgid "Leer lassen: aktuelles Gerät der Person"
+msgstr "留空：此人当前的设备"
+
+msgid "Bilder (bis zu 3)"
+msgstr "图片（最多 3 张）"
+
+msgid "Zurück zur Liste"
+msgstr "返回列表"
+
+msgid "Neues Gerät"
+msgstr "新建设备"
+
+msgid "Leer lassen: nächste Nummer des Typs"
+msgstr "留空：该类型的下一个编号"
+
+msgid "Rückgabeaktionen"
+msgstr "归还活动"
+
+msgid "Räume und Gruppen"
+msgstr "房间和小组"
+
+msgid "Gerätetypen"
+msgstr "设备类型"
+
+msgid "Nummer, Seriennummer, Person"
+msgstr "编号、序列号、人员"
+
+msgid "Geräte filtern"
+msgstr "筛选设备"
+
+msgid "Alle Status"
+msgstr "所有状态"
+
+#, python-format
+msgid "Stichtag %(date)s"
+msgstr "截止日期 %(date)s"
+
+msgid "Bei"
+msgstr "持有人"
+
+msgctxt "Gerät zurückgegeben"
+msgid "Zurück"
+msgstr "已归还"
+
+msgid "Zurücksetzen"
+msgstr "重置"
+
+msgid "Gerät öffnen"
+msgstr "打开设备"
+
+msgid "In neuem Fenster öffnen"
+msgstr "在新窗口中打开"
+
+msgid "Keine Geräte in dieser Aktion."
+msgstr "此活动中没有设备。"
+
+msgid ""
+"Sammelt ausgegebene Geräte zu einem Stichtag, zum Beispiel am "
+"Schuljahresende."
+msgstr "在截止日期前收回已发放的设备，例如在学年末。"
+
+#, python-format
+msgid "%(returned)s von %(total)s"
+msgstr "%(returned)s / %(total)s"
+
+msgid "Öffnen"
+msgstr "打开"
+
+msgid "Noch keine Aktion."
+msgstr "暂无活动。"
+
+msgid "Neue Aktion"
+msgstr "新建活动"
+
+msgid "Rückgabe Klasse 12"
+msgstr "12 年级归还"
+
+msgid "Klassenstufe (leer = alle)"
+msgstr "年级（留空 = 全部）"
+
+msgid "Schaden erfassen"
+msgstr "登记损坏"
+
+msgid "Alle"
+msgstr "全部"
+
+msgid "Austausch"
+msgstr "更换"
+
+msgid "Person öffnen"
+msgstr "打开人员"
+
+msgid "Keine Schäden."
+msgstr "没有损坏报告。"
+
+msgid "Typ"
+msgstr "类型"
+
+msgid "Neuer Typ"
+msgstr "新建类型"
+
+msgid "Trenner"
+msgstr "分隔线"
+
+msgid ""
+"Geräte, die keiner einzelnen Person gehören, zum Beispiel in der Bibliothek."
+msgstr "不属于某个人的设备，例如图书馆里的设备。"
+
+#, python-format
+msgid "%(title)s wird geladen …"
+msgstr "正在加载 %(title)s …"
+
+msgid "Vorschau"
+msgstr "预览"
+
+#, python-format
+msgid "Beispiel: %(name)s. Hier wird nichts gespeichert."
+msgstr "示例：%(name)s。此处不会保存任何内容。"
+
+msgid "Neuer Wert"
+msgstr "新值"
+
+msgid "Maske umbenennen"
+msgstr "重命名表单布局"
+
+msgid "Rückgängig"
+msgstr "撤销"
+
+msgid "Entwurf speichern"
+msgstr "保存草稿"
+
+msgid "Veröffentlichen"
+msgstr "发布"
+
+msgid "Feld suchen"
+msgstr "搜索字段"
+
+msgid "Bausteine"
+msgstr "模块"
+
+msgid "Reiter"
+msgstr "标签页"
+
+msgid "Abschnitt hinzufügen"
+msgstr "添加分区"
+
+msgid "Eigenschaften"
+msgstr "属性"
+
+msgid "Element auswählen, um es anzupassen."
+msgstr "选择一个元素进行调整。"
+
+msgid "Versionen"
+msgstr "版本"
+
+#, python-format
+msgid "Version %(number)s"
+msgstr "版本 %(number)s"
+
+msgid "Entwurf"
+msgstr "草稿"
+
+#, python-format
+msgid "Version %(number)s wieder aktivieren?"
+msgstr "重新启用版本 %(number)s？"
+
+msgid "Aktivieren"
+msgstr "启用"
+
+msgid "Entwurf verwerfen?"
+msgstr "放弃草稿？"
+
+msgid "Entwurf verwerfen"
+msgstr "放弃草稿"
+
+msgid "Maske löschen?"
+msgstr "删除表单布局？"
+
+msgid "Maske löschen"
+msgstr "删除表单布局"
+
+msgid "Neues Feld"
+msgstr "新建字段"
+
+msgid "Bezeichnung"
+msgstr "名称"
+
+msgid "Optionen, eine pro Zeile"
+msgstr "选项，每行一个"
+
+msgid "Pflichtfeld"
+msgstr "必填"
+
+msgid "In der Liste anzeigen"
+msgstr "在列表中显示"
+
+msgid "Eingebautes Feld"
+msgstr "内置字段"
+
+#, python-format
+msgid "Zuerst eingegeben als „%(base)s“."
+msgstr "最初输入为“%(base)s”。"
+
+msgid "Hilfetext"
+msgstr "帮助文字"
+
+msgid "Optionen"
+msgstr "选项"
+
+msgid "Option"
+msgstr "选项"
+
+msgid "Option entfernen"
+msgstr "移除选项"
+
+msgid "Neue Option"
+msgstr "新选项"
+
+msgid "Option hinzufügen"
+msgstr "添加选项"
+
+msgid ""
+"Umbenennen ändert keine Einträge: Datensätze mit dieser Option zeigen den "
+"neuen Namen."
+msgstr "重命名不会更改任何条目：使用此选项的记录将显示新名称。"
+
+msgid "In der Liste"
+msgstr "在列表中"
+
+msgid "Nur lesen"
+msgstr "只读"
+
+msgid "Verwendung"
+msgstr "使用位置"
+
+msgid "Wird noch nirgends verwendet."
+msgstr "尚未在任何地方使用。"
+
+msgid "Wiederherstellen"
+msgstr "恢复"
+
+msgid "Feld archivieren? Die Daten bleiben erhalten."
+msgstr "归档此字段？数据会保留。"
+
+msgid "Archivieren"
+msgstr "归档"
+
+msgid "Archivieren löscht keine Daten."
+msgstr "归档不会删除任何数据。"
+
+msgid "Herkunft"
+msgstr "来源"
+
+msgid "Liste"
+msgstr "列表"
+
+msgid "Bearbeiten"
+msgstr "编辑"
+
+msgid "Duplizieren"
+msgstr "复制"
+
+#, python-format
+msgid ""
+"%(field)s archivieren? Das Feld wird ausgeblendet, die eingetragenen Werte "
+"bleiben erhalten."
+msgstr "归档 %(field)s？该字段将被隐藏，已录入的值会保留。"
+
+msgid "Archivieren …"
+msgstr "归档 …"
+
+msgid "Eingebaut"
+msgstr "内置"
+
+msgid "Eigenes Feld"
+msgstr "自定义字段"
+
+msgid ""
+"Eine Maske legt fest, wie ein Datensatz aussieht. Sie regelt keine "
+"Zugriffsrechte."
+msgstr "表单布局决定记录的外观，不控制访问权限。"
+
+msgid "Bereich"
+msgstr "区域"
+
+msgid "Gilt für"
+msgstr "适用于"
+
+msgid "Standard"
+msgstr "默认"
+
+msgid "alle"
+msgstr "全部"
+
+msgid "Gestalten"
+msgstr "设计"
+
+msgid "Neue Maske"
+msgstr "新建表单布局"
+
+msgid "z. B. Gastschüler"
+msgstr "例如：访问学生"
+
+msgid "Gilt wenn Feld"
+msgstr "适用条件：字段"
+
+msgid "immer"
+msgstr "始终"
+
+msgid "den Wert hat"
+msgstr "的值为"
+
+msgid "Mögliche Doppelung:"
+msgstr "可能重复："
+
+#, python-format
+msgid "%(n)s Kind"
+msgid_plural "%(n)s Kinder"
+msgstr[0] "%(n)s 名幼儿"
+
+msgid "Kontakt"
+msgstr "联系方式"
+
+msgid "Kinder"
+msgstr "幼儿"
+
+msgid "Papierkorb"
+msgstr "回收站"
+
+msgid "Zu den Schülern"
+msgstr "前往学生"
+
+msgid "Zum Personal"
+msgstr "前往教职工"
+
+#, python-format
+msgid ""
+"Gelöschte Personen bleiben %(days)s Tag hier. Danach sind sie endgültig "
+"gelöscht, mit ihren Zugängen, Karten, Kommentaren und Dateien."
+msgid_plural ""
+"Gelöschte Personen bleiben %(days)s Tage hier. Danach sind sie endgültig "
+"gelöscht, mit ihren Zugängen, Karten, Kommentaren und Dateien."
+msgstr[0] ""
+"已删除的人员会在此保留 %(days)s 天，之后将连同其账号、证件卡、评论和文件一起"
+"被永久删除。"
+
+msgid "Gelöscht am"
+msgstr "删除时间"
+
+msgid "Der Papierkorb ist leer."
+msgstr "回收站是空的。"
+
+msgid "Datei hinzufügen"
+msgstr "添加文件"
+
+msgid "Datei löschen?"
+msgstr "删除文件？"
+
+msgid "Datei löschen"
+msgstr "删除文件"
+
+msgid "Keine Dateien."
+msgstr "没有文件。"
+
+msgid "Keine aktive Karte."
+msgstr "没有有效的证件卡。"
+
+msgid "Karte zuweisen"
+msgstr "分配证件卡"
+
+msgid "Karte sperren?"
+msgstr "停用证件卡？"
+
+msgid "Karte an den Leser halten"
+msgstr "将证件卡靠近读卡器"
+
+msgid "Kartenwert"
+msgstr "卡片编码"
+
+msgid "OK"
+msgstr "确定"
+
+msgid "Kommentar schreiben"
+msgstr "写评论"
+
+msgid "Kommentar"
+msgstr "评论"
+
+msgid "Senden"
+msgstr "发送"
+
+#, python-format
+msgid "Seriennummer %(serial)s · ausgegeben %(issued)s"
+msgstr "序列号 %(serial)s · 发放于 %(issued)s"
+
+msgid "Gerät zurücknehmen?"
+msgstr "收回设备？"
+
+msgid "Kein Gerät ausgegeben."
+msgstr "未发放设备。"
+
+msgid "Gerät ausgeben"
+msgstr "发放设备"
+
+#, python-format
+msgid "Frühere Geräte (%(n)s)"
+msgstr "以前的设备（%(n)s）"
+
+msgid "Noch kein Verlauf."
+msgstr "暂无历史记录。"
+
+msgid "Verknüpfung entfernen?"
+msgstr "解除关联？"
+
+msgid "Verknüpfung entfernen"
+msgstr "解除关联"
+
+#, python-format
+msgid "%(platform)s: Zugang vorhanden"
+msgstr "%(platform)s：已有账号"
+
+msgid "Noch keine Eltern verknüpft."
+msgstr "尚未关联家长。"
+
+msgid "Eltern hinzufügen"
+msgstr "添加家长"
+
+msgid "Elternteil 1"
+msgstr "家长 1"
+
+msgid "Elternteil 2"
+msgstr "家长 2"
+
+msgid "Erziehungsberechtigt"
+msgstr "监护人"
+
+msgid "Noch keine Änderungen."
+msgstr "暂无修改。"
+
+msgid "Anmeldeseite öffnen"
+msgstr "打开登录页面"
+
+msgid "Foto wählen"
+msgstr "选择照片"
+
+msgid "Entfernen"
+msgstr "移除"
+
+msgid "Karte an den Leser halten. Die Person wird sofort geöffnet."
+msgstr "将证件卡靠近读卡器，系统会立即打开此人。"
+
+msgid "Kartennummer"
+msgstr "卡号"
+
+msgid "Keine aktive Karte gefunden."
+msgstr "未找到有效的证件卡。"
+
+#, python-format
+msgid "%(n)s Schüler"
+msgid_plural "%(n)s Schüler"
+msgstr[0] "%(n)s 名学生"
+
+#, python-format
+msgid "Gerät %(number)s öffnen"
+msgstr "打开设备 %(number)s"
+
+msgid "Noch keine Schüler."
+msgstr "暂无学生。"
+
+#, python-format
+msgid "Schuljahr %(year)s"
+msgstr "%(year)s 学年"
+
+msgid "Neue Klasse oder Gruppe"
+msgstr "新建班级或小组"
+
+msgid "z. B. 5c"
+msgstr "例如：5c"
+
+msgid "Neu anlegen"
+msgstr "新建"
+
+msgid ""
+"Klick öffnet den Datensatz, Doppelklick ändert die Zelle, ein Klick auf den "
+"Spaltentitel filtert."
+msgstr "单击打开记录，双击编辑单元格，单击列标题进行筛选。"
+
+msgid "In der Liste filtern"
+msgstr "在列表中筛选"
+
+msgid "Ansicht löschen"
+msgstr "删除视图"
+
+msgid "Bestand"
+msgstr "显示范围"
+
+msgid "Ehemalige"
+msgstr "已离校"
+
+msgid "Gespeicherte Ansicht"
+msgstr "已保存的视图"
+
+msgid "Ansicht speichern"
+msgstr "保存视图"
+
+msgid "Spalten"
+msgstr "列"
+
+msgid "Klasse zuweisen"
+msgstr "分配班级"
+
+msgid "Zugänge erzeugen"
+msgstr "生成账号"
+
+msgid "Bericht drucken"
+msgstr "打印报告"
+
+msgid "Name oder E-Mail"
+msgstr "姓名或电子邮箱"
+
+msgid "Eltern suchen"
+msgstr "搜索家长"
+
+msgid "Keine Eltern gefunden."
+msgstr "未找到家长。"
+
+msgid "Neuaufnahme"
+msgstr "新生入学登记"
+
+msgid ""
+"Eine Aufnahme in einem Durchgang: Daten eingeben, Zugänge erzeugen, danach "
+"Eltern, Gerät und Druck auf der Personenseite."
+msgstr ""
+"一次完成入学登记：录入数据、生成账号，然后在人员页面处理家长、设备和打印。"
+
+msgid "Stammdaten"
+msgstr "基本信息"
+
+msgid "Schul-E-Mail"
+msgstr "学校邮箱"
+
+msgid ""
+"Passwörter werden passend zum Alter erzeugt und verschlüsselt gespeichert."
+msgstr "密码会根据年龄生成，并加密保存。"
+
+msgid ""
+"Vorschau: Alle Schüler rücken eine Stufe auf. Der Klassenverlauf bleibt "
+"erhalten. Vorher wird die Datenbank gesichert."
+msgstr "预览：所有学生升一个年级。班级历史会保留。操作前会先备份数据库。"
+
+msgid "Neues Schuljahr"
+msgstr "新学年"
+
+msgid "Bisher"
+msgstr "原为"
+
+msgid "Wird zu"
+msgstr "变为"
+
+#, python-format
+msgid ""
+"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das "
+"lässt sich nur über eine Sicherung zurücknehmen."
+msgstr ""
+"将 %(total)s 名学生升级，并将其中 %(leaving)s 名作为离校归档？此操作只能通过"
+"备份撤销。"
+
+msgid "Wechsel durchführen"
+msgstr "执行学年切换"
+
+msgid "Name der Vorlage"
+msgstr "模板名称"
+
+msgid "Seite"
+msgstr "页面"
+
+msgid "Format"
+msgstr "格式"
+
+msgid "Fußzeile"
+msgstr "页脚"
+
+msgid "Standard der Schule"
+msgstr "学校默认"
+
+msgid "Elemente"
+msgstr "元素"
+
+msgid "Datenfelder"
+msgstr "数据字段"
+
+#, python-format
+msgid "Version %(number)s wiederherstellen?"
+msgstr "恢复版本 %(number)s？"
+
+msgid "Laden"
+msgstr "加载"
+
+msgid "Noch keine älteren Versionen."
+msgstr "暂无旧版本。"
+
+msgid "Vorlage archivieren?"
+msgstr "归档模板？"
+
+msgid "Vorlage archivieren"
+msgstr "归档模板"
+
+msgid "Neue Zeile:"
+msgstr "换行："
+
+msgid "Code-Modus"
+msgstr "代码模式"
+
+msgid "HTML (Jinja2, je Datensatz). Verfügbar:"
+msgstr "HTML（Jinja2，每条记录）。可用："
+
+msgid "Element anklicken, um es anzupassen."
+msgstr "单击一个元素进行调整。"
+
+msgid "Vorschau (echtes PDF, Beispieldaten)"
+msgstr "预览（真实 PDF，示例数据）"
+
+msgid "Vorschau wird erstellt …"
+msgstr "正在生成预览 …"
+
+msgid "Berichte"
+msgstr "报告"
+
+msgid "Datenquelle"
+msgstr "数据源"
+
+msgid "Passwörter"
+msgstr "密码"
+
+msgid "Zuletzt gedruckt"
+msgstr "最近打印"
+
+#, python-format
+msgid "%(n)s Datensatz"
+msgid_plural "%(n)s Datensätze"
+msgstr[0] "%(n)s 条记录"
+
+msgid "Noch nichts gedruckt."
+msgstr "尚未打印任何内容。"
+
+msgid ""
+"PDFs werden nicht gespeichert. Protokolliert wird nur, wer was gedruckt hat."
+msgstr "不保存 PDF。仅记录谁打印了什么。"
+
+msgid ""
+"Macs mit einer Kopie der Daten, und Änderungen, bei denen eine Person "
+"entscheiden sollte."
+msgstr "存有数据副本的 Mac，以及需要人工决定的更改。"
+
+msgid "Abgleich prüfen"
+msgstr "检查同步冲突"
+
+msgid ""
+"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere "
+"Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen."
+msgstr ""
+"同一字段在两处被改成了不同的值。较新的更改已生效。请确认，或采用另一版本。"
+
+msgid "Datensatz und Feld"
+msgstr "记录和字段"
+
+msgid "Gilt jetzt"
+msgstr "当前生效"
+
+msgid "Andere Fassung"
+msgstr "另一版本"
+
+msgid "auf dem Server gelöscht"
+msgstr "已在服务器上删除"
+
+msgid "Andere übernehmen"
+msgstr "采用另一版本"
+
+msgid "Nichts zu prüfen."
+msgstr "没有需要检查的内容。"
+
+#, python-format
+msgid "%(n)s entschieden."
+msgid_plural "%(n)s entschieden."
+msgstr[0] "已处理 %(n)s 项。"
+
+msgid "Verbundene Macs"
+msgstr "已连接的 Mac"
+
+msgid "Mac"
+msgstr "Mac"
+
+msgid "Zuletzt gesehen"
+msgstr "最后在线"
+
+#, python-format
+msgid "verbunden %(date)s"
+msgstr "连接于 %(date)s"
+
+#, python-format
+msgid "Version %(version)s"
+msgstr "版本 %(version)s"
+
+msgid "Getrennt"
+msgstr "已断开"
+
+#, python-format
+msgid ""
+"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt "
+"mit dem Server."
+msgstr "断开 %(name)s？该 Mac 下次连接服务器时会删除其数据副本。"
+
+msgid "Trennen"
+msgstr "断开连接"
+
+msgid ""
+"Noch kein Mac verbunden. Ein Mac verbindet sich in der App über „Mit Server "
+"verbinden“, mit dem eigenen Konto."
+msgstr ""
+"尚未连接任何 Mac。在 App 中通过“连接服务器”并使用自己的账号即可连接 Mac。"
+
+msgid "Nur auf dem Server"
+msgstr "仅限服务器"
+
+msgid "Das geht nur in der Webversion"
+msgstr "此操作仅能在网页版中进行"
+
+msgid ""
+"Diese Datenbank ist mit dem Server verbunden. Konten, Passwörter, die Zwei-"
+"Faktor-Anmeldung, die Einstellungen der Schule, Sicherungen und Updates "
+"verwaltet der Server. Eine Änderung hier würde bei der nächsten "
+"Synchronisation wieder ersetzt."
+msgstr ""
+"此数据库已连接到服务器。账号、密码、双重验证登录、学校设置、备份和更新均由服"
+"务器管理。在此处所做的更改会在下次同步时被覆盖。"
+
+#, python-format
+msgid ""
+"Bitte dafür die Schulverwaltung im Browser öffnen: <a class=\"underline\" "
+"href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>."
+msgstr ""
+"请在浏览器中打开学校管理系统进行此操作：<a class=\"underline\" "
+"href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>。"
+
+msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
+msgstr "请在浏览器中打开学校管理系统进行此操作。"
+
+msgid "Importieren"
+msgstr "导入"
+
+msgid ""
+"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
+"etwas gespeichert wird."
+msgstr "CSV 或 Excel。您先对应各列，并在保存前查看检查结果。"
+
+msgid "In welchen Bereich?"
+msgstr "导入到哪个类别？"
+
+msgid "Weiter zur Zuordnung"
+msgstr "下一步：对应列"
+
+msgid "Exportieren"
+msgstr "导出"
+
+msgid ""
+"In den Listen exportiert „Excel“ oder „CSV“ genau die aktuelle Ansicht: "
+"Spalten, Filter und Reihenfolge."
+msgstr "在列表中，“Excel”或“CSV”会按当前视图导出：列、筛选条件和排序。"
+
+msgid "Geräte als Excel"
+msgstr "设备导出为 Excel"
+
+msgid "Geräte als CSV"
+msgstr "设备导出为 CSV"
+
+msgid "Passwörter sind in diesen Exporten nie enthalten."
+msgstr "这些导出文件中从不包含密码。"
+
+msgid "Letzte Importe"
+msgstr "最近的导入"
+
+msgid "Übernommen"
+msgstr "已导入"
+
+#, python-format
+msgid "%(created)s neu, %(updated)s geändert"
+msgstr "新增 %(created)s，更改 %(updated)s"
+
+msgid "Zurückgenommen"
+msgstr "已撤销"
+
+msgid ""
+"Diesen Import zurücknehmen? Dabei neu angelegte Personen und Geräte werden "
+"gelöscht."
+msgstr "撤销此次导入？由此新建的人员和设备将被删除。"
+
+msgid "Fortsetzen"
+msgstr "继续"
+
+msgid "Noch keine Importe."
+msgstr "暂无导入记录。"
+
+msgid "Zuordnung"
+msgstr "列对应"
+
+msgid "Spalten zuordnen"
+msgstr "对应列"
+
+#, python-format
+msgid "%(n)s Zeile."
+msgid_plural "%(n)s Zeilen."
+msgstr[0] "%(n)s 行。"
+
+msgid "Bekannte Ninox-Spalten sind bereits zugeordnet."
+msgstr "已识别的 Ninox 列已自动对应。"
+
+msgid "Spalte in der Datei"
+msgstr "文件中的列"
+
+msgid "Beispiele"
+msgstr "示例"
+
+msgid "Ziel"
+msgstr "目标字段"
+
+#, python-format
+msgid "Ziel für %(header)s"
+msgstr "%(header)s 的目标字段"
+
+msgid "Bestehende Personen erkennen über"
+msgstr "识别现有人员的依据"
+
+msgid "Ninox-ID (aus dem Bildpfad)"
+msgstr "Ninox ID（取自图片路径）"
+
+msgid "Name und Geburtsdatum"
+msgstr "姓名和出生日期"
+
+msgid "Verwerfen"
+msgstr "放弃"
+
+msgid "Prüfung"
+msgstr "检查"
+
+#, python-format
+msgid ""
+"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern "
+"vorhandene Werte nicht."
+msgstr "%(filename)s。尚未保存任何内容。空单元格不会更改现有值。"
+
+msgid "Geändert"
+msgstr "已更改"
+
+msgid "Unverändert"
+msgstr "未更改"
+
+msgid "Hinweise"
+msgstr "提示"
+
+#, python-format
+msgid "Neue Klassen werden angelegt: %(classes)s"
+msgstr "将新建班级：%(classes)s"
+
+#, python-format
+msgid "%(n)s Datensatz übernehmen"
+msgid_plural "%(n)s Datensätze übernehmen"
+msgstr[0] "导入 %(n)s 条记录"
+
+msgid "Zuordnung ändern"
+msgstr "修改列对应"
+
+msgid "Zeile"
+msgstr "行"
+
+msgid "Änderung"
+msgstr "更改"
+
+msgid "Hinweis"
+msgstr "提示"
+
+msgid "Keine Auffälligkeiten."
+msgstr "未发现问题。"
+
+#, python-format
+msgid "%(label)s anzeigen"
+msgstr "显示 %(label)s"
+
+msgid "Muss beim ersten Login geändert werden"
+msgstr "首次登录时必须修改"
+
+msgid "Neuen Zugang erzeugen? Das bisherige Passwort wird ersetzt."
+msgstr "生成新账号？原密码将被替换。"
+
+msgid "Neu erzeugen"
+msgstr "重新生成"
+
+msgid "Erzeugen"
+msgstr "生成"
+
+msgid "Unverändert lassen"
+msgstr "保持不变"
+
+msgid "Plattformen verwalten"
+msgstr "管理平台"
+
+msgid ""
+"Passwörter sind verschlüsselt. Jede Anzeige wird im Protokoll festgehalten."
+msgstr "密码已加密。每次查看都会记录在操作日志中。"
+
+#, python-format
+msgid "%(have)s von %(expected)s Zugängen"
+msgstr "%(have)s / %(expected)s 个账号"
+
+#, python-format
+msgid "%(have)s Zugang"
+msgid_plural "%(have)s Zugänge"
+msgstr[0] "%(have)s 个账号"
+
+msgid "Reihenfolge"
+msgstr "顺序"
+
+msgid "Felder (* = geheim)"
+msgstr "字段（* = 保密）"
+
+msgid "Felder lassen sich nicht ändern, solange Zugänge bestehen."
+msgstr "存在账号时无法修改字段。"
+
+msgid "Anmelde-Adresse"
+msgstr "登录地址"
+
+msgid "Auf dem Zugangsblatt"
+msgstr "显示在账号单上"
+
+msgid ""
+"Export enthält lesbare Passwörter. Die Datei muss sicher behandelt werden. "
+"Fortfahren?"
+msgstr "导出文件包含明文密码，必须妥善保管。是否继续？"
+
+msgid "Mit Passwörtern exportieren"
+msgstr "连同密码导出"
+
+msgid "Name oder Benutzername"
+msgstr "姓名或用户名"
+
+msgid ""
+"Noch keine Zugänge. In der Schülerliste lassen sie sich gesammelt erzeugen."
+msgstr "暂无账号。可在学生列表中批量生成。"
+
+msgid "Blatt"
+msgstr "账号单"
+
+msgid "Inaktiv"
+msgstr "停用"
+
+msgid "Neue Plattform"
+msgstr "新建平台"
+
+msgid "Felder, eines pro Zeile (* = geheim)"
+msgstr "字段，每行一个（* = 保密）"
+
+msgid "Daten"
+msgstr "数据"
+
+msgid "Nicht importieren"
+msgstr "不导入"
+
+msgid "Bildpfad (Ninox)"
+msgstr "图片路径（Ninox）"
+
+#, python-format
+msgid "E-Mail ungültig: %(value)s"
+msgstr "邮箱无效：%(value)s"
+
+#, python-format
+msgid "%(field)s: unbekannter Wert „%(value)s“ wird übernommen"
+msgstr "%(field)s：未知值“%(value)s”将按原样导入"
+
+msgid "Vorname fehlt"
+msgstr "缺少名字"
+
+msgid "Nachname fehlt"
+msgstr "缺少姓氏"
+
+msgid "leer"
+msgstr "空"
+
+#, python-format
+msgid "E-Mail außerhalb von %(domain)s: %(email)s"
+msgstr "邮箱不属于 %(domain)s：%(email)s"
+
+msgid "E-Mail wird kleingeschrieben"
+msgstr "邮箱将转换为小写"
+
+#, python-format
+msgid "Seriennummer %(serial)s: führende Nullen fehlen möglicherweise"
+msgstr "序列号 %(serial)s：可能缺少前导零"
+
+msgid "Kommt in der Datei mehrfach vor"
+msgstr "在文件中出现多次"
+
+msgid "Dieser Import wurde bereits bearbeitet."
+msgstr "此次导入已处理过。"
+
+msgid "Nur innerhalb von 24 Stunden möglich."
+msgstr "仅限 24 小时内操作。"
+
+msgid "Personen aus diesem Import wurden seither geändert."
+msgstr "此次导入的人员此后已被修改。"
+
+msgid "Zugänge aus diesem Import wurden seither geändert."
+msgstr "此次导入的账号此后已被修改。"
+
+msgid "Zu diesem Import gibt es inzwischen weitere Einträge."
+msgstr "此次导入现已有其他相关条目。"
+
+#, python-format
+msgid "Der Import wurde nicht zurückgenommen. %(reason)s"
+msgstr "导入未撤销。%(reason)s"
+
+#, python-format
+msgid "Datum nicht lesbar: %(value)s"
+msgstr "无法识别日期：%(value)s"
+
+msgid "Über die Sicherung zurückzunehmen."
+msgstr "可通过备份撤销。"
+
+msgid "Bitte eine Datei wählen."
+msgstr "请选择文件。"
+
+msgid "Die Datei konnte nicht gelesen werden. Bitte CSV oder XLSX verwenden."
+msgstr "无法读取文件。请使用 CSV 或 XLSX。"
+
+msgid "In der Datei wurden keine Daten gefunden."
+msgstr "文件中未找到数据。"
+
+#, python-format
+msgid ""
+"Import abgeschlossen: %(created)s neu, %(updated)s geändert, %(skipped)s "
+"übersprungen."
+msgstr "导入完成：新增 %(created)s，更改 %(updated)s，跳过 %(skipped)s。"
+
+msgid "Der Import wurde zurückgenommen."
+msgstr "导入已撤销。"
+
+msgid "Einfach (Grundschule): gut lesbar, z. B. Tomika-47"
+msgstr "简单（小学）：易读，例如 Tomika-47"
+
+msgid "Mittel (ab Klasse 5): 12 Zeichen, gut lesbar"
+msgstr "中等（5 年级起）：12 个字符，易读"
+
+msgid "Stark (Oberstufe, Personal): 16 Zeichen mit Sonderzeichen"
+msgstr "强（高中部、教职工）：16 个字符，含特殊字符"
+
+msgid "Kennung"
+msgstr "标识符"
+
+msgid "Muss geändert werden"
+msgstr "必须修改"

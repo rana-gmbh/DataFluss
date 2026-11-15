@@ -1,0 +1,4 @@
+{% extends request.user.is_authenticated|yesno:"base.html,auth_base.html" %}{% load i18n %}
+{% block title %}{% translate "Kein Zugriff" %}{% endblock %}
+{% block content %}{% translate "Kein Zugriff" as err_title %}{% translate "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich an die IT." as err_text %}{% include "core/_error.html" with title=err_title text=err_text %}{% endblock %}
+{% block auth %}{% translate "Kein Zugriff" as err_title %}{% translate "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich an die IT." as err_text %}{% include "core/_error.html" with title=err_title text=err_text %}{% endblock %}

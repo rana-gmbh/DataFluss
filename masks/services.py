@@ -1,0 +1,309 @@
+import re
+from datetime import date, datetime
+
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator, validate_email
+from django.utils import timezone
+from django.utils.translation import gettext as _
+
+from people.models import ClassGroup, Person, SchoolYear
+from sync import journal
+from vault import crypto
+
+from core import modules
+
+from . import i18n
+from .models import FieldDefinition, Mask, MaskVersion
+from .registry import BLOCKS
+
+MASKED = "••••••••"
+PERSON_COLUMNS = {f.name for f in Person._meta.concrete_fields}
+
+
+def _unclaimed_section_flags():
+    """Person flags of module sections (DaZ-Fachkraft, say) whose module is not loaded: their fields stay hidden."""
+    from core import modules
+
+    return set(Person.SECTION_FLAGS) - set(modules.merged("staff_sections"))
+
+
+def fields_for(entity, include_archived=False):
+    qs = FieldDefinition.objects.filter(entity=entity)
+    if hidden := _unclaimed_section_flags():
+        qs = qs.exclude(key__in=hidden)
+    if not include_archived:
+        qs = qs.filter(archived=False)
+    return list(qs)
+
+
+def field_map(entity, include_archived=False):
+    return {f.key: f for f in fields_for(entity, include_archived)}
+
+
+def parse_date(text):
+    text = (text or "").strip()
+    if not text:
+        return None
+    for pattern in ("%Y-%m-%d", "%d.%m.%Y", "%d.%m.%y"):
+        try:
+            return datetime.strptime(text, pattern).date()
+        except ValueError:
+            pass
+    raise ValidationError(_("Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."))
+
+
+def coerce(fd, raw):
+    """Turn form input into the stored value, or raise ValidationError in German."""
+    if isinstance(raw, str):
+        raw = raw.strip()
+    empty = raw in (None, "", [])
+    if fd.required and empty:
+        raise ValidationError(_("%(field)s ist ein Pflichtfeld.") % {"field": fd.display_label})
+    kind = fd.type
+    if kind == "bool":
+        return str(raw).lower() in ("1", "true", "on", "ja", "yes")
+    if empty:
+        return [] if kind == "multichoice" else None if kind in ("date", "number") else ""
+    if kind == "date":
+        return parse_date(raw)
+    if kind == "number":
+        try:
+            return int(str(raw))
+        except ValueError:
+            raise ValidationError(_("%(field)s: Bitte eine ganze Zahl eingeben.") % {"field": fd.display_label})
+    if kind == "email":
+        value = str(raw).lower()
+        try:
+            validate_email(value)
+        except ValidationError:
+            raise ValidationError(_("Bitte eine gültige E-Mail-Adresse eingeben."))
+        return value
+    if kind == "url":
+        URLValidator(message=_("Bitte einen gültigen Link eingeben."))(raw)
+        return raw
+    if kind == "phone":
+        if not re.fullmatch(r"[0-9+()\-./ ]{3,40}", raw):
+            raise ValidationError(_("Bitte eine gültige Telefonnummer eingeben."))
+        return raw
+    if kind == "choice":
+        if raw not in fd.option_values:
+            raise ValidationError(_("%(field)s: Unbekannte Auswahl.") % {"field": fd.display_label})
+        return raw
+    if kind == "multichoice":
+        values = raw if isinstance(raw, list) else [raw]
+        unknown = [v for v in values if v not in fd.option_values]
+        if unknown:
+            raise ValidationError(_("%(field)s: Unbekannte Auswahl.") % {"field": fd.display_label})
+        return values
+    return raw
+
+
+def get_value(person, fd):
+    if fd.key == "klasse":
+        return person.current_class
+    if fd.is_core and fd.key in PERSON_COLUMNS:
+        return getattr(person, fd.key)
+    return person.custom.get(fd.key)
+
+
+def form_value(person, fd):
+    value = get_value(person, fd)
+    if fd.type == "class":
+        return str(value.pk) if value else ""
+    if fd.type == "secret":
+        return MASKED if value else ""
+    if value is None:
+        return "" if fd.type != "multichoice" else []
+    if isinstance(value, date):
+        return value.isoformat()
+    return value
+
+
+def display_value(person, fd, localized=False):
+    """The value as text. Rules and mask conditions compare the stored, language-free text;
+    screens pass localized=True for Ja/Nein and choices in the language on screen."""
+    value = get_value(person, fd)
+    if fd.type == "class":
+        return value.name if value else ""
+    if fd.type == "secret":
+        return MASKED if value else ""
+    if value is None:
+        return ""
+    if isinstance(value, bool):
+        if localized:
+            return _("Ja") if value else _("Nein")
+        return "Ja" if value else "Nein"
+    if isinstance(value, date):
+        return value.strftime("%d.%m.%Y")
+    if localized and fd.type in ("choice", "multichoice"):
+        values = value if isinstance(value, list) else [value]
+        return ", ".join(str(fd.option_label(v)) for v in values)
+    if isinstance(value, list):
+        return ", ".join(value)
+    return value
+
+
+def secret_context(person, key):
+    return f"person:{person.pk}:{key}"
+
+
+def reveal_custom(person, fd):
+    return crypto.decrypt(person.custom.get(fd.key, ""), secret_context(person, fd.key))
+
+
+def set_value(person, fd, raw):
+    """Save one field and return (saved value as text, previous value as text)."""
+    previous = form_value(person, fd)
+    if fd.read_only:
+        raise ValidationError(_("%(field)s kann nicht geändert werden.") % {"field": fd.display_label})
+    if fd.type == "class":
+        group = ClassGroup.objects.filter(pk=raw).first() if raw else None
+        if raw and group is None:
+            raise ValidationError(_("Diese Klasse gibt es nicht."))
+        person.move_to_class(group)
+        return raw or "", previous
+    value = coerce(fd, raw)
+    if fd.is_core and fd.key in PERSON_COLUMNS:
+        setattr(person, fd.key, value)
+    elif fd.type == "secret":
+        if value:
+            person.custom[fd.key] = crypto.encrypt(value, secret_context(person, fd.key))
+        else:
+            person.custom.pop(fd.key, None)
+        previous = ""
+    else:
+        if isinstance(value, date):
+            value = value.isoformat()
+        person.custom[fd.key] = value
+    if fd.key == "archived" and value and person.exit_date is None:
+        person.exit_date = timezone.localdate()
+    person.save()
+    return form_value(person, fd), previous
+
+
+def condition_met(item, person, fields):
+    rule = item.get("show_if")
+    if not rule or not rule.get("field"):
+        return True
+    fd = fields.get(rule["field"])
+    if fd is None:
+        return True
+    current = str(display_value(person, fd))
+    target = str(rule.get("value", ""))
+    return current != target if rule.get("op") == "ne" else current == target
+
+
+def condition_fields(tree):
+    keys = set()
+    for tab in tree.get("tabs", []):
+        for section in tab.get("sections", []):
+            for item in section.get("items", []):
+                rule = item.get("show_if")
+                if rule and rule.get("field"):
+                    keys.add(rule["field"])
+    return keys
+
+
+def resolve_mask(person, user=None):
+    """Most specific published mask for this record and user."""
+    masks = list(Mask.objects.filter(entity=person.kind))
+    fields = field_map(person.kind, include_archived=True)
+
+    def applies(mask):
+        if mask.roles and user is not None and user.role not in mask.roles:
+            return False
+        if mask.match_field:
+            fd = fields.get(mask.match_field)
+            return fd is not None and str(display_value(person, fd)) == mask.match_value
+        return True
+
+    ranked = sorted(masks, key=lambda m: (not bool(m.match_field), not bool(m.roles), not m.is_default))
+    for mask in ranked:
+        if applies(mask) and mask.published:
+            return mask, mask.published
+    return None, None
+
+
+def class_choices():
+    year = SchoolYear.current()
+    qs = ClassGroup.objects.all()
+    if year:
+        from django.db.models import Q
+
+        qs = qs.filter(Q(school_year=year) | Q(school_year__isnull=True))
+    return list(qs)
+
+
+def build_view(tree, person, user, readonly=False):
+    """Resolve a mask tree into what the template renders."""
+    fields = field_map(person.kind)
+    can_edit = user.can("person.edit") and not readonly
+    classes = None
+    tabs = []
+    for tab in tree.get("tabs", []):
+        sections = []
+        for section in tab.get("sections", []):
+            items = []
+            for item in section.get("items", []):
+                if not condition_met(item, person, fields):
+                    continue
+                entry = {"w": item.get("w", 12), "type": item.get("type")}
+                if item.get("type") == "field":
+                    fd = fields.get(item.get("field"))
+                    if fd is None:
+                        continue
+                    if fd.type == "secret" and not user.can("vault.view"):
+                        continue
+                    if fd.type == "class" and classes is None:
+                        classes = class_choices()
+                    entry.update(
+                        fd=fd, value=form_value(person, fd), display=display_value(person, fd, localized=True),
+                        editable=can_edit and not fd.read_only,
+                        label=i18n.pick(item.get("label", ""), item.get("labels")) or fd.display_label, help=item.get("help") or fd.help_text,
+                        choices=fd.option_choices if fd.type in ("choice", "multichoice") else None,
+                        classes=classes if fd.type == "class" else None,
+                    )
+                elif item.get("type") == "block":
+                    name = item.get("block")
+                    if name not in BLOCKS or not modules.block_active(name):
+                        continue
+                    if name == "logins" and not user.can("vault.view"):
+                        continue
+                    entry.update(block=name, title=BLOCKS[name][0])
+                elif item.get("type") == "note":
+                    entry.update(text=item.get("text", ""))
+                else:
+                    continue
+                items.append(entry)
+            title = i18n.pick(section.get("title", ""), section.get("titles"))
+            if items or title:
+                sections.append({"title": title, "items": items})
+        if sections:
+            tabs.append({"id": tab.get("id"), "title": i18n.pick(tab.get("title", ""), tab.get("titles")), "sections": sections})
+    return tabs
+
+
+def publish_tree(mask, tree, user):
+    journal.delete(mask.versions.filter(status=MaskVersion.DRAFT))
+    latest = mask.versions.order_by("-number").first()
+    number = (latest.number + 1) if latest else 1
+    journal.update(mask.versions.filter(status=MaskVersion.PUBLISHED), status=MaskVersion.RETIRED)
+    return MaskVersion.objects.create(mask=mask, number=number, status=MaskVersion.PUBLISHED, tree=tree, author=user)
+
+
+def usage_of(entity, key):
+    """Where a field is in use, shown before it can be archived."""
+    from core.models import SavedView
+    from prints.models import PrintTemplate
+
+    found = []
+    for version in MaskVersion.objects.filter(mask__entity=entity, status=MaskVersion.PUBLISHED).select_related("mask"):
+        if f'"{key}"' in str(version.tree).replace("'", '"'):
+            found.append((_("Maske"), version.mask.display_name))
+    for template in PrintTemplate.objects.filter(source__in=[entity, "class"], archived=False):
+        if key in str(template.tree) or key in template.code_html:
+            found.append((_("Bericht"), template.name))
+    for view in SavedView.objects.filter(entity=entity):
+        if key in str(view.config):
+            found.append((_("Ansicht"), view.name))
+    return found

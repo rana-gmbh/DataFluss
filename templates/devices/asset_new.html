@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Neues Gerät" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{% translate "Neues Gerät" %}</h1>
+<form method="post" class="surface p-5 space-y-3 max-w-lg">{% csrf_token %}
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <div><label class="label" for="f-category">{% translate "Gerätetyp" %}</label><select id="f-category" class="input" name="category"><option value="">–</option>{% for c in categories %}<option value="{{ c.pk }}">{{ c.name }}</option>{% endfor %}</select></div>
+  <div><label class="label" for="f-number">{% translate "Gerätenummer" %}</label><input id="f-number" class="input mono" name="number" placeholder="{% translate 'Leer lassen: nächste Nummer des Typs' %}"></div>
+  <div><label class="label" for="f-serial">{% translate "Seriennummer" %}</label><input id="f-serial" class="input mono" name="serial"></div>
+  <div><label class="label" for="f-hardware_uuid">UUID</label><input id="f-hardware_uuid" class="input mono" name="hardware_uuid"></div>
+  <div><label class="label" for="f-product_key">{% translate "Product Key" %}</label><input id="f-product_key" class="input mono" name="product_key" type="password" autocomplete="off"></div>
+  <div class="flex gap-2"><button class="btn btn-primary">{% translate "Anlegen" %}</button><a class="btn" href="{% url 'assets' %}">{% translate "Abbrechen" %}</a></div>
+</form>
+{% endblock %}

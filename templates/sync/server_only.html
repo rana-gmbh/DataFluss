@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Nur auf dem Server" %}{% endblock %}
+{% block content %}
+<div class="max-w-xl surface p-6 space-y-3">
+  <h1 class="text-lg font-semibold">{% translate "Das geht nur in der Webversion" %}</h1>
+  <p class="muted">{% translate "Diese Datenbank ist mit dem Server verbunden. Konten, Passwörter, die Zwei-Faktor-Anmeldung, die Einstellungen der Schule, Sicherungen und Updates verwaltet der Server. Eine Änderung hier würde bei der nächsten Synchronisation wieder ersetzt." %}</p>
+  <p class="muted">{% if sync_server %}{% blocktranslate trimmed with url=sync_server %}Bitte dafür die Schulverwaltung im Browser öffnen: <a class="underline" href="{{ url }}" target="_blank" rel="noopener">{{ url }}</a>.{% endblocktranslate %}{% else %}{% translate "Bitte dafür die Schulverwaltung im Browser öffnen." %}{% endif %}</p>
+</div>
+{% endblock %}

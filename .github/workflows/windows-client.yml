@@ -1,0 +1,54 @@
+name: Windows-Client
+
+# Builds the desktop client's Windows installer on every change to the client, as a check. Releases
+# are made by release-windows.yml.
+on:
+  workflow_dispatch:
+  push:
+    branches: [client-spike]
+    paths: ["client/**", ".github/workflows/windows-client.yml"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        id: python
+        with:
+          python-version: "3.14"
+      - uses: msys2/setup-msys2@v2
+        id: msys2
+        with:
+          msystem: UCRT64
+          update: false
+          install: mingw-w64-ucrt-x86_64-pango
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: client/shell/src-tauri
+      - name: Sidecar
+        env:
+          PYTHON: ${{ steps.python.outputs.python-path }}
+          MSYS2_ROOT: ${{ steps.msys2.outputs.msys2-location }}
+        run: |
+          ./client/build-sidecar.ps1
+          ./client/fetch-winsparkle.ps1
+      - name: Shell tests
+        working-directory: client/shell/src-tauri
+        run: cargo test --release
+      - name: Installer
+        working-directory: client/shell
+        run: |
+          npm ci
+          npx tauri build --bundles nsis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DataFluss-Windows
+          path: client/shell/src-tauri/target/release/bundle/nsis/*.exe

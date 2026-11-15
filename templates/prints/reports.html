@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Berichte" %}{% endblock %}
+{% block content %}
+<div class="flex items-center gap-2 mb-4"><h1 class="page-title flex-1">{% translate "Berichte" %}</h1>
+{% if request.user|can:'print.design' %}
+<form method="post" action="{% url 'template_new' %}" class="flex gap-2" x-data="{ open: false }">{% csrf_token %}
+  <template x-if="open"><input class="input w-48" name="name" placeholder="{% translate 'Name der Vorlage' %}" required aria-label="{% translate 'Name' %}"></template>
+  <select class="input w-auto" name="source" x-show="open" x-cloak aria-label="{% translate 'Datenquelle' %}">{% for value, label in sources %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select>
+  <button class="btn btn-primary" :type="open ? 'submit' : 'button'" @click="if (!open) { $event.preventDefault(); open = true }">{% icon 'plus' %}{% translate "Neue Vorlage" %}</button></form>{% endif %}</div>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 space-y-4">
+{% for label, templates in groups.items %}<section><h2 class="section-title mb-2">{{ label }}</h2><div class="surface divide-y" style="--tw-divide-opacity:1">
+{% for t in templates %}<div class="flex flex-wrap items-center gap-2 px-4 py-3 border-b last:border-0" style="border-color: var(--line)" x-data="{ scope: '{% if t.source == 'pupil' or t.source == 'class' or t.source == 'report' %}class{% else %}all{% endif %}' }">
+  <div class="flex-1 min-w-48"><div class="font-medium flex items-center gap-2">{{ t.name }}{% if t.contains_secrets %}<span class="badge badge-warn">{% icon 'lock' %}{% translate "Passwörter" %}</span>{% endif %}</div>{% if t.description %}<div class="muted text-[12px]">{{ t.description }}</div>{% endif %}</div>
+  <form method="post" action="{% url 'report_run' %}" target="_blank" class="flex gap-2">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}">
+    {% if t.source == 'pupil' or t.source == 'class' or t.source == 'report' %}<input type="hidden" name="scope" value="class"><select class="input w-auto h-[2.125rem]" name="class_id" aria-label="{% translate 'Klasse' %}">{% for c in classes %}<option value="{{ c.pk }}">{{ c.name }}</option>{% endfor %}</select>
+    {% else %}<input type="hidden" name="scope" value="all">{% endif %}
+    {% if not t.contains_secrets or request.user|can:'print.secrets' %}<button class="btn">{% icon 'printer' %}{% translate "Drucken" %}</button>{% endif %}</form>
+  {% if request.user|can:'print.design' %}<a class="btn" href="{% url 'template_designer' t.pk %}">{% icon 'pen' %}{% translate "Gestalten" %}</a>{% endif %}
+</div>{% endfor %}</div></section>{% endfor %}
+</div>
+<section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Zuletzt gedruckt" %}</h2>
+<table class="data-table"><tbody>{% for j in jobs %}<tr><td><div class="font-medium">{{ j.template_name }}{% if j.with_secrets %} {% icon 'lock' 'muted' %}{% endif %}</div><div class="muted text-[12px]">{{ j.user.username }} · {% blocktranslate trimmed count n=j.record_count %}{{ n }} Datensatz{% plural %}{{ n }} Datensätze{% endblocktranslate %} · {{ j.at|date:"d.m.Y H:i" }}</div></td></tr>{% empty %}<tr><td class="muted">{% translate "Noch nichts gedruckt." %}</td></tr>{% endfor %}</tbody></table>
+<p class="px-4 py-2 muted text-[12px] border-t" style="border-color: var(--line)">{% translate "PDFs werden nicht gespeichert. Protokolliert wird nur, wer was gedruckt hat." %}</p></section>
+</div>
+{% endblock %}

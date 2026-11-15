@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Räume und Gruppen" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-1">{% translate "Räume und Gruppen" %}</h1><p class="muted text-[13px] mb-4">{% translate "Geräte, die keiner einzelnen Person gehören, zum Beispiel in der Bibliothek." %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Name" %}</th><th>{% translate "Art" %}</th><th>{% translate "Geräte" %}</th></tr></thead><tbody>{% for p in places %}<tr><td class="font-medium">{{ p.name }}</td><td class="muted">{{ p.get_kind_display }}</td><td class="mono text-[12px]">{% for a in p.open %}<a class="hover:underline" href="{% url 'asset_detail' a.asset.pk %}">{{ a.asset.number }}</a> {% endfor %}</td></tr>{% endfor %}</tbody></table></div>
+{% if request.user|can:'device.edit' %}<form method="post" class="surface p-4 space-y-3">{% csrf_token %}<div><label class="label" for="f-name">{% translate "Name" %}</label><input id="f-name" class="input" name="name" required></div><div><label class="label" for="f-kind">{% translate "Art" %}</label><select id="f-kind" class="input" name="kind"><option value="raum">{% translate "Raum" %}</option><option value="gruppe">{% translate "Gruppe" %}</option></select></div><button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form>{% endif %}</div>
+{% endblock %}

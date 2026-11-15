@@ -1,0 +1,26 @@
+{% load ui i18n %}
+<div id="record-form" hx-get="{% url 'person_form' person.pk %}" hx-trigger="reloadForm from:body" hx-swap="outerHTML"
+     x-data="recordTabs('{{ person.kind }}', '{{ tabs.0.id }}')">
+  <div class="record-tabs flex overflow-x-auto border-b mb-4" style="border-color: var(--line)" role="tablist">
+    {% for tab in tabs %}<button type="button" role="tab" class="tab" data-tab-id="{{ tab.id }}" :class="tab === '{{ tab.id }}' && 'active'" :aria-selected="tab === '{{ tab.id }}'" @click="show('{{ tab.id }}', $el)">{{ tab.title }}</button>{% endfor %}
+  </div>
+  {% for tab in tabs %}
+  <div x-show="tab === '{{ tab.id }}'" x-cloak class="space-y-4" role="tabpanel" aria-label="{{ tab.title }}">
+    {% for section in tab.sections %}
+    <section class="surface p-4 mask-wrap">
+      {% if section.title %}<h2 class="section-title mb-3">{{ section.title }}</h2>{% endif %}
+      <div class="mask-grid">
+        {% for item in section.items %}
+        <div class="mask-item" data-w="{{ item.w }}" style="--w: {{ item.w }}">
+          {% if item.type == 'field' %}{% include 'masks/_widget.html' %}
+          {% elif item.type == 'note' %}<p class="text-[13px] soft whitespace-pre-line">{{ item.text }}</p>
+          {% elif item.html %}<div>{{ item.html }}</div>
+          {% else %}<div hx-get="{% url 'person_block' person.pk item.block %}" hx-trigger="intersect once" hx-swap="innerHTML"><p class="muted text-[13px] py-3">{% blocktranslate trimmed with title=item.title %}{{ title }} wird geladen …{% endblocktranslate %}</p></div>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>

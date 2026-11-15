@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Start" %}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-3 mb-5">
+  <div class="flex-1 min-w-[220px]"><h1 class="page-title">{% blocktranslate trimmed with name=request.user.first_name|default:request.user.username %}Guten Tag, {{ name }}{% endblocktranslate %}</h1>
+    <p class="muted text-[13px]">{{ school.name }}</p></div>
+  {% if request.user|can:'person.edit' %}
+  <a class="btn btn-primary" href="{% url 'person_new' 'pupil' %}">{% icon 'user-plus' %}{% translate "Neuer Schüler" %}</a>
+  <a class="btn" href="{% url 'person_new' 'staff' %}">{% icon 'user-plus' %}{% translate "Neuer Mitarbeiter" %}</a>
+  {% endif %}
+</div>
+{% if update_available %}<a href="{% url 'updates' %}" class="surface flex items-center gap-2 px-4 py-2.5 mb-4 text-[13px] hover:border-[var(--line-strong)]">{% icon 'refresh' 'text-[var(--accent)]' %}{% translate "Eine neue Version ist verfügbar." %}<span class="underline">{% translate "Ansehen" %}</span></a>{% endif %}
+{% for w in warnings %}<a href="{{ w.url }}" class="rounded-lg badge-{{ w.level }} flex items-center gap-2 px-4 py-2.5 mb-4 text-[13px]" {% if w.level == 'bad' %}role="alert"{% endif %}>{% icon 'alert' %}{{ w.text }}</a>{% endfor %}
+{% if checklist %}<section class="surface p-4 mb-4" data-tour="checklist" x-data="{ open: true }" x-show="open">
+  <div class="flex items-center gap-3 mb-2"><h2 class="font-semibold flex-1">{% translate "Erste Schritte" %}</h2>
+    <span class="muted text-[12px]">{% blocktranslate trimmed with done=checklist_done total=checklist|length %}{{ done }} von {{ total }} erledigt{% endblocktranslate %}</span>
+    <form method="post" action="{% url 'tour_seen' %}" hx-post="{% url 'tour_seen' %}" hx-swap="none" @htmx:after-request="open = false">{% csrf_token %}<input type="hidden" name="tour" value="checklist"><button class="btn btn-ghost btn-sm">{% translate "Ausblenden" %}</button></form></div>
+  <div class="h-1.5 rounded-full mb-3 overflow-hidden" style="background: var(--surface-2)"><div class="h-full rounded-full" style="background: var(--accent); width: {% widthratio checklist_done checklist|length 100 %}%"></div></div>
+  <ul class="space-y-1.5 text-[13px]">{% for label, url, done in checklist %}
+    <li class="flex items-center gap-2">{% if done %}{% icon 'check' 'text-[var(--ok)]' %}<span class="muted line-through">{{ label }}</span>{% else %}<span class="inline-block w-[1em] h-[1em] rounded-full border" style="border-color: var(--line-strong)" aria-hidden="true"></span><a class="underline" href="{{ url }}">{{ label }}</a>{% endif %}</li>
+  {% endfor %}</ul>
+</section>{% endif %}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+  <a href="{% url 'pupils' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Aktive Schüler" %}</div><div class="text-2xl font-semibold mt-1">{{ pupil_count }}</div></a>
+  <a href="{% url 'staff' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Personal" %}</div><div class="text-2xl font-semibold mt-1">{{ staff_count }}</div></a>
+  <a href="{% url 'assets' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Geräte ausgegeben" %}</div><div class="text-2xl font-semibold mt-1">{{ device_count }}</div></a>
+  <a href="{% url 'cases' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Offene Schäden" %}</div><div class="text-2xl font-semibold mt-1">{{ open_cases }}</div></a>
+</div>
+<div class="grid lg:grid-cols-3 gap-4">
+  <section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Neue Schüler" %}</h2>
+    <table class="data-table"><tbody>{% for p in new_pupils %}
+      <tr><td class="w-8">{% avatar p 26 %}</td><td><a class="font-medium hover:underline" href="{% url 'person_detail' p.pk %}">{{ p.display_name }}</a></td><td class="muted">{{ p.current_class|default:"–" }}</td><td class="muted text-right whitespace-nowrap">{{ p.entry_date|date:"d.m.Y" }}</td></tr>
+    {% empty %}<tr><td class="muted text-center py-6">{% translate "Noch keine Einträge." %}</td></tr>{% endfor %}</tbody></table></section>
+  <section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Neue Mitarbeiter" %}</h2>
+    <table class="data-table"><tbody>{% for p in new_staff %}
+      <tr><td class="w-8">{% avatar p 26 %}</td><td><a class="font-medium hover:underline" href="{% url 'person_detail' p.pk %}">{{ p.display_name }}</a></td><td class="muted">{{ p.category }}</td><td class="muted text-right whitespace-nowrap">{{ p.entry_date|date:"d.m.Y" }}</td></tr>
+    {% empty %}<tr><td class="muted text-center py-6">{% translate "Noch keine Einträge." %}</td></tr>{% endfor %}</tbody></table></section>
+  <section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Zu erledigen" %}</h2>
+    <ul>{% for label, count, url in todo %}
+      <li class="border-b last:border-0" style="border-color: var(--line)"><a href="{{ url }}" class="flex items-center justify-between px-4 py-3 hover:bg-[var(--surface-2)]"><span>{{ label }}</span><span class="badge {% if count %}badge-warn{% else %}badge-ok{% endif %}">{{ count }}</span></a></li>
+    {% endfor %}</ul></section>
+</div>
+{% endblock %}

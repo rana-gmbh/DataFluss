@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Schaden" %}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-3 mb-4"><div class="flex-1"><h1 class="page-title">{% if case %}{% translate "Schaden" %}{% else %}{% translate "Schaden erfassen" %}{% endif %}</h1>{% if person %}<p class="muted text-[13px]">{{ person.display_name }}{% if case.asset %} · {{ case.asset.number }}{% endif %}</p>{% endif %}</div>
+{% for t in print_templates %}<form method="post" action="{% url 'report_run' %}" target="_blank">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}"><input type="hidden" name="ids" value="{{ case.pk }}"><button class="btn">{% icon 'printer' %}{{ t.name }}</button></form>{% endfor %}</div>
+{% include "devices/_case_form.html" %}
+{% endblock %}

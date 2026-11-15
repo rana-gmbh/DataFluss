@@ -1,0 +1,148 @@
+{% load static ui i18n %}<!doctype html>
+<html lang="{{ ui_language }}"{% if client %} data-client{% endif %}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ school.short_name }}{% endblock %} · {% translate "Schulverwaltung" %}</title>
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="app-language" content="{{ ui_language }}" data-name="{{ ui_language_name }}" data-name-scope="{{ ui_name_scope }}"{% if ui_single_language %} data-single="1"{% endif %}>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="{% static 'img/app-192.png' %}">
+  <meta name="theme-color" content="#2553eb">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">{% for sheet in module_stylesheets %}<link rel="stylesheet" href="{% static sheet %}">{% endfor %}
+  {% block head %}{% endblock %}
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% url 'js_catalog' %}?l={{ ui_language }}&amp;v={{ app_version }}"></script>
+  <script src="{% static 'vendor/htmx.min.js' %}" defer></script>
+  <script src="{% static 'js/app.js' %}" defer></script>
+  <script src="{% static 'js/menu.js' %}" defer></script>
+  <script src="{% static 'js/names.js' %}" defer></script>
+  {% block scripts %}{% endblock %}
+  {% if client %}<script src="{% static 'js/client.js' %}" defer></script>{% endif %}
+  {% if tour_steps %}<script src="{% static 'js/tour.js' %}" defer></script>{% endif %}
+  <script src="{% static 'vendor/alpine.min.js' %}" defer></script>
+</head>
+<body class="min-h-screen" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<a class="skip-link" href="#main">{% translate "Zum Inhalt springen" %}</a>
+{% block shell %}
+<div class="flex min-h-screen" x-data="{ nav: false }">
+  <div class="fixed inset-0 z-30 bg-black/40 lg:hidden" x-show="nav" x-cloak @click="nav = false"></div>
+  <aside class="fixed lg:sticky top-0 z-40 h-screen w-60 shrink-0 flex flex-col border-r transition-transform lg:translate-x-0"
+         style="background: var(--surface); border-color: var(--line)" :class="nav ? 'translate-x-0' : '-translate-x-full'">
+    {% if client %}
+    <div class="db-switch relative shrink-0 border-b" style="border-color: var(--line)" data-tour="database" x-data="dbSwitcher" @keydown.escape="open = false" @click.outside="open = false">
+      <button type="button" class="flex w-full items-center gap-2.5 px-4 h-14 text-left" @click="toggle()" :aria-expanded="open" aria-haspopup="menu" title="{% translate 'Datenbank wechseln (⇧⌘O für alle)' %}">
+        {% if school.logo %}<img src="{{ school.logo.url }}" alt="" class="h-7 w-7 object-contain">
+        {% else %}<span class="h-7 w-7 rounded-lg flex items-center justify-center text-white font-bold text-sm" style="background: var(--accent)">{{ school.short_name|slice:":1" }}</span>{% endif %}
+        <span class="min-w-0 flex-1">
+          <span class="block font-semibold text-[13px] leading-tight truncate">{{ school.short_name }}</span>
+          <span class="block text-[11px] leading-tight muted truncate">{{ client.db_name }}</span>
+        </span>
+        {% icon 'chevron-down' 'text-[14px] muted' %}
+      </button>
+      <div class="db-switch-menu" x-show="open" x-cloak x-transition.opacity.duration.100ms role="menu" aria-label="{% translate 'Datenbanken' %}">
+        <div class="px-2 pt-1 pb-1 text-[11px] font-semibold uppercase tracking-wide muted">{% translate "Datenbanken" %}</div>
+        <template x-for="(db, index) in items" :key="db.id">
+          <button type="button" role="menuitem" class="db-switch-item" @click="go(db.id)" :aria-current="db.id === current ? 'true' : null">
+            <span class="db-switch-avatar" :style="`background: ${color(db.id)}`" x-text="db.name.trim().charAt(0).toUpperCase()"></span>
+            <span class="min-w-0 flex-1">
+              <span class="block truncate font-medium" x-text="db.name"></span>
+              <span class="block truncate text-[11px] muted" x-text="db.kind === 'demo' ? gettext('Demo') : (db.school || gettext('Lokal'))"></span>
+            </span>
+            <span x-show="db.id === current" class="text-[var(--accent)]">{% icon 'check' 'text-[15px]' %}</span>
+            <span x-show="db.open && db.id !== current" class="db-switch-dot" title="{% translate 'Geöffnet' %}"></span>
+            <kbd x-show="index < 9 && db.open" class="db-switch-key" x-text="keys(openIndex(db.id))"></kbd>
+          </button>
+        </template>
+        <div class="my-1 border-t" style="border-color: var(--line)"></div>
+        <button type="button" role="menuitem" class="db-switch-item" @click="launcher()">
+          {% icon 'layout' 'text-[15px] muted' %}<span class="flex-1">{% translate "Alle Datenbanken …" %}</span><kbd class="db-switch-key" x-text="keys('O', true)">⇧⌘O</kbd>
+        </button>
+      </div>
+    </div>
+    {% else %}
+    <a href="/" class="flex items-center gap-2.5 px-4 h-14 shrink-0 border-b" style="border-color: var(--line)">
+      {% if school.logo %}<img src="{{ school.logo.url }}" alt="" class="h-7 w-7 object-contain">
+      {% else %}<span class="h-7 w-7 rounded-lg flex items-center justify-center text-white font-bold text-sm" style="background: var(--accent)">{{ school.short_name|slice:":1" }}</span>{% endif %}
+      <span class="font-semibold text-[13px] leading-tight truncate" title="{{ school.name }}">{{ school.short_name }}</span>
+    </a>
+    {% endif %}
+    <nav class="flex-1 overflow-y-auto p-3 space-y-4" data-tour="nav">
+      {% for title, items in nav %}
+      <div>
+        <div class="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wide muted">{{ title }}</div>
+        {% for label, url_name, icon_name, cap in items %}
+        <a href="{% url url_name %}" data-tour="nav-{{ url_name }}" class="nav-link {% if request.resolver_match.url_name == url_name or active_nav == url_name %}active{% endif %}" {% if request.resolver_match.url_name == url_name or active_nav == url_name %}aria-current="page"{% endif %}>
+          {% icon icon_name 'text-[16px]' %}<span>{{ label }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </nav>
+    <div class="p-3 border-t" style="border-color: var(--line)">
+      {% if client.synced %}
+      <div class="sync-status mb-2" data-tour="sync" x-data="syncStatus" :data-level="level" :title="detail">
+        <span class="sync-dot" aria-hidden="true"></span>
+        <span class="min-w-0 flex-1 truncate" x-text="text">{% translate "Synchronisation …" %}</span>
+        <button type="button" class="btn btn-ghost btn-sm btn-icon" @click="now()" :disabled="busy" {% translate "Jetzt synchronisieren" as sync_now %}title="{{ sync_now }}" aria-label="{{ sync_now }}">
+          <span :class="busy && 'sync-spin'">{% icon 'refresh' 'text-[14px]' %}</span>
+        </button>
+      </div>
+      {% endif %}
+      <div class="flex items-center gap-2 px-1" data-tour="account">
+        <div class="min-w-0 flex-1">
+          <div class="text-[13px] font-medium truncate">{{ request.user.display_name }}</div>
+          <div class="text-[11px] muted">{{ request.user.get_role_display }}</div>
+        </div>
+        {% if not ui_single_language %}{% include "core/_language_menu.html" with up=True %}{% endif %}
+        {% if tour_steps %}<button type="button" class="btn btn-ghost btn-sm btn-icon" data-tour-start title="{% translate 'Rundgang' %}" aria-label="{% translate 'Rundgang durch diese Seite starten' %}">{% icon 'help' %}</button>{% endif %}
+        <button class="btn btn-ghost btn-sm btn-icon" data-theme-toggle title="{% translate 'Hell / Dunkel' %}" aria-label="{% translate 'Farbschema wechseln' %}">{% icon 'moon' %}</button>
+        {% if request.user.has_usable_password and not client.synced %}<a class="btn btn-ghost btn-sm btn-icon" href="{% url 'password_change' %}" title="{% translate 'Passwort ändern' %}" aria-label="{% translate 'Passwort ändern' %}">{% icon 'key' %}</a>{% endif %}
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+          <button class="btn btn-ghost btn-sm btn-icon" title="{% translate 'Abmelden' %}" aria-label="{% translate 'Abmelden' %}">{% icon 'logout' %}</button>
+        </form>
+      </div>
+    </div>
+  </aside>
+  <div class="flex-1 min-w-0 flex flex-col">
+    <header class="sticky top-0 z-20 h-14 flex items-center gap-3 px-4 lg:px-6 border-b" style="background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(8px); border-color: var(--line)">
+      <button class="btn btn-ghost btn-icon lg:hidden" @click="nav = true" aria-label="{% translate 'Menü' %}">{% icon 'menu' %}</button>
+      {% if can_search %}
+      <button class="input flex items-center gap-2 text-left max-w-md muted" data-open-search data-tour="search">
+        {% icon 'search' %}<span class="flex-1 truncate">{% translate "Suchen" %}</span><span class="kbd hidden sm:inline" id="search-key">⌘K</span>
+      </button>
+      {% endif %}
+      <div class="flex-1"></div>
+      {% block header_actions %}{% endblock %}
+    </header>
+    <main id="main" tabindex="-1" class="flex-1 min-w-0 p-4 lg:p-6">
+      {% if messages %}<div class="mb-4 space-y-2">{% for message in messages %}
+        {% if message.level >= 40 %}<div class="rounded-lg badge-bad px-3 py-2 text-[13px] flex items-center gap-2" role="alert">{% icon 'alert' %}{{ message }}</div>
+        {% else %}<div class="surface px-3 py-2 text-[13px] flex items-center gap-2">{% icon 'check' 'text-[var(--ok)]' %}{{ message }}</div>{% endif %}{% endfor %}</div>{% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{% if can_search %}
+<div id="search-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-label="{% translate 'Suche' %}">
+  <div class="absolute inset-0 bg-black/40" data-close-search></div>
+  <div class="relative mx-auto mt-[12vh] w-[min(600px,calc(100vw-2rem))] surface shadow-2xl overflow-hidden">
+    <div class="flex items-center gap-2 px-3 border-b" style="border-color: var(--line)">
+      {% icon 'search' 'muted' %}
+      <input id="search-input" class="w-full h-12 bg-transparent outline-none text-[15px]" placeholder="{% translate 'Name, E-Mail, Gerätenummer, Klasse …' %}" aria-label="{% translate 'Suchen' %}"
+             name="q" autocomplete="off" hx-get="{% url 'global_search' %}" hx-trigger="input changed delay:150ms" hx-target="#search-results" hx-sync="this:replace">
+    </div>
+    <div id="search-results" class="max-h-[50vh] overflow-y-auto"></div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+<div id="problem" class="problem hidden" role="alert"><span id="problem-text"></span><a id="problem-login" class="underline font-semibold hidden" href="{% url 'login' %}" target="_blank" rel="noopener">{% translate "In neuem Tab anmelden" %}</a><button type="button" class="btn btn-ghost btn-sm btn-icon" id="problem-close" aria-label="{% translate 'Hinweis schließen' %}">{% icon 'x' %}</button></div>
+<div id="toasts" class="fixed bottom-4 right-4 z-[60] space-y-2" aria-live="polite"></div>
+{% if tour_steps %}{{ tour_steps|json_script:"tour-steps" }}<span hidden id="tour-config" data-auto="{% if tour_auto %}1{% endif %}" data-seen-url="{% url 'tour_seen' %}"></span>{% endif %}
+<div id="modal-root"></div>
+<dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-text"><form method="dialog"><p id="confirm-text" class="text-[14px] mb-4"></p><div class="flex justify-end gap-2"><button class="btn" value="no" autofocus>{% translate "Abbrechen" %}</button><button class="btn btn-primary" value="yes">{% translate "Ja, fortfahren" %}</button></div></form></dialog>
+{% include "core/_name_scope_dialog.html" %}
+<dialog id="photo-zoom" class="photo-zoom" aria-label="{% translate 'Foto' %}"><img alt="{% translate 'Vergrößertes Foto' %}"></dialog>
+</body>
+</html>

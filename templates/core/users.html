@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Benutzer" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-4">{% translate "Benutzer und Rollen" %}</h1>
+{% if temporary %}<div class="surface p-4 mb-4 max-w-2xl" role="status"><p class="text-[13px]">{% blocktranslate trimmed with name=temporary.username %}Neues Passwort für <strong>{{ name }}</strong>. Es wird nur jetzt angezeigt und muss bei der nächsten Anmeldung geändert werden.{% endblocktranslate %}</p><p class="mono text-[15px] mt-2"><span id="temporary-password">{{ temporary.password }}</span> <button class="btn btn-sm" type="button" data-copy="temporary-password">{% icon 'copy' %}{% translate "Kopieren" %}</button></p></div>{% endif %}
+<div class="grid lg:grid-cols-3 gap-4">
+<div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Benutzer" %}</th><th>{% translate "Rolle" %}</th><th>{% translate "2FA" %}</th><th>{% translate "Status" %}</th><th></th></tr></thead><tbody>
+{% for u in users %}{% blocktranslate trimmed with name=u.username asvar pw_confirm %}Neues Passwort für {{ name }} erzeugen? Das bisherige gilt dann nicht mehr.{% endblocktranslate %}<tr data-menu>
+  <td><div class="font-medium">{{ u.display_name }}</div><div class="muted text-[12px]">{{ u.username }}{% if u.email %} · {{ u.email }}{% endif %}</div></td>
+  <td><form method="post" action="{% url 'user_update' u.pk %}">{% csrf_token %}<input type="hidden" name="action" value="role"><select class="input" name="role" data-autosubmit aria-label="{% translate 'Rolle' %}">{% for value, label in roles %}<option value="{{ value }}" {% if u.role == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></form></td>
+  <td>{% if not two_factor_on %}<span class="badge">{% translate "Aus" %}</span>{% elif u.totp_confirmed %}<span class="badge badge-ok">{% translate "Aktiv" %}</span>{% else %}<span class="badge">{% translate "Nein" %}</span>{% endif %}</td>
+  <td>{% if u.is_active %}<span class="badge badge-ok">{% translate "Aktiv" %}</span>{% else %}<span class="badge badge-bad">{% translate "Gesperrt" %}</span>{% endif %}</td>
+  <td class="text-right whitespace-nowrap"><form method="post" action="{% url 'user_update' u.pk %}" class="inline-flex gap-1">{% csrf_token %}
+    {% if u.totp_confirmed %}<button class="btn btn-sm" name="action" value="reset2fa">{% translate "2FA zurücksetzen" %}</button>{% endif %}
+    {% if u != request.user and u.has_usable_password %}<button class="btn btn-sm" name="action" value="password" data-confirm="{{ pw_confirm }}">{% translate "Neues Passwort" %}</button>{% endif %}
+    {% if u != request.user %}<button class="btn btn-sm" name="action" value="toggle">{% if u.is_active %}{% translate "Sperren" %}{% else %}{% translate "Entsperren" %}{% endif %}</button>{% endif %}</form>
+    <template data-menu-items>{% if u.totp_confirmed %}<a data-post="{% url 'user_update' u.pk %}" data-data='{"action": "reset2fa"}' data-icon="shield">{% translate "2FA zurücksetzen" %}</a>{% endif %}{% if u != request.user and u.has_usable_password %}<a data-post="{% url 'user_update' u.pk %}" data-data='{"action": "password"}' data-confirm="{{ pw_confirm }}" data-icon="key">{% translate "Neues Passwort" %}</a>{% endif %}{% if u != request.user %}<a data-post="{% url 'user_update' u.pk %}" data-data='{"action": "toggle"}' data-icon="lock">{% if u.is_active %}{% translate "Sperren" %}{% else %}{% translate "Entsperren" %}{% endif %}</a>{% endif %}</template></td>
+</tr>{% endfor %}</tbody></table></div>
+<div class="space-y-4">
+<form method="post" action="{% url 'two_factor_switch' %}" class="surface p-4 space-y-2">{% csrf_token %}
+  <div class="flex items-center justify-between gap-2"><h2 class="font-semibold">{% translate "Zwei-Faktor-Anmeldung" %}</h2>{% if two_factor_on %}<span class="badge badge-ok">{% translate "Eingeschaltet" %}</span>{% else %}<span class="badge badge-warn">{% translate "Ausgeschaltet" %}</span>{% endif %}</div>
+  {% if two_factor_on %}<p class="muted text-[13px]">{% translate "Alle Benutzer brauchen bei der Anmeldung einen Code aus ihrer Authenticator-App." %}</p>
+  <button class="btn btn-sm" name="action" value="off" data-confirm="{% translate 'Zwei-Faktor-Anmeldung für alle Benutzer ausschalten? Danach genügt das Passwort.' %}">{% translate "Ausschalten" %}</button>
+  {% else %}<p class="muted text-[13px]">{% translate "Zur Anmeldung genügt das Passwort. Nur für Demos ohne echte Daten gedacht. Bereits eingerichtete Apps gelten nach dem Einschalten weiter." %}</p>
+  <button class="btn btn-sm" name="action" value="on">{% translate "Einschalten" %}</button>{% endif %}
+</form>
+<form method="post" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neuer Benutzer" %}</h2>
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <div class="grid grid-cols-2 gap-2"><div><label class="label" for="f-first_name">{% translate "Vorname" %}</label><input id="f-first_name" class="input" name="first_name"></div><div><label class="label" for="f-last_name">{% translate "Nachname" %}</label><input id="f-last_name" class="input" name="last_name"></div></div>
+  <div><label class="label" for="f-username">{% translate "Benutzername" %}</label><input id="f-username" class="input" name="username" required></div>
+  <div><label class="label" for="f-email">{% translate "E-Mail (für Microsoft-Anmeldung)" %}</label><input id="f-email" class="input" name="email" type="email"></div>
+  <div><label class="label" for="f-role">{% translate "Rolle" %}</label><select id="f-role" class="input" name="role">{% for value, label in roles %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
+  <div><label class="label" for="f-password">{% translate "Passwort (mind. 12 Zeichen)" %}</label><input id="f-password" class="input" name="password" type="password" autocomplete="new-password"><p class="muted text-[12px] mt-1">{% translate "Leer lassen, wenn nur Microsoft 365 genutzt wird." %}</p></div>
+  <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form>
+<div class="surface p-4"><h2 class="font-semibold mb-2">{% translate "Rollen" %}</h2><dl class="space-y-2 text-[13px]">{% for role, text in role_summary %}<div><dt class="font-medium">{{ role.label }}</dt><dd class="muted">{{ text }}</dd></div>{% endfor %}</dl></div>
+</div></div>
+{% endblock %}
