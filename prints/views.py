@@ -57,7 +57,7 @@ def _pdf_response(pdf, name, warnings=()):
 @require("print.run")
 def reports(request):
     groups = {}
-    labels = dict(available_sources())  # templates of a module that is not loaded stay hidden
+    labels = dict(available_sources(request.user))  # templates of a module that is not loaded, or of a table the user may not read, stay hidden
     for template in PrintTemplate.objects.filter(archived=False, source__in=labels):
         groups.setdefault(labels[template.source], []).append(template)
     return render(request, "prints/reports.html", {
@@ -73,7 +73,7 @@ def report_run(request):
     raw_ids = [i for i in request.POST.get("ids", "").replace(" ", "").split(",") if i]
     class_id = request.POST.get("class_id") or None
     source = template.source
-    if source not in dict(available_sources()):
+    if source not in dict(available_sources(request.user)):
         raise Http404
     if (extra := module_source(source)) and not extra.may_print(request.user):
         raise PermissionDenied
@@ -88,6 +88,8 @@ def report_run(request):
             raw_ids = [str(i) for i in Asset.objects.values_list("pk", flat=True)]
         elif source == "case":
             raw_ids = [str(i) for i in SupportCase.objects.exclude(status="Erledigt").values_list("pk", flat=True)]
+        elif extra is not None and hasattr(extra, "all_ids"):
+            raw_ids = extra.all_ids()
     with_secrets = template.contains_secrets
     if with_secrets and not request.user.can("print.secrets"):
         raise PermissionDenied
@@ -105,6 +107,8 @@ def report_run(request):
 def template_new(request):
     if request.method == "POST":
         source = request.POST.get("source", "pupil")
+        if source not in dict(available_sources(request.user)):
+            raise Http404
         name = request.POST.get("name", "").strip() or _("Neue Vorlage")
         template = PrintTemplate.objects.create(name=name, source=source, tree={"page": {"preset": "a4"}, "rows": []})
         return redirect("template_designer", pk=template.pk)
@@ -126,6 +130,7 @@ def template_designer(request, pk):
         "presets": [{"key": k, "label": str(PRESET_LABELS.get(k, v["label"])), "w": v["w"], "h": v["h"]} for k, v in PRESETS.items()],
         "platforms": [{"key": p.key, "name": p.name} for p in Platform.objects.filter(active=True)],
         "listColumns": [{"key": k, "title": t} for k, t in list_columns(template.source)],
+        "lists": extra.lists() if (extra := module_source(template.source)) and hasattr(extra, "lists") else None,
         "canCode": request.user.can("print.code"),
     }
     versions = template.versions.select_related("author")[:10]

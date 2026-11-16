@@ -147,7 +147,9 @@ def render_element(el, record, school):
         return render_table(["Datum", "Beschreibung", "Status", "Austauschgerät"], record.get("cases", []))
     if kind == "list":
         columns = el.get("columns") or []
-        rows = [[member.get(c["key"], "") for c in columns] for member in record.get("members", [])]
+        # A table's records bring one list per link (tables/prints.py); everything else its members.
+        members = record.get("lists", {}).get(el["link"], []) if el.get("link") else record.get("members", [])
+        rows = [[member.get(c["key"], "") for c in columns] for member in members]
         return render_table([c.get("title", c["key"]) for c in columns], rows, extra_class="list")
     if kind == "signature":
         lines = [line for line in (el.get("text") or "Unterschrift").split("\n") if line.strip()]

@@ -10,7 +10,7 @@ class PrintTemplate(TrackedModel):
 
     name = models.CharField("Name", max_length=120)
     description = models.CharField("Beschreibung", max_length=200, blank=True, default="")
-    source = models.CharField("Datenquelle", max_length=20, choices=SOURCES, default="pupil")
+    source = models.CharField("Datenquelle", max_length=64, choices=SOURCES, default="pupil")  # or table:<key> (tables/prints.py)
     tree = models.JSONField(default=dict)  # designer document
     code_mode = models.BooleanField("Code-Modus", default=False)
     code_html = models.TextField(blank=True, default="")
@@ -24,6 +24,12 @@ class PrintTemplate(TrackedModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def source_label(self):
+        from .records import available_sources
+
+        return dict(available_sources()).get(self.source, self.source)
 
 
 class PrintTemplateVersion(TrackedModel):

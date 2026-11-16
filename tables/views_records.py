@@ -122,6 +122,14 @@ def rows(table, user, ids=None):
     return out
 
 
+def _print_templates(table, user):
+    from prints.models import PrintTemplate
+
+    if not user.can("print.run"):
+        return PrintTemplate.objects.none()
+    return PrintTemplate.objects.filter(source=f"table:{table.key}", archived=False)
+
+
 def _views(table, user):
     entity = f"table:{table.key}"
     views = SavedView.objects.filter(entity=entity).filter(Q(owner=None) | Q(owner=user))
@@ -139,7 +147,7 @@ def records_page(request, key):
         "actionUrl": reverse("records_action", args=[table.key]), "fieldUrl": f"/api/tabellen/{table.key}/{{id}}/feld/{{key}}/",
         "viewsUrl": reverse("table_views", args=[table.key]), "viewDeleteUrl": f"/api/tabellen/{table.key}/ansichten/{{id}}/loeschen/",
         "initialSort": named.key if named else "name", "views": _views(table, request.user), "classes": [], "platforms": [],
-        "templates": [], "canEdit": can_edit, "canArchive": False, "canDelete": can_edit, "preset": "",
+        "templates": [{"id": str(t.pk), "name": t.name} for t in _print_templates(table, request.user)], "canEdit": can_edit, "canArchive": False, "canDelete": can_edit, "preset": "",
     }
     return render(request, "tables/records.html", {"config": config, "table": table, "can_edit": can_edit, "active_nav": f"/tabellen/{table.key}/"})
 
@@ -193,7 +201,7 @@ def _context(request, table, record):
     _fill_first_tab(request, record, tabs)
     return {"table": table, "record": record, "tabs": tabs, "form_url": reverse("record_form", args=[table.key, record.pk]),
             "form_kind": f"table-{table.key}", "can_edit": services.may_edit(request.user, table),
-            "print_templates": [], "active_nav": f"/tabellen/{table.key}/"}
+            "print_templates": _print_templates(table, request.user), "active_nav": f"/tabellen/{table.key}/"}
 
 
 def _fill_first_tab(request, record, tabs):

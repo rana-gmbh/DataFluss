@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 11:57+0100\n"
+"POT-Creation-Date: 2026-11-16 13:14+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -423,6 +423,9 @@ msgstr "Spacing"
 msgid "Linie"
 msgstr "Line"
 
+msgid "Liste über Verknüpfung"
+msgstr "List of a link"
+
 msgid "Zugangsdaten: %(platforms)s"
 msgstr "Login details: %(platforms)s"
 
@@ -506,6 +509,9 @@ msgstr "Hide empty platforms"
 
 msgid "Nur diese Plattformen (keine Auswahl = alle)"
 msgstr "Only these platforms (none selected = all)"
+
+msgid "Verknüpfung"
+msgstr "Link"
 
 msgid "Spalten"
 msgstr "Columns"

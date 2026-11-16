@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:01+0100\n"
+"POT-Creation-Date: 2026-11-16 13:14+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1295,6 +1295,10 @@ msgstr "班級名單"
 msgid "Zeugnisse"
 msgstr "成績單"
 
+#, python-format
+msgid "Tabelle: %(name)s"
+msgstr "表格：%(name)s"
+
 msgid "A4 Hochformat"
 msgstr "A4 直向"
 
@@ -1642,6 +1646,19 @@ msgstr "記錄"
 
 msgid "Weitere Felder"
 msgstr "更多欄位"
+
+msgid "Titel des Datensatzes"
+msgstr "記錄標題"
+
+msgid "Titel"
+msgstr "標題"
+
+msgid "Beispieldatensatz"
+msgstr "範例記錄"
+
+#, python-format
+msgid "Beispiel %(n)s"
+msgstr "範例 %(n)s"
 
 #, python-format
 msgid "%(field)s kann hier nicht eingegeben werden."
@@ -3463,9 +3480,6 @@ msgstr "一般"
 msgid "Ziehen, um die Reihenfolge zu ändern"
 msgstr "拖曳以變更順序"
 
-msgid "Titel"
-msgstr "標題"
-
 msgid "z. B. Ausleihen"
 msgstr "例如：借閱"
 
@@ -3780,10 +3794,6 @@ msgstr "姓名和出生日期"
 
 msgid "Bestehende Personen erkennen über"
 msgstr "辨識現有人員的依據"
-
-#, python-format
-msgid "Tabelle: %(name)s"
-msgstr "表格：%(name)s"
 
 msgid "Über die Sicherung zurückzunehmen."
 msgstr "可透過備份復原。"

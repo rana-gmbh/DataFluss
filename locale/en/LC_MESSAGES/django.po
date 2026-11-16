@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:01+0100\n"
+"POT-Creation-Date: 2026-11-16 13:14+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1353,6 +1353,10 @@ msgstr "Class list"
 msgid "Zeugnisse"
 msgstr "Reports"
 
+#, python-format
+msgid "Tabelle: %(name)s"
+msgstr "Table: %(name)s"
+
 msgid "A4 Hochformat"
 msgstr "A4 portrait"
 
@@ -1715,6 +1719,19 @@ msgstr "Record"
 
 msgid "Weitere Felder"
 msgstr "More fields"
+
+msgid "Titel des Datensatzes"
+msgstr "Title of the record"
+
+msgid "Titel"
+msgstr "Title"
+
+msgid "Beispieldatensatz"
+msgstr "Sample record"
+
+#, python-format
+msgid "Beispiel %(n)s"
+msgstr "Example %(n)s"
 
 #, python-format
 msgid "%(field)s kann hier nicht eingegeben werden."
@@ -3635,9 +3652,6 @@ msgstr "General"
 msgid "Ziehen, um die Reihenfolge zu ändern"
 msgstr "Drag to change the order"
 
-msgid "Titel"
-msgstr "Title"
-
 msgid "z. B. Ausleihen"
 msgstr "e.g. Loans"
 
@@ -3971,10 +3985,6 @@ msgstr "Name and date of birth"
 
 msgid "Bestehende Personen erkennen über"
 msgstr "Match existing people by"
-
-#, python-format
-msgid "Tabelle: %(name)s"
-msgstr "Table: %(name)s"
 
 msgid "Über die Sicherung zurückzunehmen."
 msgstr "Can be undone through the backup."

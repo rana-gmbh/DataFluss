@@ -1,6 +1,7 @@
 """Builds the data each template sees. Secrets are only decrypted when requested."""
 from django.db.models import Prefetch
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from core.models import SchoolSettings
 from devices.models import Asset, Assignment, SupportCase
@@ -127,15 +128,25 @@ def class_record(group):
 PLATFORM_SOURCES = ("pupil", "staff", "guardian", "asset", "case", "class")
 
 
-def available_sources():
-    """[(source, label)] of the platform and the loaded modules."""
+def available_sources(user=None):
+    """[(source, label)] of the platform, the loaded modules and the own tables (those `user` may read)."""
+    from tables import services as table_services
+    from tables.models import Table
+
     from .models import PrintTemplate
 
-    return [(key, label) for key, label in PrintTemplate.SOURCES if key in PLATFORM_SOURCES or module_source(key)]
+    sources = [(key, label) for key, label in PrintTemplate.SOURCES if key in PLATFORM_SOURCES or module_source(key)]
+    tables = table_services.readable(user) if user is not None else Table.objects.filter(archived=False)
+    return sources + [(f"table:{t.key}", _("Tabelle: %(name)s") % {"name": t.display_name}) for t in tables]
 
 
 def module_source(source):
-    """A data source a module brings, such as report cards from Unterricht und Noten (core/modules.py print_sources)."""
+    """A data source a module brings, such as report cards from Unterricht und Noten (core/modules.py print_sources),
+    or an own table ("table:<key>", tables/prints.py)."""
+    if (source or "").startswith("table:"):
+        from tables.prints import source_for
+
+        return source_for(source)
     from core import modules
 
     return modules.merged("print_sources").get(source)

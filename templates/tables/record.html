@@ -9,6 +9,15 @@
     <h1 class="page-title truncate">{{ record.title|default:_("(ohne Titel)") }}</h1>
     <div class="flex flex-wrap items-center gap-1.5 mt-0.5"><a class="badge badge-accent" href="{% url 'table_records' table.key %}">{{ table.display_name }}</a></div>
   </div>
+  {% if print_templates %}
+  <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+    <button class="btn" @click="open = !open">{% icon 'printer' %}{% translate "Drucken" %}{% icon 'chevron-down' %}</button>
+    <div class="absolute right-0 z-30 mt-1 w-64 surface p-1 shadow-lg" x-show="open" x-cloak>
+      {% for t in print_templates %}<form method="post" action="{% url 'report_run' %}" target="_blank">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}"><input type="hidden" name="ids" value="{{ record.pk }}">
+        <button class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px]">{{ t.name }}</button></form>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% include "masks/_form.html" %}
 <div hx-get="{% url 'table_backlinks' 'record' record.pk %}" hx-trigger="load" hx-swap="outerHTML"></div>

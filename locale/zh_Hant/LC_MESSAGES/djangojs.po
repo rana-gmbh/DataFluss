@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 11:57+0100\n"
+"POT-Creation-Date: 2026-11-16 13:14+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -415,6 +415,9 @@ msgstr "間距"
 msgid "Linie"
 msgstr "分隔線"
 
+msgid "Liste über Verknüpfung"
+msgstr "關聯列表"
+
 msgid "Zugangsdaten: %(platforms)s"
 msgstr "帳號資訊：%(platforms)s"
 
@@ -498,6 +501,9 @@ msgstr "隱藏無內容的平台"
 
 msgid "Nur diese Plattformen (keine Auswahl = alle)"
 msgstr "僅限這些平台（不選 = 全部）"
+
+msgid "Verknüpfung"
+msgstr "關聯"
 
 msgid "Spalten"
 msgstr "欄"

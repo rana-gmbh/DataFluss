@@ -6,7 +6,7 @@
 <div class="flex flex-wrap items-center gap-2 mb-4">
   <a class="btn btn-ghost btn-icon" href="{% url 'reports' %}" aria-label="{% translate 'Zurück' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
   <input id="d-name" class="input max-w-xs font-semibold" aria-label="{% translate 'Name der Vorlage' %}">
-  <span class="badge">{{ template.get_source_display }}</span><span class="muted text-[12px]" id="d-status"></span><div class="flex-1"></div>
+  <span class="badge">{{ template.source_label }}</span><span class="muted text-[12px]" id="d-status"></span><div class="flex-1"></div>
   <button class="btn" id="d-undo" disabled>{% icon 'undo' %}{% translate "Rückgängig" %}</button>
   <form method="post" action="{% url 'template_action' template.pk %}" class="contents">{% csrf_token %}<button class="btn" name="action" value="duplicate">{% icon 'copy' %}{% translate "Duplizieren" %}</button></form>
   <button class="btn btn-primary" id="d-save">{% icon 'save' %}{% translate "Speichern" %}</button>

@@ -17,6 +17,15 @@
     ["list", gettext("Klassenliste"), { type: "list", columns: [{ key: "sort_name", title: "Name" }] }], ["signature", gettext("Unterschriften"), { type: "signature", text: "Datum, Unterschrift" }],
     ["spacer", gettext("Abstand"), { type: "spacer", h_mm: 5 }], ["divider", gettext("Linie"), { type: "divider" }],
   ];
+  // An own table (tables/prints.py) has no logins, devices or damage reports, and its list shows the records of a link.
+  if (cfg.lists) {
+    const first = cfg.lists[0];
+    for (let i = ELEMENTS.length - 1; i >= 0; i--) {
+      const key = ELEMENTS[i][0];
+      if (["logins", "devices", "cases"].includes(key) || (key === "list" && !first)) ELEMENTS.splice(i, 1);
+      else if (key === "list") ELEMENTS[i] = ["list", gettext("Liste über Verknüpfung"), { type: "list", link: first.key, columns: first.columns.slice(0, 3) }];
+    }
+  }
   const LAYOUTS = [[12], [6, 6], [4, 4, 4], [3, 9], [9, 3], [3, 7, 2], [8, 4]];
   const LABELS = Object.fromEntries(ELEMENTS.map(([k, l]) => [k, l]));
 
@@ -223,8 +232,29 @@
     if (el.type === "list") {
       const list = document.createElement("div");
       list.className = "mb-2";
-      list.innerHTML = `<div class="label">${App.esc(gettext("Spalten"))}</div>`;
-      cfg.listColumns.forEach((c) => {
+      let columns = cfg.listColumns;
+      if (cfg.lists && cfg.lists.length) {
+        const chosen = cfg.lists.find((l) => l.key === el.link) || cfg.lists[0];
+        columns = chosen.columns;
+        const label = document.createElement("label");
+        label.className = "block mb-2";
+        label.innerHTML = `<span class="label">${App.esc(gettext("Verknüpfung"))}</span>`;
+        const select = document.createElement("select");
+        select.className = "input";
+        select.innerHTML = cfg.lists.map((l) => `<option value="${App.esc(l.key)}">${App.esc(l.label)}</option>`).join("");
+        select.value = chosen.key;
+        select.addEventListener("change", () => {
+          const next = cfg.lists.find((l) => l.key === select.value);
+          el.link = next.key;
+          el.columns = next.columns.slice(0, 3);
+          renderCanvas();
+          renderProps();
+        });
+        label.appendChild(select);
+        list.appendChild(label);
+      }
+      list.insertAdjacentHTML("beforeend", `<div class="label">${App.esc(gettext("Spalten"))}</div>`);
+      columns.forEach((c) => {
         const on = (el.columns || []).some((x) => x.key === c.key);
         list.appendChild(check(c.title, on, (v) => {
           el.columns = v ? [...(el.columns || []), c] : (el.columns || []).filter((x) => x.key !== c.key);
