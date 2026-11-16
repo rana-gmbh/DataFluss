@@ -1,6 +1,7 @@
 """Rights, values and design of own tables (docs/TABLES-PLAN.md §2, §3, §6)."""
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.db.models import Count
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
@@ -12,8 +13,10 @@ from vault import crypto
 from .models import EDIT, NONE, READ, RIGHTS, Field, Record, Table
 
 MAX_TEXT = 10_000
-# Types a person can choose now; links, files and formulas follow with their own steps of the plan.
+# Types whose value lives in Record.values; links and files have rows of their own (tables/links.py).
 VALUE_TYPES = [(key, label) for key, label in ft.choices() if ft.TYPES[key].storage == "value"]
+# Types a person can choose now; formulas follow with their own step of the plan.
+CREATE_TYPES = [(key, label) for key, label in ft.choices() if ft.TYPES[key].storage in ("value", "links", "files")]
 SEARCHABLE = {"text", "textarea", "email", "phone", "url", "choice", "multichoice", "number", "date", "datetime"}
 TITLE_TYPES = ("text", "email", "phone", "url", "choice", "number", "date")
 # A field may change to these types; values are converted to the new type's text.
@@ -79,19 +82,31 @@ def stored(record, field):
     return (record.values or {}).get(field.key)
 
 
+def holds_value(field):
+    kind = ft.TYPES.get(field.type)
+    return kind is not None and kind.storage == "value"
+
+
 def value(record, field):
-    """The Python value (core/fieldtypes.py); a secret field gives its stored form, never the plain text."""
+    """The Python value (core/fieldtypes.py); a secret field gives its stored form, never the plain text.
+    Links and files have no value here (tables/links.py)."""
+    if not holds_value(field):
+        return None
     raw = stored(record, field)
     return raw if field.type == "secret" else ft.from_store(field, raw)
 
 
 def display(record, field, localized=False):
+    if not holds_value(field):
+        return ""
     if field.type == "secret":
         return ft.MASKED if stored(record, field) else ""
     return ft.display(field, value(record, field), localized)
 
 
 def form(record, field):
+    if not holds_value(field):
+        return ""
     if field.type == "secret":
         return ft.MASKED if stored(record, field) else ""
     return ft.form(field, value(record, field))
@@ -220,7 +235,11 @@ def create_table(name, request=None):
 
 
 def clean_config(type_, data):
-    """The type's settings from a form (number: decimals, unit, min, max)."""
+    """The type's settings from a form (number: decimals, unit, min, max; links and files: tables/links.py)."""
+    if type_ in ("link", "file", "image"):
+        from . import links
+
+        return links.clean_config(type_, data)
     if type_ != "number":
         return {}
     config = {}
@@ -249,8 +268,10 @@ def create_field(table, label, type_, options_text="", required=False, help_text
     label = (label or "").strip()[:100]
     if not label:
         raise ValidationError(_("Bitte eine Bezeichnung eingeben."))
-    if type_ not in dict(VALUE_TYPES):
+    if type_ not in dict(CREATE_TYPES):
         raise ValidationError(_("Unbekannter Feldtyp."))
+    if type_ == "link" and not (config or {}).get("target"):
+        raise ValidationError(_("Bitte angeben, worauf die Verknüpfung zeigt."))
     options = [{"value": line.strip()[:100], "color": ""} for line in (options_text or "").splitlines() if line.strip()]
     if ft.TYPES[type_].options and not options:
         raise ValidationError(_("Bitte mindestens eine Option angeben."))
@@ -299,7 +320,7 @@ def edit_field(field, data, scope, request=None):
     field.label, field.labels = i18n.rename(field.label, field.labels, (data.get("label") or "")[:100], scope)
     field.help_text = (data.get("help_text") or "").strip()[:200]
     field.required = bool(data.get("required"))
-    field.unique = bool(data.get("unique")) and field.type not in ("bool", "secret", "multichoice", "textarea")
+    field.unique = bool(data.get("unique")) and holds_value(field) and field.type not in ("bool", "secret", "multichoice", "textarea")
     field.in_grid = bool(data.get("in_grid"))
     if ft.TYPES.get(field.type) and ft.TYPES[field.type].options:
         field.options = _edited_options(field, request, scope)
@@ -307,7 +328,33 @@ def edit_field(field, data, scope, request=None):
             raise ValidationError(_("Bitte mindestens eine Option angeben."))
     if field.type == "number":
         field.config = clean_config("number", data)
+    elif field.type in ("link", "file", "image"):
+        field.config = _changed_link_config(field, data)
     field.save()
+
+
+def _changed_link_config(field, data):
+    """A link keeps its target; it may allow several targets (or files), or go back to one while no record has more."""
+    from .models import Attachment, Link
+
+    config = dict(field.config or {})
+    multiple = bool(data.get("multiple"))
+    if config.get("multiple") and not multiple:
+        rows = Link.objects.exclude(target_id=None) if field.type == "link" else Attachment.objects
+        counts = rows.filter(record__table_id=field.table_id, field=field.key).values("record_id").order_by().annotate(n=Count("id"))
+        if any(row["n"] > 1 for row in counts):
+            raise ValidationError(_("Einige Datensätze haben hier mehrere Einträge. Entfernen Sie diese zuerst."))
+    if multiple:
+        config["multiple"] = True
+    else:
+        config.pop("multiple", None)
+    if field.type == "link":
+        reverse = (data.get("reverse") or "").strip()[:100]
+        if reverse:
+            config["reverse"] = reverse
+        else:
+            config.pop("reverse", None)
+    return config
 
 
 def set_order(table, keys):

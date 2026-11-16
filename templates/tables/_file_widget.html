@@ -1,0 +1,9 @@
+{% load i18n ui %}<div id="files-{{ item.fd.key }}" class="space-y-1.5" data-field="{{ item.fd.key }}">
+  {% for file in item.files %}<div class="flex items-center gap-2 text-[13px]">
+    {% if item.fd.type == 'image' %}<a href="{{ file.url }}" target="_blank" rel="noopener"><img src="{{ file.url }}" alt="{{ file.name }}" class="h-14 w-14 object-cover rounded-md border" style="border-color: var(--line)" loading="lazy"></a>{% else %}{% icon 'paperclip' 'muted' %}{% endif %}
+    <a class="hover:underline truncate flex-1" href="{{ file.url }}">{{ file.name }}</a><span class="muted whitespace-nowrap">{{ file.size|filesizeformat }}</span>
+    {% if item.editable %}<button type="button" class="btn btn-ghost btn-icon" hx-post="{{ item.files_url }}" hx-vals='{"delete": "{{ file.id }}"}' hx-target="#files-{{ item.fd.key }}" hx-swap="outerHTML" data-confirm="{% blocktranslate trimmed with name=file.name %}{{ name }} entfernen?{% endblocktranslate %}" title="{% translate 'Datei entfernen' %}" aria-label="{% translate 'Datei entfernen' %}">{% icon 'x' %}</button>{% endif %}
+  </div>{% empty %}{% if not item.editable %}<div class="muted text-[13px] min-h-9 flex items-center">–</div>{% endif %}{% endfor %}
+  {% if item.editable %}<form hx-post="{{ item.files_url }}" hx-encoding="multipart/form-data" hx-target="#files-{{ item.fd.key }}" hx-swap="outerHTML" hx-trigger="change">
+    <input class="input text-[13px] py-1.5 h-auto" id="f-{{ item.fd.key }}" type="file" name="file" {% if item.fd.type == 'image' %}accept="image/jpeg,image/png,image/gif,image/webp"{% endif %} aria-label="{{ item.label }}"></form>{% endif %}
+</div>

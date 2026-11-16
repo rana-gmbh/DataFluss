@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 11:57+0100\n"
+"POT-Creation-Date: 2026-11-16 12:15+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1448,15 +1448,31 @@ msgid ""
 "übernehmen."
 msgstr "該記錄已刪除，無法再採用另一版本。"
 
+msgid "Bitte angeben, worauf die Verknüpfung zeigt."
+msgstr "請選擇關聯指向的對象。"
+
+msgid "unbekannte Tabelle"
+msgstr "未知表格"
+
+#, python-format
+msgid "%(field)s ist archiviert und kann nicht geändert werden."
+msgstr "%(field)s 已封存，無法變更。"
+
+msgid "nicht sichtbar"
+msgstr "不可見"
+
+msgid "(ohne Titel)"
+msgstr "（無標題）"
+
+#, python-format
+msgid "%(field)s: Bitte ein Bild hochladen (JPEG, PNG, GIF oder WebP)."
+msgstr "%(field)s：請上傳圖片（JPEG、PNG、GIF 或 WebP）。"
+
 msgid "Datensatz"
 msgstr "記錄"
 
 msgid "Weitere Felder"
 msgstr "更多欄位"
-
-#, python-format
-msgid "%(field)s ist archiviert und kann nicht geändert werden."
-msgstr "%(field)s 已封存，無法變更。"
 
 #, python-format
 msgid "%(field)s kann hier nicht eingegeben werden."
@@ -1488,11 +1504,12 @@ msgid ""
 "neues Feld an."
 msgstr "此類型與已填寫的值不符，建議新增欄位。"
 
+msgid ""
+"Einige Datensätze haben hier mehrere Einträge. Entfernen Sie diese zuerst."
+msgstr "部分記錄在此有多個項目，請先刪除。"
+
 msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "該表格包含記錄，請改為封存。"
-
-msgid "(ohne Titel)"
-msgstr "（無標題）"
 
 #, python-format
 msgid "%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu."
@@ -3104,6 +3121,29 @@ msgstr ""
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "請在瀏覽器中開啟學校管理系統進行此操作。"
 
+msgid "Verknüpft in eigenen Tabellen"
+msgstr "在自訂表格中的關聯"
+
+#, python-format
+msgid "%(name)s entfernen?"
+msgstr "刪除 %(name)s？"
+
+msgid "Datei entfernen"
+msgstr "刪除檔案"
+
+msgid "Nichts gefunden."
+msgstr "未找到結果。"
+
+#, python-format
+msgid "%(name)s entfernen"
+msgstr "刪除 %(name)s"
+
+msgid "Suchen und hinzufügen …"
+msgstr "搜尋並新增…"
+
+msgid "Suchen und ersetzen …"
+msgstr "搜尋並取代…"
+
 msgid "Zur Tabelle"
 msgstr "返回表格"
 
@@ -3115,6 +3155,15 @@ msgid_plural ""
 "Gelöschte Datensätze bleiben %(days)s Tage hier. Danach sind sie endgültig "
 "gelöscht."
 msgstr[0] "已刪除的記錄會在此保留 %(days)s 天，之後將被永久刪除。"
+
+msgid "Zeigt auf"
+msgstr "指向"
+
+msgid "Name auf der Gegenseite"
+msgstr "對方顯示的名稱"
+
+msgid "Mehrere erlaubt"
+msgstr "允許多個"
 
 msgid "Nachkommastellen"
 msgstr "小數位數"
@@ -3195,6 +3244,9 @@ msgstr "拖曳以變更順序"
 
 msgid "Titel"
 msgstr "標題"
+
+msgid "z. B. Ausleihen"
+msgstr "例如：借閱"
 
 msgid "Wie ein Datensatz aussieht"
 msgstr "記錄的外觀"

@@ -1,0 +1,5 @@
+{% load i18n ui %}<section class="surface p-4 mt-4" aria-label="{% translate 'Verknüpft in eigenen Tabellen' %}">
+  <h2 class="section-title mb-2 inline-flex items-center gap-2">{% icon 'table' 'text-[16px] text-[var(--accent)]' %}{% translate "Verknüpft in eigenen Tabellen" %}</h2>
+  {% for group in groups %}<div class="mt-2"><div class="label">{{ group.title }}</div>
+    <div class="flex flex-wrap gap-1.5">{% for r in group.records %}<a class="badge badge-accent hover:underline" href="{{ r.url }}">{{ r.title }}</a>{% endfor %}</div></div>{% endfor %}
+</section>

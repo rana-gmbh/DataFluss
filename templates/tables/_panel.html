@@ -4,4 +4,4 @@
 {% block badges %}<span class="badge badge-accent">{{ table.display_name }}</span>{% endblock %}
 {% block record_id %}{{ record.pk }}{% endblock %}
 {% block page_url %}{% url 'record_detail' table.key record.pk %}{% endblock %}
-{% block body %}{% include "masks/_form.html" %}{% endblock %}
+{% block body %}{% include "masks/_form.html" %}<div hx-get="{% url 'table_backlinks' 'record' record.pk %}" hx-trigger="load" hx-swap="outerHTML"></div>{% endblock %}

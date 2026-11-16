@@ -16,6 +16,9 @@
     <button type="button" class="btn btn-sm mt-2" @click="rows.push({})">{% icon 'plus' %}{% translate "Option hinzufügen" %}</button>
   </fieldset>
   {% endif %}
+  {% if field.type == 'link' %}<div><div class="label">{% translate "Zeigt auf" %}</div><div class="input flex items-center" style="background: var(--surface-2)">{{ target_label }}</div></div>
+  <div><label class="label" for="f-reverse">{% translate "Name auf der Gegenseite" %}</label><input id="f-reverse" class="input" name="reverse" maxlength="100" value="{{ field.config.reverse|default:'' }}"></div>{% endif %}
+  {% if field.type == 'link' or field.type == 'file' or field.type == 'image' %}<label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="multiple" {% if field.config.multiple %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Mehrere erlaubt" %}</label>{% endif %}
   {% if field.type == 'number' %}<div class="grid sm:grid-cols-4 gap-2">
     <div><label class="label" for="f-decimals">{% translate "Nachkommastellen" %}</label><input id="f-decimals" class="input" name="decimals" type="number" min="0" max="6" value="{{ field.config.decimals|default:0 }}"></div>
     <div><label class="label" for="f-unit">{% translate "Einheit" %}</label><input id="f-unit" class="input" name="unit" maxlength="10" value="{{ field.config.unit|default:'' }}"></div>
@@ -23,7 +26,7 @@
     <div><label class="label" for="f-max">{% translate "Höchstens" %}</label><input id="f-max" class="input" name="max" value="{{ field.config.max|default:'' }}"></div></div>{% endif %}
   <div class="flex flex-wrap gap-4 text-[13px]"><label class="flex items-center gap-2"><input type="checkbox" name="required" {% if field.required %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Pflichtfeld" %}</label>
     <label class="flex items-center gap-2"><input type="checkbox" name="in_grid" {% if field.in_grid %}checked{% endif %} class="accent-[var(--accent)]">{% translate "In der Liste" %}</label>
-    {% if field.type != 'bool' and field.type != 'secret' and field.type != 'multichoice' and field.type != 'textarea' %}<label class="flex items-center gap-2"><input type="checkbox" name="unique" {% if field.unique %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Eindeutig" %}</label>{% endif %}</div>
+    {% if field.type != 'bool' and field.type != 'secret' and field.type != 'multichoice' and field.type != 'textarea' and field.type != 'link' and field.type != 'file' and field.type != 'image' %}<label class="flex items-center gap-2"><input type="checkbox" name="unique" {% if field.unique %}checked{% endif %} class="accent-[var(--accent)]">{% translate "Eindeutig" %}</label>{% endif %}</div>
   <div class="flex gap-2"><button class="btn btn-primary">{% translate "Speichern" %}</button><a class="btn" href="{% url 'table_settings' table.key %}?tab=felder">{% translate "Zurück" %}</a></div></form>
 <div class="space-y-4">
   {% if compatible %}<form method="post" class="surface p-4 space-y-2">{% csrf_token %}<h2 class="font-semibold">{% translate "Typ ändern" %}</h2>

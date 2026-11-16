@@ -45,9 +45,11 @@ class DesignTests(TableCase):
             services.create_table(" ")
         with self.assertRaisesMessage(ValidationError, "Option"):
             services.create_field(self.table, "Farbe", "choice", "")
-        for later in ("link", "file", "formula", "class", "erfunden"):
+        for later in ("formula", "class", "erfunden"):
             with self.subTest(type=later), self.assertRaisesMessage(ValidationError, "Feldtyp"):
                 services.create_field(self.table, "X", later)
+        with self.assertRaisesMessage(ValidationError, "worauf"):
+            services.create_field(self.table, "Verweis", "link")
         with self.assertRaisesMessage(ValidationError, "Nachkommastellen"):
             services.clean_config("number", {"decimals": "9"})
 

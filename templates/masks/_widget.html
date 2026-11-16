@@ -2,7 +2,9 @@
 <div class="min-w-0">
   {% if item.fd.type != 'bool' %}<label class="label" for="f-{{ item.fd.key }}">{{ item.label }}{% if item.fd.required %} <span class="text-[var(--bad)]">*</span>{% endif %}</label>{% endif %}
   {% with key=item.fd.key type=item.fd.type %}
-  {% if not item.editable and type != 'secret' %}
+  {% if type == 'link' %}{% include "tables/_link_widget.html" %}
+  {% elif type == 'file' or type == 'image' %}{% include "tables/_file_widget.html" %}
+  {% elif not item.editable and type != 'secret' %}
     {% if type == 'bool' %}<div class="label">{{ item.label }}</div><div class="text-[13px]">{% if item.value %}{% translate "Ja" %}{% else %}{% translate "Nein" %}{% endif %}</div>
     {% elif type == 'class' %}<div class="input flex items-center" style="background: var(--surface-2)">{{ item.display|default:"–" }}</div>
     {% elif type == 'textarea' %}<div class="input whitespace-pre-wrap py-2 h-auto min-h-9" style="background: var(--surface-2)">{{ item.value|default:"–" }}</div>

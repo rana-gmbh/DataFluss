@@ -13,7 +13,7 @@ from core import audit, fieldtypes as ft
 from core.permissions import require
 from masks import i18n
 
-from . import masks as table_masks, services
+from . import links, masks as table_masks, services
 from .models import EDIT, NONE, READ, Field, Record, Table
 
 ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench"]
@@ -39,7 +39,8 @@ def table_list(request):
 def _settings_context(table, tab, **extra):
     fields = services.fields_of(table, include_archived=True)
     return {
-        "table": table, "tab": tab, "fields": fields, "types": services.VALUE_TYPES, "icons": ICONS,
+        "table": table, "tab": tab, "fields": fields, "types": services.CREATE_TYPES, "icons": ICONS,
+        "link_targets": links.target_choices(),
         "title_choices": [f for f in fields if not f.archived and f.type in services.TITLE_TYPES],
         "roles": [{"value": value, "label": label, "right": (table.rights or {}).get(value, NONE)} for value, label in services.roles()],
         "rights": [(NONE, _("Kein Zugriff")), (READ, _("Lesen")), (EDIT, _("Bearbeiten"))],
@@ -125,7 +126,8 @@ def table_field_new(request, key):
         payload = json.loads(request.body or b"{}")
         try:
             field = services.create_field(table, payload.get("label"), payload.get("type", "text"), payload.get("options"),
-                                          payload.get("required"), payload.get("help_text"), payload.get("in_grid", True), request=request)
+                                          payload.get("required"), payload.get("help_text"), payload.get("in_grid", True),
+                                          config=services.clean_config(payload.get("type", "text"), payload), request=request)
         except ValidationError as exc:
             return JsonResponse({"error": " ".join(exc.messages)}, status=422)
         return JsonResponse(table_masks.field_json(field))
@@ -173,8 +175,19 @@ def table_field(request, key, pk):
     options = [{"value": o["value"], "shown": i18n.option_label(o)} for o in field.options]
     compatible = [(k, ft.TYPES[k].label) for k in sorted(services.COMPATIBLE.get(field.type, set()))]
     return render(request, "tables/field.html", {"table": table, "field": field, "options": options, "compatible": compatible,
-                                                 "filled": Record.everything.filter(table=table, values__has_key=field.key).count(),
+                                                 "target_label": links.target_label(field) if field.type == "link" else "",
+                                                 "filled": _filled(table, field),
                                                  "active_nav": "settings_home"})
+
+
+def _filled(table, field):
+    from .models import Attachment, Link
+
+    if field.type == "link":
+        return Link.objects.filter(record__table=table, field=field.key).exclude(target_id=None).values("record_id").distinct().count()
+    if field.type in ("file", "image"):
+        return Attachment.objects.filter(record__table=table, field=field.key).values("record_id").distinct().count()
+    return Record.everything.filter(table=table, values__has_key=field.key).count()
 
 
 @require("tables.design")

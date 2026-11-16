@@ -10,7 +10,7 @@ from core import fieldtypes as ft
 from masks import i18n
 from masks.models import Mask, MaskVersion
 
-from . import services
+from . import links, services
 
 # Blocks a record page may hold, besides fields and notes. Links and attachments follow with their step.
 BLOCKS = {"history": (gettext_lazy("Änderungsverlauf"), "history")}
@@ -75,7 +75,7 @@ def _field_entry(item, record, field, user, editable):
     if field.type == "number":
         places = ft.decimals(field)
         step = f"{10 ** -places:.{places}f}" if places else "1"
-    return {
+    entry = {
         "w": item.get("w", 12), "type": "field", "fd": field,
         "value": services.form(record, field), "display": services.display(record, field, localized=True),
         "editable": editable, "url": f"{base}feld/{field.key}/",
@@ -84,6 +84,18 @@ def _field_entry(item, record, field, user, editable):
         "help": item.get("help") or field.help_text,
         "choices": field.option_choices if field.type in ("choice", "multichoice") else None, "step": step,
     }
+    if field.type == "link":
+        entry.update(targets=links.shown_targets(record, field, user), multiple=bool(ft.config(field).get("multiple")),
+                     picker_url=f"{base}verknuepfung/{field.key}/suche/", link_url=f"{base}verknuepfung/{field.key}/")
+    elif field.type in ("file", "image"):
+        entry.update(files=[{"id": str(a.pk), "name": a.name, "size": a.size, "url": f"{base}datei/{a.pk}/"} for a in links.files(record, field)],
+                     files_url=f"{base}dateien/{field.key}/")
+    return entry
+
+
+def editable_type(field):
+    kind = ft.TYPES.get(field.type)
+    return kind is not None and kind.storage in ("value", "links", "files")
 
 
 def build_view(tree, record, user, readonly=False):
@@ -100,7 +112,7 @@ def build_view(tree, record, user, readonly=False):
             field = fields.get(item.get("field"))
             if field is None or (field.type == "secret" and not user.can("vault.view")):
                 return None
-            return _field_entry(item, record, field, user, editable and ft.TYPES.get(field.type) is not None and ft.TYPES[field.type].storage == "value")
+            return _field_entry(item, record, field, user, editable and editable_type(field))
         if kind == "block" and item.get("block") in BLOCKS:
             name = item["block"]
             return {"w": item.get("w", 12), "type": "block", "block": name, "title": BLOCKS[name][0],

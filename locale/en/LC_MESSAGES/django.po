@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 11:57+0100\n"
+"POT-Creation-Date: 2026-11-16 12:15+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1521,15 +1521,31 @@ msgid ""
 msgstr ""
 "The record has been deleted, so the other version can no longer be applied."
 
+msgid "Bitte angeben, worauf die Verknüpfung zeigt."
+msgstr "Please choose what the link points to."
+
+msgid "unbekannte Tabelle"
+msgstr "unknown table"
+
+#, python-format
+msgid "%(field)s ist archiviert und kann nicht geändert werden."
+msgstr "%(field)s is archived and cannot be changed."
+
+msgid "nicht sichtbar"
+msgstr "not visible"
+
+msgid "(ohne Titel)"
+msgstr "(untitled)"
+
+#, python-format
+msgid "%(field)s: Bitte ein Bild hochladen (JPEG, PNG, GIF oder WebP)."
+msgstr "%(field)s: Please upload a picture (JPEG, PNG, GIF or WebP)."
+
 msgid "Datensatz"
 msgstr "Record"
 
 msgid "Weitere Felder"
 msgstr "More fields"
-
-#, python-format
-msgid "%(field)s ist archiviert und kann nicht geändert werden."
-msgstr "%(field)s is archived and cannot be changed."
 
 #, python-format
 msgid "%(field)s kann hier nicht eingegeben werden."
@@ -1561,11 +1577,12 @@ msgid ""
 "neues Feld an."
 msgstr "This type does not fit the values entered. Better create a new field."
 
+msgid ""
+"Einige Datensätze haben hier mehrere Einträge. Entfernen Sie diese zuerst."
+msgstr "Some records have several entries here. Remove them first."
+
 msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "The table contains records. Archive it instead."
-
-msgid "(ohne Titel)"
-msgstr "(untitled)"
 
 #, python-format
 msgid "%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu."
@@ -3264,6 +3281,29 @@ msgstr ""
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "For this, please open the school administration in your browser."
 
+msgid "Verknüpft in eigenen Tabellen"
+msgstr "Linked in own tables"
+
+#, python-format
+msgid "%(name)s entfernen?"
+msgstr "Remove %(name)s?"
+
+msgid "Datei entfernen"
+msgstr "Remove file"
+
+msgid "Nichts gefunden."
+msgstr "Nothing found."
+
+#, python-format
+msgid "%(name)s entfernen"
+msgstr "Remove %(name)s"
+
+msgid "Suchen und hinzufügen …"
+msgstr "Search and add …"
+
+msgid "Suchen und ersetzen …"
+msgstr "Search and replace …"
+
 msgid "Zur Tabelle"
 msgstr "To the table"
 
@@ -3280,6 +3320,15 @@ msgstr[0] ""
 msgstr[1] ""
 "Deleted records stay here for %(days)s days. After that they are deleted for"
 " good."
+
+msgid "Zeigt auf"
+msgstr "Points to"
+
+msgid "Name auf der Gegenseite"
+msgstr "Name on the other side"
+
+msgid "Mehrere erlaubt"
+msgstr "Several allowed"
 
 msgid "Nachkommastellen"
 msgstr "Decimal places"
@@ -3365,6 +3414,9 @@ msgstr "Drag to change the order"
 
 msgid "Titel"
 msgstr "Title"
+
+msgid "z. B. Ausleihen"
+msgstr "e.g. Loans"
 
 msgid "Wie ein Datensatz aussieht"
 msgstr "What a record looks like"

@@ -19,8 +19,8 @@ from core import audit, fieldtypes as ft
 from core.models import ChangeLog, SavedView
 from vault.services import rate_limited
 
-from . import masks as table_masks, services
-from .models import Record, Table
+from . import links, masks as table_masks, services
+from .models import Attachment, Record, Table
 
 GRID_EDITABLE = {"text", "textarea", "number", "bool", "choice", "date", "email", "phone", "url"}
 
@@ -47,7 +47,7 @@ def _columns(table, user):
     columns = []
     for field in services.fields_of(table):
         kind = ft.TYPES.get(field.type)
-        if kind is None or kind.storage != "value" or field.type == "secret":
+        if kind is None or kind.storage == "computed" or field.type == "secret":
             continue
         columns.append({
             "key": field.key, "title": str(field.display_label), "type": kind.grid, "visible": field.in_grid,
@@ -65,15 +65,38 @@ def _grid_value(field, raw):
     return ft.to_store(field, value) if value is not None else None
 
 
-def rows(table, ids=None):
-    fields = [f for f in services.fields_of(table) if f.type != "secret" and ft.TYPES.get(f.type) and ft.TYPES[f.type].storage == "value"]
+def _related_texts(table, records, fields, user):
+    """{(record id, field key): text} for link and file fields, fetched once for the whole list."""
+    from .models import Link
+
+    texts = {}
+    ids = [r.pk for r in records]
+    for field in fields:
+        if field.type == "link":
+            rows = list(Link.objects.filter(record_id__in=ids, field=field.key).exclude(target_id=None).order_by("order", "created_at"))
+            found = links.resolve(user, links.kind_of(field), [r.target_id for r in rows], links.target_table(field))
+            for row in rows:
+                texts.setdefault((row.record_id, field.key), []).append(str(found[row.target_id]["title"]))
+        elif field.type in ("file", "image"):
+            for row in Attachment.objects.filter(record_id__in=ids, field=field.key):
+                texts.setdefault((row.record_id, field.key), []).append(row.name)
+    return {key: ", ".join(values) for key, values in texts.items()}
+
+
+def rows(table, user, ids=None):
+    fields = [f for f in services.fields_of(table) if f.type != "secret" and ft.TYPES.get(f.type) and ft.TYPES[f.type].storage != "computed"]
     records = Record.objects.filter(table=table)
     if ids is not None:
         records = records.filter(pk__in=ids)
+    records = list(records.order_by("title"))
+    related = _related_texts(table, records, [f for f in fields if not services.holds_value(f)], user)
     out = []
-    for record in records.order_by("title"):
+    for record in records:
         row = {"id": str(record.pk), "name": record.title or _("(ohne Titel)")}
         for field in fields:
+            if not services.holds_value(field):
+                row[field.key] = related.get((record.pk, field.key))
+                continue
             raw = (record.values or {}).get(field.key)
             row[field.key] = _grid_value(field, raw) if raw not in (None, "") else None
         out.append(row)
@@ -108,10 +131,10 @@ def api_rows(request, key):
     record = request.GET.get("id")
     if record:
         try:
-            return JsonResponse(rows(table, ids=[uuid.UUID(record)]), safe=False)
+            return JsonResponse(rows(table, request.user, ids=[uuid.UUID(record)]), safe=False)
         except ValueError:
             return HttpResponseBadRequest()
-    return JsonResponse(rows(table), safe=False)
+    return JsonResponse(rows(table, request.user), safe=False)
 
 
 def _field(table, key):
@@ -290,3 +313,106 @@ def api_view_delete(request, key, pk):
     table = _table(request, key)
     get_object_or_404(SavedView, pk=pk, entity=f"table:{table.key}", owner=request.user).delete()
     return JsonResponse({"ok": True})
+
+
+def _widget(request, table, record, field, template, problem=""):
+    entry = table_masks._field_entry({"w": 12}, record, field, request.user, services.may_edit(request.user, table))
+    entry["label"] = field.display_label
+    response = render(request, template, {"item": entry})
+    if problem:
+        response["HX-Trigger"] = json.dumps({"toast": problem})
+    return response
+
+
+def _typed_field(table, key, types):
+    field = _field(table, key)
+    if field.type not in types:
+        raise Http404
+    return field
+
+
+def record_link_options(request, key, pk, field_key):
+    """What the picker offers: targets the user may see, without those already linked."""
+    table = _table(request, key, edit=True)
+    record = _record(table, pk)
+    field = _typed_field(table, field_key, ("link",))
+    linked = {str(t) for t in links.targets(record, field)}
+    options = [o for o in links.candidates(request.user, field, request.GET.get("q", "")) if o["id"] not in linked]
+    return render(request, "tables/_link_options.html", {"options": options, "field_key": field.key,
+                                                         "link_url": reverse("record_link", args=[table.key, record.pk, field.key])})
+
+
+@require_POST
+def record_link(request, key, pk, field_key):
+    table = _table(request, key, edit=True)
+    record = _record(table, pk)
+    field = _typed_field(table, field_key, ("link",))
+    problem = ""
+    try:
+        target = str(uuid.UUID(request.POST.get("target", "")))
+        if request.POST.get("action") == "remove":
+            links.remove_target(record, field, target)
+        else:
+            found = links.resolve(request.user, links.kind_of(field), [uuid.UUID(target)], links.target_table(field))
+            if not found[uuid.UUID(target)]["visible"]:
+                raise PermissionDenied
+            links.add_target(record, field, target)
+    except ValueError:
+        return HttpResponseBadRequest()
+    except ValidationError as exc:
+        problem = " ".join(exc.messages)
+    return _widget(request, table, record, field, "tables/_link_widget.html", problem)
+
+
+@require_POST
+def record_files(request, key, pk, field_key):
+    table = _table(request, key, edit=True)
+    record = _record(table, pk)
+    field = _typed_field(table, field_key, ("file", "image"))
+    problem = ""
+    if request.POST.get("delete"):
+        attachment = Attachment.objects.filter(record=record, field=field.key, pk=request.POST["delete"]).first()
+        if attachment:
+            audit.log("attachment", f"Datei {attachment.name} aus {table.name} gelöscht", request=request, target=record.pk)
+            links.remove_file(attachment)
+    elif request.FILES.get("file"):
+        try:
+            links.add_file(record, field, request.FILES["file"], request.user)
+        except ValidationError as exc:
+            problem = " ".join(exc.messages)
+    return _widget(request, table, record, field, "tables/_file_widget.html", problem)
+
+
+def record_file(request, key, pk, attachment):
+    """A file of a record, for whoever may read the table. Pictures open in the browser, everything else downloads."""
+    from django.http import FileResponse
+
+    from core.views import INLINE_TYPES
+
+    table = _table(request, key)
+    item = get_object_or_404(Attachment, pk=attachment, record__table=table, record_id=pk)
+    field = next((f for f in services.fields_of(table, include_archived=True) if f.key == item.field), None)
+    inline = item.content_type in INLINE_TYPES and field is not None and field.type == "image"
+    if not inline:
+        audit.log("download", f"Datei {item.name} geöffnet", request=request, target=pk)
+    response = FileResponse(item.file.open("rb"), as_attachment=not inline, filename=item.name)
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Content-Security-Policy"] = "sandbox; default-src 'none'"
+    response["Cache-Control"] = "private, max-age=300"
+    return response
+
+
+def backlinks(request, kind, pk):
+    """The section "Verknüpft in eigenen Tabellen" on a person's or device's page: empty when nothing links there."""
+    if kind == "record":
+        target = Record.objects.select_related("table").filter(pk=pk).first()
+        if target is None or not services.may_read(request.user, target.table):
+            raise PermissionDenied
+    elif kind not in ("pupil", "staff", "asset"):
+        raise Http404
+    elif not request.user.can("device.view" if kind == "asset" else "person.view"):
+        raise PermissionDenied
+    groups = links.backlinks(request.user, kind, pk)
+    if not groups:
+        return HttpResponse("")
+    return render(request, "tables/_backlinks.html", {"groups": groups})

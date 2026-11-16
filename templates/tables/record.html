@@ -11,4 +11,5 @@
   </div>
 </div>
 {% include "masks/_form.html" %}
+<div hx-get="{% url 'table_backlinks' 'record' record.pk %}" hx-trigger="load" hx-swap="outerHTML"></div>
 {% endblock %}

@@ -111,3 +111,42 @@ class Record(RecycledModel):
         if name != "values":
             return set()
         return set(Field.objects.filter(table_id=self.table_id, type="secret").values_list("key", flat=True))
+
+
+def _upload_path(attachment, filename):
+    return f"tables/{attachment.record.table.key}/{attachment.record_id}/{attachment.pk}-{filename}"[:250]
+
+
+class Link(TrackedModel):
+    """One target of a link field. The target is a plain UUID, not a foreign key: a device's scope closes over
+    foreign keys, and a link must never pull pupils or other tables onto a device whose role may not see them.
+    Ids are derived from the record and field (and the target, for a field with several), so two computers
+    changing a link offline change the same row (tables/links.py link_id)."""
+
+    RECORD, PUPIL, STAFF, ASSET = "record", "pupil", "staff", "asset"
+    KINDS = (RECORD, PUPIL, STAFF, ASSET)
+
+    record = models.ForeignKey(Record, on_delete=models.CASCADE, related_name="links")
+    field = models.CharField(max_length=60)
+    target_kind = models.CharField(max_length=10)
+    target_id = models.UUIDField(null=True, blank=True, db_index=True)  # empty: a single link that was removed
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "created_at"]
+        indexes = [models.Index(fields=["record", "field"])]
+
+
+class Attachment(TrackedModel):
+    """A file of a file or image field. Served by tables/views_records.py record_file, never as plain media."""
+
+    record = models.ForeignKey(Record, on_delete=models.CASCADE, related_name="attachments")
+    field = models.CharField(max_length=60)
+    file = models.FileField(upload_to=_upload_path, max_length=255)
+    name = models.CharField(max_length=200)
+    size = models.PositiveIntegerField(default=0)
+    content_type = models.CharField(max_length=100, blank=True, default="")
+    uploaded_by = models.ForeignKey("core.User", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+
+    class Meta:
+        ordering = ["created_at"]

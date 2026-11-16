@@ -1,0 +1,12 @@
+{% load i18n ui %}<div id="link-{{ item.fd.key }}" class="space-y-1.5" data-field="{{ item.fd.key }}">
+  <div class="flex flex-wrap gap-1.5 min-h-9 items-center">
+    {% for target in item.targets %}<span class="badge {% if target.visible %}badge-accent{% endif %} inline-flex items-center gap-1">{% if target.url %}<a class="hover:underline" href="{{ target.url }}">{{ target.title }}</a>{% else %}<span class="italic">{{ target.title }}</span>{% endif %}
+      {% if item.editable %}<button type="button" class="opacity-70 hover:opacity-100" hx-post="{{ item.link_url }}" hx-vals='{"action": "remove", "target": "{{ target.id }}"}' hx-target="#link-{{ item.fd.key }}" hx-swap="outerHTML" title="{% translate 'Verknüpfung entfernen' %}" aria-label="{% blocktranslate trimmed with name=target.title %}{{ name }} entfernen{% endblocktranslate %}">{% icon 'x' 'text-[12px]' %}</button>{% endif %}</span>
+    {% empty %}<span class="muted text-[13px]">–</span>{% endfor %}
+  </div>
+  {% if item.editable %}<div class="relative" x-data="{ open: false }" @click.outside="open = false" @keydown.escape="open = false">
+    <input class="input" id="f-{{ item.fd.key }}" type="search" name="q" autocomplete="off" placeholder="{% if item.multiple or not item.targets %}{% translate 'Suchen und hinzufügen …' %}{% else %}{% translate 'Suchen und ersetzen …' %}{% endif %}"
+      hx-get="{{ item.picker_url }}" hx-trigger="input changed delay:250ms, focus" hx-target="next [data-options]" hx-swap="innerHTML" @focus="open = true" @input="open = true" aria-label="{{ item.label }}">
+    <div data-options class="absolute z-30 mt-1 w-full max-h-64 overflow-y-auto surface p-1 shadow-lg" x-show="open" x-cloak role="listbox"></div>
+  </div>{% endif %}
+</div>

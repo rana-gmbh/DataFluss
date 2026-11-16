@@ -168,6 +168,49 @@ def scoping():
     check("Mac to Mac through the server", person_field("mac3", pk2, "last_name"), "Von-Mac1")
 
 
+TABLES = ("import json; from core.models import Role, User; from people.models import Person\n"
+          "from tables import links, services; from tables.models import Field, Link, Record, Table\n")
+
+
+def tables():
+    """Own tables (docs/TABLES-PLAN.md): a read-only role, links offline on two computers, hidden targets, rights taken away."""
+    global ok
+    ids = run("server", TABLES + (
+        "intern = services.create_table('Intern'); geheim = services.create_record(intern, {'f_name': 'Nur IT'})\n"
+        "books = services.create_table('Bücher'); services.set_rights(books, {Role.SCHULLEITUNG: 'read'})\n"
+        "who = services.create_field(books, 'Leser', 'link', config={'target': 'pupil', 'multiple': True})\n"
+        "note = services.create_field(books, 'Ablage', 'link', config={'target': 'record', 'table': intern.key})\n"
+        "momo = services.create_record(books, {'f_name': 'Momo'}); links.set_targets(momo, note, [str(geheim.pk)])\n"
+        "pupils = [str(p.pk) for p in Person.objects.filter(kind='pupil').order_by('last_name')[:2]]\n"
+        "print('@@' + json.dumps({'momo': str(momo.pk), 'geheim': str(geheim.pk), 'pupils': pupils}))"))
+    for node in ("mac1", "mac2", "mac3"):
+        sync(node)
+    HOLDS = TABLES + "print('@@' + json.dumps([Record.objects.filter(pk='{}').exists(), Record.objects.filter(pk='{}').exists()]))"
+    check("tables: IT computer holds both tables", run("mac1", HOLDS.format(ids["momo"], ids["geheim"])), [True, True])
+    check("tables: Schulleitung computer holds only the readable table", run("mac2", HOLDS.format(ids["momo"], ids["geheim"])), [True, False])
+    shown = run("mac2", TABLES + f"r = Record.objects.get(pk='{ids['momo']}'); f = Field.objects.get(table=r.table, key='f_ablage')\n"
+                "print('@@' + json.dumps(links.display(r, f, User.objects.get(username='leitung'))))")
+    check("tables: a link into a table the role may not read says so", shown, "nicht sichtbar")
+
+    ADD = TABLES + "r = Record.objects.get(pk='{}'); f = Field.objects.get(table=r.table, key='f_leser'); links.add_target(r, f, '{}'); print('@@1')"
+    run("mac1", ADD.format(ids["momo"], ids["pupils"][0]))
+    run("mac3", ADD.format(ids["momo"], ids["pupils"][1]))
+    sync("mac1"); sync("mac3"); sync("mac1")
+    READERS = TABLES + "print('@@' + json.dumps(sorted(str(l.target_id) for l in Link.objects.filter(record_id='{}', field='f_leser'))))"
+    both = sorted(ids["pupils"])
+    check("tables: offline additions from two computers both reach the server", run("server", READERS.format(ids["momo"])), both)
+    check("tables: and both computers", (run("mac1", READERS.format(ids["momo"])), run("mac3", READERS.format(ids["momo"]))), (both, both))
+
+    run("mac2", TABLES + f"r = Record.objects.get(pk='{ids['momo']}'); r.values = {{**r.values, 'f_name': 'Gehackt'}}; r.save(); print('@@1')")
+    sync("mac2"); sync("mac2")
+    TITLE = TABLES + f"print('@@' + json.dumps(Record.objects.get(pk='{ids['momo']}').values['f_name']))"
+    check("tables: a read-only computer cannot change a record", (run("server", TITLE), run("mac2", TITLE)), ("Momo", "Momo"))
+
+    run("server", TABLES + "services.set_rights(Table.objects.get(key='buecher'), {}); print('@@1')")
+    sync("mac2")
+    check("tables: records leave a computer whose right was taken away", run("mac2", HOLDS.format(ids["momo"], ids["geheim"])), [False, False])
+
+
 if __name__ == "__main__":
     write_env()
     start_server()
@@ -176,6 +219,7 @@ if __name__ == "__main__":
     register("mac2", "leitung")
     register("mac3", "it")
     scoping()
+    tables()
     # Scenarios of modules: DATAFLUSS_E2E_SCENARIOS names their files (a module's own repository), and
     # premium.py beside this file runs when the premium module is in this repository.
     scenario_files = [path for path in os.environ.get("DATAFLUSS_E2E_SCENARIOS", "").split(os.pathsep) if path]
