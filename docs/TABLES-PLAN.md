@@ -322,7 +322,7 @@ slip and a list of overdue loans.
 
 ## 12. Open points
 
-- Which further templates come after the library (inventory, events, bookings)?
+- Which further templates come after the library, Inventar and Termine (bookings, contacts)?
 - Should a later version get server-assigned running numbers?
 - Server-side paging for lists, if the performance test asks for it.
 - Whether roles other than IT may design tables (the capability allows granting it later).
@@ -346,3 +346,25 @@ Where the build differs from the plan:
 - A module template's formulas are written with field keys, not names.
 - Not done: screenshots for the README, and a click-through of the new start-screen cards in the built
   desktop app.
+
+## Click-through (2026-11-16, evening)
+
+Everything was clicked through as IT, Sekretariat (edit) and Schulleitung (read), in a school database
+and in a "Leer" one, with a list of 3,000 records. Fixed: double click in a list did not edit while the
+side panel was closed; formulas showed #Fehler after about 1,000 records of a list (the step limit
+counted for the whole list); formulas over links cost a query per row (3,000 rows 1.5 s → 0.2 s); the
+cursor and typed text were lost when a save reloaded the record form; Enter in a link search picked
+nothing; the history showed stored values; the record page's title showed the id; numbers with units or
+English separators from files were refused; titles said Schulverwaltung without it.
+
+Added for fewer clicks: a table from an Excel or CSV file (types, decimals, units, options, title and
+unique identifiers guessed), type and link target guessed from a new field's name, access for all roles
+when creating a table, a new record's bar (first field focused, "Weiterer Datensatz", "Verwerfen"),
+creating a missing link target from the search, text that becomes a choice, number or date, new choice
+values added by imports of designers, re-imports matched by unique fields, new table printouts that
+start laid out, restoring the whole bin, natural sorting, the templates Inventar and Termine (no module
+needed) and formulas over fields of records linking here (`sum({Gegenstände}.{Wert})`).
+
+Known: an import writes about 8 ms per row (history and sync journal per record), so 3,000 rows take
+about 13 s in one request; batching those writes is the next step if larger files are common.
+
