@@ -63,7 +63,7 @@ class ListTests(RecordCase):
         self.login(self.sek)
         answer = self.client.post(self.url("record_new"))
         record = Record.objects.exclude(pk=self.momo.pk).get(table=self.table)
-        self.assertRedirects(answer, self.url("record_detail", record.pk))
+        self.assertRedirects(answer, self.url("record_detail", record.pk) + "?neu=1")
         result = self.client.post(self.url("records_action"), json.dumps({"ids": [str(record.pk)], "action": "delete"}), content_type="application/json").json()
         self.assertEqual(result, {"count": 1, "refused": []})
         self.assertFalse(Record.objects.filter(pk=record.pk).exists())

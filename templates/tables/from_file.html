@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Neue Tabelle aus Datei" %}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-3 mb-1">
+  <a class="btn btn-ghost btn-icon" href="{% url 'table_list' %}" aria-label="{% translate 'Zurück' %}">{% icon 'chevron' 'rotate-180' %}</a>
+  <h1 class="page-title flex-1">{% translate "Neue Tabelle aus Datei" %}</h1>
+</div>
+<p class="muted text-[13px] mb-4">{% blocktranslate trimmed count rows=rows with file=session.filename %}{{ file }}: {{ rows }} Zeile. Die Feldtypen sind aus den Werten geschätzt; ändern Sie, was nicht passt.{% plural %}{{ file }}: {{ rows }} Zeilen. Die Feldtypen sind aus den Werten geschätzt; ändern Sie, was nicht passt.{% endblocktranslate %}</p>
+<form method="post" class="space-y-4" data-once>{% csrf_token %}
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <div class="surface p-4 max-w-md space-y-3"><div><label class="label" for="t-name">{% translate "Name der Tabelle" %}</label><input id="t-name" class="input" name="name" value="{{ name }}" required maxlength="100"></div>
+    <div><label class="label" for="t-access">{% translate "Zugriff" %}</label><select id="t-access" class="input" name="access">{% for value, label in access %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div></div>
+  <div class="surface overflow-x-auto"><table class="data-table">
+    <thead><tr><th>{% translate "Übernehmen" %}</th><th>{% translate "Feld" %}</th><th>{% translate "Typ" %}</th><th>{% translate "Titel" %}</th><th>{% translate "Beispiele" %}</th></tr></thead>
+    <tbody>{% for c in columns %}<tr>
+      <td><input type="checkbox" name="use_{{ c.index }}" value="1" aria-label="{% blocktranslate trimmed with name=c.header %}{{ name }} übernehmen{% endblocktranslate %}"{% if not c.empty %} checked{% endif %}></td>
+      <td><input class="input py-1.5" name="label_{{ c.index }}" value="{{ c.header }}" maxlength="100" aria-label="{% translate 'Name des Feldes' %}"></td>
+      <td><select class="input py-1.5" name="type_{{ c.index }}" aria-label="{% translate 'Feldtyp' %}">{% for value, label in types %}<option value="{{ value }}"{% if value == c.guess.type %} selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+        {% if c.guess.type == "choice" %}<div class="muted text-[12px] mt-1 truncate max-w-[220px]">{{ c.guess.options|join:", " }}</div>{% elif c.guess.config.unit or c.guess.config.decimals %}<div class="muted text-[12px] mt-1">{% if c.guess.config.decimals %}{% blocktranslate trimmed count n=c.guess.config.decimals %}{{ n }} Nachkommastelle{% plural %}{{ n }} Nachkommastellen{% endblocktranslate %}{% endif %}{% if c.guess.config.unit %} · {{ c.guess.config.unit }}{% endif %}</div>{% endif %}</td>
+      <td class="text-center"><input type="radio" name="title" value="{{ c.index }}"{% if c.index == title_index %} checked{% endif %} aria-label="{% blocktranslate trimmed with name=c.header %}{{ name }} als Titel{% endblocktranslate %}"></td>
+      <td class="muted text-[12.5px]">{% for s in c.samples %}<div class="truncate max-w-[260px]">{{ s }}</div>{% empty %}<span>{% translate "(leer)" %}</span>{% endfor %}</td>
+    </tr>{% endfor %}</tbody>
+  </table></div>
+  <p class="muted text-[12px]">{% translate "Der Titel nennt einen Datensatz in Listen, Verknüpfungen und der Suche. Nach dem Anlegen lässt sich der Import unter Import & Export 24 Stunden lang zurücknehmen." %}</p>
+  <div class="flex gap-2"><button class="btn btn-primary">{% icon 'table' %}{% translate "Tabelle anlegen und Daten übernehmen" %}</button><a class="btn" href="{% url 'table_list' %}">{% translate "Abbrechen" %}</a></div>
+</form>
+{% endblock %}

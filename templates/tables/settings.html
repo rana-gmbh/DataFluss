@@ -16,15 +16,15 @@
 <tbody data-field-order="{% url 'table_field_order' table.key %}">
 {% for f in fields %}<tr data-key="{{ f.key }}"><td class="cursor-grab muted" data-handle title="{% translate 'Ziehen, um die Reihenfolge zu ändern' %}">{% icon 'grip' %}</td><td><a class="font-medium hover:underline" href="{% url 'table_field' table.key f.pk %}">{{ f.display_label }}</a>{% if f.required %} <span class="text-[var(--bad)]">*</span>{% endif %}{% if f.key == table.title_field %} <span class="badge">{% translate "Titel" %}</span>{% endif %}{% if f.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}</td><td class="muted">{{ f.type_label }}</td><td>{% if f.in_grid %}{% translate "Ja" %}{% endif %}</td></tr>{% endfor %}
 </tbody></table></div>
-<form method="post" action="{% url 'table_field_new' table.key %}" class="surface p-4 space-y-3" x-data="{ type: 'text' }">{% csrf_token %}<h2 class="font-semibold">{% translate "Neues Feld" %}</h2>
-  <div><label class="label" for="f-label">{% translate "Bezeichnung" %}</label><input id="f-label" class="input" name="label" required maxlength="100"></div>
-  <div><label class="label" for="f-type">{% translate "Typ" %}</label><select id="f-type" class="input" name="type" x-model="type">{% for v, l in types %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+{{ type_rules|json_script:"type-rules" }}<form method="post" action="{% url 'table_field_new' table.key %}" class="surface p-4 space-y-3" x-data="newField">{% csrf_token %}<h2 class="font-semibold">{% translate "Neues Feld" %}</h2>
+  <div><label class="label" for="f-label">{% translate "Bezeichnung" %}</label><input id="f-label" class="input" name="label" required maxlength="100" @input="guess($event.target.value)"></div>
+  <div><label class="label" for="f-type">{% translate "Typ" %}</label><select id="f-type" class="input" name="type" x-model="type" @change="touched = true">{% for v, l in types %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
   <div x-show="type === 'choice' || type === 'multichoice'" x-cloak><label class="label" for="f-options">{% translate "Optionen, eine pro Zeile" %}</label><textarea id="f-options" class="input" name="options"></textarea></div>
   <div x-show="type === 'number'" x-cloak class="space-y-3">
     <div><label class="label" for="f-decimals">{% translate "Nachkommastellen" %}</label><input id="f-decimals" class="input" name="decimals" type="number" min="0" max="6" value="0" :disabled="type !== 'number'"></div>
     <div><label class="label" for="f-unit">{% translate "Einheit" %}</label><input id="f-unit" class="input" name="unit" maxlength="10" placeholder="€"></div></div>
   <div x-show="type === 'link'" x-cloak class="space-y-3">
-    <div><label class="label" for="f-target">{% translate "Zeigt auf" %}</label><select id="f-target" class="input" name="target">{% for v, l in link_targets %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+    <div><label class="label" for="f-target">{% translate "Zeigt auf" %}</label><select id="f-target" class="input" name="target" x-ref="target" @change="touched = true">{% for v, l in link_targets %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
     <div><label class="label" for="f-reverse">{% translate "Name auf der Gegenseite" %}</label><input id="f-reverse" class="input" name="reverse" maxlength="100" placeholder="{% translate 'z. B. Ausleihen' %}"></div></div>
   <div x-show="type === 'formula'" x-cloak class="space-y-3">{% include "tables/_formula_editor.html" %}
     <div><label class="label" for="f-fdecimals">{% translate "Nachkommastellen (bei Zahlen)" %}</label><input id="f-fdecimals" class="input" name="decimals" type="number" min="0" max="6" placeholder="{% translate 'automatisch' %}" :disabled="type !== 'formula'"></div></div>

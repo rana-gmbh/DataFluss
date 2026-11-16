@@ -1,3 +1,3 @@
-{% load i18n %}{% for option in options %}<button type="button" role="option" class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px] flex justify-between gap-2"
+{% load i18n %}<span data-q="{{ q }}" hidden></span>{% for option in options %}<button type="button" role="option" class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px] flex justify-between gap-2"
   hx-post="{{ link_url }}" hx-vals='{"action": "add", "target": "{{ option.id }}"}' hx-target="#link-{{ field_key }}" hx-swap="outerHTML"><span class="truncate">{{ option.title }}</span>{% if option.sub %}<span class="muted truncate">{{ option.sub }}</span>{% endif %}</button>
 {% empty %}<p class="muted text-[13px] px-2.5 py-1.5">{% translate "Nichts gefunden." %}</p>{% endfor %}

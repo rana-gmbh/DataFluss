@@ -218,15 +218,23 @@ def apply(data, user=None, demo=False, request=None):
             if spec.get("title_field") and not table.title_field:
                 table.title_field = spec["title_field"]
                 table.save()
-        for table, pk, order, fspec in fields_later:
-            schema = formula.Schema(table)
-            try:
-                result = formula.check(fspec["config"]["expression"], schema)
-            except formula.FormulaError as exc:
-                raise BlueprintError(_("Formel %(field)s: %(problem)s") % {"field": fspec["label"], "problem": exc.message})
-            config = {**fspec["config"], "result": result if result in formula.FIELD_TYPES.values() else "text"}
-            _create_field(table, pk, order, {**fspec, "config": config})
-            report["created"].append(f"{table.name} · {fspec['label']}")
+        # A formula may use another formula, also of another table: those it needs come first, whatever the
+        # order in the file. What still fails when nothing more can be created is a mistake in the template.
+        while fields_later:
+            waiting, problem = [], None
+            for table, pk, order, fspec in fields_later:
+                try:
+                    result = formula.check(fspec["config"]["expression"], formula.Schema(table))
+                except formula.FormulaError as exc:
+                    waiting.append((table, pk, order, fspec))
+                    problem = problem or (fspec, exc)
+                    continue
+                config = {**fspec["config"], "result": result if result in formula.FIELD_TYPES.values() else "text"}
+                _create_field(table, pk, order, {**fspec, "config": config})
+                report["created"].append(f"{table.name} · {fspec['label']}")
+            if len(waiting) == len(fields_later):
+                raise BlueprintError(_("Formel %(field)s: %(problem)s") % {"field": problem[0]["label"], "problem": problem[1].message})
+            fields_later = waiting
         for item in data.get("masks") or []:
             pk = item_id(tid, "mask", item["table"], item["name"])
             table = tables[item["table"]]

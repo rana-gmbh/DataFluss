@@ -109,23 +109,40 @@ def parse_datetime(text):
     return moment
 
 
+def normalize_number(text):
+    """A number as typed or found in a file, as Python reads it: "1.234,5" and "1234,5" (German),
+    "1,234.5" (English). One comma or one point is the decimal mark; several are grouping."""
+    text = re.sub(r"[\s\u00a0\u202f']", "", str(text))
+    if "," in text and "." in text:
+        return text.replace(".", "").replace(",", ".") if text.rfind(",") > text.rfind(".") else text.replace(",", "")
+    if "," in text:
+        return text.replace(",", ".") if text.count(",") == 1 else text.replace(",", "")
+    if text.count(".") > 1:
+        return text.replace(".", "")
+    return text
+
+
 def _number(spec, raw):
     places = decimals(spec)
-    text = str(raw).replace(" ", "").replace(" ", "")
-    if places == 0:
-        try:
-            value = int(text)
-        except ValueError:
-            raise ValidationError(_("%(field)s: Bitte eine ganze Zahl eingeben.") % {"field": spec.display_label})
-    else:
-        if "," in text:  # 1.234,5 as typed in German, or 1234,5
-            text = text.replace(".", "").replace(",", ".")
-        try:
-            value = Decimal(text).quantize(Decimal(1).scaleb(-places))
-        except InvalidOperation:
-            raise ValidationError(_("%(field)s: Bitte eine Zahl eingeben.") % {"field": spec.display_label})
+    text = str(raw).strip()
+    unit = config(spec).get("unit")
+    if unit and text.endswith(unit):  # "12,50 €" from a file
+        text = text[: -len(unit)]
+    elif unit and text.startswith(unit):
+        text = text[len(unit):]
+    message = _("%(field)s: Bitte eine ganze Zahl eingeben.") if places == 0 else _("%(field)s: Bitte eine Zahl eingeben.")
+    try:
+        value = Decimal(normalize_number(text))
         if not value.is_finite():
-            raise ValidationError(_("%(field)s: Bitte eine Zahl eingeben.") % {"field": spec.display_label})
+            raise InvalidOperation
+        if places == 0:
+            if value != value.to_integral_value():
+                raise InvalidOperation
+            value = int(value)
+        else:
+            value = value.quantize(Decimal(1).scaleb(-places))
+    except InvalidOperation:
+        raise ValidationError(message % {"field": spec.display_label})
     low, high = config(spec).get("min"), config(spec).get("max")
     if low not in (None, "") and value < Decimal(str(low)):
         raise ValidationError(_("%(field)s: mindestens %(n)s.") % {"field": spec.display_label, "n": low})

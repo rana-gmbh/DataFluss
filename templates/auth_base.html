@@ -6,7 +6,7 @@
       {% if school.logo %}<img src="{% url 'school_logo' %}" alt="" class="h-14 w-14 object-contain mx-auto mb-3">
       {% else %}<div class="h-12 w-12 rounded-xl mx-auto mb-3 flex items-center justify-center text-white font-bold text-xl" style="background: var(--accent)">{{ school.short_name|slice:":1" }}</div>{% endif %}
       <h1 class="text-lg font-semibold">{{ school.name }}</h1>
-      <p class="muted text-[13px]">{% translate "Schulverwaltung" %}</p>
+      <p class="muted text-[13px]">{{ product_name|default:"DataFluss" }}</p>
     </div>
     <div class="surface p-6 shadow-sm">{% block auth %}{% endblock %}</div>
     {% if not ui_single_language %}<div class="mt-4 flex justify-center">{% include "core/_language_menu.html" with wide=True %}</div>{% endif %}

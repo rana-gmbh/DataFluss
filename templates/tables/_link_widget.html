@@ -4,9 +4,10 @@
       {% if item.editable %}<button type="button" class="opacity-70 hover:opacity-100" hx-post="{{ item.link_url }}" hx-vals='{"action": "remove", "target": "{{ target.id }}"}' hx-target="#link-{{ item.fd.key }}" hx-swap="outerHTML" title="{% translate 'Verknüpfung entfernen' %}" aria-label="{% blocktranslate trimmed with name=target.title %}{{ name }} entfernen{% endblocktranslate %}">{% icon 'x' 'text-[12px]' %}</button>{% endif %}</span>
     {% empty %}<span class="muted text-[13px]">–</span>{% endfor %}
   </div>
-  {% if item.editable %}<div class="relative" x-data="{ open: false }" @click.outside="open = false" @keydown.escape="open = false">
+  {% if item.editable %}<div class="relative" x-data="linkPicker" @click.outside="open = false" @keydown.escape="open = false">
     <input class="input" id="f-{{ item.fd.key }}" type="search" name="q" autocomplete="off" placeholder="{% if item.multiple or not item.targets %}{% translate 'Suchen und hinzufügen …' %}{% else %}{% translate 'Suchen und ersetzen …' %}{% endif %}"
-      hx-get="{{ item.picker_url }}" hx-trigger="input changed delay:250ms, focus" hx-target="next [data-options]" hx-swap="innerHTML" @focus="open = true" @input="open = true" aria-label="{{ item.label }}">
-    <div data-options class="absolute z-30 mt-1 w-full max-h-64 overflow-y-auto surface p-1 shadow-lg" x-show="open" x-cloak role="listbox"></div>
+      hx-get="{{ item.picker_url }}" hx-trigger="input changed delay:250ms, focus" hx-target="next [data-options]" hx-swap="innerHTML" @focus="open = true" @input="open = true; active = 0"
+      @keydown.enter.prevent="choose()" @keydown.down.prevent="move(1)" @keydown.up.prevent="move(-1)"{% if item.refocus %} x-init="$nextTick(() => $el.focus())"{% endif %} aria-label="{{ item.label }}">
+    <div data-options class="absolute z-30 mt-1 w-full max-h-64 overflow-y-auto surface p-1 shadow-lg" x-show="open" x-cloak role="listbox" @htmx:after-settle="loaded()"></div>
   </div>{% endif %}
 </div>

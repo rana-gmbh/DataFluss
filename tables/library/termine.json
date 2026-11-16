@@ -1,0 +1,267 @@
+{
+ "format": 1,
+ "id": "termine",
+ "version": 1,
+ "title": "Termine",
+ "titles": {
+  "en": "Events",
+  "zh-hans": "活动日程",
+  "zh-hant": "活動日程"
+ },
+ "description": "Veranstaltungen und Termine mit Ort, Art und Verantwortlichen, mit Aushang zum Drucken.",
+ "descriptions": {
+  "en": "Events and dates with place, kind and who is in charge, with a notice to print.",
+  "zh-hans": "活动和日程，附地点、类型和负责人，可打印通知。",
+  "zh-hant": "活動和日程，附地點、類型和負責人，可列印通知。"
+ },
+ "requires": [],
+ "tables": [
+  {
+   "key": "ter_termine",
+   "name": "Termine",
+   "names": {
+    "en": "Events",
+    "zh-hans": "活动",
+    "zh-hant": "活動"
+   },
+   "icon": "calendar",
+   "description": "Was wann wo stattfindet.",
+   "title_field": "f_titel",
+   "rights": {
+    "sekretariat": "edit",
+    "schulleitung": "edit"
+   },
+   "fields": [
+    {
+     "key": "f_titel",
+     "label": "Titel",
+     "labels": {
+      "en": "Title",
+      "zh-hans": "标题",
+      "zh-hant": "標題"
+     },
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "f_beginn",
+     "label": "Beginn",
+     "labels": {
+      "en": "Start",
+      "zh-hans": "开始",
+      "zh-hant": "開始"
+     },
+     "type": "datetime",
+     "required": true
+    },
+    {
+     "key": "f_ende",
+     "label": "Ende",
+     "labels": {
+      "en": "End",
+      "zh-hans": "结束",
+      "zh-hant": "結束"
+     },
+     "type": "datetime"
+    },
+    {
+     "key": "f_ort",
+     "label": "Ort",
+     "labels": {
+      "en": "Place",
+      "zh-hans": "地点",
+      "zh-hant": "地點"
+     },
+     "type": "text"
+    },
+    {
+     "key": "f_art",
+     "label": "Art",
+     "labels": {
+      "en": "Kind",
+      "zh-hans": "类型",
+      "zh-hant": "類型"
+     },
+     "type": "choice",
+     "options": [
+      {
+       "value": "Elternabend",
+       "labels": {
+        "en": "Parents' evening",
+        "zh-hans": "家长会",
+        "zh-hant": "家長會"
+       }
+      },
+      {
+       "value": "Konferenz",
+       "labels": {
+        "en": "Meeting",
+        "zh-hans": "会议",
+        "zh-hant": "會議"
+       }
+      },
+      {
+       "value": "Ausflug",
+       "labels": {
+        "en": "Trip",
+        "zh-hans": "出游",
+        "zh-hant": "出遊"
+       }
+      },
+      {
+       "value": "Fest",
+       "labels": {
+        "en": "Celebration",
+        "zh-hans": "庆典",
+        "zh-hant": "慶典"
+       }
+      },
+      {
+       "value": "Sonstiges",
+       "labels": {
+        "en": "Other",
+        "zh-hans": "其他",
+        "zh-hant": "其他"
+       }
+      }
+     ]
+    },
+    {
+     "key": "f_verantwortlich",
+     "label": "Verantwortlich",
+     "labels": {
+      "en": "In charge",
+      "zh-hans": "负责人",
+      "zh-hant": "負責人"
+     },
+     "type": "text"
+    },
+    {
+     "key": "f_teilnehmende",
+     "label": "Teilnehmende",
+     "labels": {
+      "en": "Participants",
+      "zh-hans": "参与人数",
+      "zh-hant": "參與人數"
+     },
+     "type": "number"
+    },
+    {
+     "key": "f_in_tagen",
+     "label": "In Tagen",
+     "labels": {
+      "en": "In days",
+      "zh-hans": "距今天数",
+      "zh-hant": "距今天數"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "days(today(), {f_beginn})"
+     }
+    },
+    {
+     "key": "f_abgesagt",
+     "label": "Abgesagt",
+     "labels": {
+      "en": "Cancelled",
+      "zh-hans": "已取消",
+      "zh-hant": "已取消"
+     },
+     "type": "bool"
+    },
+    {
+     "key": "f_beschreibung",
+     "label": "Beschreibung",
+     "labels": {
+      "en": "Description",
+      "zh-hans": "描述",
+      "zh-hant": "描述"
+     },
+     "type": "textarea",
+     "in_grid": false
+    }
+   ]
+  }
+ ],
+ "masks": [],
+ "prints": [
+  {
+   "table": "ter_termine",
+   "name": "Aushang",
+   "description": "Ein Termin als Aushang.",
+   "tree": {
+    "page": {
+     "preset": "a4"
+    },
+    "rows": [
+     {
+      "cols": [
+       {
+        "w": 12,
+        "items": [
+         {
+          "type": "logo",
+          "w_mm": 24
+         },
+         {
+          "type": "heading",
+          "text": "{{f_titel}}"
+         },
+         {
+          "type": "text",
+          "text": "{{f_beginn}} · {{f_ort}}\n\n{{f_beschreibung}}\n\nAnsprechpartner: {{f_verantwortlich}}"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "views": [
+  {
+   "table": "ter_termine",
+   "name": "Nach Datum",
+   "config": {
+    "sort": [
+     {
+      "column": "f_beginn",
+      "dir": "asc"
+     }
+    ],
+    "filters": {
+     "f_abgesagt": [
+      "Nein"
+     ]
+    }
+   }
+  }
+ ],
+ "demo": {
+  "ter_termine": [
+   {
+    "f_titel": "Elternabend Klasse 5",
+    "f_beginn": "2026-12-03T19:00:00+01:00",
+    "f_ende": "2026-12-03T20:30:00+01:00",
+    "f_ort": "Aula",
+    "f_art": "Elternabend",
+    "f_teilnehmende": "40"
+   },
+   {
+    "f_titel": "Weihnachtsfeier",
+    "f_beginn": "2026-12-18T15:00:00+01:00",
+    "f_ort": "Turnhalle",
+    "f_art": "Fest"
+   },
+   {
+    "f_titel": "Ausflug Zoo",
+    "f_beginn": "2027-05-12T08:00:00+02:00",
+    "f_ende": "2027-05-12T16:00:00+02:00",
+    "f_ort": "Zoo",
+    "f_art": "Ausflug",
+    "f_teilnehmende": "56"
+   }
+  ]
+ }
+}

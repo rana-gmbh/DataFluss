@@ -12,7 +12,7 @@ from django.db.models import Q
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, ngettext
 from django.views.decorators.http import require_GET, require_POST
 
 from core import audit, fieldtypes as ft
@@ -44,8 +44,10 @@ def _record(table, pk):
 
 def _columns(table, user):
     editable = services.may_edit(user, table)
+    fields = services.fields_of(table)
+    named = services.title_field(table, fields)
     columns = []
-    for field in services.fields_of(table):
+    for field in fields:
         kind = ft.TYPES.get(field.type)
         if kind is None or field.type == "secret":
             continue
@@ -53,8 +55,9 @@ def _columns(table, user):
         columns.append({
             "key": field.key, "title": str(field.display_label), "type": grid, "visible": field.in_grid,
             "editable": editable and field.type in GRID_EDITABLE, "options": field.option_values,
-            "optionLabels": {v: str(label) for v, label in field.option_choices}, "decimals": ft.decimals(field),
-            "unit": ft.config(field).get("unit", ""),
+            "optionLabels": {v: str(label) for v, label in field.option_choices},
+            "decimals": None if field.type == "formula" and "decimals" not in (field.config or {}) else ft.decimals(field),
+            "unit": ft.config(field).get("unit", ""), "wide": bool(named and field.key == named.key) or field.type == "textarea",
         })
     return columns
 
@@ -193,7 +196,26 @@ def api_field(request, key, pk, field_key):
 def record_new(request, key):
     table = _table(request, key, edit=True)
     record = services.create_record(table)
-    return redirect("record_detail", key=table.key, pk=record.pk)
+    return redirect(reverse("record_detail", args=[table.key, record.pk]) + "?neu=1")
+
+
+def _untouched(record):
+    return not any(v not in (None, "", []) for v in record.values.values()) and not record.links.exclude(target_id=None).exists() \
+        and not Attachment.objects.filter(record=record).exists()
+
+
+@require_POST
+def record_delete(request, key, pk):
+    """The record page's delete: into the bin. A new record that was never filled in is dropped for good,
+    so "Neuer Datensatz" and back leaves nothing behind."""
+    table = _table(request, key, edit=True)
+    record = _record(table, pk)
+    if request.POST.get("discard") and _untouched(record):
+        record.delete()
+    else:
+        record.recycle()
+        messages.success(request, _("%(name)s liegt im Papierkorb.") % {"name": record.title or _("(ohne Titel)")})
+    return redirect("table_records", key=table.key)
 
 
 def _context(request, table, record):
@@ -213,7 +235,9 @@ def _fill_first_tab(request, record, tabs):
 
 def record_detail(request, key, pk):
     table = _table(request, key)
-    return render(request, "tables/record.html", _context(request, table, _record(table, pk)))
+    context = _context(request, table, _record(table, pk))
+    context["is_new"] = context["can_edit"] and request.GET.get("neu") == "1"
+    return render(request, "tables/record.html", context)
 
 
 def record_panel(request, key, pk):
@@ -248,6 +272,7 @@ def record_field(request, key, pk, field_key):
     response["HX-Trigger"] = json.dumps({"fieldSaved": {
         "key": field_key, "label": str(field.display_label), "undoable": undoable, "old": str(previous),
         "url": reverse("record_field", args=[table.key, record.pk, field_key]), "reload": reload_form,
+        "title": record.title or _("(ohne Titel)"),
     }})
     return response
 
@@ -267,10 +292,26 @@ def record_secret_reveal(request, key, pk, field_key):
     return render(request, "vault/_secret_value.html", {"value": services.reveal(record, field), "dom_id": f"secret-value-{field_key}"})
 
 
+def _history_text(field, text):
+    """A value as the history stored it (core/models.py _plain: str() of the JSON value) as the field shows it."""
+    if field is None or not text or field.type == "secret":
+        return text
+    try:
+        raw = json.loads(text) if field.type == "multichoice" else (text == "True" if field.type == "bool" else text)
+        return str(ft.display(field, ft.from_store(field, raw), localized=True))
+    except (ValueError, TypeError):
+        return text
+
+
 def history(request, record):
-    labels = {f"values.{f.key}": f.display_label for f in services.fields_of(record.table, include_archived=True)}
+    fields = {f"values.{f.key}": f for f in services.fields_of(record.table, include_archived=True)}
     rows = ChangeLog.objects.filter(entity="tables.record", record_id=record.pk).exclude(field__in=["values", "title", "search_text", "table"]).select_related("user")[:25]
-    return {"changes": [{"row": r, "label": labels.get(r.field, r.field.removeprefix("values."))} for r in rows]}
+    changes = []
+    for r in rows:
+        field = fields.get(r.field)
+        changes.append({"row": r, "label": field.display_label if field else r.field.removeprefix("values."),
+                        "old": _history_text(field, r.old_value), "new": _history_text(field, r.new_value)})
+    return {"changes": changes}
 
 
 BLOCK_VIEWS = {"history": history}
@@ -315,6 +356,12 @@ def records_action(request, key):
 
 def records_bin(request, key):
     table = _table(request, key, edit=True)
+    if request.method == "POST" and request.POST.get("all"):
+        chosen = list(Record.in_the_bin().filter(table=table))
+        for record in chosen:
+            record.bring_back()
+        messages.success(request, ngettext("%(count)d Datensatz ist wieder da.", "%(count)d Datensätze sind wieder da.", len(chosen)) % {"count": len(chosen)})
+        return redirect("table_records", key=table.key)
     if request.method == "POST":
         record = get_object_or_404(Record.everything.filter(table=table).exclude(deleted_at=None), pk=request.POST.get("record"))
         record.bring_back()
@@ -343,9 +390,10 @@ def api_view_delete(request, key, pk):
     return JsonResponse({"ok": True})
 
 
-def _widget(request, table, record, field, template, problem=""):
+def _widget(request, table, record, field, template, problem="", refocus=False):
     entry = table_masks._field_entry({"w": 12}, record, field, request.user, services.may_edit(request.user, table))
     entry["label"] = field.display_label
+    entry["refocus"] = refocus and entry.get("multiple")
     response = render(request, template, {"item": entry})
     if problem:
         response["HX-Trigger"] = json.dumps({"toast": problem})
@@ -366,7 +414,7 @@ def record_link_options(request, key, pk, field_key):
     field = _typed_field(table, field_key, ("link",))
     linked = {str(t) for t in links.targets(record, field)}
     options = [o for o in links.candidates(request.user, field, request.GET.get("q", "")) if o["id"] not in linked]
-    return render(request, "tables/_link_options.html", {"options": options, "field_key": field.key,
+    return render(request, "tables/_link_options.html", {"options": options, "field_key": field.key, "q": request.GET.get("q", ""),
                                                          "link_url": reverse("record_link", args=[table.key, record.pk, field.key])})
 
 
@@ -389,7 +437,8 @@ def record_link(request, key, pk, field_key):
         return HttpResponseBadRequest()
     except ValidationError as exc:
         problem = " ".join(exc.messages)
-    return _widget(request, table, record, field, "tables/_link_widget.html", problem)
+    # Several targets: the search keeps the focus, so the next one is a few keys away.
+    return _widget(request, table, record, field, "tables/_link_widget.html", problem, refocus=request.POST.get("action") != "remove")
 
 
 @require_POST

@@ -50,6 +50,10 @@ def _grid_columns(entity, user):
             column["optionLabels"] = {value: str(label) for value, label in fd.option_choices}
         if fd.type == "class":
             column["options"] = classes
+        if fd.type == "number":
+            from core import fieldtypes
+
+            column.update(decimals=fieldtypes.decimals(fd), unit=fieldtypes.config(fd).get("unit", ""))
         columns.append(column)
     columns.insert(0, {"key": "photo_url", "title": _("Bild"), "type": "photo", "visible": True, "editable": False})
     position = next((i for i, c in enumerate(columns) if c["key"] == "email"), len(columns))

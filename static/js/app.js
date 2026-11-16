@@ -230,6 +230,11 @@ window.App = (function () {
       toast(interpolate(gettext("%(label)s gespeichert"), { label: d.label }, true));
     }
     if (d.reload) document.body.dispatchEvent(new Event("reloadForm"));
+    const heading = document.querySelector("[data-record-title]");
+    if (d.title && heading && heading.textContent !== d.title) {
+      document.title = document.title.replace(heading.textContent, d.title);
+      heading.textContent = d.title;
+    }
   });
 
   document.addEventListener("fieldError", (e) => {

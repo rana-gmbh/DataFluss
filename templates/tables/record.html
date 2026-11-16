@@ -1,12 +1,12 @@
 {% extends "base.html" %}{% load i18n static ui %}
-{% block title %}{{ record }}{% endblock %}
+{% block title %}{{ record.title|default:_("(ohne Titel)") }}{% endblock %}
 {% block scripts %}<script src="{% static 'js/record.js' %}" defer></script>{% endblock %}
 {% block content %}
 <div class="flex flex-wrap items-center gap-3 mb-4">
   <a class="btn btn-ghost btn-icon" href="{% url 'table_records' table.key %}" aria-label="{% translate 'Zurück zur Liste' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
   <span class="avatar" style="width:44px;height:44px">{% icon table.icon 'text-[20px]' %}</span>
   <div class="min-w-0 flex-1">
-    <h1 class="page-title truncate">{{ record.title|default:_("(ohne Titel)") }}</h1>
+    <h1 class="page-title truncate" data-record-title>{{ record.title|default:_("(ohne Titel)") }}</h1>
     <div class="flex flex-wrap items-center gap-1.5 mt-0.5"><a class="badge badge-accent" href="{% url 'table_records' table.key %}">{{ table.display_name }}</a></div>
   </div>
   {% if print_templates %}
@@ -18,7 +18,15 @@
     </div>
   </div>
   {% endif %}
+  {% if can_edit and not is_new %}<form method="post" action="{% url 'record_delete' table.key record.pk %}">{% csrf_token %}
+    <button class="btn btn-ghost btn-icon" title="{% translate 'In den Papierkorb' %}" aria-label="{% translate 'In den Papierkorb' %}" data-confirm="{% translate 'Diesen Datensatz in den Papierkorb legen?' %}">{% icon 'trash' %}</button></form>{% endif %}
 </div>
+{% if is_new %}<div class="surface flex flex-wrap items-center gap-2 px-4 py-2.5 mb-4 text-[13px]" data-focus-first>
+  <span class="flex-1 muted">{% translate "Neuer Datensatz. Alles wird beim Verlassen eines Feldes gespeichert." %}</span>
+  <form method="post" action="{% url 'record_delete' table.key record.pk %}">{% csrf_token %}<input type="hidden" name="discard" value="1"><button class="btn btn-sm">{% translate "Verwerfen" %}</button></form>
+  <form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn btn-sm">{% icon 'plus' %}{% translate "Weiterer Datensatz" %}</button></form>
+  <a class="btn btn-sm btn-primary" href="{% url 'table_records' table.key %}">{% translate "Fertig" %}</a>
+</div>{% endif %}
 {% include "masks/_form.html" %}
 <div hx-get="{% url 'table_backlinks' 'record' record.pk %}" hx-trigger="load" hx-swap="outerHTML"></div>
 {% endblock %}

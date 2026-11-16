@@ -102,7 +102,9 @@ def _database():
             "OPTIONS": {
                 "transaction_mode": "IMMEDIATE",
                 "timeout": 20,
-                "init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL;",
+                # A larger page cache (32 MB instead of 2) spares SQLCipher decrypting the same pages again;
+                # sorting and grouping of long lists stay in memory.
+                "init_command": "PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA cache_size=-32000; PRAGMA temp_store=MEMORY;",
             },
             # A file like the client's, because the in-memory test database locks whole tables.
             "TEST": {"NAME": str(Path(tempfile.gettempdir()) / "schule-test.sqlite3")},

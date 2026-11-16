@@ -209,7 +209,17 @@ window.RecordPanel = (function () {
         if (res.ok) table.updateData(await res.json());
       },
     };
-    table.on("cellClick", (e, cell) => { if (cell.getField()) open(cell.getData().id); });
+    // A click on an editable cell waits a moment: opening the panel narrows the list, and the second click
+    // of a double click (edit the cell) would land on another cell.
+    let waiting = null;
+    table.on("cellClick", (e, cell) => {
+      if (!cell.getField()) return;
+      clearTimeout(waiting);
+      const id = cell.getData().id;
+      if (api.activeId || !cell.getColumn().getDefinition().editor) open(id);
+      else waiting = setTimeout(() => open(id), 260);
+    });
+    table.element.addEventListener("dblclick", () => clearTimeout(waiting), true); // the cell editor swallows Tabulator's own event
     let first = true;
     table.on("dataProcessed", () => { if (first) reopen(); first = false; });
   }

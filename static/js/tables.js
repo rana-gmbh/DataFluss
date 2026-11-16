@@ -12,3 +12,21 @@
     },
   });
 })();
+
+// The new-field form guesses the type from the name while it is typed (tables/infer.py label_rules),
+// until the type is chosen by hand.
+document.addEventListener("alpine:init", () => {
+  const fold = (t) => t.toLowerCase().replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
+  Alpine.data("newField", () => ({
+    type: "text",
+    touched: false,
+    rules: JSON.parse(document.getElementById("type-rules")?.textContent || "[]").map((r) => ({ ...r, re: new RegExp(r.pattern, "i") })),
+    guess(label) {
+      if (this.touched) return;
+      const text = label.trim();
+      const hit = text ? this.rules.find((r) => r.re.test(r.fold ? fold(text) : text)) : null;
+      this.type = hit ? hit.type : "text";
+      if (hit && hit.target && this.$refs.target) this.$refs.target.value = hit.target;
+    },
+  }));
+});

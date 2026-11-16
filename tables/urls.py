@@ -5,6 +5,8 @@ from . import views, views_records as records
 urlpatterns = [
     path("einstellungen/tabellen/", views.table_list, name="table_list"),
     path("einstellungen/tabellen/vorlagen/", views.table_blueprints, name="table_blueprints"),
+    path("einstellungen/tabellen/aus-datei/", views.table_from_file, name="table_from_file"),
+    path("einstellungen/tabellen/aus-datei/<uuid:pk>/", views.table_from_file_columns, name="table_from_file_columns"),
     path("einstellungen/tabellen/<slug:key>/", views.table_settings, name="table_settings"),
     path("einstellungen/tabellen/<slug:key>/rechte/", views.table_rights, name="table_rights"),
     path("einstellungen/tabellen/<slug:key>/seite/", views.table_mask, name="table_mask"),
@@ -17,6 +19,7 @@ urlpatterns = [
     path("tabellen/<slug:key>/aktion/", records.records_action, name="records_action"),
     path("tabellen/<slug:key>/papierkorb/", records.records_bin, name="records_bin"),
     path("tabellen/<slug:key>/<uuid:pk>/", records.record_detail, name="record_detail"),
+    path("tabellen/<slug:key>/<uuid:pk>/loeschen/", records.record_delete, name="record_delete"),
     path("tabellen/<slug:key>/<uuid:pk>/panel/", records.record_panel, name="record_panel"),
     path("tabellen/<slug:key>/<uuid:pk>/formular/", records.record_form, name="record_form"),
     path("tabellen/<slug:key>/<uuid:pk>/feld/<slug:field_key>/", records.record_field, name="record_field"),

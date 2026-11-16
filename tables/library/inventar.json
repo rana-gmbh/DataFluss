@@ -1,0 +1,611 @@
+{
+ "format": 1,
+ "id": "inventar",
+ "version": 1,
+ "title": "Inventar",
+ "titles": {
+  "en": "Inventory",
+  "zh-hans": "库存",
+  "zh-hant": "庫存"
+ },
+ "description": "Räume und die Gegenstände darin, mit Wert, Zustand und Inventaretiketten.",
+ "descriptions": {
+  "en": "Rooms and the items in them, with value, condition and inventory labels.",
+  "zh-hans": "房间及其中的物品，附价值、状况和资产标签。",
+  "zh-hant": "房間及其中的物品，附價值、狀況和資產標籤。"
+ },
+ "requires": [],
+ "tables": [
+  {
+   "key": "inv_raeume",
+   "name": "Räume",
+   "names": {
+    "en": "Rooms",
+    "zh-hans": "房间",
+    "zh-hant": "房間"
+   },
+   "icon": "school",
+   "description": "Wo die Gegenstände stehen.",
+   "title_field": "f_raum",
+   "rights": {
+    "sekretariat": "edit",
+    "schulleitung": "read"
+   },
+   "fields": [
+    {
+     "key": "f_raum",
+     "label": "Raum",
+     "labels": {
+      "en": "Room",
+      "zh-hans": "房间",
+      "zh-hant": "房間"
+     },
+     "type": "text",
+     "required": true,
+     "unique": true
+    },
+    {
+     "key": "f_gebaeude",
+     "label": "Gebäude",
+     "labels": {
+      "en": "Building",
+      "zh-hans": "楼宇",
+      "zh-hant": "樓宇"
+     },
+     "type": "text"
+    },
+    {
+     "key": "f_etage",
+     "label": "Etage",
+     "labels": {
+      "en": "Floor",
+      "zh-hans": "楼层",
+      "zh-hant": "樓層"
+     },
+     "type": "text"
+    },
+    {
+     "key": "f_anzahl",
+     "label": "Gegenstände",
+     "labels": {
+      "en": "Items",
+      "zh-hans": "物品数",
+      "zh-hant": "物品數"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "count({@inv_objekte.f_raum})"
+     }
+    },
+    {
+     "key": "f_wert",
+     "label": "Wert der Gegenstände",
+     "labels": {
+      "en": "Value of the items",
+      "zh-hans": "物品价值",
+      "zh-hant": "物品價值"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "sum({@inv_objekte.f_raum}.{f_wert_gesamt})",
+      "decimals": 2
+     }
+    },
+    {
+     "key": "f_bemerkung",
+     "label": "Bemerkung",
+     "labels": {
+      "en": "Note",
+      "zh-hans": "备注",
+      "zh-hant": "備註"
+     },
+     "type": "textarea",
+     "in_grid": false
+    }
+   ]
+  },
+  {
+   "key": "inv_objekte",
+   "name": "Gegenstände",
+   "names": {
+    "en": "Items",
+    "zh-hans": "物品",
+    "zh-hant": "物品"
+   },
+   "icon": "archive",
+   "description": "Was die Einrichtung besitzt.",
+   "title_field": "f_bezeichnung",
+   "rights": {
+    "sekretariat": "edit",
+    "schulleitung": "read"
+   },
+   "fields": [
+    {
+     "key": "f_bezeichnung",
+     "label": "Bezeichnung",
+     "labels": {
+      "en": "Name",
+      "zh-hans": "名称",
+      "zh-hant": "名稱"
+     },
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "f_inventarnummer",
+     "label": "Inventarnummer",
+     "labels": {
+      "en": "Inventory number",
+      "zh-hans": "资产编号",
+      "zh-hant": "資產編號"
+     },
+     "type": "text",
+     "unique": true
+    },
+    {
+     "key": "f_kategorie",
+     "label": "Kategorie",
+     "labels": {
+      "en": "Category",
+      "zh-hans": "类别",
+      "zh-hant": "類別"
+     },
+     "type": "choice",
+     "options": [
+      {
+       "value": "Möbel",
+       "labels": {
+        "en": "Furniture",
+        "zh-hans": "家具",
+        "zh-hant": "家具"
+       }
+      },
+      {
+       "value": "Technik",
+       "labels": {
+        "en": "Equipment",
+        "zh-hans": "设备",
+        "zh-hant": "設備"
+       }
+      },
+      {
+       "value": "Medien",
+       "labels": {
+        "en": "Media",
+        "zh-hans": "媒体",
+        "zh-hant": "媒體"
+       }
+      },
+      {
+       "value": "Sport",
+       "labels": {
+        "en": "Sports",
+        "zh-hans": "体育",
+        "zh-hant": "體育"
+       }
+      },
+      {
+       "value": "Sonstiges",
+       "labels": {
+        "en": "Other",
+        "zh-hans": "其他",
+        "zh-hant": "其他"
+       }
+      }
+     ]
+    },
+    {
+     "key": "f_raum",
+     "label": "Raum",
+     "labels": {
+      "en": "Room",
+      "zh-hans": "房间",
+      "zh-hant": "房間"
+     },
+     "type": "link",
+     "config": {
+      "target": "record",
+      "table": "inv_raeume",
+      "reverse": "Gegenstände"
+     }
+    },
+    {
+     "key": "f_anzahl",
+     "label": "Anzahl",
+     "labels": {
+      "en": "Quantity",
+      "zh-hans": "数量",
+      "zh-hant": "數量"
+     },
+     "type": "number",
+     "config": {
+      "min": "0"
+     }
+    },
+    {
+     "key": "f_preis",
+     "label": "Preis",
+     "labels": {
+      "en": "Price",
+      "zh-hans": "价格",
+      "zh-hant": "價格"
+     },
+     "type": "number",
+     "config": {
+      "decimals": 2,
+      "unit": "€"
+     }
+    },
+    {
+     "key": "f_wert_gesamt",
+     "label": "Wert gesamt",
+     "labels": {
+      "en": "Total value",
+      "zh-hans": "总价值",
+      "zh-hant": "總價值"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "{f_preis} * coalesce({f_anzahl}, 1)",
+      "decimals": 2
+     }
+    },
+    {
+     "key": "f_angeschafft",
+     "label": "Angeschafft am",
+     "labels": {
+      "en": "Bought on",
+      "zh-hans": "购置日期",
+      "zh-hant": "購置日期"
+     },
+     "type": "date"
+    },
+    {
+     "key": "f_zustand",
+     "label": "Zustand",
+     "labels": {
+      "en": "Condition",
+      "zh-hans": "状况",
+      "zh-hant": "狀況"
+     },
+     "type": "choice",
+     "options": [
+      {
+       "value": "Neu",
+       "labels": {
+        "en": "New",
+        "zh-hans": "全新",
+        "zh-hant": "全新"
+       }
+      },
+      {
+       "value": "Gut",
+       "labels": {
+        "en": "Good",
+        "zh-hans": "良好",
+        "zh-hant": "良好"
+       }
+      },
+      {
+       "value": "Gebraucht",
+       "labels": {
+        "en": "Used",
+        "zh-hans": "旧",
+        "zh-hant": "舊"
+       }
+      },
+      {
+       "value": "Defekt",
+       "labels": {
+        "en": "Broken",
+        "zh-hans": "损坏",
+        "zh-hant": "損壞"
+       }
+      }
+     ]
+    },
+    {
+     "key": "f_foto",
+     "label": "Foto",
+     "labels": {
+      "en": "Photo",
+      "zh-hans": "照片",
+      "zh-hant": "照片"
+     },
+     "type": "image",
+     "in_grid": false
+    },
+    {
+     "key": "f_bemerkung",
+     "label": "Bemerkung",
+     "labels": {
+      "en": "Note",
+      "zh-hans": "备注",
+      "zh-hant": "備註"
+     },
+     "type": "textarea",
+     "in_grid": false
+    }
+   ]
+  }
+ ],
+ "masks": [
+  {
+   "table": "inv_objekte",
+   "name": "Gegenstand",
+   "names": {
+    "en": "Item",
+    "zh-hans": "物品",
+    "zh-hant": "物品"
+   },
+   "tree": {
+    "tabs": [
+     {
+      "id": "t1",
+      "title": "Gegenstand",
+      "titles": {
+       "en": "Item",
+       "zh-hans": "物品",
+       "zh-hant": "物品"
+      },
+      "sections": [
+       {
+        "id": "s1",
+        "title": "Was und wo",
+        "titles": {
+         "en": "What and where",
+         "zh-hans": "物品与位置",
+         "zh-hant": "物品與位置"
+        },
+        "items": [
+         {
+          "type": "field",
+          "field": "f_bezeichnung",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_inventarnummer",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_kategorie",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_raum",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_zustand",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_anzahl",
+          "w": 3
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "title": "Wert",
+        "titles": {
+         "en": "Value",
+         "zh-hans": "价值",
+         "zh-hant": "價值"
+        },
+        "items": [
+         {
+          "type": "field",
+          "field": "f_preis",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_wert_gesamt",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_angeschafft",
+          "w": 4
+         }
+        ]
+       },
+       {
+        "id": "s3",
+        "title": "Mehr",
+        "titles": {
+         "en": "More",
+         "zh-hans": "更多",
+         "zh-hant": "更多"
+        },
+        "items": [
+         {
+          "type": "field",
+          "field": "f_foto",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_bemerkung",
+          "w": 6
+         },
+         {
+          "type": "block",
+          "block": "history",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "prints": [
+  {
+   "table": "inv_objekte",
+   "name": "Inventaretikett",
+   "description": "Ein Etikett je Gegenstand.",
+   "tree": {
+    "page": {
+     "preset": "label-3474"
+    },
+    "rows": [
+     {
+      "cols": [
+       {
+        "w": 12,
+        "items": [
+         {
+          "type": "heading",
+          "text": "{{f_bezeichnung}}"
+         },
+         {
+          "type": "text",
+          "text": "Nr. {{f_inventarnummer}}\nRaum {{f_raum}}"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "table": "inv_raeume",
+   "name": "Raumliste",
+   "description": "Ein Raum mit allen Gegenständen.",
+   "tree": {
+    "page": {
+     "preset": "a4"
+    },
+    "rows": [
+     {
+      "cols": [
+       {
+        "w": 12,
+        "items": [
+         {
+          "type": "heading",
+          "text": "Raum {{f_raum}}"
+         },
+         {
+          "type": "text",
+          "text": "{{f_gebaeude}} · Etage {{f_etage}}"
+         },
+         {
+          "type": "list",
+          "link": "@inv_objekte.f_raum",
+          "columns": [
+           {
+            "key": "f_inventarnummer",
+            "title": "Nr."
+           },
+           {
+            "key": "f_bezeichnung",
+            "title": "Bezeichnung"
+           },
+           {
+            "key": "f_anzahl",
+            "title": "Anzahl"
+           },
+           {
+            "key": "f_zustand",
+            "title": "Zustand"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "views": [
+  {
+   "table": "inv_objekte",
+   "name": "Defekt",
+   "config": {
+    "filters": {
+     "f_zustand": [
+      "Defekt"
+     ]
+    }
+   }
+  },
+  {
+   "table": "inv_objekte",
+   "name": "Nach Wert",
+   "config": {
+    "sort": [
+     {
+      "column": "f_wert_gesamt",
+      "dir": "desc"
+     }
+    ]
+   }
+  }
+ ],
+ "demo": {
+  "inv_raeume": [
+   {
+    "f_raum": "R 12",
+    "f_gebaeude": "Hauptgebäude",
+    "f_etage": "1"
+   },
+   {
+    "f_raum": "Turnhalle",
+    "f_gebaeude": "Halle",
+    "f_etage": "0"
+   }
+  ],
+  "inv_objekte": [
+   {
+    "f_bezeichnung": "Beamer",
+    "f_inventarnummer": "INV-001",
+    "f_kategorie": "Technik",
+    "f_raum": "R 12",
+    "f_anzahl": "1",
+    "f_preis": "499.00",
+    "f_angeschafft": "2024-03-14",
+    "f_zustand": "Gut"
+   },
+   {
+    "f_bezeichnung": "Schülertisch",
+    "f_inventarnummer": "INV-002",
+    "f_kategorie": "Möbel",
+    "f_raum": "R 12",
+    "f_anzahl": "28",
+    "f_preis": "89.00",
+    "f_zustand": "Gebraucht"
+   },
+   {
+    "f_bezeichnung": "Basketball",
+    "f_inventarnummer": "INV-003",
+    "f_kategorie": "Sport",
+    "f_raum": "Turnhalle",
+    "f_anzahl": "12",
+    "f_preis": "24.90",
+    "f_zustand": "Neu"
+   },
+   {
+    "f_bezeichnung": "Weichbodenmatte",
+    "f_inventarnummer": "INV-004",
+    "f_kategorie": "Sport",
+    "f_raum": "Turnhalle",
+    "f_anzahl": "2",
+    "f_preis": "420.00",
+    "f_zustand": "Defekt"
+   }
+  ]
+ }
+}

@@ -5,7 +5,12 @@
   const deTime = (iso) => { if (!iso) return ""; const t = new Date(iso); return isNaN(t) ? iso : t.toLocaleString(document.documentElement.lang || "de", { dateStyle: "medium", timeStyle: "short" }); };
   const number = (c, v) => {
     if (v === null || v === undefined || v === "") return "";
-    const text = Number(v).toLocaleString(document.documentElement.lang || "de", { minimumFractionDigits: c.decimals || 0, maximumFractionDigits: c.decimals || 0 });
+    if (typeof v === "string" && isNaN(Number(v))) return v; // "#Fehler", "nicht sichtbar"
+    // A computed number without set decimal places shows up to two (an average, a share). A plain whole
+    // number (a year, an inventory number) keeps its digits together.
+    const places = c.decimals ?? null;
+    const text = Number(v).toLocaleString(document.documentElement.lang || "de", {
+      minimumFractionDigits: places ?? 0, maximumFractionDigits: places ?? 2, useGrouping: !(places === 0 && !c.unit) });
     return c.unit ? `${text} ${c.unit}` : text;
   };
   const LS = `grid:${cfg.entity}`;
@@ -37,6 +42,10 @@
   const optionLabel = (c, v) => (c && c.optionLabels && c.optionLabels[v]) || v;
   const label = (c, v) => (v === "" ? EMPTY : c && c.type === "bool" ? BOOL_LABELS[v] || v : optionLabel(c, v));
 
+  // "Artikel 2" before "Artikel 10", umlauts where the language puts them.
+  const collator = new Intl.Collator(document.documentElement.lang || "de", { numeric: true, sensitivity: "base" });
+  const natural = (a, b) => collator.compare(String(a ?? ""), String(b ?? ""));
+
   function column(c) {
     const col = { title: c.title, field: c.key, visible: c.visible, minWidth: 80, resizable: true, headerClick: (e, column) => openMenu(e, column, c) };
     if (c.type === "photo") {
@@ -44,6 +53,7 @@
         formatter: (cell) => { const r = cell.getData(); return r.photo_url ? `<img class="grid-avatar" src="${App.esc(r.photo_url)}" alt="" loading="lazy">` : `<span class="avatar" style="width:24px;height:24px;font-size:10px">${App.esc(r.initials)}</span>`; } };
     }
     if (c.key === "first_name" || c.key === "last_name") col.minWidth = 130;
+    if (c.wide) col.minWidth = 180; // The title of an own table's record, and long texts.
     if (c.key === "last_name") col.formatter = (cell) => App.esc(cell.getValue());
     if (c.type === "date") { col.formatter = (cell) => de(cell.getValue()); col.editor = c.editable ? "date" : false; col.width = 110; }
     else if (c.type === "bool") { col.formatter = "tickCross"; col.formatterParams = { allowEmpty: true, crossElement: "" }; col.editor = c.editable ? "tickCross" : false; col.hozAlign = "center"; col.width = 90; }
@@ -64,9 +74,10 @@
       col.formatter = (cell) => App.esc([].concat(cell.getValue() || []).map((v) => optionLabel(c, v)).join(", "));
     } else if (c.type === "number") {
       col.editor = c.editable ? "number" : false; col.editorParams = { selectContents: true }; col.width = 100; col.sorter = "number";
-      if (c.decimals || c.unit) { col.formatter = (cell) => App.esc(number(c, cell.getValue())); col.hozAlign = "right"; }
+      col.formatter = (cell) => App.esc(number(c, cell.getValue())); col.hozAlign = "right";
     } else if (c.type === "datetime") { col.formatter = (cell) => App.esc(deTime(cell.getValue())); col.width = 150; }
     else if (c.editable) { col.editor = "input"; col.editorParams = { selectContents: true }; }
+    if (!col.sorter && !["date", "bool", "number", "datetime", "photo"].includes(c.type)) col.sorter = natural;
     if (c.key === "device" || c.key === "serial") col.cssClass = "mono";
     return col;
   }
@@ -105,6 +116,10 @@
   }
   window.addEventListener("resize", App.debounce(fitHeight, 150));
 
+  const refreshRow = async (id) => {
+    const res = await fetch(`${cfg.dataUrl}?entity=${cfg.entity}&id=${id}`);
+    if (res.ok) table.updateData(await res.json());
+  };
   table.on("cellEdited", async (cell) => {
     const key = cell.getField();
     const def = columnByKey[key];
@@ -119,11 +134,13 @@
       return;
     }
     if (res.ok) {
+      if (cfg.records) refreshRow(id); // computed fields and the title follow the change
       if (id === RecordPanel.activeId) RecordPanel.show(id);
       App.toast(interpolate(gettext("%(field)s gespeichert"), { field: def.title }, true), { action: { label: gettext("Rückgängig"), run: async () => {
         const old = cell.getOldValue();
         await App.postJSON(fieldUrl(id, key), { value: def.type === "class" ? (classIdByName[old] || "") : old });
         cell.restoreOldValue();
+        if (cfg.records) refreshRow(id);
         if (id === RecordPanel.activeId) RecordPanel.show(id);
       } } });
     } else {

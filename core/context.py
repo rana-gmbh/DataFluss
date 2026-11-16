@@ -97,6 +97,8 @@ def app_context(request):
         _add_tables(nav, user)
     return {
         "school": SchoolSettings.load(),
+        # The name after the page title and on the sign-in page: the module's, or the platform's without it.
+        "product_name": _("Schulverwaltung") if "schulverwaltung" in modules.active() else "DataFluss",
         "nav": nav,
         "can_search": bool(user is not None and user.is_authenticated and any(user.can(c) for c in SEARCHERS)),
         "oidc_enabled": settings.OIDC_ENABLED,

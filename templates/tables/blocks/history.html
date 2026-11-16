@@ -1,4 +1,4 @@
 {% load i18n %}<h3 class="label">{% translate "Änderungsverlauf" %}</h3>
 {% for c in changes %}<div class="py-1.5 text-[12.5px] border-b last:border-0" style="border-color: var(--line)"><div class="flex justify-between gap-2"><span class="font-medium">{{ c.label }}</span><span class="muted whitespace-nowrap">{{ c.row.at|date:"d.m.Y H:i" }}</span></div>
-<div class="muted truncate">{% if c.row.old_value %}{{ c.row.old_value|truncatechars:40 }} → {% endif %}{{ c.row.new_value|truncatechars:40 }}{% if c.row.user %} · {{ c.row.user.username }}{% endif %}</div></div>
+<div class="muted truncate">{% if c.old %}{{ c.old|truncatechars:40 }} → {% endif %}{{ c.new|default:'–'|truncatechars:40 }}{% if c.row.user %} · {{ c.row.user.username }}{% endif %}</div></div>
 {% empty %}<p class="muted text-[13px]">{% translate "Noch keine Änderungen." %}</p>{% endfor %}

@@ -281,11 +281,21 @@ class Schema:
             return reverse[0]
         raise FormulaError(_("Unbekanntes Feld {%(name)s}.") % {"name": name}, position)
 
-    def path_key(self, first_key, name, position=None):
+    def path_fields(self, first_key, position=None):
+        """(table, fields) behind the first part of {a}.{b}: a link field of this table, or the records of
+        another table that link here ({@table.f_link})."""
+        if first_key in self.reverse:
+            source = self.reverse[first_key][0]
+            if first_key not in self._tables:
+                self._tables[first_key] = (source, {f.key: f for f in self._Field.objects.filter(table=source, archived=False)})
+            return self._tables[first_key]
         link = self.fields.get(first_key)
-        if link is None or link.type != "link":
+        if link is None or link.type != "link" or (link.config or {}).get("target") != "record":
             raise FormulaError(_("{%(name)s} ist keine Verknüpfung zu einer Tabelle.") % {"name": first_key}, position)
-        table, fields = self.target(link)
+        return self.target(link)
+
+    def path_key(self, first_key, name, position=None):
+        table, fields = self.path_fields(first_key, position)
         if name in fields:
             return name
         field = self.by_name(name, fields)
@@ -307,8 +317,10 @@ def to_names(text, schema):
     """The stored formula as a person reads it. Keys that are gone stay as they are, so the check names them."""
     def swap(inner, first):
         if first is not None:
-            link = schema.fields.get(first)
-            fields = schema.target(link)[1] if link is not None and link.type == "link" else {}
+            try:
+                fields = schema.path_fields(first)[1]
+            except FormulaError:
+                fields = {}
             return fields[inner].display_label if inner in fields else inner
         if inner in schema.fields:
             return schema.fields[inner].display_label
@@ -385,10 +397,7 @@ class Checker:
                 raise FormulaError(_("Unbekanntes Feld {%(name)s}.") % {"name": name}, position)
             return self.field_type(field, position)
         if kind == "path":
-            link = self.schema.fields.get(node[1])
-            if link is None or link.type != "link" or (link.config or {}).get("target") != "record":
-                raise FormulaError(_("{%(name)s} ist keine Verknüpfung zu einer Tabelle.") % {"name": node[1]}, position)
-            table, fields = self.schema.target(link)
+            table, fields = self.schema.path_fields(node[1], position)
             target = fields.get(node[2])
             if target is None:
                 raise FormulaError(_("Unbekanntes Feld {%(name)s}.") % {"name": node[2]}, position)
@@ -627,6 +636,8 @@ class Context:
         self.computing = []  # (table id, field key) of the formulas being computed, against loops
         self.prefetched = set()
         self.trees = {}
+        self.target_tables = {}  # link field id -> target table
+        self.resolved = {}       # (kind, table id, target id) -> links.resolve entry
 
     def schema(self, table):
         if table.pk not in self.schemas:
@@ -686,6 +697,29 @@ class Context:
             self.reverse[cache] = [l.record for l in rows]
         return self.reverse[cache]
 
+    def target_table(self, field):
+        from . import links
+
+        if field.pk not in self.target_tables:
+            self.target_tables[field.pk] = links.target_table(field)
+        return self.target_tables[field.pk]
+
+    def resolve(self, field, ids):
+        """Titles of a link's targets. The first call for a field resolves the targets of every prefetched
+        record at once, so a list computes a link formula without a query per row."""
+        from . import links
+
+        kind, table = links.kind_of(field), self.target_table(field)
+        tid = table.pk if table else None
+        missing = {i for i in ids if (kind, tid, i) not in self.resolved}
+        if missing:
+            missing |= {t for (rid, key), found in self.links.items() if key == field.key for t in found if (kind, tid, t) not in self.resolved}
+            missing = list(missing)
+            for start in range(0, len(missing), 500):
+                for i, entry in links.resolve(self.user, kind, missing[start:start + 500], table).items():
+                    self.resolved[(kind, tid, i)] = entry
+        return {i: self.resolved[(kind, tid, i)] for i in ids}
+
     def fetch(self, ids, table):
         from .models import Record
 
@@ -706,7 +740,7 @@ def _value_of(record, field, context):
         if len(ids) > MAX_LINKED:
             raise FormulaError(_("Zu viele verknüpfte Datensätze."))
         context.step(len(ids))
-        found = links.resolve(context.user, links.kind_of(field), ids, links.target_table(field))
+        found = context.resolve(field, ids)
         return [Item(links.kind_of(field), i, str(found[i]["title"])) for i in ids]
     if field.type in ("file", "image"):
         return [a.name for a in links.files(record, field)]
@@ -749,20 +783,23 @@ def _evaluate(node, record, context):
                 raise FormulaError(_("Unbekanntes Feld {%(name)s}.") % {"name": name})
             return _value_of(record, field, context)
         if kind == "path":
-            link = schema.fields.get(node[1])
-            if link is None or link.type != "link":
-                raise FormulaError(_("{%(name)s} ist keine Verknüpfung zu einer Tabelle.") % {"name": node[1]})
-            table, fields = schema.target(link)
+            table, fields = schema.path_fields(node[1])
             target = fields.get(node[2])
             if table is None or target is None:
                 raise FormulaError(_("Unbekanntes Feld {%(name)s}.") % {"name": node[2]})
             if not context.may_read(table):
                 raise Hidden()
-            ids = context.targets(record, link.key)
-            if len(ids) > MAX_LINKED:
+            if node[1] in schema.reverse:  # the records of another table that link here
+                others = context.linking(table.key, schema.reverse[node[1]][1].key, record)
+            else:
+                ids = context.targets(record, node[1])
+                if len(ids) > MAX_LINKED:
+                    raise FormulaError(_("Zu viele verknüpfte Datensätze."))
+                others = context.fetch(ids, table)
+            if len(others) > MAX_LINKED:
                 raise FormulaError(_("Zu viele verknüpfte Datensätze."))
             values = []
-            for other in context.fetch(ids, table):
+            for other in others:
                 context.step()
                 value = _value_of(other, target, context)
                 values.extend(value if isinstance(value, list) else [value])
@@ -852,6 +889,8 @@ def compute(record, field, context=None):
     expression = (field.config or {}).get("expression", "")
     if not expression:
         return None
+    if not context.computing:
+        context.steps = 0  # the limit is per value: a list shares one context across all its records
     context.computing.append(marker)
     try:
         if expression not in context.trees:

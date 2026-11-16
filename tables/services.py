@@ -62,6 +62,19 @@ def roles():
     return [(value, label) for value, label in role_choices() if value != Role.IT]
 
 
+ACCESS = {"it": NONE, "read": READ, "edit": EDIT}  # the choice when a table is created: every other role the same
+
+
+def access_choices():
+    return [("it", _("Nur IT")), ("read", _("Alle Rollen lesen")), ("edit", _("Alle Rollen bearbeiten"))]
+
+
+def set_access(table, access, request=None):
+    """The rights of a new table in one choice; finer rights per role stay on the Rechte tab."""
+    if access in ACCESS and access != "it":
+        set_rights(table, {role: ACCESS[access] for role, _label in roles()}, request=request)
+
+
 def set_rights(table, rights, request=None):
     table.rights = {role: rights.get(role, NONE) if rights.get(role, NONE) in RIGHTS else NONE for role, _label in roles()}
     table.save()

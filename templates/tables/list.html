@@ -7,10 +7,15 @@
 <div class="lg:col-span-2 surface overflow-x-auto">{% if rows %}<table class="data-table"><thead><tr><th>{% translate "Tabelle" %}</th><th>{% translate "Felder" %}</th><th>{% translate "Datensätze" %}</th></tr></thead><tbody>
 {% for row in rows %}<tr><td><a class="font-medium hover:underline inline-flex items-center gap-2" href="{% url 'table_settings' row.table.key %}">{% icon row.table.icon 'text-[16px] text-[var(--accent)]' %}{{ row.table.display_name }}</a>{% if row.table.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}{% if row.table.description %}<div class="muted text-[12px]">{{ row.table.description }}</div>{% endif %}</td><td class="muted">{{ row.fields }}</td><td class="muted">{{ row.records }}</td></tr>{% endfor %}
 </tbody></table>{% else %}<div class="p-6 text-center"><p class="font-medium">{% translate "Noch keine eigenen Tabellen." %}</p><p class="muted text-[13px] mt-1">{% translate "Legen Sie rechts die erste an." %}</p></div>{% endif %}</div>
-<form method="post" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Tabelle" %}</h2>
+<div class="space-y-4"><form method="post" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Tabelle" %}</h2>
   {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
   <div><label class="label" for="t-name">{% translate "Name" %}</label><input id="t-name" class="input" name="name" required maxlength="100" placeholder="{% translate 'z. B. Bücher' %}"></div>
+  <div><label class="label" for="t-access">{% translate "Zugriff" %}</label><select id="t-access" class="input" name="access">{% for value, label in access %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
   <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button>
   <a class="btn w-full" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlage hinzufügen …" %}</a>
-  <p class="muted text-[12px]">{% translate "Die Tabelle beginnt mit einem Feld „Name“. Wer sie sehen und bearbeiten darf, legen Sie unter Rechte fest." %}</p></form></div>
+  <p class="muted text-[12px]">{% translate "Die Tabelle beginnt mit einem Feld „Name“. Rechte je Rolle lassen sich später unter Rechte genauer festlegen." %}</p></form>
+{% if can_import %}<form method="post" action="{% url 'table_from_file' %}" enctype="multipart/form-data" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Aus Excel- oder CSV-Datei" %}</h2>
+  <p class="muted text-[12px]">{% translate "Jede Spalte wird ein Feld mit passendem Typ, jede Zeile ein Datensatz." %}</p>
+  <input class="input text-[13px] py-1.5 h-auto" type="file" name="file" accept=".csv,.xlsx,.xlsm,.txt,text/csv" required aria-label="{% translate 'Datei' %}" data-autosubmit>
+</form>{% endif %}</div></div>
 {% endblock %}

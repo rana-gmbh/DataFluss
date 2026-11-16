@@ -1,5 +1,6 @@
 """Verwaltung → Tabellen: designing own tables (docs/TABLES-PLAN.md §4). Lists and record pages follow."""
 import json
+import re
 
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -13,7 +14,7 @@ from core import audit, fieldtypes as ft
 from core.permissions import require
 from masks import i18n
 
-from . import blueprints, formula, links, masks as table_masks, services
+from . import blueprints, formula, infer, links, masks as table_masks, services
 from .models import EDIT, NONE, READ, Field, Record, Table
 
 ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench"]
@@ -26,6 +27,7 @@ def table_list(request):
     if request.method == "POST":
         try:
             table = services.create_table(request.POST.get("name"), request=request)
+            services.set_access(table, request.POST.get("access"), request=request)
             messages.success(request, _("%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu.") % {"table": table.display_name})
             return redirect("table_settings", key=table.key)
         except ValidationError as exc:
@@ -33,7 +35,8 @@ def table_list(request):
     tables = Table.objects.all()
     counts = {row["table_id"]: row["n"] for row in Record.objects.values("table_id").order_by().annotate(n=Count("id"))}
     rows = [{"table": t, "records": counts.get(t.pk, 0), "fields": t.fields.filter(archived=False).count()} for t in tables]
-    return render(request, "tables/list.html", {"rows": rows, "error": error, "active_nav": "settings_home"})
+    return render(request, "tables/list.html", {"rows": rows, "error": error, "can_import": request.user.can("data.import"),
+                                                "access": services.access_choices(), "active_nav": "settings_home"})
 
 
 def _settings_context(table, tab, **extra):
@@ -43,6 +46,7 @@ def _settings_context(table, tab, **extra):
         "link_targets": links.target_choices(),
         "title_choices": [f for f in fields if not f.archived and services.may_name(f)],
         "presets": formula.presets(table), "expression_json": json.dumps(""),
+        "type_rules": infer.label_rules(links.target_choices(), table.key),
         "roles": [{"value": value, "label": label, "right": (table.rights or {}).get(value, NONE)} for value, label in services.roles()],
         "rights": [(NONE, _("Kein Zugriff")), (READ, _("Lesen")), (EDIT, _("Bearbeiten"))],
         "has_records": Record.everything.filter(table=table).exists(),
@@ -247,9 +251,163 @@ def table_blueprints(request):
         messages.success(request, text)
         return redirect("table_list")
     rows = []
-    for template in sorted(found.values(), key=lambda t: blueprints.title(t)):
+    for template in sorted(found.values(), key=lambda t: (not blueprints.usable(t), blueprints.title(t))):  # usable ones first
         installed = blueprints.installed_version(template["id"])
         rows.append({"id": template["id"], "title": blueprints.title(template), "description": blueprints.description(template),
                      "version": template["version"], "installed": installed, "usable": blueprints.usable(template),
                      "tables": [i18n.pick(t["name"], t.get("names")) for t in template["tables"]], "has_demo": bool(template.get("demo"))})
     return render(request, "tables/blueprints.html", {"rows": rows, "active_nav": "settings_home"})
+
+
+# ---------------------------------------------------------------- a new table from a file
+
+NEW_TABLE = "newtable"  # ImportSession.entity of a file that is still waiting to become a table
+FILE_TYPES = ("text", "textarea", "number", "bool", "choice", "date", "datetime", "email", "phone", "url")
+
+
+def _may_import_file(request):
+    if not (request.user.can("tables.design") and request.user.can("data.import")):
+        from django.core.exceptions import PermissionDenied
+
+        raise PermissionDenied
+
+
+@require_POST
+def table_from_file(request):
+    """Step 1: read the file. Its columns are offered as fields with a guessed type (tables/infer.py)."""
+    from django.utils import timezone
+    from datetime import timedelta
+    from sync import journal
+    from transfer.models import ImportSession
+    from transfer.parsers import read_table
+    from transfer.views import MAX_BYTES
+
+    _may_import_file(request)
+    file = request.FILES.get("file")
+    if not file:
+        messages.error(request, _("Bitte eine Datei wählen."))
+        return redirect("table_list")
+    if file.size > MAX_BYTES:
+        messages.error(request, _("Die Datei ist größer als 20 MB."))
+        return redirect("table_list")
+    try:
+        headers, rows = read_table(file.name, file.read())
+    except Exception:
+        messages.error(request, _("Die Datei konnte nicht gelesen werden. Bitte CSV oder XLSX verwenden."))
+        return redirect("table_list")
+    # Columns are matched by their heading, so every heading must be there and different.
+    named = []
+    for index, header in enumerate(str(h).strip() for h in headers):
+        header = header or _("Spalte %(n)s") % {"n": index + 1}
+        base, n = header, 2
+        while header in named:
+            header, n = f"{base} ({n})", n + 1
+        named.append(header)
+    headers = named
+    if not rows or not headers:
+        messages.error(request, _("In der Datei wurden keine Daten gefunden."))
+        return redirect("table_list")
+    journal.delete(ImportSession.objects.filter(entity=NEW_TABLE, created_at__lt=timezone.now() - timedelta(days=1)))
+    session = ImportSession.objects.create(filename=file.name[:200], entity=NEW_TABLE, headers=headers, rows=rows, user=request.user)
+    return redirect("table_from_file_columns", pk=session.pk)
+
+
+def _file_columns(session):
+    from . import infer
+
+    columns = []
+    for index, header in enumerate(session.headers):
+        values = [str(row[index]) if index < len(row) else "" for row in session.rows[:2000]]
+        guess = infer.column(header, values)
+        filled = [v.strip() for v in values if v.strip()]
+        columns.append({"index": index, "header": header, "guess": guess,
+                        "samples": list(dict.fromkeys(filled))[:3], "unique": infer.is_unique(values), "empty": not filled})
+    naming = re.compile(r"name|bezeichnung|titel|title|benennung|名称|名稱|标题|標題", re.IGNORECASE)
+    title = next((c for c in columns if c["guess"]["type"] == "text" and naming.search(c["header"]) and not c["empty"]), None) \
+        or next((c for c in columns if c["guess"]["type"] == "text" and c["unique"]), None) \
+        or next((c for c in columns if c["guess"]["type"] == "text" and not c["empty"]), None) or (columns[0] if columns else None)
+    return columns, title["index"] if title else 0
+
+
+def table_from_file_columns(request, pk):
+    """Step 2: name the table, check the columns, and create it with all rows in one go."""
+    import os
+    from transfer.models import ImportSession
+
+    from .importer import ALWAYS_NEW, TableTarget
+
+    _may_import_file(request)
+    session = get_object_or_404(ImportSession, pk=pk, entity=NEW_TABLE, status=ImportSession.UPLOADED, user=request.user)
+    columns, title_index = _file_columns(session)
+    name = os.path.splitext(session.filename)[0].replace("_", " ").strip()[:100]
+    error = ""
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()[:100] or name
+        try:
+            table = _table_from_columns(request, session, columns, name)
+        except ValidationError as exc:
+            error = " ".join(exc.messages)
+        else:
+            target = TableTarget(table)
+            session.match_key = ALWAYS_NEW
+            session.report = target.analyse(session)
+            session.status = ImportSession.PREVIEWED
+            session.save()
+            result = target.commit(session, request.user)
+            audit.log("import", f"Tabelle {table.name} aus {session.filename}: {result['created']} Datensätze", request=request, target=session.pk)
+            text = _("%(table)s wurde mit %(count)s Datensätzen angelegt.") % {"table": table.display_name, "count": result["created"]}
+            if result["skipped"]:
+                text += " " + _("%(n)s Zeilen passten nicht und wurden übersprungen (Details unter Import & Export).") % {"n": result["skipped"]}
+            messages.success(request, text)
+            return redirect("table_records", key=table.key)
+    return render(request, "tables/from_file.html", {
+        "session": session, "columns": columns, "title_index": title_index, "name": name, "error": error,
+        "types": [(value, label) for value, label in services.CREATE_TYPES if value in FILE_TYPES], "rows": len(session.rows),
+        "access": services.access_choices(),
+        "active_nav": "settings_home",
+    })
+
+
+def _table_from_columns(request, session, columns, name):
+    """The table with a field per chosen column; the mapping for the import is stored on the session."""
+    from django.db import transaction
+
+    chosen = [c for c in columns if request.POST.get(f"use_{c['index']}")]
+    if not chosen:
+        raise ValidationError(_("Bitte mindestens eine Spalte übernehmen."))
+    try:
+        title_index = int(request.POST.get("title", ""))
+    except ValueError:
+        title_index = chosen[0]["index"]
+    if title_index not in [c["index"] for c in chosen]:
+        title_index = chosen[0]["index"]
+    with transaction.atomic():
+        table = services.create_table(name, request=request)
+        services.set_access(table, request.POST.get("access"), request=request)
+        first = Field.objects.get(table=table, key="f_name")
+        mapping = {}
+        for column in chosen:
+            type_ = request.POST.get(f"type_{column['index']}", column["guess"]["type"])
+            type_ = type_ if type_ in FILE_TYPES else "text"
+            label = (request.POST.get(f"label_{column['index']}") or column["header"]).strip()[:100]
+            guess = column["guess"] if type_ == column["guess"]["type"] else {"config": {}, "options": []}
+            options = guess["options"]
+            if type_ == "choice" and not options:
+                values = [str(row[column["index"]]).strip() for row in session.rows if column["index"] < len(row)]
+                options = list(dict.fromkeys(v for v in values if v))[:50] or [_("Ja")]
+            if column["index"] == title_index and type_ == "text":
+                first.label = label
+                first.save()
+                field = first
+            else:
+                field = services.create_field(table, label, type_, options_text="\n".join(options), config=guess["config"], request=request)
+            if column["index"] == title_index:
+                table.title_field = field.key
+            mapping[session.headers[column["index"]]] = field.key
+        if table.title_field != first.key:
+            first.delete()
+        table.save()
+        session.entity = f"table:{table.key}"
+        session.mapping = mapping
+        session.save()
+    return table
