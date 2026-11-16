@@ -93,6 +93,16 @@ def add_capabilities(capabilities, searchers=(), roles=()):
         ROLE_SUMMARIES.append((value, summary, module))
 
 
+def add_area(key, title, section, read=(), edit=(), extras=(), hint=""):
+    """An area of the role editor (core/rights.py) for the module's own capabilities: Kein Zugriff / Lesen /
+    Bearbeiten, and switches as [(key, title, hint, capabilities)]. Capabilities no area names still get a
+    switch of their own."""
+    from . import rights
+
+    rights.AREAS.append(rights.Area(key, title, section, hint=hint, read=tuple(read), edit=tuple(edit), module=_caller_module(),
+                                    extras=[rights.Extra(k, t, h, tuple(c)) for k, t, h, c in extras]))
+
+
 def add_capability_check(capability, check):
     """A capability that also holds when check(user) is true, whatever the role."""
     from .permissions import CAPABILITY_CHECKS

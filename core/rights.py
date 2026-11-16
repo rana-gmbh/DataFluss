@@ -115,8 +115,9 @@ def capabilities_of(area):
 
 
 def capabilities(levels, extras):
-    """The capabilities granted by {area: level} and a list of extra keys."""
-    granted = set()
+    """The capabilities granted by {area: level} and a list of extra keys. An extra "cap:<capability>" is a
+    module capability no area named when the role's row was made (`normalize` turns it into its area)."""
+    granted = {extra[4:] for extra in extras or [] if extra.startswith("cap:")}
     switched = set(extras or [])
     for area in areas():
         level = (levels or {}).get(area.key, NONE)
@@ -145,3 +146,13 @@ def from_capabilities(granted):
             if set(extra.capabilities) <= granted:
                 extras.append(extra.key)
     return levels, extras
+
+
+def normalize(levels, extras):
+    """The same rights in today's areas: switches of single capabilities ("cap:…") become the area a module
+    has added for them since. Capabilities no area knows stay as such switches."""
+    granted = capabilities(levels, extras)
+    new_levels, new_extras = from_capabilities(granted)
+    named = capabilities(new_levels, new_extras)
+    new_extras += [f"cap:{capability}" for capability in sorted(granted - named)]
+    return new_levels, new_extras

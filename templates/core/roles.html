@@ -16,7 +16,7 @@
     <span class="avatar" style="width:36px;height:36px">{% icon 'users' 'text-[16px]' %}</span>
     <div class="flex-1 min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="font-semibold">{{ row.role.display_name }}</h2>
       <span class="muted text-[12px]">{% blocktranslate trimmed count n=row.users %}{{ n }} Konto{% plural %}{{ n }} Konten{% endblocktranslate %}</span></div>
-      {% if row.role.description %}<p class="muted text-[13px] mt-0.5">{{ row.role.description }}</p>{% endif %}
+      {% if row.description %}<p class="muted text-[13px] mt-0.5">{{ row.description }}</p>{% endif %}
       <ul class="text-[12.5px] mt-1.5 space-y-0.5">{% for line in row.summary %}<li>{{ line }}</li>{% endfor %}</ul></div>
     {% icon 'chevron' 'text-[16px] muted mt-1' %}
   </a>

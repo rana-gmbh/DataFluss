@@ -128,6 +128,19 @@ def has_capability(user, capability):
     return bool(check and check(user))
 
 
+def _translations(label):
+    """{language: name} of a built-in role in the other languages (masks/i18n.py names)."""
+    from django.conf import settings
+    from django.utils import translation
+
+    names = {}
+    for language, _name in settings.LANGUAGES:
+        if language != settings.LANGUAGE_CODE:
+            with translation.override(language):
+                names[language] = str(label)
+    return {k: v for k, v in names.items() if v != str(label)}
+
+
 def ensure_roles(using="default"):
     """A row for every built-in role that has none yet, with the rights it had before (after migrate).
     Not tracked: a computer makes the same rows (the ids follow from the key) and then takes the server's."""
@@ -149,10 +162,27 @@ def ensure_roles(using="default"):
         if value in existing:
             continue
         levels, extras = rights.from_capabilities(default_capabilities(value))
-        made.append(UserRole(id=UserRole.id_for(value), key=value, name=str(label), description=str(summaries.get(value, ""))[:300],
+        made.append(UserRole(id=UserRole.id_for(value), key=value, name=str(label), names=_translations(label),
                              areas=levels, extras=extras, order=order * 10))
     if made:
         UserRole.objects.using(using).bulk_create(made, ignore_conflicts=True)
+    # Built-in roles made before their names were translated get the translations; the German summary they
+    # were given as description goes (the summary of the role page says it in every language).
+    for row in UserRole.objects.using(using).filter(key__in=[value for value, _label in builtin]):
+        label = dict(builtin).get(row.key)
+        update = {}
+        if not row.names:
+            update["names"] = _translations(label)
+        if row.description and row.description == str(summaries.get(row.key, ""))[:300]:
+            update["description"] = ""
+        if update:
+            UserRole.objects.using(using).filter(pk=row.pk).update(**update)
+    # Rows that hold a module's rights as single switches get them as the module's area (rights.normalize).
+    for row in UserRole.objects.using(using).filter(key__in=existing):
+        if any(extra.startswith("cap:") for extra in row.extras or []):
+            levels, extras = rights.normalize(row.areas, row.extras)
+            if (levels, extras) != (row.areas, row.extras):
+                UserRole.objects.using(using).filter(pk=row.pk).update(areas=levels, extras=extras)
     return made
 
 

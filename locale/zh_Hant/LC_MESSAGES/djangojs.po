@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:14+0100\n"
+"POT-Creation-Date: 2026-11-16 19:00+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -706,6 +706,31 @@ msgstr "新名稱"
 
 msgid "Datensatz konnte nicht geladen werden"
 msgstr "無法載入記錄"
+
+msgid "Kein Zugriff"
+msgstr "無權存取"
+
+msgid "Lesen"
+msgstr "檢視"
+
+msgid "Bearbeiten"
+msgstr "編輯"
+
+msgid "ja"
+msgstr "是"
+
+msgid "nein"
+msgstr "否"
+
+#, javascript-format
+msgid "%s Feld mit anderem Recht"
+msgid_plural "%s Felder mit anderem Recht"
+msgstr[0] "%s 個欄位權限已變更"
+
+#, javascript-format
+msgid "Das gilt sofort für %s Konto:"
+msgid_plural "Das gilt sofort für %s Konten:"
+msgstr[0] "此變更立即適用於 %s 個帳戶："
 
 msgid "Die Reihenfolge wurde nicht gespeichert."
 msgstr "順序未儲存。"

@@ -14,7 +14,7 @@
     <h2 class="section-title">{% translate "Allgemein" %}</h2>
     <div class="grid sm:grid-cols-2 gap-3">
       <div><label class="label" for="r-name">{% translate "Name" %}</label><input id="r-name" class="input" name="name" value="{{ role.display_name }}" required maxlength="80" data-name-input></div>
-      <div><label class="label" for="r-description">{% translate "Beschreibung" %}</label><input id="r-description" class="input" name="description" value="{{ role.description }}" maxlength="300" placeholder="{% translate 'Wofür die Rolle gedacht ist' %}"></div>
+      <div><label class="label" for="r-description">{% translate "Beschreibung" %}</label><input id="r-description" class="input" name="description" value="{{ role.description }}" maxlength="300" placeholder="{{ builtin_description|default:_('Wofür die Rolle gedacht ist') }}"></div>
     </div>
     <div class="text-[13px]"><span class="label inline">{% translate "Konten mit dieser Rolle:" %}</span>
       {% for account in accounts %}<span class="badge">{{ account.display_name }}</span> {% empty %}<span class="muted">{% translate "keine" %}</span>{% endfor %}

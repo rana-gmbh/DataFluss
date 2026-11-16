@@ -5,7 +5,9 @@ events or an inventory. You design the tables, their fields, record pages and pr
 they work like the built-in lists: filters, saved views, inline editing, search, printing, import and
 export, sync with a server and backups.
 
-Designing tables needs the IT role. Who may read or edit the records is set for each table.
+Designing tables needs IT or a role with "Tabellen gestalten". Who may read or edit the records is set
+for each table and role, and a role can also see single fields read-only or not at all (see
+[Roles and rights](roles.md)).
 
 ## Creating a table
 

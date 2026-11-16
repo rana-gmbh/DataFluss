@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:14+0100\n"
+"POT-Creation-Date: 2026-11-16 19:00+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -723,6 +723,33 @@ msgstr "New name"
 
 msgid "Datensatz konnte nicht geladen werden"
 msgstr "The record could not be loaded"
+
+msgid "Kein Zugriff"
+msgstr "No access"
+
+msgid "Lesen"
+msgstr "Read"
+
+msgid "Bearbeiten"
+msgstr "Edit"
+
+msgid "ja"
+msgstr "yes"
+
+msgid "nein"
+msgstr "no"
+
+#, javascript-format
+msgid "%s Feld mit anderem Recht"
+msgid_plural "%s Felder mit anderem Recht"
+msgstr[0] "%s field with another right"
+msgstr[1] "%s fields with another right"
+
+#, javascript-format
+msgid "Das gilt sofort für %s Konto:"
+msgid_plural "Das gilt sofort für %s Konten:"
+msgstr[0] "This applies at once to %s account:"
+msgstr[1] "This applies at once to %s accounts:"
 
 msgid "Die Reihenfolge wurde nicht gespeichert."
 msgstr "The order was not saved."

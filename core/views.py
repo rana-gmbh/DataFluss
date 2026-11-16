@@ -405,7 +405,7 @@ def _users_page(request, error="", temporary=None):
         request, "core/users.html",
         {
             "users": User.objects.order_by("username"), "roles": offered_roles(), "error": error, "temporary": temporary,
-            "role_rows": [{"role": r, "line": r.description or views_roles.summary(r.areas, r.extras)[0]} for r in UserRole.objects.all()],
+            "role_rows": [{"role": r, "line": views_roles.describe(r) or views_roles.summary(r.areas, r.extras)[0]} for r in UserRole.objects.all()],
             "two_factor_on": SchoolSettings.load().require_2fa,
         },
     )

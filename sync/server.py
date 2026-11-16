@@ -42,13 +42,15 @@ def resend_ruled(devices):
     """After a role's rights or an account's role changed: the devices get their people and table records
     again, so values that became hidden leave them and values that became visible arrive. Records that left
     the role's reach are evicted on the next pull anyway."""
-    for device in devices:
-        known = {tuple(r) for r in device.resend}
-        add = [[entity, str(pk)] for entity, pks in _holdings(device).items() if entity in RULED for pk in pks
-               if (entity, str(pk)) not in known]
-        if add:
-            device.resend = device.resend + add
-            device.save(update_fields=["resend"])
+    for pk in [device.pk for device in devices]:
+        with transaction.atomic():  # a pull in progress saves the same row: wait for it, then add to what it left
+            device = Device.objects.select_for_update().get(pk=pk)
+            known = {tuple(r) for r in device.resend}
+            add = [[entity, str(record)] for entity, records in _holdings(device).items() if entity in RULED for record in records
+                   if (entity, str(record)) not in known]
+            if add:
+                device.resend = device.resend + add
+                device.save(update_fields=["resend"])
 
 
 def _versions(entity, pk):

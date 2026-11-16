@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 17:39+0100\n"
+"POT-Creation-Date: 2026-11-16 19:00+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -684,6 +684,141 @@ msgstr "Maintain master data, view passwords and print login sheets."
 msgid "Daten und Berichte lesen, keine Passwörter."
 msgstr "Read data and reports, no passwords."
 
+msgid "Startseite"
+msgstr "Start page"
+
+msgid "Die Startseite mit Zahlen, Aufgaben und der Suche."
+msgstr "The start page with figures, to-dos and the search."
+
+msgid "Liste, Datenblätter und Suche; Bearbeiten heißt anlegen und ändern."
+msgstr "List, record pages and search; edit means create and change."
+
+msgid "Archivieren und löschen"
+msgstr "Archive and delete"
+
+msgid "Schüler archivieren, in den Papierkorb legen und zurückholen."
+msgstr "Archive pupils, move them to the bin and bring them back."
+
+msgid "Klassen und Schuljahreswechsel"
+msgstr "Classes and new school year"
+
+msgid "Klassen anlegen und ändern, das Schuljahr wechseln."
+msgstr "Create and change classes, start the new school year."
+
+msgid "Personal archivieren, in den Papierkorb legen und zurückholen."
+msgstr "Archive staff, move them to the bin and bring them back."
+
+msgid "Erziehungsberechtigte und ihre Kinder."
+msgstr "Parents and guardians and their children."
+
+msgid "Geräte und Schäden"
+msgstr "Devices and damage"
+
+msgid "Geräte, Ausgaben, Rücknahmen und Schadensfälle."
+msgstr "Devices, hand-outs, returns and damage cases."
+
+msgid "Benutzernamen und Passwörter der Plattformen."
+msgstr "User names and passwords of the platforms."
+
+msgid "Passwörter anzeigen"
+msgstr "Show passwords"
+
+msgid "Ein verborgenes Passwort im Klartext zeigen."
+msgstr "Show a hidden password in plain text."
+
+msgid "Mit Passwörtern exportieren"
+msgstr "Export with passwords"
+
+msgid "Zugänge samt Passwörtern als Datei."
+msgstr "Logins with their passwords as a file."
+
+msgid "Plattformen verwalten"
+msgstr "Manage platforms"
+
+msgid "Plattformen anlegen und ändern."
+msgstr "Create and change platforms."
+
+msgid "Drucken"
+msgstr "Print"
+
+msgid "Berichte, Etiketten und Briefe als PDF."
+msgstr "Reports, labels and letters as PDF."
+
+msgid "Zugangsblätter drucken"
+msgstr "Print login sheets"
+
+msgid "Vorlagen, die Passwörter enthalten."
+msgstr "Templates that contain passwords."
+
+msgid "Vorlagen gestalten"
+msgstr "Design templates"
+
+msgid "Druckvorlagen anlegen und ändern."
+msgstr "Create and change print templates."
+
+msgid "Code-Modus"
+msgstr "Code mode"
+
+msgid "Vorlagen als Code bearbeiten."
+msgstr "Edit templates as code."
+
+msgid "Import und Export"
+msgstr "Import and export"
+
+msgid "Lesen heißt exportieren, Bearbeiten auch importieren."
+msgstr "Read means export, edit also import."
+
+msgid "Eigene Tabellen"
+msgstr "Own tables"
+
+msgid "Welche Tabelle eine Rolle sieht, steht bei jeder Tabelle."
+msgstr "Which tables a role sees is set for each table."
+
+msgid "Tabellen gestalten"
+msgstr "Design tables"
+
+msgid "Tabellen, Felder, Datensatzseiten und Rechte der Tabellen."
+msgstr "Tables, fields, record pages and the tables' rights."
+
+msgid "Felder anlegen und ändern"
+msgstr "Create and change fields"
+
+msgid "Eigene Felder für Schüler und Personal."
+msgstr "Own fields for pupils and staff."
+
+msgid "Datenblätter gestalten"
+msgstr "Design record pages"
+
+msgid "Masken für Schüler und Personal."
+msgstr "Masks for pupils and staff."
+
+msgid "Benutzer und Rollen"
+msgstr "Users and roles"
+
+msgid "Konten anlegen und Rollen festlegen."
+msgstr "Create accounts and set roles."
+
+msgid "Schule und Sprachen"
+msgstr "School and languages"
+
+msgid "Name, Logo und Sprachen der Schule."
+msgstr "Name, logo and languages of the school."
+
+msgid "Neue Versionen einspielen."
+msgstr "Install new versions."
+
+msgid "Sicherungen anlegen und zurückspielen."
+msgstr "Make and restore backups."
+
+msgid "Protokoll"
+msgstr "Audit log"
+
+msgid "Wer wann was getan hat."
+msgstr "Who did what and when."
+
+msgid "Module"
+msgstr "Modules"
+
 msgid "Die Datei ist nicht verschlüsselt."
 msgstr "The file is not encrypted."
 
@@ -724,9 +859,6 @@ msgstr ""
 "In the lists, a double click changes a cell. Columns, filters and sorting "
 "can be saved as your own view."
 
-msgid "Eigene Tabellen"
-msgstr "Own tables"
-
 msgid ""
 "Tabellen, die Ihre Schule selbst gestaltet: mit eigenen Feldern, "
 "Verknüpfungen und Berechnungen. Listen und Datensätze funktionieren wie bei "
@@ -734,9 +866,6 @@ msgid ""
 msgstr ""
 "Tables your school designs itself: with its own fields, links and "
 "calculations. Lists and records work as they do for people."
-
-msgid "Drucken"
-msgstr "Print"
 
 msgid ""
 "Druckvorlagen für Ausweise, Listen und Briefe, mit einem Designer zum "
@@ -949,6 +1078,9 @@ msgstr "This username is already taken."
 msgid "Unbekannte Rolle."
 msgstr "Unknown role."
 
+msgid "Sie können nur Rollen vergeben, die nicht mehr dürfen als Ihre eigene."
+msgstr "You can only give roles that may not do more than your own."
+
 #, python-format
 msgid "%(name)s wurde angelegt."
 msgstr "%(name)s was created."
@@ -958,6 +1090,19 @@ msgstr "Two-factor sign-in turned on."
 
 msgid "Zwei-Faktor-Anmeldung ausgeschaltet."
 msgstr "Two-factor sign-in turned off."
+
+msgid "Dieses Konto darf mehr als Ihres; ändern kann es nur IT."
+msgstr "This account may do more than yours; only IT can change it."
+
+msgid ""
+"Das letzte IT-Konto behält seine Rolle, sonst könnte niemand mehr alles "
+"verwalten."
+msgstr ""
+"The last IT account keeps its role, otherwise nobody could manage everything"
+" any more."
+
+msgid "Das letzte IT-Konto lässt sich nicht sperren."
+msgstr "The last IT account cannot be locked."
 
 msgid "Das Logo muss ein Bild sein (JPEG, PNG, GIF oder WEBP)."
 msgstr "The logo must be an image (JPEG, PNG, GIF or WEBP)."
@@ -970,6 +1115,57 @@ msgstr "An update is already running."
 
 msgid "Wählen Sie mindestens eine Sprache."
 msgstr "Choose at least one language."
+
+msgid "Alles lesen"
+msgstr "Read everything"
+
+msgid "Hausmeister"
+msgstr "Caretaker"
+
+msgid "Büro"
+msgstr "Office"
+
+msgid "Weitere Felder"
+msgstr "More fields"
+
+msgid "Sie können nur Rechte vergeben, die Sie selbst haben."
+msgstr "You can only give rights you have yourself."
+
+#, python-format
+msgid "Bearbeitet: %(items)s"
+msgstr "Edits: %(items)s"
+
+#, python-format
+msgid "Sieht nur: %(items)s"
+msgstr "Only sees: %(items)s"
+
+#, python-format
+msgid "Darf außerdem: %(items)s"
+msgstr "Also may: %(items)s"
+
+#, python-format
+msgid "Felder: %(read)s nur lesen, %(hidden)s verborgen"
+msgstr "Fields: %(read)s read only, %(hidden)s hidden"
+
+msgid "Noch keine Rechte."
+msgstr "No rights yet."
+
+msgid "Bitte einen Namen für die Rolle eingeben."
+msgstr "Please enter a name for the role."
+
+#, python-format
+msgid "Die Rolle %(name)s wurde gespeichert."
+msgstr "The role %(name)s was saved."
+
+msgid "Bitte wählen, welche Rolle die Konten stattdessen bekommen."
+msgstr "Please choose which role the accounts get instead."
+
+#, python-format
+msgid "Die Rolle %(name)s wurde gelöscht."
+msgstr "The role %(name)s was deleted."
+
+msgid "Die Rechte am Feld wurden gespeichert."
+msgstr "The field's rights were saved."
 
 msgid "Gerätetyp"
 msgstr "Device type"
@@ -1813,9 +2009,6 @@ msgstr "%(field)s: Please upload a picture (JPEG, PNG, GIF or WebP)."
 msgid "Datensatz"
 msgstr "Record"
 
-msgid "Weitere Felder"
-msgstr "More fields"
-
 msgid "Titel des Datensatzes"
 msgstr "Title of the record"
 
@@ -2323,6 +2516,29 @@ msgstr "Yes, continue"
 msgid "Vergrößertes Foto"
 msgstr "Enlarged photo"
 
+msgid "Rechte"
+msgstr "Permissions"
+
+msgid "Was jede Rolle mit diesem Feld darf. IT darf immer alles."
+msgstr "What each role may do with this field. IT may always do everything."
+
+msgid ""
+"Dieses Feld kann nicht verborgen werden, sonst hätte ein Datensatz keinen "
+"Namen."
+msgstr "This field cannot be hidden, otherwise a record would have no name."
+
+msgid "Nur lesen"
+msgstr "Read-only"
+
+msgid "Verborgen"
+msgstr "Hidden"
+
+msgid "Rechte speichern"
+msgstr "Save permissions"
+
+msgid "„Bearbeiten“ gilt nur, wenn die Rolle den Bereich bearbeiten darf."
+msgstr "“Edit” only applies if the role may edit the area."
+
 msgid "Sprache"
 msgstr "Language"
 
@@ -2387,6 +2603,15 @@ msgstr "Drag to change the width, double-click to reset"
 msgid "Details"
 msgstr "Details"
 
+msgid "Diese Rolle kann"
+msgstr "This role can"
+
+msgid "Seitenleiste"
+msgstr "Sidebar"
+
+msgid "Leer: Konten mit dieser Rolle sehen nichts."
+msgstr "Empty: accounts with this role see nothing."
+
 #, python-format
 msgid "Keine Treffer für „%(query)s“."
 msgstr "No results for “%(query)s”."
@@ -2406,8 +2631,11 @@ msgid ""
 msgstr ""
 "Nobody in Staff with this name. Creating makes an entry without Staff."
 
-msgid "Protokoll"
-msgstr "Audit log"
+msgid "Benutzer"
+msgstr "User"
+
+msgid "Rollen"
+msgstr "Roles"
 
 msgid "Aktion filtern"
 msgstr "Filter by action"
@@ -2417,9 +2645,6 @@ msgstr "All actions"
 
 msgid "Zeit"
 msgstr "Time"
-
-msgid "Benutzer"
-msgstr "User"
 
 msgid "Aktion"
 msgstr "Action"
@@ -2536,6 +2761,146 @@ msgstr "New password"
 msgid "Neues Passwort wiederholen"
 msgstr "Repeat new password"
 
+msgid "Zurück zu den Rollen"
+msgstr "Back to the roles"
+
+msgid "Rolle"
+msgstr "Role"
+
+msgid "Allgemein"
+msgstr "General"
+
+msgid "Wofür die Rolle gedacht ist"
+msgstr "What the role is for"
+
+msgid "Konten mit dieser Rolle:"
+msgstr "Accounts with this role:"
+
+msgid "keine"
+msgstr "none"
+
+msgid "Konten verwalten"
+msgstr "Manage accounts"
+
+msgid ""
+"Lesen: sehen und drucken. Bearbeiten: auch anlegen und ändern. Weitere "
+"Rechte erscheinen, sobald ein Bereich offen ist."
+msgstr ""
+"Read: see and print. Edit: also create and change. More rights appear once "
+"an area is open."
+
+msgid "Dieselben Rechte wie im Reiter „Rechte“ der Tabelle."
+msgstr "The same rights as in the table's tab “Rights”."
+
+msgid "Noch keine eigenen Tabellen."
+msgstr "No tables of your own yet."
+
+msgid "Felder"
+msgstr "Fields"
+
+msgid ""
+"Bearbeiten: wie der Bereich es erlaubt. Nur lesen: sichtbar, aber nie "
+"änderbar. Verborgen: nirgends zu sehen, weder auf Seiten noch in Listen, "
+"Suche, Ausdrucken, Exporten, Verlauf und auf verbundenen Computern."
+msgstr ""
+"Edit: as the area allows. Read only: visible but never changed. Hidden: seen"
+" nowhere, neither on pages nor in lists, search, printouts, exports, history"
+" or on connected computers."
+
+msgid "Feld suchen"
+msgstr "Search fields"
+
+msgid "Alle bearbeiten"
+msgstr "All edit"
+
+msgid "Alle nur lesen"
+msgstr "All read only"
+
+#, python-format
+msgid ""
+"Diese Rolle kann %(name)s derzeit nicht öffnen. Die Regeln hier gelten, "
+"sobald sie es darf."
+msgstr ""
+"This role cannot open %(name)s at the moment. The rules here apply as soon "
+"as it may."
+
+msgid "Ohne dieses Feld hätte ein Datensatz keinen Namen."
+msgstr "Without this field a record would have no name."
+
+msgid "kann nicht verborgen werden"
+msgstr "cannot be hidden"
+
+msgid "Passwort-Feld: zusätzlich die Rechte bei Zugänge"
+msgstr "Password field: also the rights under Logins"
+
+msgid "Gestalten und Verwalten"
+msgstr "Design and administration"
+
+msgid ""
+"Rechte für Einstellungen. Wer „Benutzer und Rollen“ hat, kann nur Rechte "
+"vergeben, die er selbst hat."
+msgstr ""
+"Rights for settings. Whoever has “Users and roles” can only give rights they"
+" have themselves."
+
+msgid "Rolle löschen"
+msgstr "Delete role"
+
+msgid "Konten bekommen danach die Rolle"
+msgstr "Accounts then get the role"
+
+#, python-format
+msgid "Rolle %(name)s löschen?"
+msgstr "Delete the role %(name)s?"
+
+msgid ""
+"Eine Rolle legt fest, welche Bereiche ein Konto sieht, was es bearbeiten "
+"darf und welche Felder es nur lesen oder gar nicht sehen soll. Jedes Konto "
+"hat genau eine Rolle."
+msgstr ""
+"A role sets which areas an account sees, what it may edit and which fields "
+"it may only read or not see at all. Every account has exactly one role."
+
+msgid "Fest"
+msgstr "Fixed"
+
+#, python-format
+msgid "%(n)s Konto"
+msgid_plural "%(n)s Konten"
+msgstr[0] "%(n)s account"
+msgstr[1] "%(n)s accounts"
+
+msgid ""
+"Darf alles. Diese Rolle lässt sich nicht ändern, damit sich niemand "
+"aussperren kann."
+msgstr ""
+"May do everything. This role cannot be changed, so nobody can lock "
+"themselves out."
+
+msgid "Neue Rolle"
+msgstr "New role"
+
+msgid "z. B. Hausmeister"
+msgstr "e.g. Caretaker"
+
+msgid "Beginnt mit"
+msgstr "Starts with"
+
+msgid "Nur der Startseite"
+msgstr "Only the start page"
+
+msgid "Vorschläge"
+msgstr "Suggestions"
+
+msgid "Kopie einer Rolle"
+msgstr "Copy of a role"
+
+msgid "Anlegen und Rechte festlegen"
+msgstr "Create and set rights"
+
+msgid "Alles lässt sich danach ändern."
+msgstr "Everything can be changed afterwards."
+
 msgid "Schule"
 msgstr "School"
 
@@ -2589,9 +2954,6 @@ msgstr "Layouts"
 msgid "Eingabemasken per Drag & Drop gestalten"
 msgstr "Design input layouts by drag and drop"
 
-msgid "Felder"
-msgstr "Fields"
-
 msgid "Eigene Felder anlegen und verwalten"
 msgstr "Create and manage custom fields"
 
@@ -2603,9 +2965,6 @@ msgstr "Platforms"
 
 msgid "Anbieter für Zugangsdaten verwalten"
 msgstr "Manage login providers"
-
-msgid "Benutzer und Rollen"
-msgstr "Users and roles"
 
 msgid "Konten, Rollen und Zwei-Faktor"
 msgstr "Accounts, roles and two-factor"
@@ -2737,9 +3096,6 @@ msgstr ""
 msgid "Kopieren"
 msgstr "Copy"
 
-msgid "Rolle"
-msgstr "Role"
-
 msgid "2FA"
 msgstr "2FA"
 
@@ -2812,8 +3168,11 @@ msgstr "Leave empty if only Microsoft 365 is used."
 msgid "Anlegen"
 msgstr "Create"
 
-msgid "Rollen"
-msgstr "Roles"
+msgid "Rollen verwalten"
+msgstr "Manage roles"
+
+msgid "Darf alles."
+msgstr "May do everything."
 
 msgid "Das wurde nicht gespeichert"
 msgstr "This wasn't saved"
@@ -3021,9 +3380,6 @@ msgstr "Save draft"
 msgid "Veröffentlichen"
 msgstr "Publish"
 
-msgid "Feld suchen"
-msgstr "Search fields"
-
 msgid "Bausteine"
 msgstr "Blocks"
 
@@ -3118,9 +3474,6 @@ msgstr ""
 msgid "In der Liste"
 msgstr "In list"
 
-msgid "Nur lesen"
-msgstr "Read-only"
-
 msgid "Verwendung"
 msgstr "Used in"
 
@@ -3178,6 +3531,15 @@ msgstr "Default"
 msgid "alle"
 msgstr "all"
 
+msgid "Nur für"
+msgstr "Only for"
+
+msgid "für alle Rollen"
+msgstr "for all roles"
+
+msgid "Keine angehakt: für alle."
+msgstr "None ticked: for everyone."
+
 msgid "Gestalten"
 msgstr "Design"
 
@@ -3195,6 +3557,16 @@ msgstr "always"
 
 msgid "den Wert hat"
 msgstr "has the value"
+
+msgid "Nur für Rollen"
+msgstr "Only for roles"
+
+msgid ""
+"Keine angehakt: für alle. Eine Maske bestimmt nur das Aussehen; was eine "
+"Rolle sehen darf, steht bei der Rolle."
+msgstr ""
+"None ticked: for everyone. A mask only sets the look; what a role may see is"
+" set with the role."
 
 msgid "Mögliche Doppelung:"
 msgstr "Possible duplicate:"
@@ -3503,9 +3875,6 @@ msgstr "Archive template"
 
 msgid "Neue Zeile:"
 msgstr "New line:"
-
-msgid "Code-Modus"
-msgstr "Code mode"
 
 msgid "HTML (Jinja2, je Datensatz). Verfügbar:"
 msgstr "HTML (Jinja2, per record). Available:"
@@ -3894,9 +4263,6 @@ msgstr ""
 msgid "Datensätze"
 msgstr "Records"
 
-msgid "Noch keine eigenen Tabellen."
-msgstr "No tables of your own yet."
-
 msgid "Legen Sie rechts die erste an."
 msgstr "Create the first one on the right."
 
@@ -3949,12 +4315,6 @@ msgstr "Delete …"
 msgid "Datensatzseite"
 msgstr "Record page"
 
-msgid "Rechte"
-msgstr "Permissions"
-
-msgid "Allgemein"
-msgstr "General"
-
 msgid "Ziehen, um die Reihenfolge zu ändern"
 msgstr "Drag to change the order"
 
@@ -3993,9 +4353,6 @@ msgid ""
 msgstr ""
 "IT may always do everything. Connected computers only receive tables their "
 "account’s role may read."
-
-msgid "Rechte speichern"
-msgstr "Save permissions"
 
 msgid "Titel eines Datensatzes"
 msgstr "Title of a record"
@@ -4178,9 +4535,6 @@ msgstr "Generate"
 msgid "Unverändert lassen"
 msgstr "Leave unchanged"
 
-msgid "Plattformen verwalten"
-msgstr "Manage platforms"
-
 msgid ""
 "Passwörter sind verschlüsselt. Jede Anzeige wird im Protokoll festgehalten."
 msgstr ""
@@ -4217,9 +4571,6 @@ msgid ""
 "Fortfahren?"
 msgstr ""
 "The export contains readable passwords. Handle the file securely. Continue?"
-
-msgid "Mit Passwörtern exportieren"
-msgstr "Export with passwords"
 
 msgid "Name oder Benutzername"
 msgstr "Name or username"

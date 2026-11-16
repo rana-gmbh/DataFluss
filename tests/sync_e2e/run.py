@@ -217,12 +217,12 @@ def field_rules():
             "r = UserRole.objects.get(key=Role.SCHULLEITUNG); r.fields = {rules}; r.save()\n"
             "p = Person.objects.filter(kind='pupil').exclude(email='').order_by('last_name').first(); print('@@' + json.dumps([str(p.pk), p.email]))")
     pk, email = run("server", RULE.format(rules="{'pupil': {'email': 'hidden'}}"))
-    sync("mac2")
+    sync("mac2"); sync("mac2")
     check("roles: a hidden field leaves the computer", person_field("mac2", pk, "email"), "")
     ROLE = "import json; from core.models import UserRole; print('@@' + json.dumps(UserRole.objects.get(key='schulleitung').fields))"
     check("roles: the computer knows the role's rules", run("mac2", ROLE), {"pupil": {"email": "hidden"}})
     run("server", RULE.format(rules="{}"))
-    sync("mac2")
+    sync("mac2"); sync("mac2")
     check("roles: and comes back when the role may see it again", person_field("mac2", pk, "email"), email)
 
 

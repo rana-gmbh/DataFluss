@@ -227,3 +227,15 @@ class KindTests(AppTestCase):
         self.assertEqual([k for k, _ in targets.choices(office)][:2], ["staff"])
         export = {"entity": "pupil", "format": "csv", "columns": [{"key": "first_name"}], "ids": [str(self.pupil_x.pk)]}
         self.assertEqual(self.client.post(self.url("export_rows"), {"payload": json.dumps(export)}).status_code, 403)
+
+
+class TranslatedRoleTests(AppTestCase):
+    def test_built_in_roles_are_named_in_every_language(self):
+        from django.utils import translation
+
+        UserRole.objects.filter(key=Role.SEKRETARIAT).update(names={}, description="Stammdaten pflegen, Passwörter anzeigen und Zugangsblätter drucken.")
+        ensure_roles()
+        row = UserRole.objects.get(key=Role.SEKRETARIAT)
+        with translation.override("en"):
+            self.assertEqual(row.display_name, "Secretary's office")
+        self.assertEqual(row.description, "")

@@ -156,7 +156,8 @@ def summary(levels, extras, tables=(), fields=None):
             sees.append(str(area.title))
         for extra in area.extras:
             if extra.key in extras and (not extra.needs or level in (rights.READ, rights.EDIT)):
-                may.append(str(extra.title))
+                # "Archivieren und löschen (Schüler)": several areas have a switch of the same name
+                may.append(f"{extra.title} ({area.title})" if area.has_levels else str(extra.title))
     table_edit = [name for name, right in tables if right == "edit"]
     table_read = [name for name, right in tables if right == "read"]
     lines = []
@@ -172,6 +173,17 @@ def summary(levels, extras, tables=(), fields=None):
     return lines or [_("Noch keine Rechte.")]
 
 
+def describe(role):
+    """A role's description: the one written for it, or for a built-in role its summary in the language on
+    screen (core/permissions.py ROLE_SUMMARY and the modules' roles)."""
+    if role.description:
+        return role.description
+    from .modules import ROLE_SUMMARIES
+    from .permissions import ROLE_SUMMARY
+
+    return str(dict(ROLE_SUMMARY + [(value, text) for value, text, _module in ROLE_SUMMARIES]).get(role.key, ""))
+
+
 def _role_tables(role):
     return [(t.display_name, (t.rights or {}).get(role.key, "none")) for t in _tables()]
 
@@ -181,7 +193,8 @@ def roles(request):
     users = {}
     for key in User.objects.values_list("role", flat=True):
         users[key] = users.get(key, 0) + 1
-    rows = [{"role": r, "users": users.get(r.key, 0), "summary": summary(r.areas, r.extras, _role_tables(r), r.fields)} for r in UserRole.objects.all()]
+    rows = [{"role": r, "users": users.get(r.key, 0), "description": describe(r), "summary": summary(r.areas, r.extras, _role_tables(r), r.fields)}
+            for r in UserRole.objects.all()]
     return render(request, "core/roles.html", {
         "rows": rows, "it_users": users.get(Role.IT, 0), "presets": [(k, v[0]) for k, v in PRESETS.items()],
         "active_nav": "settings_home",
@@ -263,7 +276,7 @@ def _editor_context(request, role, levels=None, extras=None, tables=None, error=
         "other_roles": ([(Role.IT, Role.IT.label)] if request.user.role == Role.IT else [])
                        + [(r.key, r.display_name) for r in UserRole.objects.exclude(pk=role.pk)],
         "initial": json.dumps({"levels": levels, "extras": sorted(extras), "tables": table_rights, "fields": role.fields or {}}),
-        "field_entities": field_entities(role, request.user),
+        "field_entities": field_entities(role, request.user), "builtin_description": "" if role.description else describe(role),
         "active_nav": "settings_home",
     }
 

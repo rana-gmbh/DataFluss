@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 17:39+0100\n"
+"POT-Creation-Date: 2026-11-16 19:00+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -657,6 +657,141 @@ msgstr "维护基础数据、查看密码并打印账号单。"
 msgid "Daten und Berichte lesen, keine Passwörter."
 msgstr "查看数据和报告，不含密码。"
 
+msgid "Startseite"
+msgstr "首页"
+
+msgid "Die Startseite mit Zahlen, Aufgaben und der Suche."
+msgstr "带有统计、待办事项和搜索的首页。"
+
+msgid "Liste, Datenblätter und Suche; Bearbeiten heißt anlegen und ändern."
+msgstr "列表、资料页和搜索；编辑表示新建和修改。"
+
+msgid "Archivieren und löschen"
+msgstr "归档和删除"
+
+msgid "Schüler archivieren, in den Papierkorb legen und zurückholen."
+msgstr "归档学生、移入回收站并恢复。"
+
+msgid "Klassen und Schuljahreswechsel"
+msgstr "班级和学年更替"
+
+msgid "Klassen anlegen und ändern, das Schuljahr wechseln."
+msgstr "新建和修改班级，进行学年更替。"
+
+msgid "Personal archivieren, in den Papierkorb legen und zurückholen."
+msgstr "归档教职工、移入回收站并恢复。"
+
+msgid "Erziehungsberechtigte und ihre Kinder."
+msgstr "监护人及其子女。"
+
+msgid "Geräte und Schäden"
+msgstr "设备和损坏"
+
+msgid "Geräte, Ausgaben, Rücknahmen und Schadensfälle."
+msgstr "设备、发放、回收和损坏案例。"
+
+msgid "Benutzernamen und Passwörter der Plattformen."
+msgstr "各平台的用户名和密码。"
+
+msgid "Passwörter anzeigen"
+msgstr "显示密码"
+
+msgid "Ein verborgenes Passwort im Klartext zeigen."
+msgstr "以明文显示隐藏的密码。"
+
+msgid "Mit Passwörtern exportieren"
+msgstr "连同密码导出"
+
+msgid "Zugänge samt Passwörtern als Datei."
+msgstr "将登录信息连同密码导出为文件。"
+
+msgid "Plattformen verwalten"
+msgstr "管理平台"
+
+msgid "Plattformen anlegen und ändern."
+msgstr "新建和修改平台。"
+
+msgid "Drucken"
+msgstr "打印"
+
+msgid "Berichte, Etiketten und Briefe als PDF."
+msgstr "以 PDF 生成报告、标签和信函。"
+
+msgid "Zugangsblätter drucken"
+msgstr "打印登录单"
+
+msgid "Vorlagen, die Passwörter enthalten."
+msgstr "包含密码的模板。"
+
+msgid "Vorlagen gestalten"
+msgstr "设计模板"
+
+msgid "Druckvorlagen anlegen und ändern."
+msgstr "新建和修改打印模板。"
+
+msgid "Code-Modus"
+msgstr "代码模式"
+
+msgid "Vorlagen als Code bearbeiten."
+msgstr "以代码编辑模板。"
+
+msgid "Import und Export"
+msgstr "导入和导出"
+
+msgid "Lesen heißt exportieren, Bearbeiten auch importieren."
+msgstr "查看表示导出，编辑还包括导入。"
+
+msgid "Eigene Tabellen"
+msgstr "自定义表格"
+
+msgid "Welche Tabelle eine Rolle sieht, steht bei jeder Tabelle."
+msgstr "角色能看到哪些表格，在每个表格中设置。"
+
+msgid "Tabellen gestalten"
+msgstr "设计表格"
+
+msgid "Tabellen, Felder, Datensatzseiten und Rechte der Tabellen."
+msgstr "表格、字段、记录页和表格的权限。"
+
+msgid "Felder anlegen und ändern"
+msgstr "新建和修改字段"
+
+msgid "Eigene Felder für Schüler und Personal."
+msgstr "学生和教职工的自定义字段。"
+
+msgid "Datenblätter gestalten"
+msgstr "设计资料页"
+
+msgid "Masken für Schüler und Personal."
+msgstr "学生和教职工的表单。"
+
+msgid "Benutzer und Rollen"
+msgstr "用户和角色"
+
+msgid "Konten anlegen und Rollen festlegen."
+msgstr "新建账户并设置角色。"
+
+msgid "Schule und Sprachen"
+msgstr "学校和语言"
+
+msgid "Name, Logo und Sprachen der Schule."
+msgstr "学校的名称、徽标和语言。"
+
+msgid "Neue Versionen einspielen."
+msgstr "安装新版本。"
+
+msgid "Sicherungen anlegen und zurückspielen."
+msgstr "创建和恢复备份。"
+
+msgid "Protokoll"
+msgstr "操作日志"
+
+msgid "Wer wann was getan hat."
+msgstr "谁在何时做了什么。"
+
+msgid "Module"
+msgstr "模块"
+
 msgid "Die Datei ist nicht verschlüsselt."
 msgstr "文件未加密。"
 
@@ -691,17 +826,11 @@ msgid ""
 "Sortierung lassen sich als eigene Ansicht speichern."
 msgstr "在列表中双击单元格即可修改。列、筛选和排序可以保存为自己的视图。"
 
-msgid "Eigene Tabellen"
-msgstr "自定义表格"
-
 msgid ""
 "Tabellen, die Ihre Schule selbst gestaltet: mit eigenen Feldern, "
 "Verknüpfungen und Berechnungen. Listen und Datensätze funktionieren wie bei "
 "den Personen."
 msgstr "由学校自行设计的表格：包含自定义字段、关联和计算。列表和记录的用法与人员相同。"
-
-msgid "Drucken"
-msgstr "打印"
 
 msgid ""
 "Druckvorlagen für Ausweise, Listen und Briefe, mit einem Designer zum "
@@ -894,6 +1023,9 @@ msgstr "该用户名已被占用。"
 msgid "Unbekannte Rolle."
 msgstr "未知角色。"
 
+msgid "Sie können nur Rollen vergeben, die nicht mehr dürfen als Ihre eigene."
+msgstr "您只能分配权限不超过您自己角色的角色。"
+
 #, python-format
 msgid "%(name)s wurde angelegt."
 msgstr "已创建 %(name)s。"
@@ -903,6 +1035,17 @@ msgstr "双重验证登录已开启。"
 
 msgid "Zwei-Faktor-Anmeldung ausgeschaltet."
 msgstr "双重验证登录已关闭。"
+
+msgid "Dieses Konto darf mehr als Ihres; ändern kann es nur IT."
+msgstr "此账户的权限比您的多；只有 IT 可以修改它。"
+
+msgid ""
+"Das letzte IT-Konto behält seine Rolle, sonst könnte niemand mehr alles "
+"verwalten."
+msgstr "最后一个 IT 账户保留其角色，否则将无人能管理全部内容。"
+
+msgid "Das letzte IT-Konto lässt sich nicht sperren."
+msgstr "最后一个 IT 账户不能被锁定。"
 
 msgid "Das Logo muss ein Bild sein (JPEG, PNG, GIF oder WEBP)."
 msgstr "徽标必须是图片（JPEG、PNG、GIF 或 WEBP）。"
@@ -915,6 +1058,57 @@ msgstr "已有更新正在进行。"
 
 msgid "Wählen Sie mindestens eine Sprache."
 msgstr "请至少选择一种语言。"
+
+msgid "Alles lesen"
+msgstr "全部可查看"
+
+msgid "Hausmeister"
+msgstr "校工"
+
+msgid "Büro"
+msgstr "办公室"
+
+msgid "Weitere Felder"
+msgstr "更多字段"
+
+msgid "Sie können nur Rechte vergeben, die Sie selbst haben."
+msgstr "您只能分配自己拥有的权限。"
+
+#, python-format
+msgid "Bearbeitet: %(items)s"
+msgstr "可编辑：%(items)s"
+
+#, python-format
+msgid "Sieht nur: %(items)s"
+msgstr "仅可查看：%(items)s"
+
+#, python-format
+msgid "Darf außerdem: %(items)s"
+msgstr "另外可以：%(items)s"
+
+#, python-format
+msgid "Felder: %(read)s nur lesen, %(hidden)s verborgen"
+msgstr "字段：%(read)s 个只读，%(hidden)s 个隐藏"
+
+msgid "Noch keine Rechte."
+msgstr "尚无权限。"
+
+msgid "Bitte einen Namen für die Rolle eingeben."
+msgstr "请输入角色名称。"
+
+#, python-format
+msgid "Die Rolle %(name)s wurde gespeichert."
+msgstr "角色 %(name)s 已保存。"
+
+msgid "Bitte wählen, welche Rolle die Konten stattdessen bekommen."
+msgstr "请选择这些账户改用哪个角色。"
+
+#, python-format
+msgid "Die Rolle %(name)s wurde gelöscht."
+msgstr "角色 %(name)s 已删除。"
+
+msgid "Die Rechte am Feld wurden gespeichert."
+msgstr "字段权限已保存。"
 
 msgid "Gerätetyp"
 msgstr "设备类型"
@@ -1738,9 +1932,6 @@ msgstr "%(field)s：请上传图片（JPEG、PNG、GIF 或 WebP）。"
 msgid "Datensatz"
 msgstr "记录"
 
-msgid "Weitere Felder"
-msgstr "更多字段"
-
 msgid "Titel des Datensatzes"
 msgstr "记录标题"
 
@@ -2217,6 +2408,29 @@ msgstr "是，继续"
 msgid "Vergrößertes Foto"
 msgstr "放大的照片"
 
+msgid "Rechte"
+msgstr "权限"
+
+msgid "Was jede Rolle mit diesem Feld darf. IT darf immer alles."
+msgstr "每个角色对此字段的权限。IT 始终拥有全部权限。"
+
+msgid ""
+"Dieses Feld kann nicht verborgen werden, sonst hätte ein Datensatz keinen "
+"Namen."
+msgstr "此字段不能隐藏，否则记录将没有名称。"
+
+msgid "Nur lesen"
+msgstr "只读"
+
+msgid "Verborgen"
+msgstr "隐藏"
+
+msgid "Rechte speichern"
+msgstr "保存权限"
+
+msgid "„Bearbeiten“ gilt nur, wenn die Rolle den Bereich bearbeiten darf."
+msgstr "“编辑”仅在角色可编辑该区域时有效。"
+
 msgid "Sprache"
 msgstr "语言"
 
@@ -2278,6 +2492,15 @@ msgstr "拖动可调整宽度，双击可恢复"
 msgid "Details"
 msgstr "详细信息"
 
+msgid "Diese Rolle kann"
+msgstr "此角色可以"
+
+msgid "Seitenleiste"
+msgstr "侧边栏"
+
+msgid "Leer: Konten mit dieser Rolle sehen nichts."
+msgstr "空：拥有此角色的账户看不到任何内容。"
+
 #, python-format
 msgid "Keine Treffer für „%(query)s“."
 msgstr "未找到“%(query)s”的结果。"
@@ -2296,8 +2519,11 @@ msgid ""
 "Personal."
 msgstr "教职工中没有此姓名的人员。创建将生成一个不关联教职工的条目。"
 
-msgid "Protokoll"
-msgstr "操作日志"
+msgid "Benutzer"
+msgstr "用户"
+
+msgid "Rollen"
+msgstr "角色"
 
 msgid "Aktion filtern"
 msgstr "按操作筛选"
@@ -2307,9 +2533,6 @@ msgstr "所有操作"
 
 msgid "Zeit"
 msgstr "时间"
-
-msgid "Benutzer"
-msgstr "用户"
 
 msgid "Aktion"
 msgstr "操作"
@@ -2422,6 +2645,132 @@ msgstr "新密码"
 msgid "Neues Passwort wiederholen"
 msgstr "再次输入新密码"
 
+msgid "Zurück zu den Rollen"
+msgstr "返回角色"
+
+msgid "Rolle"
+msgstr "角色"
+
+msgid "Allgemein"
+msgstr "常规"
+
+msgid "Wofür die Rolle gedacht ist"
+msgstr "此角色的用途"
+
+msgid "Konten mit dieser Rolle:"
+msgstr "拥有此角色的账户："
+
+msgid "keine"
+msgstr "无"
+
+msgid "Konten verwalten"
+msgstr "管理账户"
+
+msgid ""
+"Lesen: sehen und drucken. Bearbeiten: auch anlegen und ändern. Weitere "
+"Rechte erscheinen, sobald ein Bereich offen ist."
+msgstr "查看：查看和打印。编辑：还可新建和修改。区域开放后会显示更多权限。"
+
+msgid "Dieselben Rechte wie im Reiter „Rechte“ der Tabelle."
+msgstr "与表格“权限”选项卡中的权限相同。"
+
+msgid "Noch keine eigenen Tabellen."
+msgstr "还没有自定义表格。"
+
+msgid "Felder"
+msgstr "字段"
+
+msgid ""
+"Bearbeiten: wie der Bereich es erlaubt. Nur lesen: sichtbar, aber nie "
+"änderbar. Verborgen: nirgends zu sehen, weder auf Seiten noch in Listen, "
+"Suche, Ausdrucken, Exporten, Verlauf und auf verbundenen Computern."
+msgstr "编辑：按区域权限。只读：可见但不可修改。隐藏：任何地方都看不到，包括页面、列表、搜索、打印、导出、历史记录和已连接的电脑。"
+
+msgid "Feld suchen"
+msgstr "搜索字段"
+
+msgid "Alle bearbeiten"
+msgstr "全部可编辑"
+
+msgid "Alle nur lesen"
+msgstr "全部只读"
+
+#, python-format
+msgid ""
+"Diese Rolle kann %(name)s derzeit nicht öffnen. Die Regeln hier gelten, "
+"sobald sie es darf."
+msgstr "此角色目前无法打开%(name)s。这里的规则在其获准后生效。"
+
+msgid "Ohne dieses Feld hätte ein Datensatz keinen Namen."
+msgstr "没有此字段，记录将没有名称。"
+
+msgid "kann nicht verborgen werden"
+msgstr "不能隐藏"
+
+msgid "Passwort-Feld: zusätzlich die Rechte bei Zugänge"
+msgstr "密码字段：另需“登录信息”中的权限"
+
+msgid "Gestalten und Verwalten"
+msgstr "设计和管理"
+
+msgid ""
+"Rechte für Einstellungen. Wer „Benutzer und Rollen“ hat, kann nur Rechte "
+"vergeben, die er selbst hat."
+msgstr "设置的权限。拥有“用户和角色”权限的人只能分配自己拥有的权限。"
+
+msgid "Rolle löschen"
+msgstr "删除角色"
+
+msgid "Konten bekommen danach die Rolle"
+msgstr "账户随后获得角色"
+
+#, python-format
+msgid "Rolle %(name)s löschen?"
+msgstr "删除角色 %(name)s？"
+
+msgid ""
+"Eine Rolle legt fest, welche Bereiche ein Konto sieht, was es bearbeiten "
+"darf und welche Felder es nur lesen oder gar nicht sehen soll. Jedes Konto "
+"hat genau eine Rolle."
+msgstr "角色决定账户能看到哪些区域、可以编辑什么，以及哪些字段只能查看或完全不可见。每个账户只有一个角色。"
+
+msgid "Fest"
+msgstr "固定"
+
+#, python-format
+msgid "%(n)s Konto"
+msgid_plural "%(n)s Konten"
+msgstr[0] "%(n)s 个账户"
+
+msgid ""
+"Darf alles. Diese Rolle lässt sich nicht ändern, damit sich niemand "
+"aussperren kann."
+msgstr "拥有全部权限。此角色不能修改，以免有人把自己锁在外面。"
+
+msgid "Neue Rolle"
+msgstr "新建角色"
+
+msgid "z. B. Hausmeister"
+msgstr "例如：校工"
+
+msgid "Beginnt mit"
+msgstr "起始于"
+
+msgid "Nur der Startseite"
+msgstr "仅首页"
+
+msgid "Vorschläge"
+msgstr "建议"
+
+msgid "Kopie einer Rolle"
+msgstr "复制角色"
+
+msgid "Anlegen und Rechte festlegen"
+msgstr "新建并设置权限"
+
+msgid "Alles lässt sich danach ändern."
+msgstr "之后可以修改所有设置。"
+
 msgid "Schule"
 msgstr "学校"
 
@@ -2470,9 +2819,6 @@ msgstr "表单布局"
 msgid "Eingabemasken per Drag & Drop gestalten"
 msgstr "通过拖放设计输入表单布局"
 
-msgid "Felder"
-msgstr "字段"
-
 msgid "Eigene Felder anlegen und verwalten"
 msgstr "创建和管理自定义字段"
 
@@ -2484,9 +2830,6 @@ msgstr "平台"
 
 msgid "Anbieter für Zugangsdaten verwalten"
 msgstr "管理账号提供方"
-
-msgid "Benutzer und Rollen"
-msgstr "用户和角色"
 
 msgid "Konten, Rollen und Zwei-Faktor"
 msgstr "账户、角色和双重验证"
@@ -2610,9 +2953,6 @@ msgstr "<strong>%(name)s</strong> 的新密码。仅在此时显示，下次登�
 msgid "Kopieren"
 msgstr "复制"
 
-msgid "Rolle"
-msgstr "角色"
-
 msgid "2FA"
 msgstr "双重验证"
 
@@ -2681,8 +3021,11 @@ msgstr "如果只使用 Microsoft 365，请留空。"
 msgid "Anlegen"
 msgstr "创建"
 
-msgid "Rollen"
-msgstr "角色"
+msgid "Rollen verwalten"
+msgstr "管理角色"
+
+msgid "Darf alles."
+msgstr "拥有全部权限。"
 
 msgid "Das wurde nicht gespeichert"
 msgstr "未保存"
@@ -2885,9 +3228,6 @@ msgstr "保存草稿"
 msgid "Veröffentlichen"
 msgstr "发布"
 
-msgid "Feld suchen"
-msgstr "搜索字段"
-
 msgid "Bausteine"
 msgstr "模块"
 
@@ -2980,9 +3320,6 @@ msgstr "重命名不会更改任何条目：使用此选项的记录将显示新
 msgid "In der Liste"
 msgstr "在列表中"
 
-msgid "Nur lesen"
-msgstr "只读"
-
 msgid "Verwendung"
 msgstr "使用位置"
 
@@ -3039,6 +3376,15 @@ msgstr "默认"
 msgid "alle"
 msgstr "全部"
 
+msgid "Nur für"
+msgstr "仅限"
+
+msgid "für alle Rollen"
+msgstr "适用于所有角色"
+
+msgid "Keine angehakt: für alle."
+msgstr "未勾选：适用于所有人。"
+
 msgid "Gestalten"
 msgstr "设计"
 
@@ -3056,6 +3402,14 @@ msgstr "始终"
 
 msgid "den Wert hat"
 msgstr "的值为"
+
+msgid "Nur für Rollen"
+msgstr "仅限角色"
+
+msgid ""
+"Keine angehakt: für alle. Eine Maske bestimmt nur das Aussehen; was eine "
+"Rolle sehen darf, steht bei der Rolle."
+msgstr "未勾选：适用于所有人。表单只决定外观；角色能看到什么在角色中设置。"
 
 msgid "Mögliche Doppelung:"
 msgstr "可能重复："
@@ -3349,9 +3703,6 @@ msgstr "归档模板"
 
 msgid "Neue Zeile:"
 msgstr "换行："
-
-msgid "Code-Modus"
-msgstr "代码模式"
 
 msgid "HTML (Jinja2, je Datensatz). Verfügbar:"
 msgstr "HTML（Jinja2，每条记录）。可用："
@@ -3706,9 +4057,6 @@ msgstr "自定义表格和字段，例如用于图书、借阅或预约。"
 msgid "Datensätze"
 msgstr "记录"
 
-msgid "Noch keine eigenen Tabellen."
-msgstr "还没有自定义表格。"
-
 msgid "Legen Sie rechts die erste an."
 msgstr "请在右侧创建第一个。"
 
@@ -3759,12 +4107,6 @@ msgstr "删除…"
 msgid "Datensatzseite"
 msgstr "记录页面"
 
-msgid "Rechte"
-msgstr "权限"
-
-msgid "Allgemein"
-msgstr "常规"
-
 msgid "Ziehen, um die Reihenfolge zu ändern"
 msgstr "拖动以更改顺序"
 
@@ -3798,9 +4140,6 @@ msgid ""
 "IT darf immer alles. Verbundene Computer erhalten nur Tabellen, die die "
 "Rolle ihres Kontos lesen darf."
 msgstr "IT 始终拥有全部权限。已连接的电脑只会收到其账户角色可以查看的表格。"
-
-msgid "Rechte speichern"
-msgstr "保存权限"
 
 msgid "Titel eines Datensatzes"
 msgstr "记录标题"
@@ -3973,9 +4312,6 @@ msgstr "生成"
 msgid "Unverändert lassen"
 msgstr "保持不变"
 
-msgid "Plattformen verwalten"
-msgstr "管理平台"
-
 msgid ""
 "Passwörter sind verschlüsselt. Jede Anzeige wird im Protokoll festgehalten."
 msgstr "密码已加密。每次查看都会记录在操作日志中。"
@@ -4008,9 +4344,6 @@ msgid ""
 "Export enthält lesbare Passwörter. Die Datei muss sicher behandelt werden. "
 "Fortfahren?"
 msgstr "导出文件包含明文密码，必须妥善保管。是否继续？"
-
-msgid "Mit Passwörtern exportieren"
-msgstr "连同密码导出"
 
 msgid "Name oder Benutzername"
 msgstr "姓名或用户名"
