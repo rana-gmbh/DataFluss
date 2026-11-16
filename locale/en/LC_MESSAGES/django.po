@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 17:32+0100\n"
+"POT-Creation-Date: 2026-11-16 17:35+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1874,6 +1874,18 @@ msgid ""
 "neues Feld an."
 msgstr "This type does not fit the values entered. Better create a new field."
 
+#, python-format
+msgid "Eine Auswahl braucht 1 bis 50 verschiedene Werte; hier sind es %(n)s."
+msgstr "A choice needs 1 to 50 different values; here there are %(n)s."
+
+#, python-format
+msgid ""
+"%(n)s Werte passen nicht zum neuen Typ, etwa „%(examples)s“. Bitte zuerst "
+"korrigieren."
+msgstr ""
+"%(n)s values do not fit the new type, such as “%(examples)s”. Please correct"
+" them first."
+
 msgid ""
 "Einige Datensätze haben hier mehrere Einträge. Entfernen Sie diese zuerst."
 msgstr "Some records have several entries here. Remove them first."
@@ -2292,6 +2304,9 @@ msgstr "Menu"
 
 msgid "Suchen"
 msgstr "Search"
+
+msgid "In allen Tabellen suchen …"
+msgstr "Search all tables …"
 
 msgid "Name, E-Mail, Gerätenummer, Klasse …"
 msgstr "Name, email, device number, class …"

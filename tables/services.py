@@ -22,7 +22,7 @@ SEARCHABLE = {"text", "textarea", "email", "phone", "url", "choice", "multichoic
 TITLE_TYPES = ("text", "email", "phone", "url", "choice", "number", "date")
 # A field may change to these types; values are converted to the new type's text.
 COMPATIBLE = {
-    "text": {"textarea", "email", "phone", "url"}, "textarea": {"text"}, "email": {"text"}, "phone": {"text"},
+    "text": {"textarea", "email", "phone", "url", "choice", "number", "date"}, "textarea": {"text"}, "email": {"text"}, "phone": {"text"},
     "url": {"text"}, "choice": {"text", "multichoice"}, "number": {"text"}, "date": {"text"}, "datetime": {"text"},
     "bool": {"text"},
 }
@@ -355,17 +355,44 @@ def change_type(field, new_type, request=None):
     if new_type not in COMPATIBLE.get(field.type, set()):
         raise ValidationError(_("Dieser Typ passt nicht zu den eingetragenen Werten. Legen Sie besser ein neues Feld an."))
     old = Field(type=field.type, options=field.options, config=field.config, label=field.label, labels=field.labels)
+    records = [r for r in Record.everything.filter(table_id=field.table_id) if (r.values or {}).get(field.key) not in (None, "", [])]
+    options, config, stored = field.options, {}, {}
+    if field.type == "text" and new_type in ("choice", "number", "date"):
+        # Text from an import that turns out to be a choice, a number or a date: every value must fit.
+        from transfer.parsers import parse_date
+
+        texts = [str(r.values[field.key]).strip() for r in records]
+        if new_type == "choice":
+            options = [{"value": v[:100], "color": ""} for v in dict.fromkeys(t for t in texts if t)]
+            if not options or len(options) > 50:
+                raise ValidationError(_("Eine Auswahl braucht 1 bis 50 verschiedene Werte; hier sind es %(n)s.") % {"n": len(options)})
+        if new_type == "number":
+            from . import infer
+
+            guess = infer.column(field.label, texts)
+            config = guess["config"] if guess["type"] == "number" else {}
+        spec = Field(type=new_type, options=options, config=config, label=field.label, labels=field.labels)
+        unfit = []
+        for record in records:
+            raw = str(record.values[field.key]).strip()
+            try:
+                value = parse_date(raw) if new_type == "date" else ft.clean(spec, raw, check_required=False)
+                stored[record.pk] = value.isoformat() if new_type == "date" else ft.to_store(spec, value)
+            except (ValidationError, ValueError, TypeError):
+                unfit.append(raw)
+        if unfit:
+            raise ValidationError(_("%(n)s Werte passen nicht zum neuen Typ, etwa „%(examples)s“. Bitte zuerst korrigieren.")
+                                  % {"n": len(unfit), "examples": "“, „".join(unfit[:3])})
     with transaction.atomic():
         field.type = new_type
-        if not ft.TYPES[new_type].options:
-            field.options = []
-        field.config = {}
+        field.options = options if ft.TYPES[new_type].options else []
+        field.config = config
         field.save()
-        for record in Record.everything.filter(table_id=field.table_id).iterator():
-            raw = (record.values or {}).get(field.key)
-            if raw in (None, "", []):
-                continue
-            if new_type == "multichoice":
+        for record in records:
+            raw = record.values[field.key]
+            if record.pk in stored:
+                converted = stored[record.pk]
+            elif new_type == "multichoice":
                 converted = [raw] if isinstance(raw, str) else raw
             else:
                 converted = str(ft.display(old, ft.from_store(old, raw), localized=False))

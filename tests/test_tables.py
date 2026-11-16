@@ -61,7 +61,9 @@ class DesignTests(TableCase):
         record.refresh_from_db()
         self.assertEqual(record.values["f_preis"], "12.50 €")
         with self.assertRaisesMessage(ValidationError, "neues Feld"):
-            services.change_type(self.name, "date")
+            services.change_type(self.genre, "date")
+        with self.assertRaisesMessage(ValidationError, "„Momo“"):
+            services.change_type(self.name, "date")  # text becomes a date only when every value is one
 
     def test_table_with_records_is_only_archived(self):
         services.create_record(self.table, {"f_name": "Momo"})

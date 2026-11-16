@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 17:32+0100\n"
+"POT-Creation-Date: 2026-11-16 17:35+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1799,6 +1799,16 @@ msgid ""
 "neues Feld an."
 msgstr "此類型與已填寫的值不符，建議新增欄位。"
 
+#, python-format
+msgid "Eine Auswahl braucht 1 bis 50 verschiedene Werte; hier sind es %(n)s."
+msgstr "選項欄位需要 1 到 50 個不同的值；這裡有 %(n)s 個。"
+
+#, python-format
+msgid ""
+"%(n)s Werte passen nicht zum neuen Typ, etwa „%(examples)s“. Bitte zuerst "
+"korrigieren."
+msgstr "有 %(n)s 個值不符合新類型，例如「%(examples)s」。請先修改。"
+
 msgid ""
 "Einige Datensätze haben hier mehrere Einträge. Entfernen Sie diese zuerst."
 msgstr "部分記錄在此有多個項目，請先刪除。"
@@ -2188,6 +2198,9 @@ msgstr "選單"
 
 msgid "Suchen"
 msgstr "搜尋"
+
+msgid "In allen Tabellen suchen …"
+msgstr "在所有表格中搜尋…"
 
 msgid "Name, E-Mail, Gerätenummer, Klasse …"
 msgstr "姓名、電子郵件、設備編號、班級 …"

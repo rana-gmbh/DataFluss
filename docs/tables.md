@@ -51,7 +51,9 @@ imports every row; the import can be taken back under Import & Export within 24 
 | Berechnung | A formula (see *Formulas*) |
 
 Fields can be required or unique. A field can change to a compatible type (text ↔ multi-line text,
-choice → text, number → text, …). Values are converted. For anything else, create a new field.
+choice → text, number → text, …). Values are converted. Text, for instance from an imported file, can
+also become a choice (its values become the options), a number or a date, when every value fits; the
+values that do not are named. For anything else, create a new field.
 Archiving a field hides it and keeps its values.
 
 ## Record pages

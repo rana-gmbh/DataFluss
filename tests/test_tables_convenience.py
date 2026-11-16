@@ -312,3 +312,20 @@ class CreateTargetTests(HistoryAndPickerTests):
         services.set_rights(self.table, {Role.SEKRETARIAT: "read"})
         self.login(self.sek)
         self.assertEqual(self.client.post(reverse("record_link", args=["buecher", self.momo.pk, "f_regal"]), {"action": "create", "title": "X"}).status_code, 403)
+
+
+class TextAfterImportTests(TableCase):
+    def test_text_becomes_a_choice_number_or_date(self):
+        kind = services.create_field(self.table, "Art", "text")
+        count = services.create_field(self.table, "Stück", "text")
+        since = services.create_field(self.table, "Seit", "text")
+        for name, art, n, day in (("A", "Roman", "1200", "01.02.2024"), ("B", "Sachbuch", "3", "2024-05-01"), ("C", "Roman", "", "")):
+            services.create_record(self.table, {"f_name": name, "f_art": art, "f_stueck": n, "f_seit": day})
+        services.change_type(kind, "choice")
+        services.change_type(count, "number")
+        services.change_type(since, "date")
+        kind.refresh_from_db()
+        self.assertEqual([o["value"] for o in kind.options], ["Roman", "Sachbuch"])
+        a = Record.objects.get(table=self.table, title="A")
+        self.assertEqual((a.values["f_art"], a.values["f_stueck"], a.values["f_seit"]), ("Roman", 1200, "2024-02-01"))
+        self.assertIn(Record.objects.get(table=self.table, title="C").values.get("f_stueck"), (None, ""))

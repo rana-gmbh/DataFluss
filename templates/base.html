@@ -129,7 +129,7 @@
   <div class="relative mx-auto mt-[12vh] w-[min(600px,calc(100vw-2rem))] surface shadow-2xl overflow-hidden">
     <div class="flex items-center gap-2 px-3 border-b" style="border-color: var(--line)">
       {% icon 'search' 'muted' %}
-      <input id="search-input" class="w-full h-12 bg-transparent outline-none text-[15px]" placeholder="{% translate 'Name, E-Mail, Gerätenummer, Klasse …' %}" aria-label="{% translate 'Suchen' %}"
+      <input id="search-input" class="w-full h-12 bg-transparent outline-none text-[15px]" placeholder="{% if product_name == 'DataFluss' %}{% translate 'In allen Tabellen suchen …' %}{% else %}{% translate 'Name, E-Mail, Gerätenummer, Klasse …' %}{% endif %}" aria-label="{% translate 'Suchen' %}"
              name="q" autocomplete="off" hx-get="{% url 'global_search' %}" hx-trigger="input changed delay:150ms" hx-target="#search-results" hx-sync="this:replace">
     </div>
     <div id="search-results" class="max-h-[50vh] overflow-y-auto"></div>
