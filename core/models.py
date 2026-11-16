@@ -88,6 +88,31 @@ class TrackedModel(models.Model):
     class Meta:
         abstract = True
 
+    def secret_keys(self, name):
+        """Keys of the JSON field `name` whose values are encrypted: the history names the change but
+        never shows them (Person's secret custom fields, say)."""
+        return set()
+
+    def _changes(self, before, after, existed):
+        """(field, history name, old, new, masked) per changed field. A JSON dict counts per key, as sync
+        does (sync/journal.py), so the history says which custom field changed and not the whole dict."""
+        for name, value in after.items():
+            old = before.get(name)
+            if existed and _plain(old) == _plain(value):
+                continue
+            if not existed and value in (None, "", [], {}, False):
+                continue
+            if name not in self.SECRET_FIELDS and isinstance(value, dict) and isinstance(old if existed else {}, dict):
+                old = old if existed else {}
+                hidden = self.secret_keys(name)
+                for key in sorted(set(old) | set(value), key=str):
+                    was, now = old.get(key), value.get(key)
+                    if _plain(was) == _plain(now) or (not existed and now in (None, "", [], {}, False)):
+                        continue
+                    yield name, f"{name}.{key}"[:80], was, now, key in hidden
+                continue
+            yield name, name, old, value, name in self.SECRET_FIELDS
+
     def _tracked_values(self):
         values = {}
         for field in self._meta.concrete_fields:
@@ -108,18 +133,12 @@ class TrackedModel(models.Model):
         action = ChangeLog.UPDATE if previous else ChangeLog.CREATE
         rows = []
         user = get_current_user()
-        for name, value in after.items():
-            old = before.get(name)
-            if previous and _plain(old) == _plain(value):
-                continue
-            if not previous and value in (None, "", [], {}, False):
-                continue
-            masked = name in self.SECRET_FIELDS
+        for name, field, old, value, masked in self._changes(before, after, bool(previous)):
             rows.append(
                 ChangeLog(
                     entity=self._meta.label_lower,
                     record_id=self.pk,
-                    field=name,
+                    field=field,
                     action=action,
                     old_value="" if masked else _plain(old),
                     new_value="[verschlüsselt]" if masked else _plain(value),

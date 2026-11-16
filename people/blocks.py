@@ -64,9 +64,14 @@ def comments(request, person):
 
 
 def history(request, person):
+    """The latest changes. Form fields in custom are logged per key (custom.<key>) and named like on the form;
+    rows of the whole custom dict, from before that, stay out."""
+    from masks.services import field_map
+
     fields = {f.name: f.verbose_name for f in person._meta.concrete_fields}
+    fields.update({f"custom.{key}": fd.display_label for key, fd in field_map(person.kind, include_archived=True).items()})
     rows = ChangeLog.objects.filter(entity="people.person", record_id=person.pk).exclude(field="custom").select_related("user")[:25]
-    return {"changes": [{"row": r, "label": fields.get(r.field, r.field)} for r in rows]}
+    return {"changes": [{"row": r, "label": fields.get(r.field, r.field.removeprefix("custom."))} for r in rows]}
 
 
 BLOCK_VIEWS = {

@@ -1,8 +1,6 @@
-import re
-from datetime import date, datetime
+from datetime import date
 
 from django.core.exceptions import ValidationError
-from django.core.validators import URLValidator, validate_email
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -10,13 +8,13 @@ from people.models import ClassGroup, Person, SchoolYear
 from sync import journal
 from vault import crypto
 
-from core import modules
+from core import fieldtypes, modules
 
 from . import i18n
 from .models import FieldDefinition, Mask, MaskVersion
 from .registry import BLOCKS
 
-MASKED = "••••••••"
+MASKED = fieldtypes.MASKED
 PERSON_COLUMNS = {f.name for f in Person._meta.concrete_fields}
 
 
@@ -40,62 +38,12 @@ def field_map(entity, include_archived=False):
     return {f.key: f for f in fields_for(entity, include_archived)}
 
 
-def parse_date(text):
-    text = (text or "").strip()
-    if not text:
-        return None
-    for pattern in ("%Y-%m-%d", "%d.%m.%Y", "%d.%m.%y"):
-        try:
-            return datetime.strptime(text, pattern).date()
-        except ValueError:
-            pass
-    raise ValidationError(_("Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."))
+parse_date = fieldtypes.parse_date  # devices, people and the importer read dates through here
 
 
 def coerce(fd, raw):
     """Turn form input into the stored value, or raise ValidationError in German."""
-    if isinstance(raw, str):
-        raw = raw.strip()
-    empty = raw in (None, "", [])
-    if fd.required and empty:
-        raise ValidationError(_("%(field)s ist ein Pflichtfeld.") % {"field": fd.display_label})
-    kind = fd.type
-    if kind == "bool":
-        return str(raw).lower() in ("1", "true", "on", "ja", "yes")
-    if empty:
-        return [] if kind == "multichoice" else None if kind in ("date", "number") else ""
-    if kind == "date":
-        return parse_date(raw)
-    if kind == "number":
-        try:
-            return int(str(raw))
-        except ValueError:
-            raise ValidationError(_("%(field)s: Bitte eine ganze Zahl eingeben.") % {"field": fd.display_label})
-    if kind == "email":
-        value = str(raw).lower()
-        try:
-            validate_email(value)
-        except ValidationError:
-            raise ValidationError(_("Bitte eine gültige E-Mail-Adresse eingeben."))
-        return value
-    if kind == "url":
-        URLValidator(message=_("Bitte einen gültigen Link eingeben."))(raw)
-        return raw
-    if kind == "phone":
-        if not re.fullmatch(r"[0-9+()\-./ ]{3,40}", raw):
-            raise ValidationError(_("Bitte eine gültige Telefonnummer eingeben."))
-        return raw
-    if kind == "choice":
-        if raw not in fd.option_values:
-            raise ValidationError(_("%(field)s: Unbekannte Auswahl.") % {"field": fd.display_label})
-        return raw
-    if kind == "multichoice":
-        values = raw if isinstance(raw, list) else [raw]
-        unknown = [v for v in values if v not in fd.option_values]
-        if unknown:
-            raise ValidationError(_("%(field)s: Unbekannte Auswahl.") % {"field": fd.display_label})
-        return values
-    return raw
+    return fieldtypes.clean(fd, raw)
 
 
 def get_value(person, fd):
@@ -110,13 +58,7 @@ def form_value(person, fd):
     value = get_value(person, fd)
     if fd.type == "class":
         return str(value.pk) if value else ""
-    if fd.type == "secret":
-        return MASKED if value else ""
-    if value is None:
-        return "" if fd.type != "multichoice" else []
-    if isinstance(value, date):
-        return value.isoformat()
-    return value
+    return fieldtypes.form(fd, value)
 
 
 def display_value(person, fd, localized=False):
@@ -125,22 +67,7 @@ def display_value(person, fd, localized=False):
     value = get_value(person, fd)
     if fd.type == "class":
         return value.name if value else ""
-    if fd.type == "secret":
-        return MASKED if value else ""
-    if value is None:
-        return ""
-    if isinstance(value, bool):
-        if localized:
-            return _("Ja") if value else _("Nein")
-        return "Ja" if value else "Nein"
-    if isinstance(value, date):
-        return value.strftime("%d.%m.%Y")
-    if localized and fd.type in ("choice", "multichoice"):
-        values = value if isinstance(value, list) else [value]
-        return ", ".join(str(fd.option_label(v)) for v in values)
-    if isinstance(value, list):
-        return ", ".join(value)
-    return value
+    return fieldtypes.display(fd, value, localized)
 
 
 def secret_context(person, key):

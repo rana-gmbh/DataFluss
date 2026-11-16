@@ -136,6 +136,14 @@ class Person(RecycledModel):
     # A copy is a new person: what identifies or belongs to one person stays behind.
     NOT_COPIED = {"id", "legacy_ninox_id", "photo", "legacy_photo_path", "created_at", "updated_at", "deleted_at", "archived", "exit_date"}
 
+    def secret_keys(self, name):
+        """Secret form fields keep their encrypted value in custom; the history only says they changed."""
+        if name != "custom":
+            return set()
+        from masks.models import FieldDefinition
+
+        return set(FieldDefinition.objects.filter(type="secret").values_list("key", flat=True))
+
     def duplicate(self):
         """Data and form fields, marked as a copy. Secret form fields (passwords) are left out."""
         from masks.models import FieldDefinition
