@@ -8,8 +8,8 @@
   <h1 class="page-title mr-2">{{ title }}</h1>
   <span class="badge" id="grid-count">0</span>
   <div class="flex-1"></div>
-  {% if request.user|can:'person.archive' %}<a class="btn" href="{% url 'person_bin' %}">{% icon 'trash' %}{% translate "Papierkorb" %}</a>{% endif %}
-  {% if request.user|can:'person.edit' %}<a class="btn btn-primary" href="{% url 'person_new' entity %}">{% icon 'plus' %}{% translate "Neu anlegen" %}</a>{% endif %}
+  {% if request.user|archives_kind:entity %}<a class="btn" href="{% url 'person_bin' %}">{% icon 'trash' %}{% translate "Papierkorb" %}</a>{% endif %}
+  {% if request.user|edits_kind:entity %}<a class="btn btn-primary" href="{% url 'person_new' entity %}">{% icon 'plus' %}{% translate "Neu anlegen" %}</a>{% endif %}
 </div>
 <p class="muted text-[12px] mb-2 hidden lg:block">{% translate "Klick öffnet den Datensatz, Doppelklick ändert die Zelle, ein Klick auf den Spaltentitel filtert." %}</p>
 <div class="flex gap-4 items-start">
@@ -34,7 +34,7 @@
   <div id="grid-chips" class="hidden flex-wrap items-center gap-1.5 px-2 py-1.5 border-b" style="border-color: var(--line)"></div>
   <div id="grid-bulk" class="hidden flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line); background: var(--accent-soft)">
     <span class="font-medium text-[13px]" id="grid-bulk-count"></span>
-    {% if request.user|can:'person.edit' %}
+    {% if request.user|edits_kind:entity %}
     <select id="bulk-class" class="input w-auto h-[1.9rem] text-[13px]" aria-label="{% translate 'Klasse zuweisen' %}"></select>
     <select id="bulk-logins" class="input w-auto h-[1.9rem] text-[13px]" aria-label="{% translate 'Zugänge erzeugen' %}"></select>
     <button class="btn btn-sm" id="bulk-archive">{% icon 'archive' %}{% translate "Archivieren" %}</button>

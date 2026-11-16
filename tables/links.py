@@ -160,7 +160,7 @@ def resolve(user, kind, ids, table=None):
         for record in rows:
             t = tables[record.table_id]
             out[record.pk] = {"title": record.title or _("(ohne Titel)"), "url": f"/tabellen/{t.key}/{record.pk}/", "visible": True}
-    elif kind in (Link.PUPIL, Link.STAFF) and (user is None or user.can("person.view")):
+    elif kind in (Link.PUPIL, Link.STAFF) and (user is None or user.can(f"{kind}.view")):
         from people.models import Person
 
         for person in Person.objects.filter(pk__in=ids, kind=kind):
@@ -212,7 +212,7 @@ def candidates(user, field, query, limit=20):
         for term in query.split():
             rows = rows.filter(search_text__contains=term)
         out = [{"id": str(r.pk), "title": r.title or _("(ohne Titel)"), "sub": table.display_name} for r in rows.order_by("title")[:limit]]
-    elif kind in (Link.PUPIL, Link.STAFF) and user.can("person.view"):
+    elif kind in (Link.PUPIL, Link.STAFF) and user.can(f"{kind}.view"):
         from django.db.models import Q
 
         from people.models import Person

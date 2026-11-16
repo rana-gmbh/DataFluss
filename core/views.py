@@ -263,10 +263,10 @@ def dashboard(request):
         "todo": [
             (_("Schüler ohne E-Mail"), pupils.filter(email="").exclude(school_type__in=["Kiga"]).count(), "/schueler/?preset=ohne-email"),
             (_("Ohne Foto"), pupils.filter(photo="").count(), "/schueler/?preset=ohne-foto"),
-        ],
+        ] if request.user.can("pupil.view") else [],
     }
     context.update(_checklist(request, pupils.count() + staff.count()))
-    if request.user.can("device.edit"):
+    if request.user.can("device.edit") and request.user.can("pupil.view"):
         context["todo"] += [
             (_("Neue Codes nötig"), pupils.filter(new_codes_needed=True).count(), "/schueler/?preset=neue-codes"),
             (
@@ -343,8 +343,10 @@ def global_search(request):
     results = []
     if len(query) >= 2:
         terms = query.split()
-        if user.can("person.view"):
-            people = Person.objects.select_related("current_class")
+        from people import access
+
+        if access.kinds(user):
+            people = Person.objects.filter(kind__in=access.kinds(user)).select_related("current_class")
             for term in terms:
                 people = people.filter(
                     Q(first_name__icontains=term) | Q(last_name__icontains=term) | Q(email__icontains=term) | Q(abbreviation__iexact=term)
@@ -354,8 +356,10 @@ def global_search(request):
                 if p.archived:
                     sub = f"{sub} · {_('archiviert')}".strip(" ·")
                 results.append({"title": p.display_name, "sub": sub or "", "url": f"/personen/{p.pk}/", "icon": "user"})
-            for group in ClassGroup.objects.filter(name__icontains=query).select_related("school_year").order_by("-school_year__start")[:4]:
+            for group in ClassGroup.objects.filter(name__icontains=query).select_related("school_year").order_by("-school_year__start")[:4] \
+                    if user.can("pupil.view") else []:
                 results.append({"title": group.name, "sub": _("Klasse %(year)s") % {"year": group.school_year or ""}, "url": reverse("class_detail", args=[group.pk]), "icon": "school"})
+        if user.can("guardian.view"):
             for g in people_hits(Guardian.objects.all(), terms)[:4]:
                 results.append({"title": g.display_name, "sub": _("Eltern"), "url": f"/eltern/{g.pk}/", "icon": "heart"})
         if user.can("device.view"):

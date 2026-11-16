@@ -3,11 +3,11 @@
 <div class="space-y-3">
 {% for row in links %}<div class="rounded-lg border p-3" style="border-color: var(--line)">
   <div class="flex items-center gap-2"><a class="font-medium hover:underline" href="{% url 'guardian_detail' row.link.guardian.pk %}">{{ row.link.guardian.display_name }}</a><span class="badge">{% translate row.link.role %}</span><span class="muted text-[12px] truncate">{{ row.link.guardian.email }} {{ row.link.guardian.phone }}</span><span class="flex-1"></span>
-  {% if request.user|can:'person.edit' %}<form hx-post="{% url 'person_guardian' person.pk %}" hx-target="#block-guardians" hx-swap="outerHTML"><input type="hidden" name="action" value="unlink"><input type="hidden" name="link" value="{{ row.link.pk }}"><button class="btn btn-ghost btn-sm btn-icon" data-confirm="{% translate 'Verknüpfung entfernen?' %}" aria-label="{% translate 'Verknüpfung entfernen' %}">{% icon 'x' %}</button></form>{% endif %}</div>
+  {% if request.user|edits_kind:person.kind %}<form hx-post="{% url 'person_guardian' person.pk %}" hx-target="#block-guardians" hx-swap="outerHTML"><input type="hidden" name="action" value="unlink"><input type="hidden" name="link" value="{{ row.link.pk }}"><button class="btn btn-ghost btn-sm btn-icon" data-confirm="{% translate 'Verknüpfung entfernen?' %}" aria-label="{% translate 'Verknüpfung entfernen' %}">{% icon 'x' %}</button></form>{% endif %}</div>
   {% for login in row.logins %}{% if login.credential %}<div class="mt-2 text-[12px] muted">{% blocktranslate trimmed with platform=login.platform.name %}{{ platform }}: Zugang vorhanden{% endblocktranslate %}</div>{% endif %}{% endfor %}
 </div>{% empty %}<p class="muted text-[13px]">{% translate "Noch keine Eltern verknüpft." %}</p>{% endfor %}
 </div>
-{% if request.user|can:'person.edit' %}
+{% if request.user|edits_kind:person.kind %}
 <button class="btn mt-3" x-show="!add" @click="add = true">{% icon 'plus' %}{% translate "Eltern hinzufügen" %}</button>
 <form x-show="add" x-cloak hx-post="{% url 'person_guardian' person.pk %}" hx-target="#block-guardians" hx-swap="outerHTML" class="mt-3 grid sm:grid-cols-3 gap-2">
   <input type="hidden" name="action" value="add">

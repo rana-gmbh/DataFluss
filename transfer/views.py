@@ -176,6 +176,8 @@ def export_rows(request):
         return _export_table(request, entity.removeprefix("table:"), fmt, columns, ids)
     if entity not in ("pupil", "staff"):
         return HttpResponseBadRequest()
+    if not request.user.can(f"{entity}.view"):
+        raise PermissionDenied
     by_id = {r["id"]: r for r in person_rows(entity, ids=ids)}
     rows = [[by_id[i].get(c["key"], "") for c in columns] for i in ids if i in by_id]
     titles = [c.get("title") or c["key"] for c in columns]

@@ -30,13 +30,14 @@ from vault.models import Credential, Platform
 from vault.services import generate_login, rate_limited
 
 from .blocks import BLOCK_VIEWS
+from . import access
 from .models import Attachment, Card, ClassGroup, Comment, Enrollment, Guardian, Guardianship, Person, SchoolYear
 from .services import RolloverRefused, parse_card_input, rollover_commit, rollover_preview
 
 
 def _grid_columns(entity, user):
     columns = []
-    can_edit = user.can("person.edit")
+    can_edit = access.may(user, entity, "edit")
     classes = [{"value": str(c.pk), "label": c.name} for c in ms.class_choices()]
     for fd in ms.fields_for(entity):
         if fd.type == "secret":
@@ -70,7 +71,7 @@ def _grid_page(request, entity, title, nav):
         "entity": entity,
         "columns": _grid_columns(entity, request.user),
         "dataUrl": reverse("api_persons"),
-        "canEdit": request.user.can("person.edit"),
+        "canEdit": access.may(request.user, entity, "edit"),
         "preset": request.GET.get("preset", ""),
         "views": [{"id": str(v.pk), "name": v.name, "config": v.config, "shared": v.owner_id is None} for v in views],
         "classes": [{"value": str(c.pk), "label": c.name} for c in ms.class_choices()],
@@ -78,18 +79,18 @@ def _grid_page(request, entity, title, nav):
         "platforms": [{"id": str(p.pk), "name": p.name} for p in Platform.active_for(entity)]
         if request.user.can("vault.edit") else [],
         "canExport": request.user.can("data.export"),
-        "canArchive": request.user.can("person.archive"),
+        "canArchive": access.may(request.user, entity, "archive"),
         "binUrl": reverse("person_bin"),
     }
     return render(request, "people/grid.html", {"config": config, "title": title, "entity": entity, "active_nav": nav})
 
 
-@require("person.view")
+@require("pupil.view")
 def pupils(request):
     return _grid_page(request, "pupil", _("Schüler"), "pupils")
 
 
-@require("person.view")
+@require("staff.view")
 def staff(request):
     return _grid_page(request, "staff", _("Personal"), "staff")
 
@@ -132,6 +133,8 @@ def api_persons(request):
     entity = request.GET.get("entity", "pupil")
     if entity not in ("pupil", "staff"):
         return HttpResponseBadRequest()
+    if not access.may(request.user, entity):
+        raise PermissionDenied
     record = request.GET.get("id")
     if record:
         try:
@@ -142,7 +145,7 @@ def api_persons(request):
 
 
 def _save_field(request, person, key, raw):
-    if not request.user.can("person.edit"):
+    if not access.may(request.user, person.kind, "edit"):
         raise PermissionDenied
     fd = FieldDefinition.objects.filter(entity=person.kind, key=key, archived=False).first()
     if fd is None:
@@ -155,7 +158,7 @@ def _save_field(request, person, key, raw):
 @require("person.edit")
 @require_POST
 def api_person_field(request, pk, key):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "edit")
     payload = json.loads(request.body or b"{}")
     try:
         _save_field(request, person, key, payload.get("value"))
@@ -216,27 +219,27 @@ def _detail_context(request, person):
 
 @require("person.view")
 def person_detail(request, pk):
-    person = get_object_or_404(Person.objects.select_related("current_class"), pk=pk)
+    person = access.person_or_403(request, pk, "view", Person.objects.select_related("current_class"))
     return render(request, "people/detail.html", _detail_context(request, person))
 
 
 @require("person.view")
 def person_form(request, pk):
-    person = get_object_or_404(Person.objects.select_related("current_class"), pk=pk)
+    person = access.person_or_403(request, pk, "view", Person.objects.select_related("current_class"))
     return render(request, "masks/_form.html", _detail_context(request, person))
 
 
 @require("person.view")
 def person_panel(request, pk):
     """The record as a side panel beside the list."""
-    person = get_object_or_404(Person.objects.select_related("current_class"), pk=pk)
+    person = access.person_or_403(request, pk, "view", Person.objects.select_related("current_class"))
     return render(request, "people/_panel.html", _detail_context(request, person))
 
 
 @require("person.edit")
 @require_POST
 def person_field(request, pk, key):
-    person = get_object_or_404(Person.objects.select_related("current_class"), pk=pk)
+    person = access.person_or_403(request, pk, "edit", Person.objects.select_related("current_class"))
     values = request.POST.getlist("value")
     fd_probe = FieldDefinition.objects.filter(entity=person.kind, key=key).first()
     raw = [v for v in values if v] if fd_probe and fd_probe.type == "multichoice" else (values[-1] if values else "")
@@ -261,7 +264,7 @@ def person_field(request, pk, key):
 @require("vault.reveal")
 @require_POST
 def person_secret_reveal(request, pk, key):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "view")
     fd = get_object_or_404(FieldDefinition, entity=person.kind, key=key, type="secret")
     if rate_limited(request):
         return HttpResponse(_("Zu viele Abrufe. Bitte kurz warten."), status=429)
@@ -271,7 +274,7 @@ def person_secret_reveal(request, pk, key):
 
 @require("person.view")
 def person_block(request, pk, name):
-    person = get_object_or_404(Person.objects.select_related("current_class"), pk=pk)
+    person = access.person_or_403(request, pk, "view", Person.objects.select_related("current_class"))
     view = BLOCK_VIEWS.get(name)
     if view is None or not modules.block_active(name):
         raise Http404
@@ -285,7 +288,7 @@ def _render_block(request, person, name):
 @require("person.edit")
 @require_POST
 def person_photo(request, pk):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "edit")
     upload = request.FILES.get("photo")
     if request.POST.get("remove"):
         person.photo = ""
@@ -298,7 +301,7 @@ def person_photo(request, pk):
 @require("person.edit")
 @require_POST
 def person_card(request, pk):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "edit")
     action = request.POST.get("action", "assign")
     if action == "revoke":
         journal.update(person.cards.filter(active=True), active=False)
@@ -326,7 +329,7 @@ def person_card(request, pk):
 @require("person.view")
 @require_POST
 def person_comment(request, pk):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "view")
     text = request.POST.get("text", "").strip()
     if text:
         Comment.objects.create(person=person, author=request.user, text=text[:4000])
@@ -336,7 +339,7 @@ def person_comment(request, pk):
 @require("person.edit")
 @require_POST
 def person_attachment(request, pk):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "edit")
     upload = request.FILES.get("file")
     problem = ""
     if request.POST.get("delete"):
@@ -358,7 +361,7 @@ def person_attachment(request, pk):
 
 @require("person.view")
 def attachment_download(request, pk, attachment):
-    item = get_object_or_404(Attachment, pk=attachment, person_id=pk)
+    item = get_object_or_404(Attachment, pk=attachment, person_id=pk, person__kind__in=access.kinds(request.user))
     audit.log("download", f"Datei {item.name} geöffnet", request=request, target=pk)
     return FileResponse(item.file.open("rb"), as_attachment=True, filename=item.name)
 
@@ -366,7 +369,7 @@ def attachment_download(request, pk, attachment):
 @require("person.edit")
 @require_POST
 def person_guardian(request, pk):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "edit")
     action = request.POST.get("action")
     if action == "add":
         first, last = request.POST.get("first_name", "").strip(), request.POST.get("last_name", "").strip()
@@ -389,6 +392,8 @@ def person_guardian(request, pk):
 def person_new(request, entity):
     if entity not in ("pupil", "staff"):
         raise Http404
+    if not access.may(request.user, entity, "edit"):
+        raise PermissionDenied
     error, data = "", {}
     fields = ms.field_map(entity)
     if request.method == "POST":
@@ -433,7 +438,8 @@ def person_duplicates(request):
     first, last = request.GET.get("first_name", "").strip(), request.GET.get("last_name", "").strip()
     found = []
     if len(last) >= 2:
-        found = Person.objects.filter(last_name__iexact=last, first_name__istartswith=first[:2])[:5] if first else Person.objects.filter(last_name__iexact=last)[:5]
+        seen = Person.objects.filter(kind__in=access.kinds(request.user))
+        found = seen.filter(last_name__iexact=last, first_name__istartswith=first[:2])[:5] if first else seen.filter(last_name__iexact=last)[:5]
     return render(request, "people/_duplicates.html", {"found": found})
 
 
@@ -442,7 +448,9 @@ def person_duplicates(request):
 def bulk_action(request):
     payload = json.loads(request.body or b"{}")
     ids, action = payload.get("ids") or [], payload.get("action")
-    people = Person.objects.filter(pk__in=ids)
+    # Only people of the kinds this user may change (or archive); others in the list are left alone.
+    allowed = access.kinds(request.user, "archive" if action in ("archive", "restore", "delete", "bring_back") else "edit")
+    people = Person.objects.filter(pk__in=ids, kind__in=allowed)
     count = 0
     if action == "class":
         group = ClassGroup.objects.filter(pk=payload.get("value")).first()
@@ -463,7 +471,7 @@ def bulk_action(request):
         if not request.user.can("person.archive"):
             raise PermissionDenied
         if action == "bring_back":
-            people = Person.everything.filter(pk__in=ids).exclude(deleted_at=None)
+            people = Person.everything.filter(pk__in=ids, kind__in=allowed).exclude(deleted_at=None)
         refused = []
         for person in people:
             if action == "delete" and (reason := person.kept_by_section()):
@@ -493,7 +501,7 @@ def bulk_action(request):
 @require("person.edit")
 @require_POST
 def person_duplicate(request, pk):
-    person = get_object_or_404(Person, pk=pk)
+    person = access.person_or_403(request, pk, "edit")
     copy = person.duplicate()
     audit.log("person", f"{person.display_name} dupliziert", request=request, target=copy.pk)
     messages.success(request, _("Kopie von %(name)s angelegt. Bitte den Namen anpassen.") % {"name": person.display_name})
@@ -504,12 +512,13 @@ def person_duplicate(request, pk):
 @require_http_methods(["GET", "POST"])
 def person_bin(request):
     if request.method == "POST":
-        person = get_object_or_404(Person.everything.exclude(deleted_at=None), pk=request.POST.get("person"))
+        person = get_object_or_404(Person.everything.exclude(deleted_at=None).filter(kind__in=access.kinds(request.user, "archive")),
+                                   pk=request.POST.get("person"))
         person.bring_back()
         audit.log("person", f"{person.display_name} aus dem Papierkorb geholt", request=request, target=person.pk)
         messages.success(request, _("%(name)s ist wieder da.") % {"name": person.display_name})
         return redirect("person_bin")
-    people = Person.in_the_bin().select_related("current_class")
+    people = Person.in_the_bin().filter(kind__in=access.kinds(request.user, "archive")).select_related("current_class")
     return render(request, "people/bin.html", {"people": people, "keep_days": Person.KEEP_DAYS, "active_nav": "pupils"})
 
 
@@ -520,14 +529,14 @@ def card_lookup(request):
     if request.method == "POST":
         searched = True
         code = parse_card_input(request.POST.get("raw", ""), settings.CARD_INPUT_FORMAT)
-        card = Card.objects.filter(code=code, active=True).select_related("person").first() if code else None
+        card = Card.objects.filter(code=code, active=True, person__kind__in=access.kinds(request.user)).select_related("person").first() if code else None
         audit.log("card_lookup", "Karte gesucht" + (f": {card.person.display_name}" if card else " (kein Treffer)"), request=request)
         if card:
             return redirect("person_detail", pk=card.person_id)
     return render(request, "people/card_lookup.html", {"searched": searched})
 
 
-@require("person.view")
+@require("guardian.view")
 def guardians(request):
     query = request.GET.get("q", "").strip()
     qs = Guardian.objects.annotate(children=Count("guardianships")).prefetch_related("guardianships__person")
@@ -552,12 +561,12 @@ def _guardian_context(request, guardian):
     }
 
 
-@require("person.view")
+@require("guardian.view")
 @require_http_methods(["GET", "POST"])
 def guardian_detail(request, pk):
     guardian = get_object_or_404(Guardian, pk=pk)
     if request.method == "POST":
-        if not request.user.can("person.edit"):
+        if not request.user.can("guardian.edit"):
             raise PermissionDenied
         for name in ("first_name", "last_name", "email", "phone", "notes"):
             setattr(guardian, name, request.POST.get(name, "").strip())
@@ -568,14 +577,14 @@ def guardian_detail(request, pk):
     return render(request, "people/guardian_detail.html", _guardian_context(request, guardian))
 
 
-@require("person.view")
+@require("guardian.view")
 def guardian_panel(request, pk):
     """The guardian as a side panel beside the list."""
     guardian = get_object_or_404(Guardian, pk=pk)
     return render(request, "people/_guardian_panel.html", _guardian_context(request, guardian))
 
 
-@require("person.view")
+@require("pupil.view")
 @require_http_methods(["GET", "POST"])
 def classes(request):
     year = SchoolYear.current()
@@ -594,7 +603,7 @@ def classes(request):
     return render(request, "people/classes.html", {"groups": groups, "year": year, "kinds": ClassGroup.KINDS[:2]})
 
 
-@require("person.view")
+@require("pupil.view")
 def class_detail(request, pk):
     group = get_object_or_404(ClassGroup, pk=pk)
     from prints.models import PrintTemplate

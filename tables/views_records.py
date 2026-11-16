@@ -501,7 +501,7 @@ def backlinks(request, kind, pk):
             raise PermissionDenied
     elif kind not in ("pupil", "staff", "asset"):
         raise Http404
-    elif not request.user.can("device.view" if kind == "asset" else "person.view"):
+    elif not request.user.can("device.view" if kind == "asset" else f"{kind}.view"):
         raise PermissionDenied
     groups = links.backlinks(request.user, kind, pk)
     if not groups:

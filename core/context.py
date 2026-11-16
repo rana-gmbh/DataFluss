@@ -14,10 +14,10 @@ NAV = [
     (
         _("Personen"),
         [
-            (_("Schüler"), "pupils", "users", "person.view"),
-            (_("Personal"), "staff", "briefcase", "person.view"),
-            (_("Eltern"), "guardians", "heart", "person.view"),
-            (_("Klassen"), "classes", "school", "person.view"),
+            (_("Schüler"), "pupils", "users", "pupil.view"),
+            (_("Personal"), "staff", "briefcase", "staff.view"),
+            (_("Eltern"), "guardians", "heart", "guardian.view"),
+            (_("Klassen"), "classes", "school", "pupil.view"),
         ],
     ),
     (

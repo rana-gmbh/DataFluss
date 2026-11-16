@@ -21,7 +21,7 @@ class PersonTarget:
     def may_import(self, user):
         from core import modules
 
-        return user.can("data.import") and "schulverwaltung" in modules.active()
+        return user.can("data.import") and "schulverwaltung" in modules.active() and user.can(f"{self.entity}.edit")
 
     def targets(self):
         return importer.targets(self.entity)
@@ -69,7 +69,7 @@ def choices(user):
     from core import modules
 
     people = user.can("data.import") and "schulverwaltung" in modules.active()
-    out = [("pupil", _("Schüler")), ("staff", _("Personal"))] if people else []
+    out = [(kind, label) for kind, label in (("pupil", _("Schüler")), ("staff", _("Personal"))) if people and user.can(f"{kind}.edit")]
     from tables import services
 
     return out + [(f"table:{t.key}", _("Tabelle: %(name)s") % {"name": t.display_name}) for t in services.readable(user) if services.may_edit(user, t)]

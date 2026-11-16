@@ -16,9 +16,15 @@ IT, SEK, SL = Role.IT, Role.SEKRETARIAT, Role.SCHULLEITUNG
 
 # Modules add their own capabilities and roles (core/modules.py add_capabilities).
 CAPABILITIES = {
-    "person.view": {IT, SEK, SL},
-    "person.edit": {IT, SEK},
-    "person.archive": {IT, SEK},
+    # People by kind; "person.view/edit/archive" mean "of any kind" (DERIVED below).
+    "pupil.view": {IT, SEK, SL},
+    "pupil.edit": {IT, SEK},
+    "pupil.archive": {IT, SEK},
+    "staff.view": {IT, SEK, SL},
+    "staff.edit": {IT, SEK},
+    "staff.archive": {IT, SEK},
+    "guardian.view": {IT, SEK, SL},
+    "guardian.edit": {IT, SEK},
     "class.manage": {IT, SEK},
     "device.view": {IT, SEK, SL},
     "device.edit": {IT, SEK},
@@ -46,7 +52,8 @@ CAPABILITIES = {
 
 # Capabilities of the basic module Schulverwaltung: a database that does not use it (SchoolSettings.modules_off)
 # has no people, devices or logins, so nobody has these there (has_capability below).
-for _capability in ("person.view", "person.edit", "person.archive", "class.manage", "device.view", "device.edit",
+for _capability in ("pupil.view", "pupil.edit", "pupil.archive", "staff.view", "staff.edit", "staff.archive", "guardian.view",
+                    "guardian.edit", "class.manage", "device.view", "device.edit",
                     "vault.view", "vault.reveal", "vault.edit", "vault.export", "admin.fields", "admin.platforms"):
     CAPABILITY_MODULES.setdefault(_capability, "schulverwaltung")
 
@@ -93,6 +100,13 @@ def role_capabilities(user):
     return granted
 
 
+# Capabilities that hold when one of these does: checks that do not know which kind of person.
+DERIVED = {
+    "person.view": ("pupil.view", "staff.view", "guardian.view"),
+    "person.edit": ("pupil.edit", "staff.edit", "guardian.edit"),
+    "person.archive": ("pupil.archive", "staff.archive"),
+}
+
 # "Einstellungen" opens for anyone with one of these; it is not a right of its own (core/context.py NAV).
 SETTINGS = ("admin.masks", "admin.fields", "tables.design", "admin.platforms", "admin.users", "admin.school",
             "admin.update", "admin.backup", "admin.audit")
@@ -103,6 +117,8 @@ def has_capability(user, capability):
         return False
     if capability == "settings.open":
         return any(has_capability(user, c) for c in SETTINGS)
+    if capability in DERIVED:
+        return any(has_capability(user, c) for c in DERIVED[capability])
     module = CAPABILITY_MODULES.get(capability)
     if module and module not in active():
         return False  # a module this database does not use

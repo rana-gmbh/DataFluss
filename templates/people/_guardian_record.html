@@ -1,13 +1,13 @@
 {% load i18n ui %}
 <div class="record-wrap"><div class="record-columns">
 <form method="post" action="{% url 'guardian_detail' guardian.pk %}" class="surface p-4 space-y-3" data-panel-form>{% csrf_token %}<h2 class="section-title">{% translate "Kontakt" %}</h2>
-  <fieldset class="space-y-3" {% if not request.user|can:'person.edit' %}disabled{% endif %}>
+  <fieldset class="space-y-3" {% if not request.user|can:'guardian.edit' %}disabled{% endif %}>
   <div class="grid grid-cols-2 gap-3"><div><label class="label" for="f-first_name">{% translate "Vorname" %}</label><input id="f-first_name" class="input" name="first_name" value="{{ guardian.first_name }}"></div><div><label class="label" for="f-last_name">{% translate "Nachname" %}</label><input id="f-last_name" class="input" name="last_name" value="{{ guardian.last_name }}"></div></div>
   <div><label class="label" for="f-email">{% translate "E-Mail" %}</label><input id="f-email" class="input" name="email" value="{{ guardian.email }}"></div>
   <div><label class="label" for="f-phone">{% translate "Telefon" %}</label><input id="f-phone" class="input" name="phone" value="{{ guardian.phone }}"></div>
   <div><label class="label" for="f-notes">{% translate "Bemerkungen" %}</label><textarea id="f-notes" class="input" name="notes">{{ guardian.notes }}</textarea></div>
   </fieldset>
-  {% if request.user|can:'person.edit' %}<button class="btn btn-primary">{% translate "Speichern" %}</button>{% endif %}</form>
+  {% if request.user|can:'guardian.edit' %}<button class="btn btn-primary">{% translate "Speichern" %}</button>{% endif %}</form>
 <div class="space-y-4">
 <section class="surface p-4"><h2 class="section-title mb-2">{% translate "Kinder" %}</h2>{% for link in children %}<a class="flex items-center gap-2 py-1.5 hover:underline" href="{% url 'person_detail' link.person.pk %}">{% avatar link.person 26 %}<span>{{ link.person.display_name }}</span><span class="muted text-[12px]">{{ link.person.current_class|default:"" }} · {% translate link.role %}</span></a>{% endfor %}</section>
 {% for row in logins %}<section class="surface p-4"><h2 class="section-title mb-2">{{ row.platform.name }}</h2>

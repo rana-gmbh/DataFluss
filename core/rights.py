@@ -45,13 +45,20 @@ PEOPLE, IT, PRINT, ADMIN, TABLES = _("Personen"), _("IT"), _("Drucken und Daten"
 
 PLATFORM_AREAS = [
     Area("home", _("Startseite"), _("Übersicht"), _("Die Startseite mit Zahlen, Aufgaben und der Suche."), read=("home.view",)),
-    Area("people", _("Schüler, Personal und Eltern"), PEOPLE, _("Listen, Datenblätter und Suche; Bearbeiten heißt anlegen und ändern."),
-         read=("person.view",), edit=("person.edit",), extras=[
-             Extra("people.archive", _("Archivieren und löschen"), _("Personen archivieren, in den Papierkorb legen und zurückholen."),
-                   ("person.archive",)),
-             Extra("people.classes", _("Klassen und Schuljahreswechsel"), _("Klassen anlegen und ändern, das Schuljahr wechseln."),
+    Area("pupils", _("Schüler"), PEOPLE, _("Liste, Datenblätter und Suche; Bearbeiten heißt anlegen und ändern."),
+         read=("pupil.view",), edit=("pupil.edit",), extras=[
+             Extra("pupils.archive", _("Archivieren und löschen"), _("Schüler archivieren, in den Papierkorb legen und zurückholen."),
+                   ("pupil.archive",)),
+             Extra("pupils.classes", _("Klassen und Schuljahreswechsel"), _("Klassen anlegen und ändern, das Schuljahr wechseln."),
                    ("class.manage",)),
          ], module="schulverwaltung"),
+    Area("staff", _("Personal"), PEOPLE, _("Liste, Datenblätter und Suche; Bearbeiten heißt anlegen und ändern."),
+         read=("staff.view",), edit=("staff.edit",), extras=[
+             Extra("staff.archive", _("Archivieren und löschen"), _("Personal archivieren, in den Papierkorb legen und zurückholen."),
+                   ("staff.archive",)),
+         ], module="schulverwaltung"),
+    Area("guardians", _("Eltern"), PEOPLE, _("Erziehungsberechtigte und ihre Kinder."),
+         read=("guardian.view",), edit=("guardian.edit",), module="schulverwaltung"),
     Area("devices", _("Geräte und Schäden"), IT, _("Geräte, Ausgaben, Rücknahmen und Schadensfälle."),
          read=("device.view",), edit=("device.edit",), module="schulverwaltung"),
     Area("vault", _("Zugänge"), IT, _("Benutzernamen und Passwörter der Plattformen."),

@@ -116,7 +116,12 @@ class Scope:
         return next((day for module in self.modules if (day := module.change_day(stamps)) is not None), None)
 
     def allows(self, model, pk, when=None):
-        """After a push: whether the record, as the push left it, is one this user may change (the modules' rules)."""
+        """After a push: whether the record, as the push left it, is one this user may change (the modules' rules,
+        and for a person the right to edit its kind)."""
+        if codec.entity_of(model) == "people.person" and not self.edits_people:
+            kind = model._base_manager.filter(pk=pk).values_list("kind", flat=True).first()
+            if kind and not self.user.can(f"{kind}.edit"):
+                return False
         return all(module.allows(self, model, pk, when) for module in self.modules)
 
     # ------------------------------------------------------------ reading
@@ -140,9 +145,22 @@ class Scope:
         if can("data.import"):
             for model in m["import"]:
                 add(model)
-        if can("person.view"):
+        from people import access
+
+        kinds = access.kinds(self.user)  # roles grant pupils and staff apart
+        if kinds:
             for model in m["people"]:
-                add(model)
+                label = model._meta.label_lower
+                if label == "people.person":
+                    add(model, model._base_manager.filter(kind__in=kinds))
+                elif label == "people.guardian":
+                    if can("guardian.view"):
+                        add(model)
+                elif label == "people.guardianship":
+                    if can("guardian.view"):
+                        add(model, model._base_manager.filter(person__kind__in=kinds))
+                else:  # enrolments, cards, comments, attachments: those of the people it may see
+                    add(model, model._base_manager.filter(person__kind__in=kinds))
         if can("device.view"):
             for model in m["devices"]:
                 add(model)
@@ -223,10 +241,17 @@ class Scope:
         if label == "core.userrole":
             return can("admin.users")
         if label == "people.person":
-            return can("person.edit") or self.edits_people
+            if self.edits_people:
+                return True
+            from people.models import Person
+
+            kind = Person._base_manager.filter(pk=pk).values_list("kind", flat=True).first()
+            return can(f"{kind}.edit") if kind else can("person.edit")  # a new one: its kind is checked in allows()
         if label in ("people.schoolyear", "people.classgroup"):
             return can("class.manage")
-        if label in ("people.comment", "people.attachment"):
+        if label == "people.comment":  # as on the page: whoever sees the person may comment
+            return can("person.view") or self.edits_people
+        if label == "people.attachment":
             return can("person.edit") or self.edits_people
         if app == "people":
             return can("person.edit")

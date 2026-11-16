@@ -4,10 +4,8 @@
 <div class="flex flex-wrap items-center gap-3 mb-5">
   <div class="flex-1 min-w-[220px]"><h1 class="page-title">{% blocktranslate trimmed with name=request.user.first_name|default:request.user.username %}Guten Tag, {{ name }}{% endblocktranslate %}</h1>
     <p class="muted text-[13px]">{{ school.name }}</p></div>
-  {% if request.user|can:'person.edit' %}
-  <a class="btn btn-primary" href="{% url 'person_new' 'pupil' %}">{% icon 'user-plus' %}{% translate "Neuer Schüler" %}</a>
-  <a class="btn" href="{% url 'person_new' 'staff' %}">{% icon 'user-plus' %}{% translate "Neuer Mitarbeiter" %}</a>
-  {% endif %}
+  {% if request.user|edits_kind:'pupil' %}<a class="btn btn-primary" href="{% url 'person_new' 'pupil' %}">{% icon 'user-plus' %}{% translate "Neuer Schüler" %}</a>{% endif %}
+  {% if request.user|edits_kind:'staff' %}<a class="btn" href="{% url 'person_new' 'staff' %}">{% icon 'user-plus' %}{% translate "Neuer Mitarbeiter" %}</a>{% endif %}
 </div>
 {% if update_available %}<a href="{% url 'updates' %}" class="surface flex items-center gap-2 px-4 py-2.5 mb-4 text-[13px] hover:border-[var(--line-strong)]">{% icon 'refresh' 'text-[var(--accent)]' %}{% translate "Eine neue Version ist verfügbar." %}<span class="underline">{% translate "Ansehen" %}</span></a>{% endif %}
 {% for w in warnings %}<a href="{{ w.url }}" class="rounded-lg badge-{{ w.level }} flex items-center gap-2 px-4 py-2.5 mb-4 text-[13px]" {% if w.level == 'bad' %}role="alert"{% endif %}>{% icon 'alert' %}{{ w.text }}</a>{% endfor %}
@@ -21,20 +19,20 @@
   {% endfor %}</ul>
 </section>{% endif %}
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
-  <a href="{% url 'pupils' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Aktive Schüler" %}</div><div class="text-2xl font-semibold mt-1">{{ pupil_count }}</div></a>
-  <a href="{% url 'staff' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Personal" %}</div><div class="text-2xl font-semibold mt-1">{{ staff_count }}</div></a>
-  <a href="{% url 'assets' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Geräte ausgegeben" %}</div><div class="text-2xl font-semibold mt-1">{{ device_count }}</div></a>
-  <a href="{% url 'cases' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Offene Schäden" %}</div><div class="text-2xl font-semibold mt-1">{{ open_cases }}</div></a>
+  {% if request.user|can:'pupil.view' %}<a href="{% url 'pupils' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Aktive Schüler" %}</div><div class="text-2xl font-semibold mt-1">{{ pupil_count }}</div></a>{% endif %}
+  {% if request.user|can:'staff.view' %}<a href="{% url 'staff' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Personal" %}</div><div class="text-2xl font-semibold mt-1">{{ staff_count }}</div></a>{% endif %}
+  {% if request.user|can:'device.view' %}<a href="{% url 'assets' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Geräte ausgegeben" %}</div><div class="text-2xl font-semibold mt-1">{{ device_count }}</div></a>
+  <a href="{% url 'cases' %}" class="surface p-4 hover:border-[var(--line-strong)]"><div class="muted text-[12px]">{% translate "Offene Schäden" %}</div><div class="text-2xl font-semibold mt-1">{{ open_cases }}</div></a>{% endif %}
 </div>
 <div class="grid lg:grid-cols-3 gap-4">
-  <section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Neue Schüler" %}</h2>
+  {% if request.user|can:'pupil.view' %}<section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Neue Schüler" %}</h2>
     <table class="data-table"><tbody>{% for p in new_pupils %}
       <tr><td class="w-8">{% avatar p 26 %}</td><td><a class="font-medium hover:underline" href="{% url 'person_detail' p.pk %}">{{ p.display_name }}</a></td><td class="muted">{{ p.current_class|default:"–" }}</td><td class="muted text-right whitespace-nowrap">{{ p.entry_date|date:"d.m.Y" }}</td></tr>
-    {% empty %}<tr><td class="muted text-center py-6">{% translate "Noch keine Einträge." %}</td></tr>{% endfor %}</tbody></table></section>
-  <section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Neue Mitarbeiter" %}</h2>
+    {% empty %}<tr><td class="muted text-center py-6">{% translate "Noch keine Einträge." %}</td></tr>{% endfor %}</tbody></table></section>{% endif %}
+  {% if request.user|can:'staff.view' %}<section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Neue Mitarbeiter" %}</h2>
     <table class="data-table"><tbody>{% for p in new_staff %}
       <tr><td class="w-8">{% avatar p 26 %}</td><td><a class="font-medium hover:underline" href="{% url 'person_detail' p.pk %}">{{ p.display_name }}</a></td><td class="muted">{{ p.category }}</td><td class="muted text-right whitespace-nowrap">{{ p.entry_date|date:"d.m.Y" }}</td></tr>
-    {% empty %}<tr><td class="muted text-center py-6">{% translate "Noch keine Einträge." %}</td></tr>{% endfor %}</tbody></table></section>
+    {% empty %}<tr><td class="muted text-center py-6">{% translate "Noch keine Einträge." %}</td></tr>{% endfor %}</tbody></table></section>{% endif %}
   <section class="surface overflow-hidden"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Zu erledigen" %}</h2>
     <ul>{% for label, count, url in todo %}
       <li class="border-b last:border-0" style="border-color: var(--line)"><a href="{{ url }}" class="flex items-center justify-between px-4 py-3 hover:bg-[var(--surface-2)]"><span>{{ label }}</span><span class="badge {% if count %}badge-warn{% else %}badge-ok{% endif %}">{{ count }}</span></a></li>

@@ -126,6 +126,9 @@ def class_record(group):
 
 
 PLATFORM_SOURCES = ("pupil", "staff", "guardian", "asset", "case", "class")
+# What a role needs to print from a source of the platform (roles grant pupils, staff and parents apart).
+SOURCE_RIGHTS = {"pupil": "pupil.view", "staff": "staff.view", "guardian": "guardian.view", "class": "pupil.view",
+                 "asset": "device.view", "case": "device.view"}
 
 
 def available_sources(user=None):
@@ -139,6 +142,8 @@ def available_sources(user=None):
 
     basic = "schulverwaltung" in modules.active()  # people, devices and classes
     sources = [(key, label) for key, label in PrintTemplate.SOURCES if (key in PLATFORM_SOURCES and basic) or (key not in PLATFORM_SOURCES and module_source(key))]
+    if user is not None:
+        sources = [(key, label) for key, label in sources if key not in SOURCE_RIGHTS or user.can(SOURCE_RIGHTS[key])]
     tables = table_services.readable(user) if user is not None else Table.objects.filter(archived=False)
     return sources + [(f"table:{t.key}", _("Tabelle: %(name)s") % {"name": t.display_name}) for t in tables]
 

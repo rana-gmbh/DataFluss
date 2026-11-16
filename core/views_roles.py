@@ -27,9 +27,11 @@ UMLAUTS = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä": "
 # Starting points for a new role, besides empty and a copy of an existing role.
 PRESETS = {
     "read": (_("Alles lesen"), lambda: ({a.key: rights.READ for a in rights.areas() if a.has_levels}, [])),
-    "janitor": (_("Hausmeister"), lambda: ({"home": rights.READ, "people": rights.READ, "devices": rights.EDIT, "print": rights.READ}, [])),
-    "office": (_("Büro"), lambda: ({"home": rights.READ, "people": rights.EDIT, "devices": rights.READ, "print": rights.READ,
-                                    "data": rights.EDIT}, ["people.archive", "people.classes"])),
+    "janitor": (_("Hausmeister"), lambda: ({"home": rights.READ, "pupils": rights.READ, "staff": rights.READ, "devices": rights.EDIT,
+                                            "print": rights.READ}, [])),
+    "office": (_("Büro"), lambda: ({"home": rights.READ, "pupils": rights.EDIT, "staff": rights.EDIT, "guardians": rights.EDIT,
+                                    "devices": rights.READ, "print": rights.READ, "data": rights.EDIT},
+                                   ["pupils.archive", "pupils.classes", "staff.archive"])),
 }
 
 

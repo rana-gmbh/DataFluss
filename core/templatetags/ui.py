@@ -17,6 +17,17 @@ def can(user, capability):
 
 
 @register.filter
+def edits_kind(user, kind):
+    """Whether the user may change people of this kind ("pupil", "staff"): roles grant it per kind."""
+    return user.can(f"{kind}.edit")
+
+
+@register.filter
+def archives_kind(user, kind):
+    return user.can(f"{kind}.archive")
+
+
+@register.filter
 def get(mapping, key):
     return mapping.get(key, "") if mapping else ""
 

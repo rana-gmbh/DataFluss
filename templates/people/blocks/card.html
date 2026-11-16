@@ -3,7 +3,7 @@
 {% with card=cards.0 %}
 {% if card and card.active %}<div class="flex items-center gap-2 mb-2"><span class="badge badge-ok">{% translate "Aktiv" %}</span><span class="mono text-[13px]">{{ card.code }}</span></div>
 {% else %}<p class="muted text-[13px] mb-2">{% translate "Keine aktive Karte." %}</p>{% endif %}
-{% if request.user|can:'person.edit' %}
+{% if request.user|edits_kind:person.kind %}
 <div class="flex gap-2">
   <button class="btn" @click="assign = true; $nextTick(() => $refs.reader.focus())" x-show="!assign">{% icon 'card' %}{% translate "Karte zuweisen" %}</button>
   {% if card and card.active %}<form hx-post="{% url 'person_card' person.pk %}" hx-target="#block-card" hx-swap="outerHTML"><input type="hidden" name="action" value="revoke"><button class="btn btn-danger" data-confirm="{% translate 'Karte sperren?' %}">{% translate "Sperren" %}</button></form>{% endif %}

@@ -13,7 +13,7 @@ STEPS = [
      "text": _("Links stehen alle Bereiche, die Ihre Rolle öffnen darf. Was Sie nicht sehen dürfen, erscheint gar nicht erst.")},
     {"anchor": "search", "title": _("Suche"),
      "text": _("Personen, Klassen, Geräte und mehr finden: hier klicken oder ⌘K (unter Windows Strg+K) drücken.")},
-    {"anchor": "nav-pupils", "capability": "person.view", "title": _("Listen"),
+    {"anchor": "nav-pupils", "capability": "pupil.view", "title": _("Listen"),
      "text": _("In den Listen ändert ein Doppelklick eine Zelle. Spalten, Filter und Sortierung lassen sich als eigene Ansicht speichern.")},
     {"anchor": "nav-tables", "title": _("Eigene Tabellen"),
      "text": _("Tabellen, die Ihre Schule selbst gestaltet: mit eigenen Feldern, Verknüpfungen und Berechnungen. Listen und Datensätze funktionieren wie bei den Personen.")},

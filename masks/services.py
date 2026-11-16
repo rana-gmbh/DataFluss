@@ -165,7 +165,7 @@ def class_choices():
 def build_view(tree, person, user, readonly=False):
     """Resolve a mask tree into what the template renders."""
     fields = field_map(person.kind)
-    can_edit = user.can("person.edit") and not readonly
+    can_edit = user.can(f"{person.kind}.edit") and not readonly  # roles grant pupils and staff apart
     classes = None
     tabs = []
     for tab in tree.get("tabs", []):
