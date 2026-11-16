@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:14+0100\n"
+"POT-Creation-Date: 2026-11-16 13:33+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -846,6 +846,9 @@ msgstr "已离校但设备未归还"
 msgid "Name und Logo eintragen"
 msgstr "填写名称和标志"
 
+msgid "Erste eigene Tabelle anlegen"
+msgstr "创建第一个自定义表格"
+
 msgid "Personen aufnehmen oder aus einer Datei importieren"
 msgstr "添加人员或从文件导入"
 
@@ -1452,6 +1455,84 @@ msgid ""
 "übernehmen."
 msgstr "该记录已删除，无法再采用另一版本。"
 
+msgid "Unbekanntes Vorlagenformat."
+msgstr "未知的模板格式。"
+
+msgid "Die Vorlage braucht eine Kennung aus Kleinbuchstaben, Ziffern und _."
+msgstr "模板需要由小写字母、数字和 _ 组成的标识。"
+
+msgid "Die Vorlage braucht eine Versionsnummer."
+msgstr "模板需要版本号。"
+
+msgid "Die Vorlage braucht einen Titel."
+msgstr "模板需要标题。"
+
+msgid "Die Vorlage enthält keine Tabellen."
+msgstr "模板中没有表格。"
+
+#, python-format
+msgid "Tabelle %(key)s: ungültige oder doppelte Kennung."
+msgstr "表格 %(key)s：标识无效或重复。"
+
+#, python-format
+msgid "Tabelle %(key)s: Name fehlt."
+msgstr "表格 %(key)s：缺少名称。"
+
+#, python-format
+msgid "Tabelle %(key)s: unbekanntes Recht %(right)s."
+msgstr "表格 %(key)s：未知权限 %(right)s。"
+
+#, python-format
+msgid "Tabelle %(key)s: ungültiges oder doppeltes Feld %(field)s."
+msgstr "表格 %(key)s：字段 %(field)s 无效或重复。"
+
+#, python-format
+msgid "Feld %(field)s: unbekannter Typ."
+msgstr "字段 %(field)s：未知类型。"
+
+#, python-format
+msgid "Feld %(field)s: Bezeichnung fehlt."
+msgstr "字段 %(field)s：缺少名称。"
+
+#, python-format
+msgid "Feld %(field)s: Optionen fehlen."
+msgstr "字段 %(field)s：缺少选项。"
+
+#, python-format
+msgid "Feld %(field)s: unbekanntes Ziel der Verknüpfung."
+msgstr "字段 %(field)s：未知的关联目标。"
+
+#, python-format
+msgid "Feld %(field)s: Die verknüpfte Tabelle fehlt in der Vorlage."
+msgstr "字段 %(field)s：模板中缺少所关联的表格。"
+
+#, python-format
+msgid "Feld %(field)s: Formel fehlt."
+msgstr "字段 %(field)s：缺少公式。"
+
+#, python-format
+msgid "Tabelle %(key)s: Das Titelfeld fehlt."
+msgstr "表格 %(key)s：缺少标题字段。"
+
+#, python-format
+msgid "%(group)s: Eintrag ohne Tabelle oder Namen."
+msgstr "%(group)s：条目缺少表格或名称。"
+
+#, python-format
+msgid "Beispieldaten für eine unbekannte Tabelle %(key)s."
+msgstr "未知表格 %(key)s 的示例数据。"
+
+msgid "Diese Vorlage braucht ein Modul, das diese Datenbank nicht nutzt."
+msgstr "此模板需要本数据库未使用的模块。"
+
+#, python-format
+msgid "Eine Tabelle mit der Kennung %(key)s gibt es schon."
+msgstr "标识为 %(key)s 的表格已存在。"
+
+#, python-format
+msgid "Formel %(field)s: %(problem)s"
+msgstr "公式 %(field)s：%(problem)s"
+
 #, python-format
 msgid "Die Formel ist zu lang (höchstens %(n)s Zeichen)."
 msgstr "公式过长（最多 %(n)s 个字符）。"
@@ -1742,6 +1823,17 @@ msgstr "类型已更改。"
 
 msgid "Liste"
 msgstr "列表"
+
+msgid "Diese Vorlage gibt es nicht."
+msgstr "该模板不存在。"
+
+#, python-format
+msgid "%(template)s: %(n)s neu angelegt."
+msgstr "%(template)s：已新建 %(n)s 项。"
+
+#, python-format
+msgid "Angepasst und deshalb nicht aktualisiert: %(items)s."
+msgstr "已被修改，因此未更新：%(items)s。"
 
 msgid ""
 "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
@@ -2355,6 +2447,18 @@ msgstr "备份和恢复所有数据"
 
 msgid "Anmeldungen, angezeigte Passwörter, Ausdrucke"
 msgstr "登录、显示过的密码、打印记录"
+
+msgid "Vorlage hinzufügen …"
+msgstr "添加模板…"
+
+msgid "Neue Tabelle"
+msgstr "新建表格"
+
+msgid "Noch keine Tabellen."
+msgstr "还没有表格。"
+
+msgid "Legen Sie eine eigene an oder beginnen Sie mit einer Vorlage."
+msgstr "请自行创建，或从模板开始。"
 
 msgid "Zwei-Faktor einrichten"
 msgstr "设置双重验证"
@@ -3384,6 +3488,41 @@ msgid_plural ""
 "gelöscht."
 msgstr[0] "已删除的记录会在此保留 %(days)s 天，之后将被永久删除。"
 
+msgid "Vorlagen"
+msgstr "模板"
+
+msgid "Vorlage hinzufügen"
+msgstr "添加模板"
+
+msgid ""
+"Eine Vorlage legt fertige Tabellen mit Feldern, Datensatzseiten, "
+"Druckvorlagen und Ansichten an. Danach lässt sich alles anpassen; eine "
+"neuere Version ergänzt nur, was fehlt."
+msgstr "模板会创建现成的表格，包括字段、记录页面、打印模板和视图。之后一切均可修改；新版本只会补充缺少的内容。"
+
+#, python-format
+msgid "Version %(n)s angewendet"
+msgstr "已应用版本 %(n)s"
+
+msgid "Braucht ein Modul, das diese Datenbank nicht nutzt."
+msgstr "需要本数据库未使用的模块。"
+
+msgid "Mit Beispieldaten"
+msgstr "包含示例数据"
+
+msgid "Anwenden"
+msgstr "应用"
+
+#, python-format
+msgid "Auf Version %(n)s ergänzen"
+msgstr "补充到版本 %(n)s"
+
+msgid "Erneut anwenden (ergänzt Fehlendes)"
+msgstr "再次应用（补充缺少的内容）"
+
+msgid "Keine Vorlagen vorhanden."
+msgstr "没有可用的模板。"
+
 msgid "Zeigt auf"
 msgstr "指向"
 
@@ -3443,9 +3582,6 @@ msgstr "还没有自定义表格。"
 
 msgid "Legen Sie rechts die erste an."
 msgstr "请在右侧创建第一个。"
-
-msgid "Neue Tabelle"
-msgstr "新建表格"
 
 msgid "z. B. Bücher"
 msgstr "例如：图书"
@@ -3564,6 +3700,9 @@ msgstr "设备导出为 Excel"
 
 msgid "Geräte als CSV"
 msgstr "设备导出为 CSV"
+
+msgid "Eigene Tabellen exportieren Sie in ihrer Liste."
+msgstr "自定义表格请在其列表中导出。"
 
 msgid "Passwörter sind in diesen Exporten nie enthalten."
 msgstr "这些导出文件中从不包含密码。"

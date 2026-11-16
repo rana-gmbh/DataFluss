@@ -268,7 +268,33 @@ def main():
         check("new: first account must set up 2FA", (status, location), (302, "/anmelden/zwei-faktor/einrichten/"))
         sidecar.close()
 
-        # 4. A new database that leaves out the premium module (the start screen's wizard)
+        # 4. The wizard's card "Leer": own tables only, no people (tables/blueprints.py, SchoolSettings.modules_off)
+        empty_dir = work / "empty"
+        empty_dir.mkdir()
+        sidecar = Sidecar(command, empty_dir, new_keys(), task="demo")
+        logins = {row["username"]: row["password"] for row in sidecar.run_task("demo", {"modules": [], "without": ["schulverwaltung"]})["logins"]}
+        sidecar.wait_ready()
+        check("empty: one IT account", list(logins), ["it"])
+        check("empty: IT signs in", sidecar.sign_in("it", logins["it"]), (302, "/"))
+        status, page, _ = sidecar.request("GET", "/")
+        check("empty: the start page of own tables", (status, "Noch keine Tabellen".encode() in page, b'href="/schueler/"' in page), (200, True, False))
+        check("empty: no pupils", sidecar.request("GET", "/schueler/")[0], 403)
+        sidecar.close()
+
+        # 5. A database with Schulverwaltung and the library template, with its sample records
+        library_dir = work / "library"
+        library_dir.mkdir()
+        sidecar = Sidecar(command, library_dir, new_keys(), task="demo")
+        logins = {row["username"]: row["password"] for row in sidecar.run_task("demo", {"modules": [], "templates": ["bibliothek"]})["logins"]}
+        sidecar.wait_ready()
+        check("library: IT signs in", sidecar.sign_in("it", logins["it"]), (302, "/"))
+        status, page, _ = sidecar.request("GET", "/tabellen/buecher/")
+        check("library: the books' list", status, 200)
+        status, page, _ = sidecar.request("GET", "/api/tabellen/buecher/")
+        check("library: sample books", (status, b"Momo" in page), (200, True))
+        sidecar.close()
+
+        # 6. A new database that leaves out the premium module (the start screen's wizard)
         if premium_installed():
             plain_dir = work / "plain"
             plain_dir.mkdir()

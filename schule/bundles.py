@@ -69,13 +69,20 @@ def _verify_signature(manifest_bytes, signature):
 def _check_manifest(manifest):
     if manifest.get("format") != FORMAT:
         raise BundleError("unknown bundle format")
-    for key in ("id", "version", "apps", "files"):
+    for key in ("id", "version", "files"):
         if not manifest.get(key):
             raise BundleError(f"the manifest lacks {key}")
+    templates = manifest.get("templates") or []
+    if not isinstance(manifest.get("apps"), list) or not (manifest["apps"] or templates):
+        raise BundleError("the manifest lacks apps")  # a module brings apps, templates (tables/blueprints.py) or both
+    roots = set(manifest["apps"]) | ({"templates"} if templates else set())
     for path in manifest["files"]:
         parts = Path(path).parts
-        if Path(path).is_absolute() or ".." in parts or parts[0] not in manifest["apps"]:
+        if Path(path).is_absolute() or ".." in parts or parts[0] not in roots:
             raise BundleError(f"a file outside the module's apps: {path}")
+    for path in templates:
+        if path not in manifest["files"] or not path.endswith(".json"):
+            raise BundleError(f"a template the bundle does not carry: {path}")
 
 
 def read_archive(archive):

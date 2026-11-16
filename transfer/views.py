@@ -49,7 +49,10 @@ def home(request):
         else:
             session.target_label = target.label
             session.undo_blocker = target.undo_blocker(session) if target.may_import(request.user) and session.status == ImportSession.DONE else ""
+    from core import modules
+
     return render(request, "transfer/home.html", {"sessions": sessions, "can_import": can_import, "entities": targets.choices(request.user),
+                                                  "basic": "schulverwaltung" in modules.active(),
                                                   "chosen": request.GET.get("bereich", "")})
 
 

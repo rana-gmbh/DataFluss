@@ -36,7 +36,14 @@ CAPABILITIES = {
     "admin.update": {IT},
     "admin.backup": {IT},
     "tables.design": {IT},  # own tables: tables, fields, rights; records follow each table's rights
+    "home.view": {IT, SEK, SL},  # the start page; module roles have their own (core/modules.py "home")
 }
+
+# Capabilities of the basic module Schulverwaltung: a database that does not use it (SchoolSettings.modules_off)
+# has no people, devices or logins, so nobody has these there (has_capability below).
+for _capability in ("person.view", "person.edit", "person.archive", "class.manage", "device.view", "device.edit",
+                    "vault.view", "vault.reveal", "vault.edit", "vault.export", "admin.fields", "admin.platforms"):
+    CAPABILITY_MODULES.setdefault(_capability, "schulverwaltung")
 
 ROLE_SUMMARY = [
     (IT, _("Voller Zugriff, inklusive Masken, Vorlagen, Benutzer und Export von Passwörtern.")),

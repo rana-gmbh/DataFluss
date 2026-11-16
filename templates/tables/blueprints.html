@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Vorlagen" %}{% endblock %}
+{% block content %}
+<a class="muted text-[13px] hover:underline" href="{% url 'table_list' %}">{% translate "Tabellen" %}</a>
+<h1 class="page-title mb-1 mt-1">{% translate "Vorlage hinzufügen" %}</h1>
+<p class="muted text-[13px] mb-4">{% translate "Eine Vorlage legt fertige Tabellen mit Feldern, Datensatzseiten, Druckvorlagen und Ansichten an. Danach lässt sich alles anpassen; eine neuere Version ergänzt nur, was fehlt." %}</p>
+<div class="grid md:grid-cols-2 gap-4 items-start">
+{% for row in rows %}<form method="post" class="surface p-5 space-y-2">{% csrf_token %}<input type="hidden" name="template" value="{{ row.id }}">
+  <div class="flex items-center gap-2"><h2 class="font-semibold flex-1">{{ row.title }}</h2>{% if row.installed %}<span class="badge badge-accent">{% blocktranslate trimmed with n=row.installed %}Version {{ n }} angewendet{% endblocktranslate %}</span>{% endif %}</div>
+  <p class="text-[13px]">{{ row.description }}</p>
+  <p class="muted text-[12px]">{% translate "Tabellen" %}: {{ row.tables|join:", " }}</p>
+  {% if not row.usable %}<p class="muted text-[12px]">{% translate "Braucht ein Modul, das diese Datenbank nicht nutzt." %}</p>
+  {% else %}
+  {% if row.has_demo and not row.installed %}<label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="demo" class="accent-[var(--accent)]">{% translate "Mit Beispieldaten" %}</label>{% endif %}
+  {% if not row.installed %}<button class="btn btn-primary">{% translate "Anwenden" %}</button>
+  {% elif row.installed < row.version %}<button class="btn btn-primary">{% blocktranslate trimmed with n=row.version %}Auf Version {{ n }} ergänzen{% endblocktranslate %}</button>
+  {% else %}<button class="btn">{% translate "Erneut anwenden (ergänzt Fehlendes)" %}</button>{% endif %}
+  {% endif %}
+</form>{% empty %}<div class="surface p-6 muted text-[13px]">{% translate "Keine Vorlagen vorhanden." %}</div>{% endfor %}
+</div>
+{% endblock %}

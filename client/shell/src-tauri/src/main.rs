@@ -609,9 +609,9 @@ async fn create_with_task(app: &AppHandle, name: &str, kind: &str, task: &str, d
 }
 
 #[tauri::command]
-async fn create_database(app: AppHandle, window: WebviewWindow, name: String, school: String, username: String, password: String, modules: Option<Vec<String>>) -> Result<String, String> {
+async fn create_database(app: AppHandle, window: WebviewWindow, name: String, school: String, username: String, password: String, modules: Option<Vec<String>>, without: Option<Vec<String>>, templates: Option<Vec<String>>) -> Result<String, String> {
     from_launcher(&window)?;
-    let data = json!({"school": school, "username": username, "password": password, "modules": modules});
+    let data = json!({"school": school, "username": username, "password": password, "modules": modules, "without": without, "templates": templates});
     let (node, _) = create_with_task(&app, &name, "local", "create", data).await?;
     Ok(node.id)
 }
@@ -619,11 +619,12 @@ async fn create_database(app: AppHandle, window: WebviewWindow, name: String, sc
 /// A demo with the optional modules picked in the wizard; without a pick (the start screen's
 /// "Mit erfundenen Daten ausprobieren"), with the basic modules only.
 #[tauri::command]
-async fn create_demo(app: AppHandle, window: WebviewWindow, name: Option<String>, modules: Option<Vec<String>>) -> Result<Value, String> {
+async fn create_demo(app: AppHandle, window: WebviewWindow, name: Option<String>, modules: Option<Vec<String>>, without: Option<Vec<String>>, templates: Option<Vec<String>>) -> Result<Value, String> {
     from_launcher(&window)?;
     let name = name.filter(|n| !n.trim().is_empty()).unwrap_or_else(|| "Demo".into());
     let modules = modules.unwrap_or_default();
-    let (node, result) = create_with_task(&app, &name, "demo", "demo", json!({"modules": modules})).await?;
+    let data = json!({"modules": modules, "without": without.unwrap_or_default(), "templates": templates.unwrap_or_default()});
+    let (node, result) = create_with_task(&app, &name, "demo", "demo", data).await?;
     Ok(json!({"id": node.id, "logins": result["logins"]}))
 }
 
@@ -656,6 +657,50 @@ fn available_modules(app: AppHandle, window: WebviewWindow) -> Result<Vec<Value>
             if let Ok(text) = std::fs::read_to_string(manifest) {
                 let parsed: Value = serde_json::from_str(&text).unwrap_or_default();
                 add(parsed["id"].as_str().unwrap_or_default(), parsed["title"].as_str().unwrap_or_default());
+            }
+        }
+    }
+    Ok(found)
+}
+
+/// The module templates a new database can start with (tables/blueprints.py): those of the build (modules.json,
+/// written by sidecar.spec) and those in the bundles of this version. The sidecar checks them again.
+#[tauri::command]
+fn available_templates(app: AppHandle, window: WebviewWindow) -> Result<Vec<Value>, String> {
+    from_launcher(&window)?;
+    let mut found: Vec<Value> = Vec::new();
+    let mut add = |template: Value| {
+        let id = template["id"].as_str().unwrap_or_default().to_string();
+        if !id.is_empty() && !found.iter().any(|t| t["id"] == id.as_str()) {
+            found.push(json!({"id": id, "title": template["title"], "titles": template["titles"], "description": template["description"],
+                              "descriptions": template["descriptions"], "requires": template["requires"]}));
+        }
+    };
+    if let Some(dir) = sidecar_program(&app)?.parent() {
+        for file in [dir.join("_internal").join("modules.json"), dir.join("modules.json")] {
+            if let Ok(text) = std::fs::read_to_string(&file) {
+                let parsed: Value = serde_json::from_str(&text).unwrap_or_default();
+                for template in parsed["templates"].as_array().cloned().unwrap_or_default() {
+                    add(template);
+                }
+                break;
+            }
+        }
+    }
+    let version = app.package_info().version.to_string();
+    if let Ok(entries) = std::fs::read_dir(databases::modules_root(&app)?) {
+        for entry in entries.flatten() {
+            let folder = entry.path().join(&version);
+            let Ok(text) = std::fs::read_to_string(folder.join("manifest.json")) else { continue };
+            let manifest: Value = serde_json::from_str(&text).unwrap_or_default();
+            for name in manifest["templates"].as_array().cloned().unwrap_or_default() {
+                let Some(name) = name.as_str() else { continue };
+                if name.contains("..") {
+                    continue;
+                }
+                if let Ok(text) = std::fs::read_to_string(folder.join(name)) {
+                    add(serde_json::from_str(&text).unwrap_or_default());
+                }
             }
         }
     }
@@ -975,6 +1020,7 @@ fn main() {
             pick_backup,
             install_module,
             available_modules,
+            available_templates,
             welcome_seen,
             welcome_done,
             open_db,

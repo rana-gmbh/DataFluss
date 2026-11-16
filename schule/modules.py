@@ -21,7 +21,10 @@ MODULES = {
     "platform": ("core", "vault", "masks", "prints", "transfer", "archive", "tables", "sync"),
     "schulverwaltung": ("people", "devices"),
 }
-REQUIRED = ("platform", "schulverwaltung")
+REQUIRED = ("platform", "schulverwaltung")  # always loaded; a database may still switch Schulverwaltung off (core/modules.py)
+# Module templates (tables/blueprints.py) a module brings: module -> paths of JSON files. A module may bring
+# only templates ("apps": []): a basic module without any Python.
+TEMPLATE_FILES = {}
 # Names shown when a database or backup needs a module that is not loaded.
 TITLES = {
     "platform": "DataFluss",
@@ -59,6 +62,7 @@ def _load_sources():
             sys.path.append(str(folder))
         MODULES[module["id"]] = tuple(module["apps"])
         TITLES[module["id"]] = module.get("title") or module["id"]
+        TEMPLATE_FILES[module["id"]] = [str(folder / name) for name in module.get("templates", [])]
         ORDER[ORDER.index("sync"):ORDER.index("sync")] = [app for app in module["apps"] if app not in ORDER]
 
 
@@ -70,6 +74,7 @@ def _load_bundles():
         if module_id not in MODULES:
             MODULES[module_id] = tuple(manifest["apps"])
             TITLES[module_id] = manifest.get("title") or module_id
+            TEMPLATE_FILES[module_id] = [str(info["path"] / name) for name in manifest.get("templates", [])]
             ORDER[ORDER.index("sync"):ORDER.index("sync")] = [app for app in manifest["apps"] if app not in ORDER]
 
 

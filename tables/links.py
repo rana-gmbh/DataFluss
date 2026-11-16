@@ -29,7 +29,11 @@ def link_id(record_id, field_key, target_id=None):
 
 def target_choices():
     """What a link field may point to, for the field dialog: [(value, label)]."""
+    from core import modules
+
     choices = [(f"table:{t.key}", t.display_name) for t in Table.objects.filter(archived=False)]
+    if "schulverwaltung" not in modules.active():
+        return choices
     return choices + [(Link.PUPIL, _("Schüler")), (Link.STAFF, _("Personal")), (Link.ASSET, _("Geräte"))]
 
 

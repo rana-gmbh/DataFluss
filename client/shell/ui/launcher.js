@@ -263,9 +263,41 @@ async function offeredModules() {
 }
 
 let chosenModules = null;
+let chosenStart = { without: [], templates: [] }; // the card "Leer" and the module templates picked
+let templates = null; // module templates this installation has (tables/blueprints.py): [{id, title, requires, …}]
+
+async function offeredTemplates() {
+  if (templates === null) {
+    try { templates = await invoke("available_templates"); } catch { templates = []; }
+  }
+  return templates;
+}
+
+const language = () => (navigator.language || "de").toLowerCase().startsWith("zh") ? (/hant|tw|hk/i.test(navigator.language) ? "zh-hant" : "zh-hans") : navigator.language.slice(0, 2).toLowerCase();
+const pick = (base, names) => (names && names[language()]) || base || "";
+
+function renderTemplates(box, start) {
+  box.querySelectorAll("label").forEach((label) => label.remove());
+  const usable = (templates || []).filter((t) => !(t.requires || []).includes("schulverwaltung") || start === "schulverwaltung");
+  for (const template of usable) {
+    const label = document.createElement("label");
+    label.className = "check";
+    const input = Object.assign(document.createElement("input"), { type: "checkbox", name: "template", value: template.id });
+    const text = document.createElement("span");
+    text.append(Object.assign(document.createElement("strong"), { textContent: pick(template.title, template.titles) }));
+    const description = pick(template.description, template.descriptions);
+    if (description) {
+      text.append(document.createElement("br"), Object.assign(document.createElement("span"), { className: "muted small", textContent: description }));
+    }
+    label.append(input, text);
+    box.append(label);
+  }
+  box.hidden = usable.length === 0;
+}
 
 async function startCreate() {
   const modules = await offeredModules();
+  await offeredTemplates();
   openSheet("Neue Datenbank", {
     template: "#t-start",
     actions: [
@@ -284,16 +316,28 @@ async function startCreate() {
     box.append(label);
   }
   box.hidden = modules.length === 0;
+  const templateBox = $("#template-choices");
+  const start = () => sheet.querySelector('[name="start"]:checked').value;
+  renderTemplates(templateBox, start());
+  sheet.querySelectorAll('[name="start"]').forEach((radio) => radio.addEventListener("change", () => {
+    box.hidden = start() !== "schulverwaltung" || modules.length === 0; // optional modules build on Schulverwaltung
+    renderTemplates(templateBox, start());
+  }));
 }
 
 function afterStart() {
-  chosenModules = [...sheet.querySelectorAll('[name="module"]:checked')].map((input) => input.value);
+  const start = sheet.querySelector('[name="start"]:checked').value;
+  chosenModules = start === "schulverwaltung" ? [...sheet.querySelectorAll('[name="module"]:checked')].map((input) => input.value) : [];
+  chosenStart = {
+    without: start === "leer" ? ["schulverwaltung"] : [],
+    templates: [...sheet.querySelectorAll('[name="template"]:checked')].map((input) => input.value),
+  };
   if (field("demo").checked) {
     openSheet("Neue Datenbank mit Beispieldaten", {
       template: "#t-demo-name",
       actions: [
         { label: "Zurück", run: startCreate },
-        { label: "Anlegen", kind: "primary", submit: true, run: () => createDemo(field("name").value.trim(), chosenModules) },
+        { label: "Anlegen", kind: "primary", submit: true, run: () => createDemo(field("name").value.trim(), chosenModules, chosenStart) },
       ],
     });
     return;
@@ -305,6 +349,12 @@ function afterStart() {
       { label: "Anlegen", kind: "primary", submit: true, run: create },
     ],
   });
+  if (chosenStart.without.length) { // not necessarily a school
+    const school = field("school");
+    school.parentElement.firstChild.textContent = "Name (Schule, Verein, Firma …)";
+    school.placeholder = "z. B. Bibliothek am Markt";
+    sheet.querySelector("p.muted").textContent = "Noch ohne Tabellen, mit dem ersten IT-Konto. Beim ersten Anmelden wird die Zwei-Faktor-Anmeldung eingerichtet.";
+  }
 }
 
 async function create() {
@@ -316,7 +366,7 @@ async function create() {
   if (password.length < 12) return showError("Das Passwort braucht mindestens 12 Zeichen.");
   if (password !== field("password2").value) return showError("Die beiden Passwörter stimmen nicht überein.");
   try {
-    const id = await busy("Datenbank wird angelegt …", () => invoke("create_database", { name, school, username, password, modules: chosenModules }));
+    const id = await busy("Datenbank wird angelegt …", () => invoke("create_database", { name, school, username, password, modules: chosenModules, ...chosenStart }));
     sheet.close();
     await openDatabase(id);
   } catch (error) {
@@ -407,9 +457,9 @@ async function startDemo() {
   });
 }
 
-async function createDemo(name = null, modules = null) {
+async function createDemo(name = null, modules = null, start = { without: [], templates: [] }) {
   try {
-    const result = await busy("Demo wird angelegt …", () => invoke("create_demo", { name, modules }));
+    const result = await busy("Demo wird angelegt …", () => invoke("create_demo", { name, modules, ...start }));
     await refresh();
     showLoginsSheet(result.id, result.logins);
   } catch (error) {

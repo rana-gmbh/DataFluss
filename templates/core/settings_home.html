@@ -3,7 +3,7 @@
 {% block content %}
 <h1 class="page-title mb-5">{% translate "Einstellungen" %}</h1>
 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-{% if request.user|can:'admin.masks' %}
+{% if request.user|can:'admin.masks' and basic %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'mask_list' %}">{% icon 'layout' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Masken" %}</h2><p class="muted text-[13px]">{% translate "Eingabemasken per Drag & Drop gestalten" %}</p></a>
 {% endif %}{% if request.user|can:'admin.fields' %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'field_list' %}">{% icon 'rows' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Felder" %}</h2><p class="muted text-[13px]">{% translate "Eigene Felder anlegen und verwalten" %}</p></a>

@@ -48,7 +48,7 @@ class RegistryTests(AppTestCase):
         self.assertEqual(roles[:3], ["it", "sekretariat", "schulleitung"])
         self.assertEqual(sources[:6], ["pupil", "staff", "guardian", "asset", "case", "class"])
         if not PREMIUM:
-            self.assertEqual((len(roles), SEARCHERS, len(sources)), (3, ["person.view"], 6))
+            self.assertEqual((len(roles), SEARCHERS, len(sources)), (3, ["person.view", "home.view"], 6))
 
     def test_pages_render(self):
         self.login(self.it)

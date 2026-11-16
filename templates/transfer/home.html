@@ -11,7 +11,7 @@
   <button class="btn btn-primary">{% translate "Weiter zur Zuordnung" %}</button></form>{% endif %}
 <section class="surface p-5"><h2 class="font-semibold flex items-center gap-2 mb-1">{% icon 'download' %}{% translate "Exportieren" %}</h2>
   <p class="muted text-[13px] mb-3">{% translate "In den Listen exportiert „Excel“ oder „CSV“ genau die aktuelle Ansicht: Spalten, Filter und Reihenfolge." %}</p>
-  <div class="flex flex-wrap gap-2"><a class="btn" href="{% url 'pupils' %}">{% translate "Schüler" %}</a><a class="btn" href="{% url 'staff' %}">{% translate "Personal" %}</a><a class="btn" href="{% url 'export_assets' %}?format=xlsx" download>{% translate "Geräte als Excel" %}</a><a class="btn" href="{% url 'export_assets' %}?format=csv" download>{% translate "Geräte als CSV" %}</a></div>
+  <div class="flex flex-wrap gap-2">{% if basic %}<a class="btn" href="{% url 'pupils' %}">{% translate "Schüler" %}</a><a class="btn" href="{% url 'staff' %}">{% translate "Personal" %}</a><a class="btn" href="{% url 'export_assets' %}?format=xlsx" download>{% translate "Geräte als Excel" %}</a><a class="btn" href="{% url 'export_assets' %}?format=csv" download>{% translate "Geräte als CSV" %}</a>{% else %}<p class="muted text-[13px]">{% translate "Eigene Tabellen exportieren Sie in ihrer Liste." %}</p>{% endif %}</div>
   <p class="muted text-[12px] mt-3">{% translate "Passwörter sind in diesen Exporten nie enthalten." %}</p></section>
 </div>
 <section class="surface overflow-hidden mt-4"><h2 class="section-title px-4 py-3 border-b" style="border-color: var(--line)">{% translate "Letzte Importe" %}</h2><table class="data-table"><tbody>

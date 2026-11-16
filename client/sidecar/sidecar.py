@@ -128,6 +128,10 @@ def _choose_modules(data):
     from core import modules
     from core.models import SchoolSettings
 
+    without = [name for name in (data.get("without") or []) if name == "schulverwaltung"]  # the card "Leer"
+    if without:
+        SchoolSettings.load()
+        SchoolSettings.objects.filter(pk=1).update(modules_off=without)
     if data.get("modules") is None:
         return
     offered = {module_id for module_id, _title in modules.optional_modules()}
@@ -157,8 +161,28 @@ def _task_create(data, progress, db_dir):
     _choose_modules(data)
     call_command("setup_school", verbosity=0)
     SchoolSettings.objects.filter(pk=1).update(name=school, short_name=(data.get("short_name") or school)[:60])
-    User.objects.create_user(username, password=password, role=Role.IT)
+    user = User.objects.create_user(username, password=password, role=Role.IT)
+    _apply_templates(data, progress, user, demo=False)
     return {}
+
+
+def _apply_templates(data, progress, user, demo):
+    """The module templates chosen in the wizard (tables/blueprints.py), with their sample records for a demo."""
+    from tables import blueprints
+
+    wanted = [t for t in (data.get("templates") or []) if isinstance(t, str)]
+    if not wanted:
+        return
+    found = blueprints.available()
+    for template_id in wanted:
+        template = found.get(template_id)
+        if template is None:
+            raise TaskError(f"Diese Vorlage fehlt in dieser DataFluss-Version: {template_id}")
+        progress("Vorlage wird angewendet")
+        try:
+            blueprints.apply(template, user, demo=demo)
+        except blueprints.BlueprintError as exc:
+            raise TaskError(str(exc))
 
 
 def _task_demo(data, progress, db_dir):
@@ -168,12 +192,25 @@ def _task_demo(data, progress, db_dir):
 
     from core.models import SchoolSettings
 
-    progress("Erfundene Personen werden angelegt")
+    progress("Beispieldaten werden angelegt")
     _choose_modules(data)
     call_command("setup_school", verbosity=0)
+    SchoolSettings.objects.filter(pk=1).update(require_2fa=False)
+    if "schulverwaltung" in (data.get("without") or []):
+        # No invented people without Schulverwaltung: one IT account, and the templates' sample records.
+        import secrets
+
+        from core.models import Role, User
+
+        password = "Demo-" + secrets.token_urlsafe(9)  # as seed_demo makes them
+        user = User.objects.create_user("it", password=password, role=Role.IT)
+        _apply_templates(data, progress, user, demo=True)
+        return {"logins": [{"username": "it", "password": password}]}
     settings.BASE_DIR = db_dir  # seed_demo writes the logins to BASE_DIR/.secrets
     call_command("seed_demo", verbosity=0)
-    SchoolSettings.objects.filter(pk=1).update(require_2fa=False)
+    from core.models import Role, User
+
+    _apply_templates(data, progress, User.objects.filter(role=Role.IT).first(), demo=True)
     logins = (db_dir / ".secrets" / "demo-logins.txt").read_text().splitlines()
     return {"logins": [dict(zip(("username", "password"), line.split("\t", 1))) for line in logins if "\t" in line]}
 

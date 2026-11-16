@@ -7,10 +7,10 @@ from . import modules
 from .models import SchoolSettings
 
 # Capabilities that open the search. Modules add theirs (core/modules.py).
-SEARCHERS = ["person.view"]
+SEARCHERS = ["person.view", "home.view"]
 # The menu. Modules add their sections (core/modules.py add_nav_section).
 NAV = [
-    (_("Übersicht"), [(_("Start"), "dashboard", "home", "person.view")]),
+    (_("Übersicht"), [(_("Start"), "dashboard", "home", "home.view")]),
     (
         _("Personen"),
         [

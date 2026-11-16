@@ -13,7 +13,7 @@ from core import audit, fieldtypes as ft
 from core.permissions import require
 from masks import i18n
 
-from . import formula, links, masks as table_masks, services
+from . import blueprints, formula, links, masks as table_masks, services
 from .models import EDIT, NONE, READ, Field, Record, Table
 
 ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench"]
@@ -225,3 +225,31 @@ def table_formula_check(request, key):
         "result": labels.get(result, _("Liste") if result.startswith("list") else _("Text")),
         "rows": formula.preview(table, stored, user=request.user),
     })
+
+
+@require("tables.design")
+def table_blueprints(request):
+    """Verwaltung → Tabellen → Vorlage hinzufügen: the templates of the platform and of the modules in use."""
+    found = blueprints.available()
+    if request.method == "POST":
+        template = found.get(request.POST.get("template", ""))
+        if template is None:
+            messages.error(request, _("Diese Vorlage gibt es nicht."))
+            return redirect("table_blueprints")
+        try:
+            report = blueprints.apply(template, request.user, demo=bool(request.POST.get("demo")), request=request)
+        except blueprints.BlueprintError as exc:
+            messages.error(request, str(exc))
+            return redirect("table_blueprints")
+        text = _("%(template)s: %(n)s neu angelegt.") % {"template": blueprints.title(template), "n": len(report["created"])}
+        if report["changed"]:
+            text += " " + _("Angepasst und deshalb nicht aktualisiert: %(items)s.") % {"items": ", ".join(report["changed"])}
+        messages.success(request, text)
+        return redirect("table_list")
+    rows = []
+    for template in sorted(found.values(), key=lambda t: blueprints.title(t)):
+        installed = blueprints.installed_version(template["id"])
+        rows.append({"id": template["id"], "title": blueprints.title(template), "description": blueprints.description(template),
+                     "version": template["version"], "installed": installed, "usable": blueprints.usable(template),
+                     "tables": [i18n.pick(t["name"], t.get("names")) for t in template["tables"]], "has_demo": bool(template.get("demo"))})
+    return render(request, "tables/blueprints.html", {"rows": rows, "active_nav": "settings_home"})

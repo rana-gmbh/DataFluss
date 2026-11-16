@@ -4,6 +4,7 @@ from . import views, views_records as records
 
 urlpatterns = [
     path("einstellungen/tabellen/", views.table_list, name="table_list"),
+    path("einstellungen/tabellen/vorlagen/", views.table_blueprints, name="table_blueprints"),
     path("einstellungen/tabellen/<slug:key>/", views.table_settings, name="table_settings"),
     path("einstellungen/tabellen/<slug:key>/rechte/", views.table_rights, name="table_rights"),
     path("einstellungen/tabellen/<slug:key>/seite/", views.table_mask, name="table_mask"),

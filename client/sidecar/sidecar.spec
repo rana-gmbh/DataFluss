@@ -49,9 +49,20 @@ datas = [
 # The optional modules this build carries, for the start screen's new-database wizard (main.rs available_modules).
 _modules_json = Path(SPECPATH).parent / "build" / "modules.json"
 _modules_json.parent.mkdir(parents=True, exist_ok=True)
+def _template_list():
+    """The module templates this build carries (tables/blueprints.py), for the wizard's choice."""
+    found = []
+    for path in [*sorted((ROOT / "tables" / "library").glob("*.json")), *(Path(p) for m in modules.selected() for p in modules.TEMPLATE_FILES.get(m, []))]:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        found.append({key: data.get(key) for key in ("id", "title", "titles", "description", "descriptions", "requires")})
+    return found
+
+
 _modules_json.write_text(json.dumps({"optional": [{"id": name, "title": modules.TITLES.get(name, name)}
-                                                  for name in modules.selected() if name not in modules.REQUIRED]}))
+                                                  for name in modules.selected() if name not in modules.REQUIRED],
+                                     "templates": _template_list()}))
 datas.append((str(_modules_json), "."))
+datas.append((str(ROOT / "tables" / "library"), "tables/library"))  # the platform's module templates
 # Templates inside an app (a module's own), where Django's app template loader looks for them.
 datas += [(str(ROOT / app / "templates"), f"{app}/templates") for app in APPS if (ROOT / app / "templates").is_dir()]
 WINDOWS = sys.platform == "win32"

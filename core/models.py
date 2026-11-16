@@ -263,6 +263,9 @@ class SchoolSettings(models.Model):
     languages = models.JSONField("Sprachen", default=list, blank=True, db_default=[])
     # The optional modules this database uses (core.modules.active). None: all that are loaded, as before.
     modules = models.JSONField("Module", null=True, blank=True, default=None)
+    # Always-loaded modules this database does not use: ["schulverwaltung"] for a database of own tables only
+    # (the start screen's card "Leer"). Empty in every database made before.
+    modules_off = models.JSONField(default=list, blank=True)
 
     class Meta:
         verbose_name = "Schuleinstellungen"

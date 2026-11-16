@@ -1,0 +1,74 @@
+{
+  "format": 1,
+  "id": "bibliothek",
+  "version": 1,
+  "title": "Bibliothek",
+  "titles": {"en": "Library", "zh-hans": "图书馆", "zh-hant": "圖書館"},
+  "description": "Bücher und ihre Ausleihen an Schülerinnen und Schüler, mit Ausleihschein und einer Liste der überfälligen Bücher.",
+  "descriptions": {"en": "Books and their loans to pupils, with a loan slip and a list of overdue books.", "zh-hans": "图书及其借给学生的记录，附借阅单和逾期图书列表。", "zh-hant": "圖書及其借給學生的記錄，附借閱單和逾期圖書清單。"},
+  "requires": ["schulverwaltung"],
+  "tables": [
+    {
+      "key": "buecher", "name": "Bücher", "names": {"en": "Books", "zh-hans": "图书", "zh-hant": "圖書"}, "icon": "book",
+      "description": "Der Bestand der Bibliothek.", "title_field": "f_titel", "rights": {"sekretariat": "edit", "schulleitung": "read"},
+      "fields": [
+        {"key": "f_titel", "label": "Titel", "labels": {"en": "Title", "zh-hans": "书名", "zh-hant": "書名"}, "type": "text", "required": true},
+        {"key": "f_autor", "label": "Autor", "labels": {"en": "Author", "zh-hans": "作者", "zh-hant": "作者"}, "type": "text"},
+        {"key": "f_isbn", "label": "ISBN", "type": "text", "unique": true, "in_grid": false},
+        {"key": "f_signatur", "label": "Signatur", "labels": {"en": "Shelf mark", "zh-hans": "索书号", "zh-hant": "索書號"}, "type": "text"},
+        {"key": "f_gattung", "label": "Gattung", "labels": {"en": "Genre", "zh-hans": "类别", "zh-hant": "類別"}, "type": "choice",
+         "options": [{"value": "Roman", "labels": {"en": "Novel", "zh-hans": "小说", "zh-hant": "小說"}}, {"value": "Sachbuch", "labels": {"en": "Non-fiction", "zh-hans": "非虚构", "zh-hant": "非虛構"}},
+                     {"value": "Lyrik", "labels": {"en": "Poetry", "zh-hans": "诗歌", "zh-hant": "詩歌"}}, {"value": "Comic", "labels": {"en": "Comic", "zh-hans": "漫画", "zh-hant": "漫畫"}},
+                     {"value": "Nachschlagewerk", "labels": {"en": "Reference", "zh-hans": "工具书", "zh-hant": "工具書"}}]},
+        {"key": "f_ausleihen_gesamt", "label": "Ausleihen gesamt", "labels": {"en": "Loans in total", "zh-hans": "借阅总数", "zh-hant": "借閱總數"}, "type": "formula",
+         "config": {"expression": "count({@ausleihen.f_buch})"}}
+      ]
+    },
+    {
+      "key": "ausleihen", "name": "Ausleihen", "names": {"en": "Loans", "zh-hans": "借阅", "zh-hant": "借閱"}, "icon": "clipboard",
+      "description": "Wer welches Buch wann ausgeliehen und zurückgegeben hat.", "title_field": "f_ausgabe", "rights": {"sekretariat": "edit", "schulleitung": "read"},
+      "fields": [
+        {"key": "f_ausgabe", "label": "Ausgegeben am", "labels": {"en": "Lent on", "zh-hans": "借出日期", "zh-hant": "借出日期"}, "type": "date", "required": true},
+        {"key": "f_buch", "label": "Buch", "labels": {"en": "Book", "zh-hans": "图书", "zh-hant": "圖書"}, "type": "link", "config": {"target": "record", "table": "buecher", "reverse": "Ausleihen"}},
+        {"key": "f_schueler", "label": "Schüler", "labels": {"en": "Pupil", "zh-hans": "学生", "zh-hant": "學生"}, "type": "link", "config": {"target": "pupil", "reverse": "Bibliothek"}},
+        {"key": "f_faellig", "label": "Zurück bis", "labels": {"en": "Due", "zh-hans": "应还日期", "zh-hant": "應還日期"}, "type": "date"},
+        {"key": "f_rueckgabe", "label": "Zurückgegeben am", "labels": {"en": "Returned on", "zh-hans": "归还日期", "zh-hant": "歸還日期"}, "type": "date"},
+        {"key": "f_ueberfaellig", "label": "Überfällig", "labels": {"en": "Overdue", "zh-hans": "逾期", "zh-hant": "逾期"}, "type": "formula",
+         "config": {"expression": "isempty({f_rueckgabe}) and {f_faellig} < today()"}},
+        {"key": "f_notiz", "label": "Notiz", "labels": {"en": "Note", "zh-hans": "备注", "zh-hant": "備註"}, "type": "textarea", "in_grid": false}
+      ]
+    }
+  ],
+  "masks": [
+    {"table": "ausleihen", "name": "Ausleihe", "names": {"en": "Loan", "zh-hans": "借阅", "zh-hant": "借閱"}, "tree": {"tabs": [{"id": "t1", "title": "Ausleihe", "titles": {"en": "Loan", "zh-hans": "借阅", "zh-hant": "借閱"}, "sections": [
+      {"id": "s1", "title": "Was und wer", "titles": {"en": "What and who", "zh-hans": "图书与学生", "zh-hant": "圖書與學生"}, "items": [{"type": "field", "field": "f_buch", "w": 6}, {"type": "field", "field": "f_schueler", "w": 6}]},
+      {"id": "s2", "title": "Termine", "titles": {"en": "Dates", "zh-hans": "日期", "zh-hant": "日期"}, "items": [{"type": "field", "field": "f_ausgabe", "w": 4}, {"type": "field", "field": "f_faellig", "w": 4}, {"type": "field", "field": "f_rueckgabe", "w": 4}, {"type": "field", "field": "f_ueberfaellig", "w": 4}, {"type": "field", "field": "f_notiz", "w": 12}]},
+      {"id": "s3", "title": "", "items": [{"type": "block", "block": "history", "w": 12}]}
+    ]}]}}
+  ],
+  "prints": [
+    {"table": "ausleihen", "name": "Ausleihschein", "description": "Für das Buch, mit Rückgabedatum und Unterschrift.", "tree": {"page": {"preset": "a5"}, "rows": [{"cols": [{"w": 12, "items": [
+      {"type": "logo", "w_mm": 18}, {"type": "heading", "text": "Ausleihschein"},
+      {"type": "text", "text": "Buch: {{f_buch}}\nAusgeliehen von: {{f_schueler}}\nAusgegeben am: {{f_ausgabe}}\nZurück bis: {{f_faellig}}"},
+      {"type": "spacer", "h_mm": 12}, {"type": "signature", "text": "Datum, Unterschrift"}]}]}]}},
+    {"table": "buecher", "name": "Buchkarte", "description": "Ein Buch mit allen Ausleihen.", "tree": {"page": {"preset": "a4"}, "rows": [{"cols": [{"w": 12, "items": [
+      {"type": "heading", "text": "{{f_titel}}"}, {"type": "text", "text": "{{f_autor}} · Signatur {{f_signatur}} · ISBN {{f_isbn}}"},
+      {"type": "list", "link": "@ausleihen.f_buch", "columns": [{"key": "f_ausgabe", "title": "Ausgegeben"}, {"key": "f_schueler", "title": "Schüler"}, {"key": "f_rueckgabe", "title": "Zurück"}]}]}]}]}}
+  ],
+  "views": [
+    {"table": "ausleihen", "name": "Offene Ausleihen", "config": {"filters": {"f_rueckgabe": [""]}, "sort": [{"column": "f_faellig", "dir": "asc"}]}},
+    {"table": "ausleihen", "name": "Überfällig", "config": {"filters": {"f_ueberfaellig": ["Ja"]}, "sort": [{"column": "f_faellig", "dir": "asc"}]}}
+  ],
+  "demo": {
+    "buecher": [
+      {"f_titel": "Momo", "f_autor": "Michael Ende", "f_isbn": "978-3-522-20210-3", "f_signatur": "END 1", "f_gattung": "Roman"},
+      {"f_titel": "Krabat", "f_autor": "Otfried Preußler", "f_isbn": "978-3-522-20226-4", "f_signatur": "PRE 2", "f_gattung": "Roman"},
+      {"f_titel": "Die Welt der Pflanzen", "f_autor": "A. Gärtner", "f_signatur": "BIO 4", "f_gattung": "Sachbuch"},
+      {"f_titel": "Gedichte für Kinder", "f_signatur": "LYR 1", "f_gattung": "Lyrik"}
+    ],
+    "ausleihen": [
+      {"f_buch": "Momo", "f_ausgabe": "2026-09-01", "f_faellig": "2026-09-29"},
+      {"f_buch": "Krabat", "f_ausgabe": "2026-10-05", "f_faellig": "2026-11-02", "f_rueckgabe": "2026-10-30"}
+    ]
+  }
+}

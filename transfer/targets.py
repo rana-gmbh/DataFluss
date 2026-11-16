@@ -19,7 +19,9 @@ class PersonTarget:
         return _("Schüler") if self.entity == "pupil" else _("Personal")
 
     def may_import(self, user):
-        return user.can("data.import")
+        from core import modules
+
+        return user.can("data.import") and "schulverwaltung" in modules.active()
 
     def targets(self):
         return importer.targets(self.entity)
@@ -64,7 +66,10 @@ def target_for(entity):
 
 def choices(user):
     """Where this user may import to, for the upload form: [(entity, label)]."""
-    out = [("pupil", _("Schüler")), ("staff", _("Personal"))] if user.can("data.import") else []
+    from core import modules
+
+    people = user.can("data.import") and "schulverwaltung" in modules.active()
+    out = [("pupil", _("Schüler")), ("staff", _("Personal"))] if people else []
     from tables import services
 
     return out + [(f"table:{t.key}", _("Tabelle: %(name)s") % {"name": t.display_name}) for t in services.readable(user) if services.may_edit(user, t)]

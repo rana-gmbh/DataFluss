@@ -135,10 +135,15 @@ def active():
     try:
         from .models import SchoolSettings
 
-        chosen = SchoolSettings.objects.filter(pk=1).values_list("modules", flat=True).first()
+        row = SchoolSettings.objects.filter(pk=1).values_list("modules", "modules_off").first()
     except DatabaseError:  # before the first migration
-        chosen = None
-    value = frozenset(loaded if chosen is None else (set(catalog.REQUIRED) | set(chosen)) & loaded)
+        row = None
+    chosen, off = row if row else (None, [])
+    value = set(loaded if chosen is None else (set(catalog.REQUIRED) | set(chosen)) & loaded)
+    if "schulverwaltung" in (off or []):
+        # Only the platform and modules without code of their own (templates only) work without it.
+        value = {name for name in value if name == "platform" or not catalog.MODULES.get(name)}
+    value = frozenset(value)
     if cache is not None:
         cache["value"] = value
     return value

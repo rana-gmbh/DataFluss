@@ -91,14 +91,20 @@ def build(module_id, out, key_path, css=True, version=None):
     files = {}
     for app in apps:
         files.update(app_files(app))
-    files.update(translations(apps[0]))
+    if apps:
+        files.update(translations(apps[0]))
+    templates = []
+    for path in modules.TEMPLATE_FILES.get(module_id, []):  # module templates travel under templates/
+        name = f"templates/{Path(path).name}"
+        files[name] = Path(path).read_bytes()
+        templates.append(name)
     sheet = ""
-    if css:
+    if css and apps:
         sheet = f"css/{module_id}.css"
         files[f"{apps[0]}/static/{sheet}"] = stylesheet(module_id, apps)
     manifest = {
         "format": bundles.FORMAT, "id": module_id, "version": version, "title": modules.TITLES.get(module_id, module_id),
-        "requires": list(modules.REQUIRED), "apps": apps, "stylesheet": sheet,
+        "requires": list(modules.REQUIRED), "apps": apps, "stylesheet": sheet, "templates": templates,
         "files": {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items())},
     }
     manifest_bytes = json.dumps(manifest, indent=1, sort_keys=True).encode()

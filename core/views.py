@@ -239,6 +239,8 @@ def dashboard(request):
 
     if updates.is_running():
         updates.refresh_deployment()  # In case the worker that followed the update is gone.
+    if "schulverwaltung" not in modules.active() and request.user.can("home.view"):
+        return _tables_home(request)  # a database of own tables only
     if not request.user.can("person.view"):
         for home in modules.hooks("home"):  # a module's own start page, e.g. DaZ for a DaZ teacher
             response = home(request)
@@ -274,18 +276,39 @@ def dashboard(request):
     return render(request, "core/dashboard.html", context)
 
 
+def _tables_home(request):
+    """The start page of a database without Schulverwaltung: its tables, warnings and first steps."""
+    from tables import services
+    from tables.models import Record
+
+    readable = services.readable(request.user)
+    counts = dict(Record.objects.filter(table__in=readable).values("table_id").order_by().annotate(n=Count("id")).values_list("table_id", "n"))
+    context = {
+        "tables": [{"table": t, "records": counts.get(t.pk, 0)} for t in readable],
+        "update_available": request.user.can("admin.update") and updates.update_available(background_check=True),
+        "warnings": health.warnings_for(request.user),
+    }
+    context.update(_checklist(request, 0))
+    return render(request, "core/tables_home.html", context)
+
+
 def _checklist(request, people):
     """First steps on the start page: each item ticks itself off; hidden when all are done or put away."""
     from archive import nightly, plan
 
     user = request.user
-    if "checklist" in (user.tours_seen or []) or not (user.can("admin.school") or user.can("data.import")):
+    if "checklist" in (user.tours_seen or []) or not (user.can("admin.school") or user.can("data.import") or user.can("tables.design")):
         return {}
     school = SchoolSettings.load()
     items = []
     if user.can("admin.school"):
         items.append((_("Name und Logo eintragen"), reverse("school_settings"), bool(school.logo) or school.name != "Meine Schule"))
-    if user.can("data.import"):
+    if "schulverwaltung" not in modules.active():
+        from tables.models import Table
+
+        if user.can("tables.design"):
+            items.append((_("Erste eigene Tabelle anlegen"), reverse("table_list"), Table.objects.exists()))
+    elif user.can("data.import"):
         items.append((_("Personen aufnehmen oder aus einer Datei importieren"), reverse("transfer"), people > 0))
     if user.can("admin.backup") and not plan.is_client():
         items.append((_("Nächtliche Sicherung einrichten"), reverse("backups"), nightly.is_set_up()))
@@ -350,7 +373,7 @@ def settings_home(request):
     new_version = request.user.can("admin.update") and updates.update_available()
     from sync.models import Conflict
 
-    return render(request, "core/settings_home.html", {"update_available": new_version, "sync_conflicts": Conflict.objects.filter(resolved_at=None).count(),
+    return render(request, "core/settings_home.html", {"basic": "schulverwaltung" in modules.active(), "update_available": new_version, "sync_conflicts": Conflict.objects.filter(resolved_at=None).count(),
                                                        "datafluss_version": settings.DATAFLUSS_VERSION})
 
 

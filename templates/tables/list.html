@@ -11,5 +11,6 @@
   {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
   <div><label class="label" for="t-name">{% translate "Name" %}</label><input id="t-name" class="input" name="name" required maxlength="100" placeholder="{% translate 'z. B. Bücher' %}"></div>
   <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button>
+  <a class="btn w-full" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlage hinzufügen …" %}</a>
   <p class="muted text-[12px]">{% translate "Die Tabelle beginnt mit einem Feld „Name“. Wer sie sehen und bearbeiten darf, legen Sie unter Rechte fest." %}</p></form></div>
 {% endblock %}

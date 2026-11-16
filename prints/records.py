@@ -135,7 +135,10 @@ def available_sources(user=None):
 
     from .models import PrintTemplate
 
-    sources = [(key, label) for key, label in PrintTemplate.SOURCES if key in PLATFORM_SOURCES or module_source(key)]
+    from core import modules
+
+    basic = "schulverwaltung" in modules.active()  # people, devices and classes
+    sources = [(key, label) for key, label in PrintTemplate.SOURCES if (key in PLATFORM_SOURCES and basic) or (key not in PLATFORM_SOURCES and module_source(key))]
     tables = table_services.readable(user) if user is not None else Table.objects.filter(archived=False)
     return sources + [(f"table:{t.key}", _("Tabelle: %(name)s") % {"name": t.display_name}) for t in tables]
 

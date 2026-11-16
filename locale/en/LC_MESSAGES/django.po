@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:14+0100\n"
+"POT-Creation-Date: 2026-11-16 13:33+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -899,6 +899,9 @@ msgstr "Former, device not returned"
 msgid "Name und Logo eintragen"
 msgstr "Enter name and logo"
 
+msgid "Erste eigene Tabelle anlegen"
+msgstr "Create the first table of your own"
+
 msgid "Personen aufnehmen oder aus einer Datei importieren"
 msgstr "Add people or import them from a file"
 
@@ -1525,6 +1528,84 @@ msgid ""
 msgstr ""
 "The record has been deleted, so the other version can no longer be applied."
 
+msgid "Unbekanntes Vorlagenformat."
+msgstr "Unknown template format."
+
+msgid "Die Vorlage braucht eine Kennung aus Kleinbuchstaben, Ziffern und _."
+msgstr "The template needs an ID of lower-case letters, digits and _."
+
+msgid "Die Vorlage braucht eine Versionsnummer."
+msgstr "The template needs a version number."
+
+msgid "Die Vorlage braucht einen Titel."
+msgstr "The template needs a title."
+
+msgid "Die Vorlage enthält keine Tabellen."
+msgstr "The template contains no tables."
+
+#, python-format
+msgid "Tabelle %(key)s: ungültige oder doppelte Kennung."
+msgstr "Table %(key)s: invalid or duplicate ID."
+
+#, python-format
+msgid "Tabelle %(key)s: Name fehlt."
+msgstr "Table %(key)s: name missing."
+
+#, python-format
+msgid "Tabelle %(key)s: unbekanntes Recht %(right)s."
+msgstr "Table %(key)s: unknown permission %(right)s."
+
+#, python-format
+msgid "Tabelle %(key)s: ungültiges oder doppeltes Feld %(field)s."
+msgstr "Table %(key)s: invalid or duplicate field %(field)s."
+
+#, python-format
+msgid "Feld %(field)s: unbekannter Typ."
+msgstr "Field %(field)s: unknown type."
+
+#, python-format
+msgid "Feld %(field)s: Bezeichnung fehlt."
+msgstr "Field %(field)s: label missing."
+
+#, python-format
+msgid "Feld %(field)s: Optionen fehlen."
+msgstr "Field %(field)s: options missing."
+
+#, python-format
+msgid "Feld %(field)s: unbekanntes Ziel der Verknüpfung."
+msgstr "Field %(field)s: unknown link target."
+
+#, python-format
+msgid "Feld %(field)s: Die verknüpfte Tabelle fehlt in der Vorlage."
+msgstr "Field %(field)s: the linked table is missing from the template."
+
+#, python-format
+msgid "Feld %(field)s: Formel fehlt."
+msgstr "Field %(field)s: formula missing."
+
+#, python-format
+msgid "Tabelle %(key)s: Das Titelfeld fehlt."
+msgstr "Table %(key)s: the title field is missing."
+
+#, python-format
+msgid "%(group)s: Eintrag ohne Tabelle oder Namen."
+msgstr "%(group)s: entry without table or name."
+
+#, python-format
+msgid "Beispieldaten für eine unbekannte Tabelle %(key)s."
+msgstr "Sample data for an unknown table %(key)s."
+
+msgid "Diese Vorlage braucht ein Modul, das diese Datenbank nicht nutzt."
+msgstr "This template needs a module this database does not use."
+
+#, python-format
+msgid "Eine Tabelle mit der Kennung %(key)s gibt es schon."
+msgstr "A table with the ID %(key)s already exists."
+
+#, python-format
+msgid "Formel %(field)s: %(problem)s"
+msgstr "Formula %(field)s: %(problem)s"
+
 #, python-format
 msgid "Die Formel ist zu lang (höchstens %(n)s Zeichen)."
 msgstr "The formula is too long (at most %(n)s characters)."
@@ -1815,6 +1896,17 @@ msgstr "The type has been changed."
 
 msgid "Liste"
 msgstr "List"
+
+msgid "Diese Vorlage gibt es nicht."
+msgstr "This template does not exist."
+
+#, python-format
+msgid "%(template)s: %(n)s neu angelegt."
+msgstr "%(template)s: %(n)s created."
+
+#, python-format
+msgid "Angepasst und deshalb nicht aktualisiert: %(items)s."
+msgstr "Changed here and therefore not updated: %(items)s."
 
 msgid ""
 "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
@@ -2468,6 +2560,18 @@ msgstr "Back up and restore all data"
 
 msgid "Anmeldungen, angezeigte Passwörter, Ausdrucke"
 msgstr "Sign-ins, revealed passwords, printouts"
+
+msgid "Vorlage hinzufügen …"
+msgstr "Add template …"
+
+msgid "Neue Tabelle"
+msgstr "New table"
+
+msgid "Noch keine Tabellen."
+msgstr "No tables yet."
+
+msgid "Legen Sie eine eigene an oder beginnen Sie mit einer Vorlage."
+msgstr "Create one of your own or start with a template."
 
 msgid "Zwei-Faktor einrichten"
 msgstr "Set up two-factor"
@@ -3552,6 +3656,44 @@ msgstr[1] ""
 "Deleted records stay here for %(days)s days. After that they are deleted for"
 " good."
 
+msgid "Vorlagen"
+msgstr "Templates"
+
+msgid "Vorlage hinzufügen"
+msgstr "Add template"
+
+msgid ""
+"Eine Vorlage legt fertige Tabellen mit Feldern, Datensatzseiten, "
+"Druckvorlagen und Ansichten an. Danach lässt sich alles anpassen; eine "
+"neuere Version ergänzt nur, was fehlt."
+msgstr ""
+"A template creates ready-made tables with fields, record pages, print "
+"templates and views. Everything can be changed afterwards; a newer version "
+"only adds what is missing."
+
+#, python-format
+msgid "Version %(n)s angewendet"
+msgstr "Version %(n)s applied"
+
+msgid "Braucht ein Modul, das diese Datenbank nicht nutzt."
+msgstr "Needs a module this database does not use."
+
+msgid "Mit Beispieldaten"
+msgstr "With sample data"
+
+msgid "Anwenden"
+msgstr "Apply"
+
+#, python-format
+msgid "Auf Version %(n)s ergänzen"
+msgstr "Update to version %(n)s"
+
+msgid "Erneut anwenden (ergänzt Fehlendes)"
+msgstr "Apply again (adds what is missing)"
+
+msgid "Keine Vorlagen vorhanden."
+msgstr "No templates available."
+
 msgid "Zeigt auf"
 msgstr "Points to"
 
@@ -3614,9 +3756,6 @@ msgstr "No tables of your own yet."
 
 msgid "Legen Sie rechts die erste an."
 msgstr "Create the first one on the right."
-
-msgid "Neue Tabelle"
-msgstr "New table"
 
 msgid "z. B. Bücher"
 msgstr "e.g. Books"
@@ -3748,6 +3887,9 @@ msgstr "Devices as Excel"
 
 msgid "Geräte als CSV"
 msgstr "Devices as CSV"
+
+msgid "Eigene Tabellen exportieren Sie in ihrer Liste."
+msgstr "Export your own tables from their list."
 
 msgid "Passwörter sind in diesen Exporten nie enthalten."
 msgstr "These exports never contain passwords."
