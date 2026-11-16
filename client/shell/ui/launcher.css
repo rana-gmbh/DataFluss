@@ -139,3 +139,8 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-so
 @media (prefers-color-scheme: dark) {
   .backup-flag { color: #fbbf24; }
 }
+
+/* The language switcher in the start screen's left column (i18n.js). */
+.language-switch { display: flex; align-items: center; gap: 8px; font-weight: 400; font-size: 12px; color: var(--ink-3); }
+.language-switch select { font: inherit; color: var(--ink); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--surface); cursor: pointer; }
+.language-switch select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }

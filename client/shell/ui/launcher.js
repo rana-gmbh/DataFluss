@@ -7,9 +7,9 @@ window.addEventListener("error", (e) => invoke("report_error", { message: `${e.m
 window.addEventListener("unhandledrejection", (e) => invoke("report_error", { message: `Unhandled: ${e.reason}` }));
 
 const $ = (selector, root = document) => root.querySelector(selector);
+const { t, translate } = window.I18N; // i18n.js: the start screen in the system's (or the chosen) language
 // The same start screen on macOS and Windows; only the names of the computer and its tools differ.
 const WINDOWS = navigator.userAgent.includes("Windows");
-const HERE = WINDOWS ? "diesem PC" : "diesem Mac";
 const FILE_MANAGER = WINDOWS ? "Explorer" : "Finder";
 
 // Elements with data-win get their Windows wording (in the page and in templates when they are used).
@@ -18,7 +18,10 @@ function localize(root) {
   for (const el of root.querySelectorAll("[data-win]")) el.textContent = el.dataset.win;
   for (const el of root.querySelectorAll("[data-win-label]")) el.setAttribute("aria-label", el.dataset.winLabel);
 }
+// The Mac's or the PC's wording of a text, translated.
+const forComputer = (mac, pc, vars) => t(WINDOWS ? pc : mac, vars);
 localize(document);
+translate(document);
 const list = $("#databases");
 const sheet = $("#sheet");
 let databases = [];
@@ -30,12 +33,12 @@ const colorOf = (id) => COLORS[[...id].reduce((sum, c) => sum + c.charCodeAt(0),
 const initial = (name) => (name.trim()[0] || "?").toUpperCase();
 
 function when(seconds) {
-  if (!seconds) return "noch nie geöffnet";
+  if (!seconds) return t("noch nie geöffnet");
   const days = Math.floor((Date.now() / 1000 - seconds) / 86400);
-  if (days < 1) return "heute geöffnet";
-  if (days < 2) return "gestern geöffnet";
-  if (days < 30) return `vor ${days} Tagen geöffnet`;
-  return `zuletzt ${new Date(seconds * 1000).toLocaleDateString("de-DE")}`;
+  if (days < 1) return t("heute geöffnet");
+  if (days < 2) return t("gestern geöffnet");
+  if (days < 30) return t("vor {days} Tagen geöffnet", { days });
+  return t("zuletzt {date}", { date: new Date(seconds * 1000).toLocaleDateString(window.I18N.locale) });
 }
 
 // A database of its own says when its regular backup (archive/plan.py) is missing or overdue.
@@ -43,11 +46,11 @@ const BACKUP_DAYS = { day: 1, week: 7 };
 
 function backupWarning(backup) {
   if (!backup) return "";
-  if (!backup.every) return "Keine Sicherung eingerichtet";
-  if (backup.state === "failed") return "Letzte Sicherung fehlgeschlagen";
+  if (!backup.every) return t("Keine Sicherung eingerichtet");
+  if (backup.state === "failed") return t("Letzte Sicherung fehlgeschlagen");
   if (!backup.ok_at) return "";
   const days = (Date.now() - Date.parse(backup.ok_at)) / 86400000;
-  return days > BACKUP_DAYS[backup.every] + 1 ? `Sicherung seit ${Math.floor(days)} Tagen überfällig` : "";
+  return days > BACKUP_DAYS[backup.every] + 1 ? t("Sicherung seit {days} Tagen überfällig", { days: Math.floor(days) }) : "";
 }
 
 function size(bytes) {
@@ -70,7 +73,7 @@ function render() {
   list.replaceChildren();
   $("#empty").hidden = databases.length > 0;
   list.hidden = databases.length === 0;
-  $("#count").textContent = databases.length ? `${databases.length} auf ${HERE}` : "";
+  $("#count").textContent = databases.length ? forComputer("{n} auf diesem Mac", "{n} auf diesem PC", { n: databases.length }) : "";
   if (selected && !databases.some((d) => d.id === selected)) selected = null;
   for (const db of databases) {
     const item = document.createElement("li");
@@ -92,12 +95,12 @@ function render() {
     if (db.open) {
       const dot = document.createElement("span");
       dot.className = "dot";
-      dot.title = "Geöffnet";
+      dot.title = t("Geöffnet");
       meta.append(dot);
     }
     const badge = document.createElement("span");
     badge.className = db.kind === "demo" ? "badge demo" : db.kind === "connected" ? "badge server" : "badge";
-    badge.textContent = db.kind === "demo" ? "Demo" : db.kind === "connected" ? "Server" : "Lokal";
+    badge.textContent = db.kind === "demo" ? "Demo" : db.kind === "connected" ? "Server" : t("Lokal");
     if (db.kind === "connected" && db.server) badge.title = db.server;
     meta.append(badge);
     const details = document.createElement("span");
@@ -109,17 +112,17 @@ function render() {
       const flag = document.createElement("span");
       flag.className = "backup-flag";
       flag.textContent = warning;
-      flag.title = "Die regelmäßige Sicherung lässt sich in der Datenbank unter Verwaltung → Sicherung einrichten.";
+      flag.title = t("Die regelmäßige Sicherung lässt sich in der Datenbank unter Verwaltung → Sicherung einrichten.");
       meta.append(flag);
     }
     text.append(name, meta);
     const open = document.createElement("button");
     open.className = "btn open-btn";
-    open.textContent = db.open ? "Anzeigen" : "Öffnen";
+    open.textContent = db.open ? t("Anzeigen") : t("Öffnen");
     open.addEventListener("click", (e) => { e.stopPropagation(); openDatabase(db.id); });
     const more = document.createElement("button");
     more.className = "icon-btn";
-    more.setAttribute("aria-label", `Mehr zu ${db.name}`);
+    more.setAttribute("aria-label", t("Mehr zu {name}", { name: db.name }));
     more.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>';
     more.addEventListener("click", (e) => { e.stopPropagation(); select(db.id); showMenu(db, more.getBoundingClientRect()); });
     item.append(avatar, text, open, more);
@@ -157,14 +160,14 @@ function showMenu(db, at) {
   menu.replaceChildren();
   const add = (label, action, danger = false) => {
     const button = document.createElement("button");
-    button.textContent = label;
+    button.textContent = t(label);
     button.role = "menuitem";
     if (danger) button.className = "danger";
     button.addEventListener("click", () => { hideMenu(); action(); });
     menu.append(button);
   };
   add(db.open ? "Anzeigen" : "Öffnen", () => openDatabase(db.id));
-  add(`Im ${FILE_MANAGER} zeigen`, () => invoke("reveal_database", { id: db.id }));
+  add(t("Im {app} zeigen", { app: FILE_MANAGER }), () => invoke("reveal_database", { id: db.id }));
   if (db.kind === "demo") add("Anmeldedaten zeigen …", () => showLogins(db.id));
   menu.append(document.createElement("hr"));
   add("In den Papierkorb legen …", () => confirmRemove(db), true);
@@ -183,12 +186,13 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") hideMenu()
 
 function openSheet(title, { template, html, actions }) {
   if (sheet.open) sheet.close(); // showModal() refuses a dialog that is still open.
-  $("#sheet-title").textContent = title;
+  $("#sheet-title").textContent = typeof title === "string" ? t(title) : title.name; // a database's own name stays as it is
   const body = $("#sheet-body");
   body.replaceChildren();
   if (template) {
     const content = $(template).content.cloneNode(true);
     localize(content);
+    translate(content);
     body.append(content);
   }
   if (html) body.append(html);
@@ -199,7 +203,7 @@ function openSheet(title, { template, html, actions }) {
   for (const { label, kind = "", run, submit } of actions) {
     const button = document.createElement("button");
     button.className = `btn ${kind}`;
-    button.textContent = label;
+    button.textContent = t(label);
     button.type = submit ? "submit" : "button";
     if (!submit) button.addEventListener("click", run || closeSheet);
     else sheet.onsubmit = (e) => { e.preventDefault(); run(); };
@@ -217,14 +221,14 @@ sheet.addEventListener("cancel", (e) => { if (working) e.preventDefault(); });
 
 function showError(message) {
   const box = $("#sheet-error");
-  box.textContent = message;
+  box.textContent = t(message);
   box.hidden = false;
 }
 
 async function busy(text, task) {
   working = true;
   $("#sheet-error").hidden = true;
-  $("#busy-text").textContent = text;
+  $("#busy-text").textContent = t(text);
   $("#busy-bar").hidden = true;
   $("#sheet-busy").hidden = false;
   for (const el of sheet.querySelectorAll("input, button")) el.disabled = true;
@@ -239,7 +243,7 @@ async function busy(text, task) {
 
 listen("task-progress", ({ payload }) => {
   const { text, done, total } = payload.step || {};
-  if (text) $("#busy-text").textContent = `${text} …`;
+  if (text) $("#busy-text").textContent = `${t(text)} …`;
   const bar = $("#busy-bar");
   if (total) {
     bar.hidden = false;
@@ -273,8 +277,8 @@ async function offeredTemplates() {
   return templates;
 }
 
-// Template names in the start screen's own language (German), so a card never mixes two languages.
-const language = () => (document.documentElement.lang || "de").toLowerCase();
+// Template names in the start screen's language, so a card never mixes two languages.
+const language = () => window.I18N.language;
 const pick = (base, names) => (names && names[language()]) || base || "";
 
 function renderTemplates(box, start) {
@@ -360,9 +364,9 @@ function afterStart() {
   });
   if (chosenStart.without.length) { // not necessarily a school
     const school = field("school");
-    school.parentElement.firstChild.textContent = "Name (Schule, Verein, Firma …)";
-    school.placeholder = "z. B. Bibliothek am Markt";
-    sheet.querySelector("p.muted").textContent = "Noch ohne Tabellen, mit dem ersten IT-Konto. Beim ersten Anmelden wird die Zwei-Faktor-Anmeldung eingerichtet.";
+    school.parentElement.firstChild.textContent = t("Name (Schule, Verein, Firma …)");
+    school.placeholder = t("z. B. Bibliothek am Markt");
+    sheet.querySelector("p.muted").textContent = t("Noch ohne Tabellen, mit dem ersten IT-Konto. Beim ersten Anmelden wird die Zwei-Faktor-Anmeldung eingerichtet.");
   }
 }
 
@@ -457,7 +461,7 @@ async function startDemo() {
   openSheet("Demo anlegen", {
     html: Object.assign(document.createElement("p"), {
       className: "muted",
-      textContent: "Die Schulverwaltung mit rund 600 erfundenen Personen, Geräten und Zugängen, zum Ausprobieren. Ein Konto für jede Rolle, ohne Zwei-Faktor-Anmeldung. Keine echten Daten eintragen.",
+      textContent: t("Die Schulverwaltung mit rund 600 erfundenen Personen, Geräten und Zugängen, zum Ausprobieren. Ein Konto für jede Rolle, ohne Zwei-Faktor-Anmeldung. Keine echten Daten eintragen."),
     }),
     actions: [
       { label: "Abbrechen" },
@@ -488,12 +492,12 @@ const ROLES = { it: "IT", sekretariat: "Sekretariat", leitung: "Schulleitung", d
 
 function showLoginsSheet(id, logins) {
   const wrap = document.createElement("div");
-  wrap.append(Object.assign(document.createElement("p"), { className: "muted", textContent: "Mit diesen Konten anmelden. Sie stehen auch im Ordner der Datenbank." }));
+  wrap.append(Object.assign(document.createElement("p"), { className: "muted", textContent: t("Mit diesen Konten anmelden. Sie stehen auch im Ordner der Datenbank.") }));
   const table = document.createElement("table");
   table.className = "logins";
   for (const { username, password } of logins) {
     const row = table.insertRow();
-    row.insertCell().textContent = ROLES[username] || username;
+    row.insertCell().textContent = ROLES[username] ? t(ROLES[username]) : username;
     const user = document.createElement("code");
     user.textContent = username;
     row.insertCell().append(user);
@@ -514,7 +518,8 @@ function showLoginsSheet(id, logins) {
 function confirmRemove(db) {
   if (!db) return;
   const text = document.createElement("p");
-  text.textContent = `„${db.name}“ wird mit allen Daten in den Papierkorb gelegt.${db.open ? " Ihr Fenster wird geschlossen." : ""} Solange der Ordner im Papierkorb liegt, lässt er sich zurücklegen.`;
+  text.textContent = [t("„{name}“ wird mit allen Daten in den Papierkorb gelegt.", { name: db.name }), db.open ? t("Ihr Fenster wird geschlossen.") : "",
+    t("Solange der Ordner im Papierkorb liegt, lässt er sich zurücklegen.")].filter(Boolean).join(" ");
   openSheet("In den Papierkorb legen?", {
     html: text,
     actions: [
@@ -537,18 +542,23 @@ function confirmRemove(db) {
 async function openDatabase(id) {
   const db = databases.find((d) => d.id === id);
   if (!sheet.open) {
-    openSheet(db ? db.name : "Datenbank", { html: document.createElement("span"), actions: [] });
+    openSheet(db ? { name: db.name } : "Datenbank", { html: document.createElement("span"), actions: [] });
   }
   try {
     await busy("Datenbank wird geöffnet …", () => invoke("open_db", { id }));
     sheet.close();
     refresh();
   } catch (error) {
-    if (!sheet.open) openSheet(db ? db.name : "Datenbank", { html: document.createElement("span"), actions: [] });
-    $("#sheet-actions").replaceChildren(Object.assign(document.createElement("button"), { className: "btn", type: "button", textContent: "Schließen", onclick: closeSheet }));
+    if (!sheet.open) openSheet(db ? { name: db.name } : "Datenbank", { html: document.createElement("span"), actions: [] });
+    $("#sheet-actions").replaceChildren(Object.assign(document.createElement("button"), { className: "btn", type: "button", textContent: t("Schließen"), onclick: closeSheet }));
     showError(String(error));
   }
 }
+
+// The language switcher (i18n.js): each language named in its own words; a change reloads the start screen.
+const languageSelect = $("#language");
+for (const [code, name] of window.I18N.languages) languageSelect.append(new Option(name, code, false, code === window.I18N.language));
+languageSelect.addEventListener("change", () => window.I18N.setLanguage(languageSelect.value));
 
 for (const button of document.querySelectorAll("[data-action]")) {
   button.addEventListener("click", () => {
@@ -566,7 +576,7 @@ async function installModule() {
     const name = await invoke("install_module");
     if (!name) return;
     const text = document.createElement("p");
-    text.textContent = `${name} liegt bereit. DataFluss prüft die Signatur beim nächsten Öffnen einer Datenbank und lädt das Modul nur, wenn sie stimmt und das Modul zu dieser Version passt.`;
+    text.textContent = t("{name} liegt bereit. DataFluss prüft die Signatur beim nächsten Öffnen einer Datenbank und lädt das Modul nur, wenn sie stimmt und das Modul zu dieser Version passt.", { name });
     openSheet("Modul installiert", { html: text, actions: [{ label: "OK", kind: "primary" }] });
   } catch (error) {
     openSheet("Modul installieren", { html: document.createElement("span"), actions: [{ label: "Schließen" }] });
@@ -579,7 +589,8 @@ async function installModule() {
 const WELCOME = [
   {
     title: "Willkommen bei DataFluss",
-    text: [`DataFluss hält Daten in eigenen Datenbanken: auf ${HERE}, verschlüsselt, und auf Wunsch im Abgleich mit einem Server, auch nach einer Zeit ohne Verbindung.`,
+    text: [WINDOWS ? "DataFluss hält Daten in eigenen Datenbanken: auf diesem PC, verschlüsselt, und auf Wunsch im Abgleich mit einem Server, auch nach einer Zeit ohne Verbindung."
+      : "DataFluss hält Daten in eigenen Datenbanken: auf diesem Mac, verschlüsselt, und auf Wunsch im Abgleich mit einem Server, auch nach einer Zeit ohne Verbindung.",
       "Eine Datenbank beginnt mit einem Ausgangspunkt wie der Schulverwaltung und lässt sich dann mit eigenen Feldern, Masken und Druckvorlagen anpassen."],
   },
   {
@@ -588,12 +599,13 @@ const WELCOME = [
       ["Mit erfundenen Daten ausprobieren", "der schnellste Weg, alles kennenzulernen"],
       ["Neue Datenbank", "für die eigenen Daten, mit einem Ausgangspunkt"],
       ["Mit Server verbinden", "eine Kopie, die sich mit dem Server Ihrer Organisation abgleicht"],
-      ["Sicherung importieren", `von einem Server oder einem anderen ${WINDOWS ? "PC" : "Mac"}`],
+      ["Sicherung importieren", WINDOWS ? "von einem Server oder einem anderen PC" : "von einem Server oder einem anderen Mac"],
     ],
   },
   {
     title: "Sicher von Anfang an",
-    text: [`Jede Datenbank ist verschlüsselt. Die Schlüssel liegen ${WINDOWS ? "in der Anmeldeinformationsverwaltung dieses PCs" : "im Schlüsselbund dieses Macs"}, nie im Ordner der Datenbank.`,
+    text: [WINDOWS ? "Jede Datenbank ist verschlüsselt. Die Schlüssel liegen in der Anmeldeinformationsverwaltung dieses PCs, nie im Ordner der Datenbank."
+      : "Jede Datenbank ist verschlüsselt. Die Schlüssel liegen im Schlüsselbund dieses Macs, nie im Ordner der Datenbank.",
       "Beim ersten Anmelden zeigt ein kurzer Rundgang, wo was ist. Diese Seiten und den Rundgang gibt es jederzeit wieder im Menü Hilfe."],
   },
 ];
@@ -602,17 +614,17 @@ function showWelcome(index = 0) {
   const step = WELCOME[index];
   const wrap = document.createElement("div");
   wrap.className = "welcome";
-  for (const paragraph of step.text || []) wrap.append(Object.assign(document.createElement("p"), { textContent: paragraph }));
+  for (const paragraph of step.text || []) wrap.append(Object.assign(document.createElement("p"), { textContent: t(paragraph) }));
   if (step.list) {
     const list = document.createElement("ul");
     for (const [title, detail] of step.list) {
       const item = document.createElement("li");
-      item.append(Object.assign(document.createElement("strong"), { textContent: title }), document.createTextNode(` – ${detail}`));
+      item.append(Object.assign(document.createElement("strong"), { textContent: t(title) }), document.createTextNode(` – ${t(detail)}`));
       list.append(item);
     }
     wrap.append(list);
   }
-  wrap.append(Object.assign(document.createElement("p"), { className: "muted small", textContent: `${index + 1} von ${WELCOME.length}` }));
+  wrap.append(Object.assign(document.createElement("p"), { className: "muted small", textContent: t("{i} von {n}", { i: index + 1, n: WELCOME.length }) }));
   const done = () => { invoke("welcome_done").catch(() => {}); };
   const last = index === WELCOME.length - 1;
   openSheet(step.title, {
@@ -640,7 +652,8 @@ listen("launcher-connect", ({ payload }) => { if (!working) startConnect(payload
 listen("database-wiped", ({ payload }) => {
   refresh();
   const text = document.createElement("p");
-  text.textContent = `Der Server hat die Verbindung von „${payload.name}“ zu ${HERE} getrennt. Die Kopie der Daten wurde von ${HERE} gelöscht. Zum weiteren Arbeiten ${WINDOWS ? "den PC" : "den Mac"} neu verbinden oder die Webversion benutzen.`;
+  text.textContent = forComputer("Der Server hat die Verbindung von „{name}“ zu diesem Mac getrennt. Die Kopie der Daten wurde von diesem Mac gelöscht. Zum weiteren Arbeiten den Mac neu verbinden oder die Webversion benutzen.",
+    "Der Server hat die Verbindung von „{name}“ zu diesem PC getrennt. Die Kopie der Daten wurde von diesem PC gelöscht. Zum weiteren Arbeiten den PC neu verbinden oder die Webversion benutzen.", { name: payload.name });
   openSheet("Verbindung getrennt", { html: text, actions: [{ label: "OK", kind: "primary", submit: true, run: closeSheet }] });
 });
 window.addEventListener("focus", refresh);
