@@ -3,21 +3,22 @@
     <channel>
         <title>DataFluss</title>
         <item>
-            <title>1.0.0</title>
-            <pubDate>Sun, 15 Nov 2026 20:43:54 +0000</pubDate>
+            <title>1.1.0</title>
+            <pubDate>Mon, 16 Nov 2026 08:39:56 +0000</pubDate>
             <link>https://github.com/rana-gmbh/DataFluss</link>
-            <sparkle:version>1.0.0</sparkle:version>
-            <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
+            <sparkle:version>1.1.0</sparkle:version>
+            <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<h2>DataFluss 1.0.0</h2>
+            <description><![CDATA[<h2>DataFluss 1.1.0</h2>
 <ul>
-  <li><strong>DataFluss ist jetzt Open Source</strong> (AGPL-3.0): <a href="https://github.com/rana-gmbh/DataFluss">github.com/rana-gmbh/DataFluss</a>.</li>
-  <li>Die App enthält die Plattform und das Modul Schulverwaltung. Weitere Module kommen als signierte Dateien dazu: von dem Server, mit dem eine Datenbank verbunden ist, oder über „Modul installieren …“ auf der Startseite.</li>
-  <li>Verbundene Datenbanken, die ein solches Modul nutzen, öffnen sich wie bisher; das Modul hat der Computer schon vom Server geholt.</li>
+  <li><strong>Regelmäßige Sicherung auf dem Computer:</strong> Eine eigene Datenbank sichert sich täglich oder wöchentlich in einen Ordner Ihrer Wahl, etwa auf ein anderes Laufwerk oder in einen Cloud-Ordner. Einzurichten unter Verwaltung → Sicherung. Die Startseite zeigt, wenn eine Sicherung fehlt oder überfällig ist.</li>
+  <li><strong>Auf einen Server übertragen:</strong> Eine Datenbank, die auf dem Computer begonnen hat, wird mit allen Konten, Bildern und Dokumenten zu den Daten eines DataFluss-Servers. Danach verbindet sich der Computer neu mit dem Server.</li>
+  <li><strong>Vollständige Sicherung vom Server:</strong> In einer verbundenen Datenbank kann IT die vollständige Sicherung des Servers auf den Computer laden.</li>
+  <li>Für die Übertragung braucht der Server ebenfalls DataFluss 1.1.</li>
 </ul>
 ]]></description>
-            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.0.0/DataFluss-1.0.0.zip" length="63103909" type="application/octet-stream" sparkle:edSignature="FClXr0m7YgX9s3PZCsR2zKAv2YbYp+0sC3Ntumuiog2dNPgYvVzpv9StUlx83ughCthvmZXeSmKEs+h6lUlhCA=="/>
+            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.1.0/DataFluss-1.1.0.zip" length="63162340" type="application/octet-stream" sparkle:edSignature="WutwIySMsK3Trum/G9r0uKF05i/MlosnRN9kAA0gAVYxfJ4lh/vfOoJ88ZKq9Jw9eo1Xo7gLqjNsvP3S6NvADg=="/>
         </item>
     </channel>
 </rss>

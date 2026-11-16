@@ -4,16 +4,17 @@
     <title>DataFluss</title>
     <link>https://github.com/rana-gmbh/DataFluss</link>
     <item>
-      <title>DataFluss 1.0.0</title>
-      <pubDate>Sun, 15 Nov 2026 20:49:31 +0000</pubDate>
-      <sparkle:version>1.0.0</sparkle:version>
-      <description><![CDATA[<h2>DataFluss 1.0.0</h2>
+      <title>DataFluss 1.1.0</title>
+      <pubDate>Mon, 16 Nov 2026 08:39:08 +0000</pubDate>
+      <sparkle:version>1.1.0</sparkle:version>
+      <description><![CDATA[<h2>DataFluss 1.1.0</h2>
 <ul>
-  <li><strong>DataFluss ist jetzt Open Source</strong> (AGPL-3.0): <a href="https://github.com/rana-gmbh/DataFluss">github.com/rana-gmbh/DataFluss</a>.</li>
-  <li>Die App enthält die Plattform und das Modul Schulverwaltung. Weitere Module kommen als signierte Dateien dazu: von dem Server, mit dem eine Datenbank verbunden ist, oder über „Modul installieren …“ auf der Startseite.</li>
-  <li>Verbundene Datenbanken, die ein solches Modul nutzen, öffnen sich wie bisher; das Modul hat der Computer schon vom Server geholt.</li>
+  <li><strong>Regelmäßige Sicherung auf dem Computer:</strong> Eine eigene Datenbank sichert sich täglich oder wöchentlich in einen Ordner Ihrer Wahl, etwa auf ein anderes Laufwerk oder in einen Cloud-Ordner. Einzurichten unter Verwaltung → Sicherung. Die Startseite zeigt, wenn eine Sicherung fehlt oder überfällig ist.</li>
+  <li><strong>Auf einen Server übertragen:</strong> Eine Datenbank, die auf dem Computer begonnen hat, wird mit allen Konten, Bildern und Dokumenten zu den Daten eines DataFluss-Servers. Danach verbindet sich der Computer neu mit dem Server.</li>
+  <li><strong>Vollständige Sicherung vom Server:</strong> In einer verbundenen Datenbank kann IT die vollständige Sicherung des Servers auf den Computer laden.</li>
+  <li>Für die Übertragung braucht der Server ebenfalls DataFluss 1.1.</li>
 </ul>]]></description>
-      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.0.0/DataFluss-1.0.0-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47451792" type="application/octet-stream" sparkle:edSignature="SEafwHSbjDpkc4KuIPspzsb4JWBhXl9QspCyr3vkKzV3x5ZM2cwOtxMa532sin+6Hjfl37v/B9kxO5v3tgvmBQ=="/>
+      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.1.0/DataFluss-1.1.0-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47490304" type="application/octet-stream" sparkle:edSignature="S9BPwno67hWDuPYKmpUr3vYi0b1eOAB1ETU4ScBv5uWxEu3NALfp71DZA13CSmVGhZFTC+42ExmWPTbUqQ4yBA=="/>
     </item>
   </channel>
 </rss>
