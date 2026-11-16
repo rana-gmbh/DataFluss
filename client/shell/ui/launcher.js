@@ -273,7 +273,8 @@ async function offeredTemplates() {
   return templates;
 }
 
-const language = () => (navigator.language || "de").toLowerCase().startsWith("zh") ? (/hant|tw|hk/i.test(navigator.language) ? "zh-hant" : "zh-hans") : navigator.language.slice(0, 2).toLowerCase();
+// Template names in the start screen's own language (German), so a card never mixes two languages.
+const language = () => (document.documentElement.lang || "de").toLowerCase();
 const pick = (base, names) => (names && names[language()]) || base || "";
 
 function renderTemplates(box, start) {
@@ -319,9 +320,17 @@ async function startCreate() {
   const templateBox = $("#template-choices");
   const start = () => sheet.querySelector('[name="start"]:checked').value;
   renderTemplates(templateBox, start());
+  // Sample data comes from Schulverwaltung's invented people or from a template; "Leer" without one has none.
+  const demo = field("demo");
+  const showDemo = () => {
+    const none = start() === "leer" && templateBox.hidden;
+    demo.closest("label").hidden = none;
+    if (none) demo.checked = false;
+  };
   sheet.querySelectorAll('[name="start"]').forEach((radio) => radio.addEventListener("change", () => {
     box.hidden = start() !== "schulverwaltung" || modules.length === 0; // optional modules build on Schulverwaltung
     renderTemplates(templateBox, start());
+    showDemo();
   }));
 }
 
