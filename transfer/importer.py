@@ -31,10 +31,12 @@ class ImportClosed(Exception):
     """The message is shown to the user."""
 
 
-def targets(entity):
-    """Everything a column can be mapped to."""
+def targets(entity, user=None):
+    """Everything a column can be mapped to; with a user, only fields the user's role may change."""
+    from core import fieldrules
+
     options = [("", _("Nicht importieren"))]
-    options += [(f.key, f.display_label) for f in ms.fields_for(entity) if f.type != "secret"]
+    options += [(f.key, f.display_label) for f in ms.fields_for(entity) if f.type != "secret" and fieldrules.may_change(user, entity, f.key)]
     options += [("legacy_ninox_id", _("Ninox-ID")), ("_device_number", _("Gerätenummer")), ("_device_serial", _("Seriennummer")), ("_photo_path", _("Bildpfad (Ninox)"))]
     for platform in Platform.active_for(entity):
         for field in platform.fields:
@@ -52,10 +54,15 @@ def auto_mapping(headers, entity):
 
 
 def _row_values(session, row):
-    """An empty cell says nothing, so it never replaces what is already stored."""
+    """An empty cell says nothing, so it never replaces what is already stored. A field the uploader's role
+    may only read or not see is left out, whatever the mapping says."""
+    from core import fieldrules
+
     values = {}
     for index, header in enumerate(session.headers):
         target = session.mapping.get(header)
+        if target and not fieldrules.may_change(session.user, session.entity, target):
+            continue
         if target and index < len(row) and row[index].strip():
             values[target] = row[index]
     return values

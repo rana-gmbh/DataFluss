@@ -217,6 +217,22 @@ def _ref_tokens(text):
     return [(position, position + len(value), value[1:-1].strip()) for kind, value, position in tokens(text) if kind == "ref"]
 
 
+def used_fields(text):
+    """The keys of this table's fields a stored formula names (the first part of a path counts, the second is
+    a field of another table)."""
+    found = set()
+
+    def note(inner, first):
+        if first is None:
+            found.add(inner)
+        return inner
+    try:
+        _replace_refs(text or "", note)
+    except FormulaError:
+        pass
+    return {key for key in found if not key.startswith("@")}
+
+
 def _replace_refs(text, swap):
     """`text` with each reference replaced by swap(inner, previous inner or None); paths pass their first part."""
     out, last, previous_end, previous = [], 0, None, None
@@ -638,6 +654,7 @@ class Context:
         self.trees = {}
         self.target_tables = {}  # link field id -> target table
         self.resolved = {}       # (kind, table id, target id) -> links.resolve entry
+        self.unseen = {}         # table id -> keys of fields the user's role does not see
 
     def schema(self, table):
         if table.pk not in self.schemas:
@@ -652,6 +669,17 @@ class Context:
 
             self.readable = {t.pk for t in services.readable(self.user, include_archived=True)}
         return table.pk in self.readable
+
+    def sees(self, field):
+        """Whether the user's role sees this field (core/fieldrules.py); a formula reading a hidden one shows
+        "nicht sichtbar" to that role."""
+        if self.user is None:
+            return True
+        if field.table_id not in self.unseen:
+            from core import fieldrules
+
+            self.unseen[field.table_id] = fieldrules.hidden(self.user, fieldrules.table_entity(field.table))
+        return field.key not in self.unseen[field.table_id]
 
     def step(self, n=1):
         self.steps += n
@@ -732,6 +760,9 @@ class Context:
 
 def _value_of(record, field, context):
     from . import links, services
+
+    if not context.sees(field):
+        raise Hidden()
 
     if field.type == "formula":
         return compute(record, field, context)

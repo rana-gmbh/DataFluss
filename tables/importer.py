@@ -67,9 +67,13 @@ class TableTarget:
     def importable(self):
         return [f for f in self.fields.values() if f.type not in ("secret", "formula", "file", "image")]
 
-    def targets(self):
+    def targets(self, user=None):
+        from core import fieldrules
+
         options = [("", _("Nicht importieren"))]
         for field in self.importable():
+            if not fieldrules.may_change(user, self.entity, field.key):
+                continue  # the role may only read this field, or does not see it
             label = _("%(field)s (Verknüpfung über den Namen)") % {"field": field.display_label} if field.type == "link" else field.display_label
             options.append((field.key, label))
         return options
@@ -97,10 +101,15 @@ class TableTarget:
     # ------------------------------------------------------------ reading rows
 
     def _row_values(self, session, row):
-        """An empty cell says nothing, so it never replaces what is stored."""
+        """An empty cell says nothing, so it never replaces what is stored. Fields the uploader's role may only
+        read or not see are left out."""
+        from core import fieldrules
+
         values = {}
         for index, header in enumerate(session.headers):
             key = session.mapping.get(header)
+            if key in self.fields and not fieldrules.may_change(session.user, self.entity, key):
+                continue
             if key in self.fields and index < len(row) and str(row[index]).strip():
                 values[key] = str(row[index]).strip()
         return values

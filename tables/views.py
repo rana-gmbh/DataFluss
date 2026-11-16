@@ -167,6 +167,11 @@ def table_field(request, key, pk):
                 field.archived = False
                 field.save()
                 return redirect("table_field", key=table.key, pk=field.pk)
+            if action == "rights":
+                from core import views_roles
+
+                views_roles.save_field_rights(request, f"table:{table.key}", field.key)
+                return redirect("table_field", key=table.key, pk=field.pk)
             if action == "type":
                 services.change_type(field, request.POST.get("type", ""), request=request)
                 messages.success(request, _("Der Typ wurde geändert."))
@@ -180,7 +185,10 @@ def table_field(request, key, pk):
             return redirect("table_field", key=table.key, pk=field.pk)
     options = [{"value": o["value"], "shown": i18n.option_label(o)} for o in field.options]
     compatible = [(k, ft.TYPES[k].label) for k in sorted(services.COMPATIBLE.get(field.type, set()))]
+    from core import views_roles
+
     return render(request, "tables/field.html", {"table": table, "field": field, "options": options, "compatible": compatible,
+                                                 "field_rights": views_roles.field_rights(request, f"table:{table.key}", field.key),
                                                  "target_label": links.target_label(field) if field.type == "link" else "",
                                                  "expression_json": json.dumps(formula.to_names(field.config.get("expression", ""), formula.Schema(table)) if field.type == "formula" else ""),
                                                  "presets": formula.presets(table) if field.type == "formula" else [],

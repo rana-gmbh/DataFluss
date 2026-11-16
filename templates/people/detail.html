@@ -9,9 +9,9 @@
     <h1 class="page-title truncate">{{ person.display_name }}</h1>
     <div class="flex flex-wrap items-center gap-1.5 mt-0.5">
       {% if person.kind == 'pupil' %}
-        {% if person.current_class %}<a href="{% url 'class_detail' person.current_class.pk %}" class="badge badge-accent">{{ person.current_class }}</a>{% endif %}
-        {% if person.school_type %}<span class="badge">{{ person.school_type }}</span>{% endif %}
-      {% else %}{% if person.category %}<span class="badge badge-accent">{{ person.category }}</span>{% endif %}{% endif %}
+        {% if person.current_class and 'klasse' not in hidden_fields %}<a href="{% url 'class_detail' person.current_class.pk %}" class="badge badge-accent">{{ person.current_class }}</a>{% endif %}
+        {% if person.school_type and 'school_type' not in hidden_fields %}<span class="badge">{{ person.school_type }}</span>{% endif %}
+      {% else %}{% if person.category and 'category' not in hidden_fields %}<span class="badge badge-accent">{{ person.category }}</span>{% endif %}{% endif %}
       {% if person.archived %}<span class="badge badge-warn">{% translate "Archiviert" %}</span>{% endif %}
   {% for badge in person_badges %}{% include badge %}{% endfor %}
       {% if person.new_codes_needed %}<span class="badge badge-warn">{% translate "Neue Codes nötig" %}</span>{% endif %}

@@ -17,7 +17,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-from core import audit, updates, modules
+from core import audit, fieldrules, modules, updates
 from core.images import TOO_LARGE, too_large
 from core.models import SavedView
 from core.permissions import require
@@ -39,12 +39,13 @@ def _grid_columns(entity, user):
     columns = []
     can_edit = access.may(user, entity, "edit")
     classes = [{"value": str(c.pk), "label": c.name} for c in ms.class_choices()]
-    for fd in ms.fields_for(entity):
+    fixed = fieldrules.read_only(user, entity)
+    for fd in ms.fields_for(entity, user=user):
         if fd.type == "secret":
             continue
         column = {
             "key": fd.key, "title": fd.display_label, "type": fd.type, "visible": fd.in_grid,
-            "editable": can_edit and not fd.read_only and fd.type != "multichoice",
+            "editable": can_edit and not fd.read_only and fd.key not in fixed and fd.type != "multichoice",
             "options": fd.option_values,
         }
         if fd.type in ("choice", "multichoice"):
@@ -95,7 +96,8 @@ def staff(request):
     return _grid_page(request, "staff", _("Personal"), "staff")
 
 
-def person_rows(entity, scope="active", ids=None):
+def person_rows(entity, scope="active", ids=None, user=None):
+    """The list's rows; with a user, without the fields the user's role does not see."""
     qs = Person.objects.filter(kind=entity).select_related("current_class").prefetch_related(
         Prefetch("assignments", Assignment.objects.filter(returned_at__isnull=True).select_related("asset"), to_attr="open_assignments")
     )
@@ -105,7 +107,7 @@ def person_rows(entity, scope="active", ids=None):
         qs = qs.filter(archived=False)
     elif scope == "archived":
         qs = qs.filter(archived=True)
-    fields = [f for f in ms.fields_for(entity) if f.type != "secret"]
+    fields = [f for f in ms.fields_for(entity, user=user) if f.type != "secret"]
     rows = []
     for person in qs:
         row = {"id": str(person.pk), "name": person.display_name, "photo_url": person.thumb_url, "initials": person.initials, "archived": person.archived}
@@ -138,10 +140,10 @@ def api_persons(request):
     record = request.GET.get("id")
     if record:
         try:
-            return JsonResponse(person_rows(entity, ids=[uuid.UUID(record)]), safe=False)
+            return JsonResponse(person_rows(entity, ids=[uuid.UUID(record)], user=request.user), safe=False)
         except ValueError:
             return HttpResponseBadRequest()
-    return JsonResponse(person_rows(entity, request.GET.get("scope", "active")), safe=False)
+    return JsonResponse(person_rows(entity, request.GET.get("scope", "active"), user=request.user), safe=False)
 
 
 def _save_field(request, person, key, raw):
@@ -152,6 +154,8 @@ def _save_field(request, person, key, raw):
         raise Http404
     if fd.type == "secret" and not request.user.can("vault.edit"):
         raise PermissionDenied
+    if not fieldrules.may_change(request.user, person.kind, fd.key):
+        raise PermissionDenied  # the role may only read this field, or does not see it
     return fd, *ms.set_value(person, fd, raw)
 
 
@@ -212,6 +216,7 @@ def _detail_context(request, person):
         "tabs": tabs,
         "form_url": reverse("person_form", args=[person.pk]),
         "form_kind": person.kind,
+        "hidden_fields": fieldrules.hidden(request.user, person.kind),  # badges in the head follow the role's rules
         "print_templates": PrintTemplate.objects.filter(source=person.kind, archived=False),
         "active_nav": "pupils" if person.kind == "pupil" else "staff",
     }
@@ -396,6 +401,8 @@ def person_new(request, entity):
         raise PermissionDenied
     error, data = "", {}
     fields = ms.field_map(entity)
+    # Fields the role may only read or not see are not offered and not taken (core/fieldrules.py).
+    settable = {key for key in fields if fieldrules.may_change(request.user, entity, key)}
     if request.method == "POST":
         data = request.POST
         first, last = data.get("first_name", "").strip(), data.get("last_name", "").strip()
@@ -404,13 +411,14 @@ def person_new(request, entity):
         else:
             try:
                 with transaction.atomic():
+                    sent = {key: data.get(key, "") if key in settable else "" for key in ("birth_date", "entry_date", "email", "school_type", "category", "gender", "klasse")}
                     person = Person.objects.create(
                         kind=entity, first_name=first, last_name=last,
-                        birth_date=ms.parse_date(data.get("birth_date")), entry_date=ms.parse_date(data.get("entry_date")) or timezone.localdate(),
-                        email=data.get("email", "").strip().lower(), school_type=data.get("school_type", ""),
-                        category=data.get("category", ""), gender=data.get("gender", ""),
+                        birth_date=ms.parse_date(sent["birth_date"]), entry_date=ms.parse_date(sent["entry_date"]) or timezone.localdate(),
+                        email=sent["email"].strip().lower(), school_type=sent["school_type"],
+                        category=sent["category"], gender=sent["gender"],
                     )
-                    group = ClassGroup.objects.filter(pk=data.get("klasse")).first() if data.get("klasse") else None
+                    group = ClassGroup.objects.filter(pk=sent["klasse"]).first() if sent["klasse"] else None
                     if group:
                         person.move_to_class(group)
                     created = []
@@ -427,7 +435,7 @@ def person_new(request, entity):
             except ValidationError as exc:
                 error = " ".join(exc.messages)
     return render(request, "people/new.html", {
-        "entity": entity, "error": error, "data": data, "fields": fields, "classes": ms.class_choices(), "today": timezone.localdate().isoformat(),
+        "entity": entity, "error": error, "data": data, "fields": fields, "settable": settable, "classes": ms.class_choices(), "today": timezone.localdate().isoformat(),
         "platforms": Platform.active_for(entity) if request.user.can("vault.edit") else [],
         "active_nav": "pupils" if entity == "pupil" else "staff",
     })

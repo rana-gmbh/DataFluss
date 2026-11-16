@@ -9,7 +9,7 @@ from people.models import ClassGroup, Person, SchoolYear
 from sync import journal
 from vault import crypto
 
-from core import fieldtypes, modules
+from core import fieldrules, fieldtypes, modules
 
 from . import i18n
 from .models import FieldDefinition, Mask, MaskVersion
@@ -26,17 +26,25 @@ def _unclaimed_section_flags():
     return set(Person.SECTION_FLAGS) - set(modules.merged("staff_sections"))
 
 
-def fields_for(entity, include_archived=False):
+def fields_for(entity, include_archived=False, user=None):
+    """The fields of pupils or staff; with a user, without those the user's role does not see (core/fieldrules.py)."""
     qs = FieldDefinition.objects.filter(entity=entity)
     if hidden := _unclaimed_section_flags():
         qs = qs.exclude(key__in=hidden)
     if not include_archived:
         qs = qs.filter(archived=False)
+    if user is not None and (unseen := fieldrules.hidden(user, entity)):
+        qs = qs.exclude(key__in=unseen)
     return list(qs)
 
 
-def field_map(entity, include_archived=False):
-    return {f.key: f for f in fields_for(entity, include_archived)}
+def field_map(entity, include_archived=False, user=None):
+    return {f.key: f for f in fields_for(entity, include_archived, user)}
+
+
+def may_change(user, entity, fd):
+    """Whether the user may change this field: the area's edit right, the field's own lock and the role's rule."""
+    return user.can(f"{entity}.edit") and not fd.read_only and fieldrules.may_change(user, entity, fd.key)
 
 
 parse_date = fieldtypes.parse_date  # devices, people and the importer read dates through here
@@ -164,8 +172,10 @@ def class_choices():
 
 def build_view(tree, person, user, readonly=False):
     """Resolve a mask tree into what the template renders."""
-    fields = field_map(person.kind)
+    every = field_map(person.kind)  # conditions may read a field the role does not see; it is just not shown
+    fields = field_map(person.kind, user=user)
     can_edit = user.can(f"{person.kind}.edit") and not readonly  # roles grant pupils and staff apart
+    fixed = fieldrules.read_only(user, person.kind)
     classes = None
     tabs = []
     for tab in tree.get("tabs", []):
@@ -173,7 +183,7 @@ def build_view(tree, person, user, readonly=False):
         for section in tab.get("sections", []):
             items = []
             for item in section.get("items", []):
-                if not condition_met(item, person, fields):
+                if not condition_met(item, person, every):
                     continue
                 entry = {"w": item.get("w", 12), "type": item.get("type")}
                 if item.get("type") == "field":
@@ -186,7 +196,7 @@ def build_view(tree, person, user, readonly=False):
                         classes = class_choices()
                     entry.update(
                         fd=fd, value=form_value(person, fd), display=display_value(person, fd, localized=True),
-                        editable=can_edit and not fd.read_only,
+                        editable=can_edit and not fd.read_only and fd.key not in fixed,
                         url=reverse("person_field", args=[person.pk, fd.key]),
                         reveal_url=reverse("person_secret_reveal", args=[person.pk, fd.key]) if fd.type == "secret" else "",
                         label=i18n.pick(item.get("label", ""), item.get("labels")) or fd.display_label, help=item.get("help") or fd.help_text,

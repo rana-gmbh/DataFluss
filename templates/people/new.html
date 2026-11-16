@@ -13,14 +13,14 @@
     </div>
     <div id="dupes" class="mt-3"></div>
     <div class="grid sm:grid-cols-2 gap-3 mt-3">
-      <div><label class="label" for="birth_date">{{ fields.birth_date.display_label|default:_("Geburtsdatum") }}</label><input class="input" type="date" id="birth_date" name="birth_date" value="{{ data.birth_date }}"></div>
-      <div><label class="label" for="entry_date">{{ fields.entry_date.display_label|default:_("Eintritt") }}</label><input class="input" type="date" id="entry_date" name="entry_date" value="{{ data.entry_date|default:today }}"></div>
-      <div><label class="label" for="gender">{{ fields.gender.display_label|default:_("Geschlecht") }}</label><select class="input" id="gender" name="gender"><option value="">–</option>{% for value, label in fields.gender.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
+      {% if 'birth_date' in settable %}<div><label class="label" for="birth_date">{{ fields.birth_date.display_label|default:_("Geburtsdatum") }}</label><input class="input" type="date" id="birth_date" name="birth_date" value="{{ data.birth_date }}"></div>{% endif %}
+      {% if 'entry_date' in settable %}<div><label class="label" for="entry_date">{{ fields.entry_date.display_label|default:_("Eintritt") }}</label><input class="input" type="date" id="entry_date" name="entry_date" value="{{ data.entry_date|default:today }}"></div>{% endif %}
+      {% if 'gender' in settable %}<div><label class="label" for="gender">{{ fields.gender.display_label|default:_("Geschlecht") }}</label><select class="input" id="gender" name="gender"><option value="">–</option>{% for value, label in fields.gender.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>{% endif %}
       {% if entity == 'pupil' %}
-      <div><label class="label" for="klasse">{{ fields.klasse.display_label|default:_("Klasse") }}</label><select class="input" id="klasse" name="klasse"><option value="">–</option>{% for c in classes %}<option value="{{ c.pk }}">{{ c.name }}</option>{% endfor %}</select></div>
-      <div><label class="label" for="school_type">{{ fields.school_type.display_label|default:_("Schultyp") }}</label><select class="input" id="school_type" name="school_type"><option value="">–</option>{% for value, label in fields.school_type.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
+      {% if 'klasse' in settable %}<div><label class="label" for="klasse">{{ fields.klasse.display_label|default:_("Klasse") }}</label><select class="input" id="klasse" name="klasse"><option value="">–</option>{% for c in classes %}<option value="{{ c.pk }}">{{ c.name }}</option>{% endfor %}</select></div>{% endif %}
+      {% if 'school_type' in settable %}<div><label class="label" for="school_type">{{ fields.school_type.display_label|default:_("Schultyp") }}</label><select class="input" id="school_type" name="school_type"><option value="">–</option>{% for value, label in fields.school_type.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>{% endif %}
       {% else %}
-      <div><label class="label" for="category">{{ fields.category.display_label|default:_("Kategorie") }}</label><select class="input" id="category" name="category"><option value="">–</option>{% for value, label in fields.category.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
+      {% if 'category' in settable %}<div><label class="label" for="category">{{ fields.category.display_label|default:_("Kategorie") }}</label><select class="input" id="category" name="category"><option value="">–</option>{% for value, label in fields.category.option_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>{% endif %}
       {% endif %}
       <div class="sm:col-span-2"><label class="label" for="email">{% translate "Schul-E-Mail" %}</label><input class="input" type="email" id="email" name="email" value="{{ data.email }}"></div>
     </div>

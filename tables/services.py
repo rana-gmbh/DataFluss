@@ -1,7 +1,7 @@
 """Rights, values and design of own tables (docs/TABLES-PLAN.md §2, §3, §6)."""
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
@@ -83,9 +83,17 @@ def set_rights(table, rights, request=None):
 
 # ---------------------------------------------------------------- values
 
-def fields_of(table, include_archived=False):
+def fields_of(table, include_archived=False, user=None):
+    """The table's fields; with a user, without those the user's role does not see (core/fieldrules.py)."""
     qs = Field.objects.filter(table=table)
-    return list(qs if include_archived else qs.filter(archived=False))
+    if not include_archived:
+        qs = qs.filter(archived=False)
+    if user is not None:
+        from core import fieldrules
+
+        if unseen := fieldrules.hidden(user, fieldrules.table_entity(table)):
+            qs = qs.exclude(key__in=unseen)
+    return list(qs)
 
 
 def secret_context(record, key):
@@ -478,9 +486,13 @@ def search(user, terms):
     tables = {t.pk: t for t in readable(user)}
     if not tables or not terms:
         return []
+    from core import fieldrules
+
+    # A table with fields this role does not see is searched by title only: its search text holds them all.
+    private = [pk for pk, t in tables.items() if fieldrules.hidden(user, fieldrules.table_entity(t))]
     records = Record.objects.filter(table_id__in=tables)
     for term in terms:
-        records = records.filter(search_text__contains=term.lower())
+        records = records.filter(Q(search_text__contains=term.lower()) & ~Q(table_id__in=private) | Q(title__icontains=term, table_id__in=private))
     return [{"title": r.title or _("(ohne Titel)"), "sub": tables[r.table_id].display_name, "url": f"/tabellen/{tables[r.table_id].key}/{r.pk}/",
              "icon": tables[r.table_id].icon} for r in records.order_by("title")[:10]]
 

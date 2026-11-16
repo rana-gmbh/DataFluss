@@ -91,7 +91,7 @@ def mapping(request, pk):
     session = get_object_or_404(ImportSession, pk=pk, status__in=[ImportSession.UPLOADED, ImportSession.PREVIEWED])
     target = _target(request, session)
     if request.method == "POST":
-        known = {key for key, _label in target.targets()}
+        known = {key for key, _label in target.targets(request.user)}
         session.mapping = {h: value if (value := request.POST.get(f"map_{i}", "")) in known else "" for i, h in enumerate(session.headers)}
         chosen = request.POST.get("match_key", session.match_key)
         session.match_key = chosen if chosen in dict(target.match_keys()) else target.default_match()
@@ -104,7 +104,7 @@ def mapping(request, pk):
         samples = [row[index] for row in session.rows[:40] if index < len(row) and row[index]][:3]
         columns.append({"index": index, "header": header, "target": session.mapping.get(header, ""), "samples": samples})
     return render(request, "transfer/mapping.html", {
-        "session": session, "columns": columns, "targets": target.targets(), "match_keys": target.match_keys(),
+        "session": session, "columns": columns, "targets": target.targets(request.user), "match_keys": target.match_keys(),
         "match_label": target.match_label(), "target_label": target.label, "active_nav": "transfer",
     })
 
@@ -178,7 +178,7 @@ def export_rows(request):
         return HttpResponseBadRequest()
     if not request.user.can(f"{entity}.view"):
         raise PermissionDenied
-    by_id = {r["id"]: r for r in person_rows(entity, ids=ids)}
+    by_id = {r["id"]: r for r in person_rows(entity, ids=ids, user=request.user)}
     rows = [[by_id[i].get(c["key"], "") for c in columns] for i in ids if i in by_id]
     titles = [c.get("title") or c["key"] for c in columns]
     content = exporters.to_csv(titles, rows) if fmt == "csv" else exporters.to_xlsx(titles, rows)

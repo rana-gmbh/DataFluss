@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _, ngettext
 from django.views.decorators.http import require_GET, require_POST
 
-from core import audit, fieldtypes as ft
+from core import audit, fieldrules, fieldtypes as ft
 from core.models import ChangeLog, SavedView
 from vault.services import rate_limited
 
@@ -44,8 +44,9 @@ def _record(table, pk):
 
 def _columns(table, user):
     editable = services.may_edit(user, table)
-    fields = services.fields_of(table)
+    fields = services.fields_of(table, user=user)
     named = services.title_field(table, fields)
+    fixed = fieldrules.read_only(user, fieldrules.table_entity(table))
     columns = []
     for field in fields:
         kind = ft.TYPES.get(field.type)
@@ -54,7 +55,7 @@ def _columns(table, user):
         grid = services.RESULTS.get((field.config or {}).get("result"), "text") if field.type == "formula" else kind.grid
         columns.append({
             "key": field.key, "title": str(field.display_label), "type": grid, "visible": field.in_grid,
-            "editable": editable and field.type in GRID_EDITABLE, "options": field.option_values,
+            "editable": editable and field.type in GRID_EDITABLE and field.key not in fixed, "options": field.option_values,
             "optionLabels": {v: str(label) for v, label in field.option_choices},
             "decimals": None if field.type == "formula" and "decimals" not in (field.config or {}) else ft.decimals(field),
             "unit": ft.config(field).get("unit", ""), "wide": bool(named and field.key == named.key) or field.type == "textarea",
@@ -97,7 +98,7 @@ def _formula_cell(record, field, context):
 
 
 def rows(table, user, ids=None):
-    fields = [f for f in services.fields_of(table) if f.type != "secret" and ft.TYPES.get(f.type)]
+    fields = [f for f in services.fields_of(table, user=user) if f.type != "secret" and ft.TYPES.get(f.type)]
     records = Record.objects.filter(table=table)
     if ids is not None:
         records = records.filter(pk__in=ids)
@@ -178,6 +179,8 @@ def _save(request, table, record, key, raw):
     field = _field(table, key)
     if field.type == "secret" and not request.user.can("vault.edit"):
         raise PermissionDenied
+    if not fieldrules.may_change(request.user, fieldrules.table_entity(table), field.key):
+        raise PermissionDenied  # the role may only read this field, or does not see it
     return field, *services.set_value(record, field, raw)
 
 
@@ -304,7 +307,9 @@ def _history_text(field, text):
 
 def history(request, record):
     fields = {f"values.{f.key}": f for f in services.fields_of(record.table, include_archived=True)}
-    rows = ChangeLog.objects.filter(entity="tables.record", record_id=record.pk).exclude(field__in=["values", "title", "search_text", "table"]).select_related("user")[:25]
+    unseen = [f"values.{key}" for key in fieldrules.hidden(getattr(request, "user", None), fieldrules.table_entity(record.table))]
+    rows = ChangeLog.objects.filter(entity="tables.record", record_id=record.pk).exclude(field__in=["values", "title", "search_text", "table", *unseen])
+    rows = rows.select_related("user")[:25]
     changes = []
     for r in rows:
         field = fields.get(r.field)
@@ -482,6 +487,8 @@ def record_file(request, key, pk, attachment):
 
     table = _table(request, key)
     item = get_object_or_404(Attachment, pk=attachment, record__table=table, record_id=pk)
+    if not fieldrules.visible(request.user, fieldrules.table_entity(table), item.field):
+        raise PermissionDenied
     field = next((f for f in services.fields_of(table, include_archived=True) if f.key == item.field), None)
     inline = item.content_type in INLINE_TYPES and field is not None and field.type == "image"
     if not inline:
@@ -511,7 +518,7 @@ def backlinks(request, kind, pk):
 
 def export_rows(table, user, ids, keys):
     """Rows for CSV or Excel: each cell as shown on screen, in the order of `ids` (what the list shows)."""
-    fields = {f.key: f for f in services.fields_of(table) if f.type != "secret"}
+    fields = {f.key: f for f in services.fields_of(table, user=user) if f.type != "secret"}
     wanted = [k for k in keys]
     try:
         chosen = [uuid.UUID(str(i)) for i in ids][:50000]

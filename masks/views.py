@@ -285,6 +285,11 @@ def field_edit(request, pk):
     usage = ms.usage_of(fd.entity, fd.key)
     if request.method == "POST":
         action = request.POST.get("action", "save")
+        if action == "rights":
+            from core import views_roles
+
+            views_roles.save_field_rights(request, fd.entity, fd.key)
+            return redirect("field_edit", pk=pk)
         if action == "archive" and not fd.is_core:
             fd.archived = True
             fd.save()
@@ -308,7 +313,10 @@ def field_edit(request, pk):
         messages.success(request, _("Gespeichert."))
         return redirect(f"/einstellungen/felder/?bereich={fd.entity}")
     options = [{"value": o["value"], "shown": i18n.option_label(o)} for o in fd.options]
-    return render(request, "masks/field_edit.html", {"fd": fd, "usage": usage, "options": options, "active_nav": "settings_home"})
+    from core import views_roles
+
+    return render(request, "masks/field_edit.html", {"fd": fd, "usage": usage, "options": options, "active_nav": "settings_home",
+                                                    "field_rights": views_roles.field_rights(request, fd.entity, fd.key)})
 
 
 def _edited_options(fd, request, scope):

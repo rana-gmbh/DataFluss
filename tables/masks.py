@@ -105,7 +105,11 @@ def editable_type(field):
 
 def build_view(tree, record, user, readonly=False):
     """Resolve a mask tree into what masks/_form.html renders, for one record."""
-    fields = {f.key: f for f in services.fields_of(record.table)}
+    from core import fieldrules
+
+    every = {f.key: f for f in services.fields_of(record.table)}  # conditions may read a field the role does not see
+    fields = {f.key: f for f in services.fields_of(record.table, user=user)}
+    fixed = fieldrules.read_only(user, fieldrules.table_entity(record.table))
     editable = services.may_edit(user, record.table) and not readonly
     placed = {item.get("field") for tab in tree.get("tabs", []) for section in tab.get("sections", [])
               for item in section.get("items", []) if item.get("type") == "field"}
@@ -117,7 +121,7 @@ def build_view(tree, record, user, readonly=False):
             field = fields.get(item.get("field"))
             if field is None or (field.type == "secret" and not user.can("vault.view")):
                 return None
-            return _field_entry(item, record, field, user, editable and editable_type(field))
+            return _field_entry(item, record, field, user, editable and editable_type(field) and field.key not in fixed)
         if kind == "block" and item.get("block") in BLOCKS:
             name = item["block"]
             return {"w": item.get("w", 12), "type": "block", "block": name, "title": BLOCKS[name][0],
@@ -129,7 +133,7 @@ def build_view(tree, record, user, readonly=False):
     for tab in tree.get("tabs", []):
         sections = []
         for section in tab.get("sections", []):
-            items = [e for item in section.get("items", []) if _condition_met(item, record, fields) and (e := entry_for(item))]
+            items = [e for item in section.get("items", []) if _condition_met(item, record, every) and (e := entry_for(item))]
             title = i18n.pick(section.get("title", ""), section.get("titles"))
             if items or title:
                 sections.append({"title": title, "items": items})

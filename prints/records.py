@@ -52,9 +52,11 @@ def _logins(owner_filter, kinds, include_secrets):
 
 
 def person_record(person, include_secrets=False):
+    from core.context_user import get_current_user
+
     fields = {**common_fields()}
     labels = {}
-    for fd in ms.fields_for(person.kind):
+    for fd in ms.fields_for(person.kind, user=get_current_user()):  # without what the printing role does not see
         if fd.type == "secret":
             continue
         labels[fd.key] = fd.label
@@ -115,12 +117,17 @@ def class_record(group):
     query = group.members.filter(archived=False).prefetch_related(
         Prefetch("assignments", Assignment.objects.filter(returned_at__isnull=True).select_related("asset"), to_attr="open_assignments")
     )
+    from core import fieldrules
+    from core.context_user import get_current_user
+
+    unseen = fieldrules.hidden(get_current_user(), "pupil")
     for person in query:
         assets = [a.asset for a in person.open_assignments]
-        members.append({
+        member = {
             "sort_name": person.sort_name, "email": person.email, "birth_date": _d(person.birth_date), "school_type": person.school_type,
             "device": ", ".join(a.number for a in assets), "serial": ", ".join(a.serial for a in assets), "empty": "",
-        })
+        }
+        members.append({key: "" if key in unseen else value for key, value in member.items()})
     fields = {**common_fields(), "name": group.name, "klasse": group.name, "anzahl": str(len(members)), "schuljahr": str(group.school_year or "")}
     return {"id": str(group.pk), "title": f"Klasse {group.name}", "fields": fields, "labels": {"klasse": "Klasse", "anzahl": "Schüler", "schuljahr": "Schuljahr", "name": "Name"}, "photo": "", "logins": [], "devices": [], "cases": [], "members": members}
 

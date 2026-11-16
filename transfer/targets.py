@@ -23,8 +23,8 @@ class PersonTarget:
 
         return user.can("data.import") and "schulverwaltung" in modules.active() and user.can(f"{self.entity}.edit")
 
-    def targets(self):
-        return importer.targets(self.entity)
+    def targets(self, user=None):
+        return importer.targets(self.entity, user)
 
     def auto_mapping(self, headers):
         return importer.auto_mapping(headers, self.entity)

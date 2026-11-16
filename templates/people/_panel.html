@@ -3,9 +3,9 @@
 {% block heading %}{{ person.display_name }}{% endblock %}
 {% block badges %}
   {% if person.kind == 'pupil' %}
-    {% if person.current_class %}<a href="{% url 'class_detail' person.current_class.pk %}" class="badge badge-accent">{{ person.current_class }}</a>{% endif %}
-    {% if person.school_type %}<span class="badge">{{ person.school_type }}</span>{% endif %}
-  {% elif person.category %}<span class="badge badge-accent">{{ person.category }}</span>{% endif %}
+    {% if person.current_class and 'klasse' not in hidden_fields %}<a href="{% url 'class_detail' person.current_class.pk %}" class="badge badge-accent">{{ person.current_class }}</a>{% endif %}
+    {% if person.school_type and 'school_type' not in hidden_fields %}<span class="badge">{{ person.school_type }}</span>{% endif %}
+  {% elif person.category and 'category' not in hidden_fields %}<span class="badge badge-accent">{{ person.category }}</span>{% endif %}
   {% if person.archived %}<span class="badge badge-warn">{% translate "Archiviert" %}</span>{% endif %}
   {% for badge in person_badges %}{% include badge %}{% endfor %}
 {% endblock %}

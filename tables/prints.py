@@ -56,7 +56,9 @@ class TableSource:
         return user.can("print.run") and services.may_read(user, self.table)
 
     def fields(self):
-        return [f for f in services.fields_of(self.table) if f.type != "secret"]
+        from core.context_user import get_current_user
+
+        return [f for f in services.fields_of(self.table, user=get_current_user()) if f.type != "secret"]
 
     def field_catalog(self):
         return [{"key": "titel", "label": _("Titel des Datensatzes")}] + [{"key": f.key, "label": str(f.display_label)} for f in self.fields()]
@@ -144,7 +146,7 @@ class TableSource:
             if table is None or (user is not None and not services.may_read(user, table)):
                 return []
             others = context.fetch(context.targets(record, key), table)
-        fields = [f for f in services.fields_of(table) if f.type != "secret"]
+        fields = [f for f in services.fields_of(table, user=user) if f.type != "secret"]
         rows = []
         for other in others:
             other.table = table

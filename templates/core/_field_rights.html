@@ -1,0 +1,13 @@
+{% load i18n %}{% if field_rights %}<form method="post" class="surface p-4 space-y-2">{% csrf_token %}<input type="hidden" name="action" value="rights">
+  <h2 class="font-semibold">{% translate "Rechte" %}</h2>
+  <p class="muted text-[12.5px]">{% translate "Was jede Rolle mit diesem Feld darf. IT darf immer alles." %}{% if field_rights.locked %} {% translate "Dieses Feld kann nicht verborgen werden, sonst hätte ein Datensatz keinen Namen." %}{% endif %}</p>
+  {% for item in field_rights.roles %}<div class="flex flex-wrap items-center justify-between gap-2 py-1">
+    <a class="text-[13px] font-medium hover:underline" href="{% url 'role_edit' item.role.key %}">{{ item.role.display_name }}</a>
+    <div class="segmented" role="radiogroup" aria-label="{{ item.role.display_name }}">
+      <label><input type="radio" name="rule_{{ item.role.key }}" value="edit" {% if item.rule == 'edit' %}checked{% endif %}><span>{% translate "Bearbeiten" %}</span></label>
+      <label><input type="radio" name="rule_{{ item.role.key }}" value="read" {% if item.rule == 'read' %}checked{% endif %}><span>{% translate "Nur lesen" %}</span></label>
+      <label><input type="radio" name="rule_{{ item.role.key }}" value="hidden" {% if item.rule == 'hidden' %}checked{% endif %} {% if field_rights.locked %}disabled{% endif %}><span>{% translate "Verborgen" %}</span></label>
+    </div></div>{% endfor %}
+  <button class="btn btn-sm w-full">{% translate "Rechte speichern" %}</button>
+  <p class="muted text-[12px]">{% translate "„Bearbeiten“ gilt nur, wenn die Rolle den Bereich bearbeiten darf." %}</p>
+</form>{% endif %}

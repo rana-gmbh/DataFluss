@@ -68,9 +68,16 @@ def history(request, person):
     rows of the whole custom dict, from before that, stay out."""
     from masks.services import field_map
 
+    from core import fieldrules
+
     fields = {f.name: f.verbose_name for f in person._meta.concrete_fields}
     fields.update({f"custom.{key}": fd.display_label for key, fd in field_map(person.kind, include_archived=True).items()})
-    rows = ChangeLog.objects.filter(entity="people.person", record_id=person.pk).exclude(field="custom").select_related("user")[:25]
+    # Changes of fields the role does not see stay out (a column's change is named by the column, a form
+    # field's by custom.<key>; the class field is the column current_class).
+    unseen = fieldrules.hidden(getattr(request, "user", None), person.kind)
+    unseen = unseen | {f"custom.{key}" for key in unseen} | ({"current_class"} if "klasse" in unseen else set())
+    rows = ChangeLog.objects.filter(entity="people.person", record_id=person.pk).exclude(field="custom").exclude(field__in=unseen)
+    rows = rows.select_related("user")[:25]
     return {"changes": [{"row": r, "label": fields.get(r.field, r.field.removeprefix("custom."))} for r in rows]}
 
 

@@ -346,10 +346,13 @@ def global_search(request):
         from people import access
 
         if access.kinds(user):
+            from core import fieldrules
+
             people = Person.objects.filter(kind__in=access.kinds(user)).select_related("current_class")
+            mail_kinds = [kind for kind in access.kinds(user) if fieldrules.visible(user, kind, "email")]  # a hidden e-mail finds nobody
             for term in terms:
                 people = people.filter(
-                    Q(first_name__icontains=term) | Q(last_name__icontains=term) | Q(email__icontains=term) | Q(abbreviation__iexact=term)
+                    Q(first_name__icontains=term) | Q(last_name__icontains=term) | Q(email__icontains=term, kind__in=mail_kinds) | Q(abbreviation__iexact=term)
                 )
             for p in people[:8]:
                 sub = (p.current_class.name if p.current_class else p.school_type) if p.kind == "pupil" else p.category

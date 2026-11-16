@@ -66,6 +66,34 @@
       <span><span class="font-medium">{{ extra.title }}</span>{% if extra.hint %}<span class="block muted text-[12px]">{{ extra.hint }}</span>{% endif %}</span></label>{% endfor %}</div>
   </section>
 
+  {% if field_entities %}<section class="surface p-4" id="felder" x-data="{ entity: '{{ field_entities.0.entity }}', q: '' }">
+    <h2 class="section-title">{% translate "Felder" %}</h2>
+    <p class="muted text-[13px] mb-3">{% translate "Bearbeiten: wie der Bereich es erlaubt. Nur lesen: sichtbar, aber nie änderbar. Verborgen: nirgends zu sehen, weder auf Seiten noch in Listen, Suche, Ausdrucken, Exporten, Verlauf und auf verbundenen Computern." %}</p>
+    <div class="flex flex-wrap gap-1.5 mb-3" role="tablist">{% for e in field_entities %}
+      <button type="button" class="toggle" :class="entity === '{{ e.entity }}' && 'is-on'" @click="entity = '{{ e.entity }}'" role="tab">{{ e.title }}{% if e.count %} <span class="ml-1 opacity-80">({{ e.count }})</span>{% endif %}</button>{% endfor %}
+    </div>
+    <div class="flex flex-wrap items-center gap-2 mb-2">
+      <input class="input max-w-xs py-1.5" type="search" x-model="q" placeholder="{% translate 'Feld suchen' %}" aria-label="{% translate 'Feld suchen' %}">
+      <button type="button" class="btn btn-sm" data-all-fields="edit">{% translate "Alle bearbeiten" %}</button>
+      <button type="button" class="btn btn-sm" data-all-fields="read">{% translate "Alle nur lesen" %}</button>
+    </div>
+    {% for e in field_entities %}<div x-show="entity === '{{ e.entity }}'" {% if not forloop.first %}x-cloak{% endif %} data-field-entity="{{ e.entity }}">
+      {% if e.closed %}<p class="badge-warn rounded-lg px-3 py-2 text-[12.5px] mb-2">{% blocktranslate trimmed with name=e.title %}Diese Rolle kann {{ name }} derzeit nicht öffnen. Die Regeln hier gelten, sobald sie es darf.{% endblocktranslate %}</p>{% endif %}
+      {% for group in e.groups %}{% if group.title %}<h3 class="muted uppercase text-[10.5px] tracking-wide mt-3 mb-1">{{ group.title }}</h3>{% endif %}
+      {% for item in group.fields %}<div class="py-1.5 flex flex-wrap items-center gap-3 border-b last:border-0" style="border-color: var(--line)" data-field-row
+           x-show="!q || '{{ item.field.display_label|lower|escapejs }}'.includes(q.toLowerCase())">
+        <div class="flex-1 min-w-[12rem] text-[13px]"><span class="font-medium">{{ item.field.display_label }}</span>
+          {% if item.locked %}<span class="muted text-[11.5px] inline-flex items-center gap-1 ml-1" title="{% translate 'Ohne dieses Feld hätte ein Datensatz keinen Namen.' %}">{% icon 'lock' 'text-[11px]' %}{% translate "kann nicht verborgen werden" %}</span>{% endif %}
+          {% if item.field.type == 'secret' %}<span class="muted text-[11.5px] ml-1">{% translate "Passwort-Feld: zusätzlich die Rechte bei Zugänge" %}</span>{% endif %}</div>
+        <div class="segmented" role="radiogroup" aria-label="{{ item.field.display_label }}">
+          <label><input type="radio" name="field__{{ e.entity }}__{{ item.field.key }}" value="edit" {% if item.rule == 'edit' %}checked{% endif %}><span>{% translate "Bearbeiten" %}</span></label>
+          <label><input type="radio" name="field__{{ e.entity }}__{{ item.field.key }}" value="read" {% if item.rule == 'read' %}checked{% endif %}><span>{% translate "Nur lesen" %}</span></label>
+          <label><input type="radio" name="field__{{ e.entity }}__{{ item.field.key }}" value="hidden" {% if item.rule == 'hidden' %}checked{% endif %} {% if item.locked %}disabled{% endif %}><span>{% translate "Verborgen" %}</span></label>
+        </div>
+      </div>{% endfor %}{% endfor %}
+    </div>{% endfor %}
+  </section>{% endif %}
+
   <section class="surface p-4" id="verwaltung">
     <h2 class="section-title">{% translate "Gestalten und Verwalten" %}</h2>
     <p class="muted text-[13px] mb-2">{% translate "Rechte für Einstellungen. Wer „Benutzer und Rollen“ hat, kann nur Rechte vergeben, die er selbst hat." %}</p>
