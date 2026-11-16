@@ -2,9 +2,20 @@
   const cfg = JSON.parse(document.getElementById("grid-config").textContent);
   const $ = (id) => document.getElementById(id);
   const de = (iso) => { if (!iso) return ""; const [y, m, d] = iso.split("-"); return `${d}.${m}.${y}`; };
+  const deTime = (iso) => { if (!iso) return ""; const t = new Date(iso); return isNaN(t) ? iso : t.toLocaleString(document.documentElement.lang || "de", { dateStyle: "medium", timeStyle: "short" }); };
+  const number = (c, v) => {
+    if (v === null || v === undefined || v === "") return "";
+    const text = Number(v).toLocaleString(document.documentElement.lang || "de", { minimumFractionDigits: c.decimals || 0, maximumFractionDigits: c.decimals || 0 });
+    return c.unit ? `${text} ${c.unit}` : text;
+  };
   const LS = `grid:${cfg.entity}`;
   const FILTER_KEY = `grid-filters:${cfg.entity}`;
   const columnByKey = Object.fromEntries(cfg.columns.map((c) => [c.key, c]));
+  const recordBase = cfg.recordBase || "/personen/";
+  const actionUrl = cfg.actionUrl || "/personen/aktion/";
+  const fieldUrl = (id, key) => (cfg.fieldUrl || "/api/personen/{id}/feld/{key}/").replace("{id}", id).replace("{key}", key);
+  const viewsUrl = cfg.viewsUrl || "/api/ansichten/";
+  const viewDeleteUrl = (id) => (cfg.viewDeleteUrl || "/api/ansichten/{id}/loeschen/").replace("{id}", id);
   let state = { scope: "active" };
   try { state = { ...state, ...JSON.parse(sessionStorage.getItem(LS) || "{}") }; } catch (e) {}
 
@@ -17,6 +28,7 @@
     const value = row[c.key];
     if (c.type === "bool") return value ? "Ja" : "Nein";
     if (c.type === "date") return de(value);
+    if (c.type === "datetime") return deTime(value);
     return value === null || value === undefined ? "" : String(value);
   };
   const EMPTY = gettext("(leer)");
@@ -50,7 +62,10 @@
       col.sorter = (a, b) => String(optionLabel(c, a ?? "")).localeCompare(String(optionLabel(c, b ?? "")));
     } else if (c.type === "multichoice") {
       col.formatter = (cell) => App.esc([].concat(cell.getValue() || []).map((v) => optionLabel(c, v)).join(", "));
-    } else if (c.type === "number") { col.editor = c.editable ? "number" : false; col.editorParams = { selectContents: true }; col.width = 100; }
+    } else if (c.type === "number") {
+      col.editor = c.editable ? "number" : false; col.editorParams = { selectContents: true }; col.width = 100; col.sorter = "number";
+      if (c.decimals || c.unit) { col.formatter = (cell) => App.esc(number(c, cell.getValue())); col.hozAlign = "right"; }
+    } else if (c.type === "datetime") { col.formatter = (cell) => App.esc(deTime(cell.getValue())); col.width = 150; }
     else if (c.editable) { col.editor = "input"; col.editorParams = { selectContents: true }; }
     if (c.key === "device" || c.key === "serial") col.cssClass = "mono";
     return col;
@@ -67,7 +82,7 @@
     ajaxParams: () => ({ entity: cfg.entity, scope: state.scope }),
     ajaxResponse: (url, params, response) => response,
     columns: [rowHeader, ...cfg.columns.map(column)],
-    initialSort: [{ column: "last_name", dir: "asc" }],
+    initialSort: [{ column: cfg.initialSort || "last_name", dir: "asc" }],
     headerSortClickElement: "icon",
     movableColumns: true,
     persistence: { sort: true, columns: ["width", "visible"] },
@@ -98,7 +113,7 @@
     if (def.type === "class") value = classIdByName[value] || "";
     let res;
     try {
-      res = await App.postJSON(`/api/personen/${id}/feld/${key}/`, { value });
+      res = await App.postJSON(fieldUrl(id, key), { value });
     } catch (e) {
       cell.restoreOldValue();
       return;
@@ -107,7 +122,7 @@
       if (id === RecordPanel.activeId) RecordPanel.show(id);
       App.toast(interpolate(gettext("%(field)s gespeichert"), { field: def.title }, true), { action: { label: gettext("Rückgängig"), run: async () => {
         const old = cell.getOldValue();
-        await App.postJSON(`/api/personen/${id}/feld/${key}/`, { value: def.type === "class" ? (classIdByName[old] || "") : old });
+        await App.postJSON(fieldUrl(id, key), { value: def.type === "class" ? (classIdByName[old] || "") : old });
         cell.restoreOldValue();
         if (id === RecordPanel.activeId) RecordPanel.show(id);
       } } });
@@ -120,7 +135,7 @@
 
   // Filtering
   const search = $("grid-search");
-  const presets = {
+  const presets = cfg.records ? {} : {
     "ohne-email": (r) => !r.email && r.school_type !== "Kiga",
     "neue-codes": (r) => r.new_codes_needed === true,
     "ohne-foto": (r) => !r.photo_url,
@@ -282,7 +297,7 @@
   });
 
   // Scope
-  const scope = $("grid-scope");
+  const scope = $("grid-scope") || { value: "active", addEventListener() {} };
   scope.value = state.scope;
   scope.addEventListener("change", () => { state.scope = scope.value; persist(); table.setData(); });
 
@@ -337,7 +352,7 @@
     if (!name) return;
     const columns = table.getColumns().filter((c) => c.isVisible() && c.getField()).map((c) => c.getField());
     const sort = table.getSorters().map((s) => ({ column: s.field, dir: s.dir }));
-    const res = await App.postJSON("/api/ansichten/", { entity: cfg.entity, name, config: { columns, sort, scope: state.scope, preset: activePreset, filters } });
+    const res = await App.postJSON(viewsUrl, { entity: cfg.entity, name, config: { columns, sort, scope: state.scope, preset: activePreset, filters } });
     if (res.ok) {
       const view = await res.json();
       cfg.views = cfg.views.filter((v) => v.id !== view.id).concat(view);
@@ -348,7 +363,7 @@
   });
   deleteBtn.addEventListener("click", async () => {
     if (!confirm(gettext("Ansicht löschen?"))) return;
-    await App.post(`/api/ansichten/${viewSelect.value}/loeschen/`);
+    await App.post(viewDeleteUrl(viewSelect.value));
     cfg.views = cfg.views.filter((v) => v.id !== viewSelect.value);
     renderViews();
     deleteBtn.classList.add("hidden");
@@ -365,14 +380,18 @@
   });
   async function runBulk(action, value, question, ids = selectedIds()) {
     if (question && !(await App.ask(question))) return;
-    const res = await App.postJSON("/personen/aktion/", { ids, action, value });
+    const res = await App.postJSON(actionUrl, { ids, action, value });
     if (res.ok) {
       const body = await res.json();
-      App.toast(interpolate(ngettext("Erledigt: %(n)s Person", "Erledigt: %(n)s Personen", body.count), { n: body.count }, true));
+      App.toast(cfg.records
+        ? interpolate(ngettext("Erledigt: %(n)s Datensatz", "Erledigt: %(n)s Datensätze", body.count), { n: body.count }, true)
+        : interpolate(ngettext("Erledigt: %(n)s Person", "Erledigt: %(n)s Personen", body.count), { n: body.count }, true));
       table.setData();
     } else if (res.status !== 401) App.toast(gettext("Das hat nicht geklappt"), { error: true });
   }
-  const count = (n) => interpolate(ngettext("%(n)s Person", "%(n)s Personen", n), { n }, true);
+  const count = (n) => cfg.records
+    ? interpolate(ngettext("%(n)s Datensatz", "%(n)s Datensätze", n), { n }, true)
+    : interpolate(ngettext("%(n)s Person", "%(n)s Personen", n), { n }, true);
   const people = () => count(selectedIds().length);
   const chosenLabel = (select) => select.options[select.selectedIndex].textContent;
   const classSel = $("bulk-class");
@@ -397,8 +416,9 @@
   $("bulk-archive")?.addEventListener("click", () => runBulk("archive", undefined, interpolate(gettext("%(who)s archivieren?"), { who: people() }, true)));
   $("bulk-restore")?.addEventListener("click", () => runBulk("restore"));
   const printSel = $("bulk-print");
-  printSel.innerHTML = `<option value="">${App.esc(gettext("Bericht drucken"))}</option>` + cfg.templates.map((t) => `<option value="${t.id}">${App.esc(t.name)}</option>`).join("");
-  printSel.addEventListener("change", () => {
+  if (printSel && !cfg.templates.length && cfg.records) printSel.classList.add("hidden");
+  if (printSel) printSel.innerHTML = `<option value="">${App.esc(gettext("Bericht drucken"))}</option>` + cfg.templates.map((t) => `<option value="${t.id}">${App.esc(t.name)}</option>`).join("");
+  printSel?.addEventListener("change", () => {
     if (!printSel.value) return;
     const form = $("print-form");
     form.template.value = printSel.value;
@@ -418,7 +438,7 @@
   async function moveToBin(ids, names) {
     const what = ids.length === 1 ? names[0] : count(ids.length);
     if (!(await App.ask(interpolate(gettext("%(what)s in den Papierkorb legen? Von dort lässt sich das 30 Tage lang zurückholen."), { what }, true)))) return;
-    const res = await App.postJSON("/personen/aktion/", { ids, action: "delete" });
+    const res = await App.postJSON(actionUrl, { ids, action: "delete" });
     if (!res.ok) { if (res.status !== 401) App.toast(gettext("Das hat nicht geklappt"), { error: true }); return; }
     const body = await res.json();
     if (ids.includes(RecordPanel.activeId) && body.count) location.reload();
@@ -429,7 +449,7 @@
       ? interpolate(gettext("%(name)s liegt im Papierkorb"), { name: names[0] }, true)
       : interpolate(gettext("%(who)s im Papierkorb"), { who: count(body.count) }, true);
     App.toast(done, { action: { label: gettext("Rückgängig"), run: async () => {
-      const back = await App.postJSON("/personen/aktion/", { ids, action: "bring_back" });
+      const back = await App.postJSON(actionUrl, { ids, action: "bring_back" });
       if (back.ok) { table.setData(); App.toast(gettext("Wiederhergestellt")); }
     } } });
   }
@@ -441,7 +461,7 @@
     const ids = rows.map((r) => r.id);
     const names = rows.map((r) => r.name);
     const single = rows.length === 1;
-    const url = `/personen/${data.id}/`;
+    const url = `${recordBase}${data.id}/`;
     const archived = rows.every((r) => r.archived);
     const items = single
       ? [
@@ -449,7 +469,7 @@
           { label: gettext("Ganze Seite öffnen"), icon: "file", href: url },
           { label: gettext("In neuem Fenster öffnen"), icon: "external", newWindow: url },
           "-",
-          cfg.canEdit && { label: gettext("Duplizieren"), icon: "copyplus", post: `${url}duplizieren/`, confirm: interpolate(gettext("%(name)s duplizieren? Die Kopie bekommt Daten und Formularfelder, aber kein Bild, keine Karten, Zugänge oder Geräte."), { name: data.name }, true) },
+          cfg.canEdit && !cfg.records && { label: gettext("Duplizieren"), icon: "copyplus", post: `${url}duplizieren/`, confirm: interpolate(gettext("%(name)s duplizieren? Die Kopie bekommt Daten und Formularfelder, aber kein Bild, keine Karten, Zugänge oder Geräte."), { name: data.name }, true) },
         ]
       : [{ label: interpolate(gettext("%(who)s ausgewählt"), { who: count(rows.length) }, true), disabled: true }, "-"];
     const who = single ? names[0] : count(ids.length);
@@ -460,11 +480,13 @@
     if (cfg.platforms.length) {
       items.push({ label: gettext("Zugänge erzeugen"), icon: "key", items: cfg.platforms.map((p) => ({ label: p.name, run: () => runBulk("logins", p.id, interpolate(gettext("%(platform)s: Zugänge für %(who)s erzeugen?"), { platform: p.name, who }, true), ids) })) });
     }
+    if (cfg.canArchive || cfg.canDelete) items.push("-");
     if (cfg.canArchive) {
-      items.push("-");
       items.push(archived
         ? { label: gettext("Wiederherstellen"), icon: "archive-restore", run: () => runBulk("restore", undefined, null, ids) }
         : { label: gettext("Archivieren"), icon: "archive", run: () => runBulk("archive", undefined, interpolate(gettext("%(who)s archivieren?"), { who }, true), ids) });
+    }
+    if (cfg.canArchive || cfg.canDelete) {
       items.push({ label: single ? gettext("Löschen …") : interpolate(gettext("%(who)s löschen …"), { who: count(ids.length) }, true), icon: "trash", danger: true, run: () => moveToBin(ids, names) });
     }
     ContextMenu.open(e, items);
@@ -481,7 +503,8 @@
   $("grid-export-xlsx")?.addEventListener("click", () => exportRows("xlsx"));
   $("grid-export-csv")?.addEventListener("click", () => exportRows("csv"));
 
-  RecordPanel.tabulator(table, { base: "/personen/", rowUrl: (id) => `${cfg.dataUrl}?entity=${cfg.entity}&id=${id}`, busy: () => menu });
+  $("bulk-delete")?.addEventListener("click", () => { const rows = table.getSelectedData(); moveToBin(rows.map((r) => r.id), rows.map((r) => r.name)); });
+  RecordPanel.tabulator(table, { base: recordBase, rowUrl: (id) => `${cfg.dataUrl}?entity=${cfg.entity}&id=${id}`, busy: () => menu });
   document.addEventListener("keydown", (e) => { if (menu && e.key === "Escape") closeMenu(); });
 
   table.on("tableBuilt", () => {

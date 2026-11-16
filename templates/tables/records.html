@@ -1,0 +1,42 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{{ table.display_name }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'vendor/tabulator.min.css' %}"><link rel="stylesheet" href="{% static 'css/app.css' %}">{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/tabulator.min.js' %}" defer></script><script src="{% static 'js/record.js' %}" defer></script><script src="{% static 'js/panel.js' %}" defer></script><script src="{% static 'js/grid.js' %}" defer></script>{% endblock %}
+{% block content %}
+{{ config|json_script:"grid-config" }}
+<div class="flex flex-wrap items-center gap-2 mb-3">
+  <h1 class="page-title mr-2 inline-flex items-center gap-2">{% icon table.icon 'text-[20px] text-[var(--accent)]' %}{{ table.display_name }}</h1>
+  <span class="badge" id="grid-count">0</span>
+  {% if table.archived %}<span class="badge badge-warn">{% translate "Archiviert" %}</span>{% endif %}
+  <div class="flex-1"></div>
+  {% if request.user|can:'tables.design' %}<a class="btn" href="{% url 'table_settings' table.key %}">{% icon 'settings' %}{% translate "Tabelle gestalten" %}</a>{% endif %}
+  {% if can_edit %}<a class="btn" href="{% url 'records_bin' table.key %}">{% icon 'trash' %}{% translate "Papierkorb" %}</a>
+  <form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn btn-primary">{% icon 'plus' %}{% translate "Neuer Datensatz" %}</button></form>{% endif %}
+</div>
+{% if table.description %}<p class="muted text-[13px] mb-2">{{ table.description }}</p>{% endif %}
+<p class="muted text-[12px] mb-2 hidden lg:block">{% translate "Klick öffnet den Datensatz, Doppelklick ändert die Zelle, ein Klick auf den Spaltentitel filtert." %}</p>
+<div class="flex gap-4 items-start">
+<div class="flex-1 min-w-0 surface overflow-hidden">
+  <div class="flex flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line)">
+    {% translate "In der Liste filtern" as filter_label %}{% translate "Ansicht löschen" as delete_view_label %}
+    <div class="relative w-56"><span class="absolute left-2.5 top-2.5 muted">{% icon 'search' %}</span><input id="grid-search" class="input pl-8 h-[2.125rem]" placeholder="{{ filter_label }}" aria-label="{{ filter_label }}"></div>
+    <select id="grid-views" class="input w-auto h-[2.125rem]" aria-label="{% translate 'Gespeicherte Ansicht' %}"></select>
+    <button class="btn" id="grid-save-view">{% icon 'save' %}{% translate "Ansicht speichern" %}</button>
+    <button class="btn btn-icon hidden" id="grid-delete-view" title="{{ delete_view_label }}" aria-label="{{ delete_view_label }}">{% icon 'trash' %}</button>
+    <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+      <button class="btn" @click="open = !open">{% icon 'columns' %}{% translate "Spalten" %}</button>
+      <div class="absolute z-30 mt-1 w-56 max-h-80 overflow-y-auto surface p-2 shadow-lg" x-show="open" x-cloak id="grid-columns"></div>
+    </div>
+  </div>
+  <div id="grid-chips" class="hidden flex-wrap items-center gap-1.5 px-2 py-1.5 border-b" style="border-color: var(--line)"></div>
+  <div id="grid-bulk" class="hidden flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line); background: var(--accent-soft)">
+    <span class="font-medium text-[13px]" id="grid-bulk-count"></span>
+    {% if can_edit %}<button class="btn btn-sm" id="bulk-delete">{% icon 'trash' %}{% translate "Löschen …" %}</button>{% endif %}
+    <select id="bulk-print" class="input w-auto h-[1.9rem] text-[13px]" aria-label="{% translate 'Bericht drucken' %}"></select>
+  </div>
+  <div id="grid"></div>
+</div>
+{% include "core/_record_panel.html" %}
+</div>
+<form id="print-form" method="post" action="{% url 'report_run' %}" target="_blank" class="hidden">{% csrf_token %}<input type="hidden" name="template"><input type="hidden" name="ids"></form>
+{% endblock %}

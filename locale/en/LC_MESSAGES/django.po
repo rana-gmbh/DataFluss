@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 11:40+0100\n"
+"POT-Creation-Date: 2026-11-16 11:57+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -512,6 +512,9 @@ msgstr "Import & export"
 
 msgid "Verwaltung"
 msgstr "Administration"
+
+msgid "Tabellen"
+msgstr "Tables"
 
 msgid "Text"
 msgstr "Text"
@@ -1111,6 +1114,9 @@ msgstr "This device does not exist."
 msgid "Bitte den Schaden beschreiben."
 msgstr "Please describe the damage."
 
+msgid "Tabelle"
+msgstr "Table"
+
 msgid "Foto"
 msgstr "Photo"
 
@@ -1515,6 +1521,12 @@ msgid ""
 msgstr ""
 "The record has been deleted, so the other version can no longer be applied."
 
+msgid "Datensatz"
+msgstr "Record"
+
+msgid "Weitere Felder"
+msgstr "More fields"
+
 #, python-format
 msgid "%(field)s ist archiviert und kann nicht geändert werden."
 msgstr "%(field)s is archived and cannot be changed."
@@ -1551,6 +1563,9 @@ msgstr "This type does not fit the values entered. Better create a new field."
 
 msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "The table contains records. Archive it instead."
+
+msgid "(ohne Titel)"
+msgstr "(untitled)"
 
 #, python-format
 msgid "%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu."
@@ -2202,9 +2217,6 @@ msgstr "Fields"
 
 msgid "Eigene Felder anlegen und verwalten"
 msgstr "Create and manage custom fields"
-
-msgid "Tabellen"
-msgstr "Tables"
 
 msgid "Eigene Tabellen mit eigenen Feldern anlegen"
 msgstr "Create your own tables with your own fields"
@@ -3252,6 +3264,23 @@ msgstr ""
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "For this, please open the school administration in your browser."
 
+msgid "Zur Tabelle"
+msgstr "To the table"
+
+#, python-format
+msgid ""
+"Gelöschte Datensätze bleiben %(days)s Tag hier. Danach sind sie endgültig "
+"gelöscht."
+msgid_plural ""
+"Gelöschte Datensätze bleiben %(days)s Tage hier. Danach sind sie endgültig "
+"gelöscht."
+msgstr[0] ""
+"Deleted records stay here for %(days)s day. After that they are deleted for "
+"good."
+msgstr[1] ""
+"Deleted records stay here for %(days)s days. After that they are deleted for"
+" good."
+
 msgid "Nachkommastellen"
 msgstr "Decimal places"
 
@@ -3291,9 +3320,6 @@ msgid ""
 msgstr ""
 "Your own tables with your own fields, for books, loans or appointments, say."
 
-msgid "Tabelle"
-msgstr "Table"
-
 msgid "Datensätze"
 msgstr "Records"
 
@@ -3316,6 +3342,18 @@ msgstr ""
 "The table starts with a field “Name”. Who may see and edit it is set under "
 "Permissions."
 
+msgid "Tabelle gestalten"
+msgstr "Design table"
+
+msgid "Neuer Datensatz"
+msgstr "New record"
+
+msgid "Löschen …"
+msgstr "Delete …"
+
+msgid "Datensatzseite"
+msgstr "Record page"
+
 msgid "Rechte"
 msgstr "Permissions"
 
@@ -3327,6 +3365,29 @@ msgstr "Drag to change the order"
 
 msgid "Titel"
 msgstr "Title"
+
+msgid "Wie ein Datensatz aussieht"
+msgstr "What a record looks like"
+
+msgid ""
+"Ordnen Sie die Felder im Maskendesigner in Reitern und Abschnitten an. "
+"Felder, die nicht in der Maske stehen, erscheinen unten unter „Weitere "
+"Felder“."
+msgstr ""
+"Arrange the fields in tabs and sections in the mask designer. Fields not "
+"placed in the mask appear at the bottom under “More fields”."
+
+#, python-format
+msgid "Version %(n)s"
+msgstr "Version %(n)s"
+
+msgid ""
+"Noch keine eigene Gestaltung: Die Seite zeigt alle Felder untereinander."
+msgstr ""
+"No design of its own yet: the page shows all fields one below the other."
+
+msgid "Im Maskendesigner gestalten"
+msgstr "Design in the mask designer"
 
 msgid "Wer darf die Datensätze sehen und bearbeiten?"
 msgstr "Who may see and edit the records?"

@@ -130,7 +130,12 @@ class Scope:
             sets.setdefault(model, set()).update(queryset.values_list("pk", flat=True))
 
         for model in m["config"]:
-            add(model)
+            if model._meta.label_lower == "masks.mask":  # a table's masks come with the table (tables/sync_scope.py)
+                add(model, model._base_manager.filter(table=None))
+            elif model._meta.label_lower == "masks.maskversion":
+                add(model, model._base_manager.filter(mask__table=None))
+            else:
+                add(model)
         add(m["saved_view"], m["saved_view"]._base_manager.filter(Q(owner=self.user) | Q(owner=None)))
         if can("data.import"):
             for model in m["import"]:

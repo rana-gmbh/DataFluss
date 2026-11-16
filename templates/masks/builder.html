@@ -4,7 +4,7 @@
 {% block content %}
 {{ config|json_script:"builder-config" }}
 <div class="flex flex-wrap items-center gap-2 mb-4">
-  <a class="btn btn-ghost btn-icon" href="{% url 'mask_list' %}" aria-label="{% translate 'Zurück' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
+  <a class="btn btn-ghost btn-icon" href="{% if mask.table_id %}{% url 'table_settings' mask.table.key %}?tab=seite{% else %}{% url 'mask_list' %}{% endif %}" aria-label="{% translate 'Zurück' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
   <div class="flex-1 min-w-40"><h1 class="page-title flex items-center gap-1">{{ mask.display_name }}<button type="button" class="btn btn-ghost btn-sm btn-icon" id="builder-rename" title="{% translate 'Maske umbenennen' %}" aria-label="{% translate 'Maske umbenennen' %}">{% icon 'pen' 'text-[14px]' %}</button></h1><p class="muted text-[12px]" id="builder-status"></p></div>
   <button class="btn" id="builder-undo" disabled>{% icon 'undo' %}{% translate "Rückgängig" %}</button>
   <button class="btn" id="builder-preview">{% icon 'eye' %}{% translate "Vorschau" %}</button>

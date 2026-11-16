@@ -297,7 +297,7 @@
   $("field-cancel").addEventListener("click", () => dialog.close());
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const res = await App.postJSON("/einstellungen/felder/neu/", {
+    const res = await App.postJSON(cfg.fieldCreateUrl || "/einstellungen/felder/neu/", {
       entity: cfg.entity, label: form.label.value, type: form.type.value, options: form.options.value,
       required: form.required.checked, in_grid: form.in_grid.checked,
     });
@@ -343,7 +343,7 @@
     render();
     App.toast(interpolate(section ? gettext("%(field)s angelegt und daneben platziert. Umbenennen über Rechtsklick → Feld bearbeiten.") : gettext("%(field)s angelegt. Umbenennen über Rechtsklick → Feld bearbeiten."), { field: body.label }, true));
   }
-  const editField = (key) => ({ label: gettext("Feld bearbeiten"), icon: "pen", newWindow: `/einstellungen/felder/${fieldInfo(key).id}/` });
+  const editField = (key) => ({ label: gettext("Feld bearbeiten"), icon: "pen", newWindow: (cfg.fieldEditUrl || "/einstellungen/felder/{id}/").replace("{id}", fieldInfo(key).id) });
 
   ContextMenu.register("#builder-sections .builder-item", (el) => {
     const section = tab().sections[Number(el.dataset.si)];
@@ -359,7 +359,7 @@
       { label: gettext("Nach hinten"), disabled: index === section.items.length - 1, run: move(1) },
       { label: gettext("Verschieben nach"), icon: "move", items: sectionTargets((to) => moveTo(section, item, to), section) },
       "-",
-      isField && { label: gettext("Feld duplizieren"), icon: "copyplus", run: () => duplicateField(item.field, section, index, item.w) },
+      isField && cfg.canDuplicate !== false && { label: gettext("Feld duplizieren"), icon: "copyplus", run: () => duplicateField(item.field, section, index, item.w) },
       !isField && item.type !== "field" && { label: gettext("Duplizieren"), icon: "copyplus", run: () => { checkpoint(); section.items.splice(index + 1, 0, JSON.parse(JSON.stringify(item))); render(); } },
       isField && editField(item.field),
       "-",
@@ -419,7 +419,7 @@
     return [
       { label: gettext("Einfügen in"), icon: "plus", disabled: placed, hint: placed ? gettext("schon platziert") : "", items: placed ? [] : sectionTargets(add) },
       data.type === "field" && "-",
-      data.type === "field" && { label: gettext("Feld duplizieren"), icon: "copyplus", run: () => duplicateField(data.field) },
+      data.type === "field" && cfg.canDuplicate !== false && { label: gettext("Feld duplizieren"), icon: "copyplus", run: () => duplicateField(data.field) },
       data.type === "field" && editField(data.field),
     ];
   });

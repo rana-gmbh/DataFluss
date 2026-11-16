@@ -6,6 +6,7 @@
 <div class="flex items-center gap-2 mb-4 mt-1"><h1 class="page-title flex-1 inline-flex items-center gap-2">{% icon table.icon 'text-[22px] text-[var(--accent)]' %}{{ table.display_name }}{% if table.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}</h1>
 <nav class="flex gap-1" aria-label="{% translate 'Bereiche' %}">
   <a class="btn btn-sm {% if tab == 'felder' %}btn-primary{% endif %}" href="?tab=felder" {% if tab == 'felder' %}aria-current="page"{% endif %}>{% translate "Felder" %}</a>
+  <a class="btn btn-sm {% if tab == 'seite' %}btn-primary{% endif %}" href="?tab=seite" {% if tab == 'seite' %}aria-current="page"{% endif %}>{% translate "Datensatzseite" %}</a>
   <a class="btn btn-sm {% if tab == 'rechte' %}btn-primary{% endif %}" href="?tab=rechte" {% if tab == 'rechte' %}aria-current="page"{% endif %}>{% translate "Rechte" %}</a>
   <a class="btn btn-sm {% if tab == 'allgemein' %}btn-primary{% endif %}" href="?tab=allgemein" {% if tab == 'allgemein' %}aria-current="page"{% endif %}>{% translate "Allgemein" %}</a></nav></div>
 
@@ -26,6 +27,15 @@
   <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="required" class="accent-[var(--accent)]">{% translate "Pflichtfeld" %}</label>
   <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="in_grid" checked class="accent-[var(--accent)]">{% translate "In der Liste anzeigen" %}</label>
   <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form></div>
+
+{% elif tab == 'seite' %}
+<div class="surface p-5 max-w-2xl space-y-3">
+  <h2 class="font-semibold">{% translate "Wie ein Datensatz aussieht" %}</h2>
+  <p class="muted text-[13px]">{% translate "Ordnen Sie die Felder im Maskendesigner in Reitern und Abschnitten an. Felder, die nicht in der Maske stehen, erscheinen unten unter „Weitere Felder“." %}</p>
+  {% for mask in masks %}<div class="flex items-center gap-2 text-[13px]"><a class="font-medium hover:underline flex-1" href="{% url 'mask_builder' mask.pk %}">{{ mask.display_name }}</a>{% if mask.is_default %}<span class="badge">{% translate "Standard" %}</span>{% endif %}{% if mask.published %}<span class="badge badge-accent">{% blocktranslate trimmed with n=mask.published.number %}Version {{ n }}{% endblocktranslate %}</span>{% endif %}</div>{% empty %}
+  <p class="text-[13px]">{% translate "Noch keine eigene Gestaltung: Die Seite zeigt alle Felder untereinander." %}</p>{% endfor %}
+  <form method="post" action="{% url 'table_mask' table.key %}">{% csrf_token %}<button class="btn btn-primary">{% icon 'layout' %}{% translate "Im Maskendesigner gestalten" %}</button></form>
+</div>
 
 {% elif tab == 'rechte' %}
 <form method="post" action="{% url 'table_rights' table.key %}" class="surface p-5 max-w-2xl">{% csrf_token %}

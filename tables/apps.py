@@ -8,7 +8,8 @@ class TablesConfig(AppConfig):
     def ready(self):
         from core import modules
 
+        from . import services
         from .models import Record
         from .sync_scope import TablesScope
 
-        modules.contribute(sync=TablesScope(), nightly=Record.empty_old)
+        modules.contribute(sync=TablesScope(), nightly=Record.empty_old, search=services.search)

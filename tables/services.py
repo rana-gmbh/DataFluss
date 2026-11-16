@@ -325,7 +325,28 @@ def delete_table(table, request=None):
         raise ValidationError(_("Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."))
     name = table.name
     with transaction.atomic():
+        for mask in table.masks.all():
+            for version in mask.versions.all():
+                version.delete()
+            mask.delete()
         for field in Field.objects.filter(table=table):
             field.delete()
         table.delete()
     audit.log("table", f"Tabelle gelöscht: {name}", request=request)
+
+
+def search(user, terms):
+    """Global search (core/modules.py "search"): records of readable tables whose title or text match every term."""
+    tables = {t.pk: t for t in readable(user)}
+    if not tables or not terms:
+        return []
+    records = Record.objects.filter(table_id__in=tables)
+    for term in terms:
+        records = records.filter(search_text__contains=term.lower())
+    return [{"title": r.title or _("(ohne Titel)"), "sub": tables[r.table_id].display_name, "url": f"/tabellen/{tables[r.table_id].key}/{r.pk}/",
+             "icon": tables[r.table_id].icon} for r in records.order_by("title")[:10]]
+
+
+def nav_items(user):
+    """The sidebar's section "Tabellen": readable tables that show there, as (label, url, icon, active key)."""
+    return [(t.display_name, f"/tabellen/{t.key}/", t.icon, f"table:{t.key}") for t in readable(user) if t.in_nav]

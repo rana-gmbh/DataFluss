@@ -13,11 +13,11 @@ from core import audit, fieldtypes as ft
 from core.permissions import require
 from masks import i18n
 
-from . import services
+from . import masks as table_masks, services
 from .models import EDIT, NONE, READ, Field, Record, Table
 
 ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench"]
-TABS = ("felder", "rechte", "allgemein")
+TABS = ("felder", "seite", "rechte", "allgemein")
 
 
 @require("tables.design")
@@ -44,6 +44,7 @@ def _settings_context(table, tab, **extra):
         "roles": [{"value": value, "label": label, "right": (table.rights or {}).get(value, NONE)} for value, label in services.roles()],
         "rights": [(NONE, _("Kein Zugriff")), (READ, _("Lesen")), (EDIT, _("Bearbeiten"))],
         "has_records": Record.everything.filter(table=table).exists(),
+        "masks": table.masks.prefetch_related("versions"),
         "active_nav": "settings_home", **extra,
     }
 
@@ -100,6 +101,15 @@ def _refresh_titles(table):
 
 @require("tables.design")
 @require_POST
+def table_mask(request, key):
+    """Opens the mask designer for the table's record page; the first time, the automatic layout becomes its mask."""
+    table = get_object_or_404(Table, key=key)
+    mask = table_masks.ensure_mask(table, request.user)
+    return redirect("mask_builder", pk=mask.pk)
+
+
+@require("tables.design")
+@require_POST
 def table_rights(request, key):
     table = get_object_or_404(Table, key=key)
     services.set_rights(table, {role: request.POST.get(f"right_{role}", NONE) for role, _label in services.roles()}, request=request)
@@ -111,6 +121,14 @@ def table_rights(request, key):
 @require_POST
 def table_field_new(request, key):
     table = get_object_or_404(Table, key=key)
+    if request.content_type == "application/json":  # the mask designer's dialog
+        payload = json.loads(request.body or b"{}")
+        try:
+            field = services.create_field(table, payload.get("label"), payload.get("type", "text"), payload.get("options"),
+                                          payload.get("required"), payload.get("help_text"), payload.get("in_grid", True), request=request)
+        except ValidationError as exc:
+            return JsonResponse({"error": " ".join(exc.messages)}, status=422)
+        return JsonResponse(table_masks.field_json(field))
     try:
         type_ = request.POST.get("type", "text")
         field = services.create_field(

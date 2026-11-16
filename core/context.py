@@ -46,6 +46,18 @@ NAV = [
 ]
 
 
+def _add_tables(nav, user):
+    """Own tables the user may read, as a section "Tabellen" before "Drucken und Daten". Their items carry a
+    path instead of a URL name (templates/base.html), and their pages set active_nav to that path."""
+    from tables.services import nav_items
+
+    items = [(label, url, icon, "") for label, url, icon, _key in nav_items(user)]
+    if not items:
+        return
+    before = next((i for i, (title, _items) in enumerate(nav) if str(title) == str(_("Drucken und Daten"))), len(nav))
+    nav.insert(before, (_("Tabellen"), items))
+
+
 def _tour(user):
     """The guided tour's steps for this user, and whether it starts by itself (first sign-in)."""
     if user is None or not user.is_authenticated:
@@ -82,6 +94,7 @@ def app_context(request):
             visible = [i for i in items if user.can(i[3])]
             if visible:
                 nav.append((title, visible))
+        _add_tables(nav, user)
     return {
         "school": SchoolSettings.load(),
         "nav": nav,

@@ -61,7 +61,7 @@ def mask_list(request):
             return redirect("mask_builder", pk=mask.pk)
     choices = {e: [f for f in ms.fields_for(e) if f.type in ("choice", "class", "bool")] for e, _ in FieldDefinition.ENTITIES}
     labels = {f.key: f.display_label for f in FieldDefinition.objects.filter(key__in=["school_type", "category"])}
-    return render(request, "masks/list.html", {"masks": Mask.objects.prefetch_related("versions"), "choices": choices, "match_labels": labels, "active_nav": "settings_home"})
+    return render(request, "masks/list.html", {"masks": Mask.objects.filter(table=None).prefetch_related("versions"), "choices": choices, "match_labels": labels, "active_nav": "settings_home"})
 
 
 @require("admin.masks")
@@ -76,6 +76,18 @@ def mask_builder(request, pk):
         "blocks": [{"key": k, "label": str(v[0]), "icon": v[1]} for k, v in BLOCKS.items() if modules.block_active(k)],
         "types": [(value, str(label)) for value, label in USER_TYPES],
     }
+    if mask.table_id:  # the record page of an own table: its fields and blocks, fields made in its settings
+        from tables import masks as table_masks, services as table_services
+
+        table = mask.table
+        config.update(
+            fields=[table_masks.field_json(f) for f in table_services.fields_of(table)],
+            blocks=[{"key": k, "label": str(v[0]), "icon": v[1]} for k, v in table_masks.BLOCKS.items()],
+            types=[(value, str(label)) for value, label in table_services.VALUE_TYPES],
+            fieldCreateUrl=f"/einstellungen/tabellen/{table.key}/felder/neu/",
+            fieldEditUrl=f"/einstellungen/tabellen/{table.key}/felder/{{id}}/", canDuplicate=False,
+            backUrl=f"/einstellungen/tabellen/{table.key}/?tab=seite",
+        )
     versions = mask.versions.select_related("author").order_by("-number")[:12]
     return render(request, "masks/builder.html", {"mask": mask, "config": config, "versions": versions, "active_nav": "settings_home"})
 
@@ -87,7 +99,15 @@ def _with_titles(clean, node, limit):
     return clean
 
 
-def _clean_tree(tree):
+def _blocks_of(mask):
+    if mask.table_id:
+        from tables.masks import BLOCKS as TABLE_BLOCKS
+
+        return TABLE_BLOCKS
+    return BLOCKS
+
+
+def _clean_tree(tree, blocks=BLOCKS):
     """Keep only the structure a mask may contain."""
     clean = {"tabs": []}
     for tab in tree.get("tabs", []):
@@ -104,7 +124,7 @@ def _clean_tree(tree):
                             entry[prop] = str(item[prop])[:200]
                     if i18n.clean_names(item.get("labels")):
                         entry["labels"] = i18n.clean_names(item.get("labels"))
-                elif kind == "block" and item.get("block") in BLOCKS:
+                elif kind == "block" and item.get("block") in blocks:
                     entry["block"] = item["block"]
                 elif kind == "note":
                     entry["text"] = str(item.get("text", ""))[:1000]
@@ -124,7 +144,7 @@ def _clean_tree(tree):
 def mask_save(request, pk):
     mask = get_object_or_404(Mask, pk=pk)
     payload = json.loads(request.body or b"{}")
-    tree = _clean_tree(payload.get("tree") or {})
+    tree = _clean_tree(payload.get("tree") or {}, _blocks_of(mask))
     if not tree["tabs"]:
         return JsonResponse({"error": _("Eine Maske braucht mindestens einen Reiter.")}, status=422)
     if payload.get("publish"):
@@ -147,7 +167,15 @@ def mask_save(request, pk):
 def mask_preview(request, pk):
     mask = get_object_or_404(Mask, pk=pk)
     payload = json.loads(request.body or b"{}")
-    tree = _clean_tree(payload.get("tree") or {})
+    tree = _clean_tree(payload.get("tree") or {}, _blocks_of(mask))
+    if mask.table_id:
+        from tables import masks as table_masks
+        from tables.models import Record
+
+        record = Record.objects.filter(table_id=mask.table_id).select_related("table").first()
+        if record is None:
+            return JsonResponse({"error": _("Für die Vorschau fehlt ein Datensatz.")}, status=422)
+        return render(request, "masks/_preview.html", {"tabs": table_masks.build_view(tree, record, request.user, readonly=True)})
     person = Person.objects.filter(kind=mask.entity, archived=False).select_related("current_class").first()
     if person is None:
         return JsonResponse({"error": _("Für die Vorschau fehlt ein Datensatz.")}, status=422)
@@ -173,7 +201,11 @@ def mask_action(request, pk):
         mask.save()
         return redirect("mask_list") if request.POST.get("next") == "list" else redirect("mask_builder", pk=pk)
     if action == "delete" and not mask.is_default:
+        for version in mask.versions.all():
+            version.delete()
         mask.delete()
+    if mask.table_id:
+        return redirect(f"/einstellungen/tabellen/{mask.table.key}/?tab=seite")
     return redirect("mask_list")
 
 

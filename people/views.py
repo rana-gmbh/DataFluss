@@ -203,6 +203,8 @@ def _detail_context(request, person):
     return {
         "person": person,
         "tabs": tabs,
+        "form_url": reverse("person_form", args=[person.pk]),
+        "form_kind": person.kind,
         "print_templates": PrintTemplate.objects.filter(source=person.kind, archived=False),
         "active_nav": "pupils" if person.kind == "pupil" else "staff",
     }

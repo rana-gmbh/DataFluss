@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 11:40+0100\n"
+"POT-Creation-Date: 2026-11-16 11:57+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -487,6 +487,9 @@ msgstr "导入与导出"
 
 msgid "Verwaltung"
 msgstr "管理"
+
+msgid "Tabellen"
+msgstr "表格"
 
 msgid "Text"
 msgstr "文本"
@@ -1056,6 +1059,9 @@ msgstr "该设备不存在。"
 msgid "Bitte den Schaden beschreiben."
 msgstr "请描述损坏情况。"
 
+msgid "Tabelle"
+msgstr "表格"
+
 msgid "Foto"
 msgstr "照片"
 
@@ -1442,6 +1448,12 @@ msgid ""
 "übernehmen."
 msgstr "该记录已删除，无法再采用另一版本。"
 
+msgid "Datensatz"
+msgstr "记录"
+
+msgid "Weitere Felder"
+msgstr "更多字段"
+
 #, python-format
 msgid "%(field)s ist archiviert und kann nicht geändert werden."
 msgstr "%(field)s 已归档，无法更改。"
@@ -1478,6 +1490,9 @@ msgstr "此类型与已填写的值不符，建议新建字段。"
 
 msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "该表格包含记录，请改为归档。"
+
+msgid "(ohne Titel)"
+msgstr "（无标题）"
 
 #, python-format
 msgid "%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu."
@@ -2089,9 +2104,6 @@ msgstr "字段"
 
 msgid "Eigene Felder anlegen und verwalten"
 msgstr "创建和管理自定义字段"
-
-msgid "Tabellen"
-msgstr "表格"
 
 msgid "Eigene Tabellen mit eigenen Feldern anlegen"
 msgstr "创建自定义表格和字段"
@@ -3091,6 +3103,18 @@ msgstr ""
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "请在浏览器中打开学校管理系统进行此操作。"
 
+msgid "Zur Tabelle"
+msgstr "返回表格"
+
+#, python-format
+msgid ""
+"Gelöschte Datensätze bleiben %(days)s Tag hier. Danach sind sie endgültig "
+"gelöscht."
+msgid_plural ""
+"Gelöschte Datensätze bleiben %(days)s Tage hier. Danach sind sie endgültig "
+"gelöscht."
+msgstr[0] "已删除的记录会在此保留 %(days)s 天，之后将被永久删除。"
+
 msgid "Nachkommastellen"
 msgstr "小数位数"
 
@@ -3127,9 +3151,6 @@ msgid ""
 "Termine."
 msgstr "自定义表格和字段，例如用于图书、借阅或预约。"
 
-msgid "Tabelle"
-msgstr "表格"
-
 msgid "Datensätze"
 msgstr "记录"
 
@@ -3150,6 +3171,18 @@ msgid ""
 "darf, legen Sie unter Rechte fest."
 msgstr "表格自带一个“名称”字段。谁可以查看和编辑，请在“权限”中设置。"
 
+msgid "Tabelle gestalten"
+msgstr "设计表格"
+
+msgid "Neuer Datensatz"
+msgstr "新建记录"
+
+msgid "Löschen …"
+msgstr "删除…"
+
+msgid "Datensatzseite"
+msgstr "记录页面"
+
 msgid "Rechte"
 msgstr "权限"
 
@@ -3161,6 +3194,26 @@ msgstr "拖动以更改顺序"
 
 msgid "Titel"
 msgstr "标题"
+
+msgid "Wie ein Datensatz aussieht"
+msgstr "记录的外观"
+
+msgid ""
+"Ordnen Sie die Felder im Maskendesigner in Reitern und Abschnitten an. "
+"Felder, die nicht in der Maske stehen, erscheinen unten unter „Weitere "
+"Felder“."
+msgstr "在表单设计器中将字段排列到选项卡和分区中。未放入表单的字段显示在底部的“更多字段”中。"
+
+#, python-format
+msgid "Version %(n)s"
+msgstr "版本 %(n)s"
+
+msgid ""
+"Noch keine eigene Gestaltung: Die Seite zeigt alle Felder untereinander."
+msgstr "尚无自定义设计：页面将所有字段依次显示。"
+
+msgid "Im Maskendesigner gestalten"
+msgstr "在表单设计器中设计"
 
 msgid "Wer darf die Datensätze sehen und bearbeiten?"
 msgstr "谁可以查看和编辑记录？"

@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -186,6 +187,8 @@ def build_view(tree, person, user, readonly=False):
                     entry.update(
                         fd=fd, value=form_value(person, fd), display=display_value(person, fd, localized=True),
                         editable=can_edit and not fd.read_only,
+                        url=reverse("person_field", args=[person.pk, fd.key]),
+                        reveal_url=reverse("person_secret_reveal", args=[person.pk, fd.key]) if fd.type == "secret" else "",
                         label=i18n.pick(item.get("label", ""), item.get("labels")) or fd.display_label, help=item.get("help") or fd.help_text,
                         choices=fd.option_choices if fd.type in ("choice", "multichoice") else None,
                         classes=classes if fd.type == "class" else None,
@@ -196,7 +199,7 @@ def build_view(tree, person, user, readonly=False):
                         continue
                     if name == "logins" and not user.can("vault.view"):
                         continue
-                    entry.update(block=name, title=BLOCKS[name][0])
+                    entry.update(block=name, title=BLOCKS[name][0], block_url=reverse("person_block", args=[person.pk, name]))
                 elif item.get("type") == "note":
                     entry.update(text=item.get("text", ""))
                 else:

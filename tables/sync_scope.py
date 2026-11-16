@@ -20,10 +20,14 @@ class TablesScope(ModuleScope):
     def read(self, scope, add):
         from .models import Field, Record, Table
 
+        from masks.models import Mask, MaskVersion
+
         tables = self._readable(scope)
         add(Table, Table._base_manager.filter(pk__in=tables))
         add(Field, Field._base_manager.filter(table_id__in=tables))
         add(Record, Record._base_manager.filter(table_id__in=tables))
+        add(Mask, Mask._base_manager.filter(table_id__in=tables))
+        add(MaskVersion, MaskVersion._base_manager.filter(mask__table_id__in=tables))
 
     def may_write(self, scope, model, pk, label):
         if label in ("tables.table", "tables.field"):

@@ -1,6 +1,6 @@
 {% load ui i18n %}
-<div id="record-form" hx-get="{% url 'person_form' person.pk %}" hx-trigger="reloadForm from:body" hx-swap="outerHTML"
-     x-data="recordTabs('{{ person.kind }}', '{{ tabs.0.id }}')">
+<div id="record-form" hx-get="{{ form_url }}" hx-trigger="reloadForm from:body" hx-swap="outerHTML"
+     x-data="recordTabs('{{ form_kind }}', '{{ tabs.0.id }}')">
   <div class="record-tabs flex overflow-x-auto border-b mb-4" style="border-color: var(--line)" role="tablist">
     {% for tab in tabs %}<button type="button" role="tab" class="tab" data-tab-id="{{ tab.id }}" :class="tab === '{{ tab.id }}' && 'active'" :aria-selected="tab === '{{ tab.id }}'" @click="show('{{ tab.id }}', $el)">{{ tab.title }}</button>{% endfor %}
   </div>
@@ -15,7 +15,7 @@
           {% if item.type == 'field' %}{% include 'masks/_widget.html' %}
           {% elif item.type == 'note' %}<p class="text-[13px] soft whitespace-pre-line">{{ item.text }}</p>
           {% elif item.html %}<div>{{ item.html }}</div>
-          {% else %}<div hx-get="{% url 'person_block' person.pk item.block %}" hx-trigger="intersect once" hx-swap="innerHTML"><p class="muted text-[13px] py-3">{% blocktranslate trimmed with title=item.title %}{{ title }} wird geladen …{% endblocktranslate %}</p></div>{% endif %}
+          {% else %}<div hx-get="{{ item.block_url }}" hx-trigger="intersect once" hx-swap="innerHTML"><p class="muted text-[13px] py-3">{% blocktranslate trimmed with title=item.title %}{{ title }} wird geladen …{% endblocktranslate %}</p></div>{% endif %}
         </div>
         {% endfor %}
       </div>

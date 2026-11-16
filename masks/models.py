@@ -65,7 +65,11 @@ class FieldDefinition(TrackedModel):
 
 
 class Mask(TrackedModel):
-    entity = models.CharField(max_length=20, choices=FieldDefinition.ENTITIES)
+    RECORD = "record"  # the record page of an own table (tables app); `table` says which
+    ENTITIES = FieldDefinition.ENTITIES + [(RECORD, _("Tabelle"))]
+
+    entity = models.CharField(max_length=20, choices=ENTITIES)
+    table = models.ForeignKey("tables.Table", null=True, blank=True, on_delete=models.CASCADE, related_name="masks")
     name = models.CharField("Name", max_length=80)  # as first typed; see masks/i18n.py
     names = models.JSONField(default=dict, blank=True, db_default={})  # {language: own name}
     is_default = models.BooleanField("Standard", default=False)

@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Papierkorb" %} · {{ table.display_name }}{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-3 mb-1"><h1 class="page-title flex-1">{% translate "Papierkorb" %} · {{ table.display_name }}</h1><a class="btn btn-sm" href="{% url 'table_records' table.key %}">{% translate "Zur Tabelle" %}</a></div>
+<p class="muted text-[13px] mb-4">{% blocktranslate trimmed count days=keep_days %}Gelöschte Datensätze bleiben {{ days }} Tag hier. Danach sind sie endgültig gelöscht.{% plural %}Gelöschte Datensätze bleiben {{ days }} Tage hier. Danach sind sie endgültig gelöscht.{% endblocktranslate %}</p>
+<div class="surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Datensatz" %}</th><th>{% translate "Gelöscht am" %}</th><th></th></tr></thead><tbody>
+{% for r in records %}<tr><td class="font-medium">{{ r.title|default:_("(ohne Titel)") }}</td><td class="muted">{{ r.deleted_at|date:"d.m.Y, H:i" }}</td>
+<td class="text-right"><form method="post" data-once>{% csrf_token %}<input type="hidden" name="record" value="{{ r.pk }}"><button class="btn btn-sm">{% icon 'undo' %}{% translate "Wiederherstellen" %}</button></form></td></tr>
+{% empty %}<tr><td colspan="3" class="muted text-center py-6">{% translate "Der Papierkorb ist leer." %}</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

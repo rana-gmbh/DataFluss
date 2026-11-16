@@ -1,12 +1,27 @@
 from django.urls import path
 
-from . import views
+from . import views, views_records as records
 
 urlpatterns = [
     path("einstellungen/tabellen/", views.table_list, name="table_list"),
     path("einstellungen/tabellen/<slug:key>/", views.table_settings, name="table_settings"),
     path("einstellungen/tabellen/<slug:key>/rechte/", views.table_rights, name="table_rights"),
+    path("einstellungen/tabellen/<slug:key>/seite/", views.table_mask, name="table_mask"),
     path("einstellungen/tabellen/<slug:key>/felder/neu/", views.table_field_new, name="table_field_new"),
     path("einstellungen/tabellen/<slug:key>/felder/reihenfolge/", views.table_field_order, name="table_field_order"),
     path("einstellungen/tabellen/<slug:key>/felder/<uuid:pk>/", views.table_field, name="table_field"),
+    path("tabellen/<slug:key>/", records.records_page, name="table_records"),
+    path("tabellen/<slug:key>/neu/", records.record_new, name="record_new"),
+    path("tabellen/<slug:key>/aktion/", records.records_action, name="records_action"),
+    path("tabellen/<slug:key>/papierkorb/", records.records_bin, name="records_bin"),
+    path("tabellen/<slug:key>/<uuid:pk>/", records.record_detail, name="record_detail"),
+    path("tabellen/<slug:key>/<uuid:pk>/panel/", records.record_panel, name="record_panel"),
+    path("tabellen/<slug:key>/<uuid:pk>/formular/", records.record_form, name="record_form"),
+    path("tabellen/<slug:key>/<uuid:pk>/feld/<slug:field_key>/", records.record_field, name="record_field"),
+    path("tabellen/<slug:key>/<uuid:pk>/geheim/<slug:field_key>/", records.record_secret_reveal, name="record_secret_reveal"),
+    path("tabellen/<slug:key>/<uuid:pk>/block/<slug:name>/", records.record_block, name="record_block"),
+    path("api/tabellen/<slug:key>/", records.api_rows, name="table_rows"),
+    path("api/tabellen/<slug:key>/<uuid:pk>/feld/<slug:field_key>/", records.api_field, name="table_api_field"),
+    path("api/tabellen/<slug:key>/ansichten/", records.api_views, name="table_views"),
+    path("api/tabellen/<slug:key>/ansichten/<uuid:pk>/loeschen/", records.api_view_delete, name="table_view_delete"),
 ]
