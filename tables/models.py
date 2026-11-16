@@ -22,7 +22,8 @@ class Table(TrackedModel):
     icon = models.CharField(max_length=30, default="table")
     order = models.PositiveIntegerField(default=500)
     archived = models.BooleanField(default=False)
-    in_nav = models.BooleanField(default=True)  # in the sidebar section "Tabellen"
+    in_nav = models.BooleanField(default=True)  # in the sidebar
+    section = models.CharField(max_length=60, blank=True, default="", db_default="")  # its sidebar section; empty: "Tabellen"
     title_field = models.CharField(max_length=60, blank=True, default="")  # names a record; empty: the first text field
     rights = models.JSONField(default=dict, blank=True)  # {role: none|read|edit}; IT always edits
     template = models.JSONField(null=True, blank=True)  # {"id", "version"} when a module template made it

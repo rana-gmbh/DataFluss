@@ -82,7 +82,7 @@ PLATFORM_AREAS = [
         Extra("admin.fields", _("Felder anlegen und ändern"), _("Eigene Felder für Schüler und Personal."), ("admin.fields",), needs=""),
         Extra("admin.masks", _("Datenblätter gestalten"), _("Masken für Schüler und Personal."), ("admin.masks",), needs=""),
         Extra("admin.users", _("Benutzer und Rollen"), _("Konten anlegen und Rollen festlegen."), ("admin.users",), needs=""),
-        Extra("admin.school", _("Schule und Sprachen"), _("Name, Logo und Sprachen der Schule."), ("admin.school",), needs=""),
+        Extra("admin.school", _("Schule oder Organisation"), _("Name, Logo und Sprachen."), ("admin.school",), needs=""),
         Extra("admin.update", _("Aktualisierung"), _("Neue Versionen einspielen."), ("admin.update",), needs=""),
         Extra("admin.backup", _("Sicherung"), _("Sicherungen anlegen und zurückspielen."), ("admin.backup",), needs=""),
         Extra("admin.audit", _("Protokoll"), _("Wer wann was getan hat."), ("admin.audit",), needs=""),
@@ -92,12 +92,21 @@ PLATFORM_AREAS = [
 AREAS = list(PLATFORM_AREAS)  # modules append theirs (core/modules.py add_area)
 
 
-def areas():
-    """Every area, and a switch for each module capability no area names, under the module's own area."""
+def areas(in_use=False):
+    """Every area, and a switch for each module capability no area names, under the module's own area.
+    With in_use, only what this database uses: no people, devices or logins without Schulverwaltung, no
+    areas of modules it does not use (the role editor and its summary)."""
     from . import modules
     from .permissions import CAPABILITIES
 
-    found = list(AREAS)
+    found, using = list(AREAS), None
+    if in_use:
+        try:
+            using = set(modules.active()) | {"platform"}
+        except Exception:  # noqa: BLE001 - no settings table yet (during migrate)
+            using = None
+        if using is not None:
+            found = [_without_unused(area, using) for area in found if area.module in using]
     named = {cap for area in found for cap in capabilities_of(area)}
     loose = {}
     for capability in CAPABILITIES:
@@ -106,8 +115,18 @@ def areas():
             continue
         loose.setdefault(module, []).append(Extra(f"cap:{capability}", capability, "", (capability,), needs=""))
     for module, extras in loose.items():
-        found.append(Area(f"module:{module}", str(module), _("Module"), extras=extras, module=module))
+        if not in_use or module in (using or {module}):
+            found.append(Area(f"module:{module}", str(module), _("Module"), extras=extras, module=module))
     return found
+
+
+def _without_unused(area, using):
+    """The area without switches whose capabilities belong to a module the database does not use
+    (Felder anlegen and Masken need Schulverwaltung, say)."""
+    from . import modules
+
+    extras = [e for e in area.extras if all(modules.CAPABILITY_MODULES.get(c, "platform") in using for c in e.capabilities)]
+    return area if len(extras) == len(area.extras) else Area(area.key, area.title, area.section, area.hint, area.read, area.edit, extras, area.module)
 
 
 def capabilities_of(area):

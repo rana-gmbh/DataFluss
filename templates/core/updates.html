@@ -4,7 +4,7 @@
 {% block content %}
 {{ status|json_script:"update-status" }}
 <h1 class="page-title mb-1">{% translate "Aktualisierung" %}</h1>
-<p class="muted text-[13px] mb-4">{% translate "Installiert die neueste Version von GitHub über Coolify. Vorher wird die Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit ist, alle können also normal weiterarbeiten." %}</p>
+<p class="muted text-[13px] mb-4">{% translate "Installiert die neueste Version auf dem Server. Vorher wird die Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit ist, alle können also normal weiterarbeiten." %}</p>
 {% if not status.enabled %}
 <div class="surface p-5 max-w-2xl"><p class="text-[13px]">{% blocktranslate trimmed %}Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht in <span class="mono">docs/INSTALL-COOLIFY.md</span>.{% endblocktranslate %}</p></div>
 {% else %}

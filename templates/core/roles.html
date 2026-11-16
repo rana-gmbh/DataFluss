@@ -23,7 +23,7 @@
   {% endfor %}
 </div>
 <form method="post" action="{% url 'role_new' %}" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Rolle" %}</h2>
-  <div><label class="label" for="r-name">{% translate "Name" %}</label><input id="r-name" class="input" name="name" required maxlength="80" placeholder="{% translate 'z. B. Hausmeister' %}"></div>
+  <div><label class="label" for="r-name">{% translate "Name" %}</label><input id="r-name" class="input" name="name" required maxlength="80" placeholder="{% if is_school %}{% translate 'z. B. Hausmeister' %}{% else %}{% translate 'z. B. Vorstand' %}{% endif %}"></div>
   <div><label class="label" for="r-start">{% translate "Beginnt mit" %}</label><select id="r-start" class="input" name="start">
     <option value="">{% translate "Nur der Startseite" %}</option>
     <optgroup label="{% translate 'Vorschläge' %}">{% for key, label in presets %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</optgroup>

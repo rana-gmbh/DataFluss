@@ -10,7 +10,7 @@ from django.urls import reverse
 
 from core import fieldtypes as ft
 from core.context_user import set_current_user
-from core.models import Role
+from core.models import Role, User
 from tables import formula, infer, links, services
 from tables.models import EDIT, Field, Record, Table
 from tables.views_records import rows
@@ -374,3 +374,78 @@ class StarterPrintTests(TableCase):
         self.assertEqual([k for k in keys if k], ["f_preis", "f_genre", "f_isbn", "f_notiz"])
         pdf = self.client.post(reverse("report_run"), {"template": template.pk, "ids": str(momo.pk)})
         self.assertEqual((pdf.status_code, pdf["Content-Type"]), (200, "application/pdf"))
+
+
+class BacklinkTests(TableCase):
+    """A link with its other side as a field: Räume.Inhaber and Personen."Inhaber von", editable on both sides."""
+
+    def setUp(self):
+        super().setUp()
+        self.people = services.create_table("Personen")
+        self.rooms = services.create_table("Räume")
+        services.set_rights(self.rooms, {Role.SEKRETARIAT: EDIT})
+        services.set_rights(self.people, {Role.SEKRETARIAT: EDIT})
+        self.anna = services.create_record(self.people, {"f_name": "Anna"})
+        self.r1 = services.create_record(self.rooms, {"f_name": "R 1"})
+        self.r2 = services.create_record(self.rooms, {"f_name": "R 2"})
+        set_current_user(None)
+        self.login(self.it)
+        self.client.post(reverse("table_field_new", args=["raeume"]), {"label": "Inhaber", "type": "link", "target": "table:personen",
+                                                                       "reverse": "Inhaber von", "backlink": "1"})
+        self.link = Field.objects.get(table=self.rooms, key="f_inhaber")
+        self.back = Field.objects.get(table=self.people, type="backlink")
+
+    def test_both_sides(self):
+        self.assertEqual((self.back.display_label, self.back.config), ("Inhaber von", {"link": "raeume.f_inhaber"}))
+        url = reverse("record_link", args=["personen", self.anna.pk, self.back.key])
+        self.client.post(url, {"action": "add", "target": str(self.r1.pk)})
+        self.client.post(url, {"action": "add", "target": str(self.r2.pk)})
+        self.assertEqual(links.targets(self.r1, self.link), [self.anna.pk])
+        self.assertEqual(links.backlink_display(self.anna, self.back, self.it), "R 1, R 2")
+        row = {r["name"]: r for r in rows(self.people, self.it)}["Anna"]
+        self.assertEqual(row[self.back.key], "R 1, R 2")
+        options = self.client.get(reverse("record_link_options", args=["personen", self.anna.pk, self.back.key]), {"q": "r"}).content.decode()
+        self.assertNotIn("R 1", options)  # already linked
+        self.client.post(url, {"action": "remove", "target": str(self.r1.pk)})
+        self.assertEqual(links.targets(self.r1, self.link), [])
+        count = services.create_field(self.people, "Räume", "formula", config=services.formula_config(self.people, {"expression": "count({Inhaber von})"}))
+        self.assertEqual(formula.compute(self.anna, count), 1)
+
+    def test_changing_the_other_side_needs_the_right_on_the_linking_table(self):
+        services.set_rights(self.rooms, {Role.SEKRETARIAT: "read"})
+        self.login(User.objects.get(pk=self.sek.pk))
+        answer = self.client.post(reverse("record_link", args=["personen", self.anna.pk, self.back.key]), {"action": "add", "target": str(self.r1.pk)})
+        self.assertEqual(answer.status_code, 403)
+
+
+class SectionTests(TableCase):
+    """Tables can be put into sidebar sections, renamed together, and the sidebar groups them."""
+
+    def setUp(self):
+        set_current_user(self.it)
+        self.login(self.it)
+        self.books = services.create_table("Bücher")
+        self.loans = services.create_table("Ausleihen")
+        self.rooms = services.create_table("Räume")
+
+    def test_section_is_saved_and_groups_the_sidebar(self):
+        url = reverse("table_settings", args=[self.books.key])
+        self.assertContains(self.client.get(url + "?tab=allgemein"), 'name="section"')
+        data = {"name": "Bücher", "icon": self.books.icon, "in_nav": "on", "section": "  Bibliothek  "}
+        self.client.post(url, data)
+        self.books.refresh_from_db()
+        self.assertEqual(self.books.section, "Bibliothek")
+        self.loans.section = "Bibliothek"
+        self.loans.save()
+        home = self.client.get(reverse("dashboard")).content.decode()
+        self.assertIn("Bibliothek", home)
+        self.assertLess(home.index("Bibliothek"), home.index("Bücher"))
+
+    def test_rename_section_moves_all_its_tables(self):
+        for t in (self.books, self.loans):
+            t.section = "Bibliothek"
+            t.save()
+        self.client.post(reverse("table_list"), {"rename_section": "Bibliothek", "section": "Mediathek"})
+        self.books.refresh_from_db(); self.loans.refresh_from_db(); self.rooms.refresh_from_db()
+        self.assertEqual((self.books.section, self.loans.section, self.rooms.section), ("Mediathek", "Mediathek", ""))
+        self.assertContains(self.client.get(reverse("table_list")), "Mediathek")

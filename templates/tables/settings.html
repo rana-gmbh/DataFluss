@@ -24,8 +24,10 @@
     <div><label class="label" for="f-decimals">{% translate "Nachkommastellen" %}</label><input id="f-decimals" class="input" name="decimals" type="number" min="0" max="6" value="0" :disabled="type !== 'number'"></div>
     <div><label class="label" for="f-unit">{% translate "Einheit" %}</label><input id="f-unit" class="input" name="unit" maxlength="10" placeholder="€"></div></div>
   <div x-show="type === 'link'" x-cloak class="space-y-3">
-    <div><label class="label" for="f-target">{% translate "Zeigt auf" %}</label><select id="f-target" class="input" name="target" x-ref="target" @change="touched = true">{% for v, l in link_targets %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
-    <div><label class="label" for="f-reverse">{% translate "Name auf der Gegenseite" %}</label><input id="f-reverse" class="input" name="reverse" maxlength="100" placeholder="{% translate 'z. B. Ausleihen' %}"></div></div>
+    <div><label class="label" for="f-target">{% translate "Zeigt auf" %}</label><select id="f-target" class="input" name="target" x-ref="target" x-model="linkTarget" @change="touched = true">{% for v, l in link_targets %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+    <div><label class="label" for="f-reverse">{% translate "Name auf der Gegenseite" %}</label><input id="f-reverse" class="input" name="reverse" maxlength="100" placeholder="{% translate 'z. B. Ausleihen' %}"></div>
+    <label class="flex items-start gap-2 text-[13px]" x-show="linkTarget.startsWith('table:')"><input type="checkbox" name="backlink" value="1" checked class="mt-0.5 accent-[var(--accent)]">
+      <span>{% translate "Dort auch als Feld zeigen" %}<span class="block muted text-[12px]">{% translate "Die andere Tabelle bekommt ein Feld mit diesem Namen, z. B. „Inhaber von“, das die Verknüpfung von ihrer Seite zeigt und ändert." %}</span></span></label></div>
   <div x-show="type === 'formula'" x-cloak class="space-y-3">{% include "tables/_formula_editor.html" %}
     <div><label class="label" for="f-fdecimals">{% translate "Nachkommastellen (bei Zahlen)" %}</label><input id="f-fdecimals" class="input" name="decimals" type="number" min="0" max="6" placeholder="{% translate 'automatisch' %}" :disabled="type !== 'formula'"></div></div>
   <label x-show="type === 'link' || type === 'file' || type === 'image'" x-cloak class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="multiple" class="accent-[var(--accent)]">{% translate "Mehrere erlaubt" %}</label>
@@ -60,6 +62,9 @@
   <div><label class="label" for="t-title">{% translate "Titel eines Datensatzes" %}</label><select id="t-title" class="input" name="title_field"><option value="">{% translate "Erstes passendes Feld" %}</option>{% for f in title_choices %}<option value="{{ f.key }}" {% if f.key == table.title_field %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select>
     <p class="muted text-[12px] mt-1">{% translate "So heißt ein Datensatz in Verknüpfungen, in der Suche und im Papierkorb." %}</p></div>
   <fieldset><legend class="label">{% translate "Symbol" %}</legend><div class="flex flex-wrap gap-1.5">{% for name in icons %}<label class="btn btn-icon has-[:checked]:bg-[var(--accent)] has-[:checked]:text-white has-[:focus-visible]:ring-2" title="{{ name }}"><input type="radio" name="icon" value="{{ name }}" class="sr-only" {% if name == table.icon %}checked{% endif %} aria-label="{{ name }}">{% icon name %}</label>{% endfor %}</div></fieldset>
+  <div><label class="label" for="t-section">{% translate "Bereich in der Seitenleiste" %}</label><input id="t-section" class="input" name="section" value="{{ table.section }}" maxlength="60" list="t-sections" placeholder="{% translate 'Tabellen' %}">
+    <datalist id="t-sections">{% for name in sections %}<option value="{{ name }}">{% endfor %}</datalist>
+    <p class="muted text-[12px] mt-1">{% translate "Tabellen mit demselben Bereich stehen in der Seitenleiste zusammen, etwa unter „Bibliothek“ oder „Verein“. Leer: unter „Tabellen“." %}</p></div>
   <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="in_nav" {% if table.in_nav %}checked{% endif %} class="accent-[var(--accent)]">{% translate "In der Seitenleiste zeigen" %}</label>
   <button class="btn btn-primary">{% translate "Speichern" %}</button></form>
 <div class="surface p-4 space-y-2"><h2 class="font-semibold">{% translate "Tabelle" %}</h2>

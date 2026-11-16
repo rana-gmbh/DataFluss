@@ -16,7 +16,7 @@ MAX_TEXT = 10_000
 # Types whose value lives in Record.values; links and files have rows of their own (tables/links.py).
 VALUE_TYPES = [(key, label) for key, label in ft.choices() if ft.TYPES[key].storage == "value"]
 # Every type a field of a table may have.
-CREATE_TYPES = ft.choices()
+CREATE_TYPES = [(key, label) for key, label in ft.choices() if key != "backlink"]  # a backlink comes with its link
 RESULTS = {"number": "number", "date": "date", "datetime": "datetime", "bool": "bool"}  # formula result -> list column type
 SEARCHABLE = {"text", "textarea", "email", "phone", "url", "choice", "multichoice", "number", "date", "datetime"}
 TITLE_TYPES = ("text", "email", "phone", "url", "choice", "number", "date")
@@ -498,5 +498,32 @@ def search(user, terms):
 
 
 def nav_items(user):
-    """The sidebar's section "Tabellen": readable tables that show there, as (label, url, icon, active key)."""
-    return [(t.display_name, f"/tabellen/{t.key}/", t.icon, f"table:{t.key}") for t in readable(user) if t.in_nav]
+    """The sidebar's tables: readable tables that show there, as (label, url, icon, active key, section)."""
+    return [(t.display_name, f"/tabellen/{t.key}/", t.icon, f"table:{t.key}", t.section) for t in readable(user) if t.in_nav]
+
+
+def by_section(items, section=lambda t: t.section):
+    """Items grouped by their table's section, sections in the order of their first table, as the sidebar
+    shows them: [(section, [items])], section "" for tables without one."""
+    groups = {}
+    for item in items:
+        groups.setdefault(section(item) or "", []).append(item)
+    return list(groups.items())
+
+
+def rename_section(old, new, request=None):
+    """Move every table of section `old` to section `new` (empty: back to "Tabellen"). Returns how many."""
+    new = " ".join((new or "").split())[:60]
+    moved = 0
+    for table in Table.objects.filter(section=old):
+        table.section = new
+        table.save()
+        moved += 1
+    if moved:
+        audit.log("table", f"Bereich umbenannt: {old} → {new or 'Tabellen'}", request=request)
+    return moved
+
+
+def sections():
+    """The sidebar sections tables are in, in the order of their first table (empty: "Tabellen")."""
+    return list(dict.fromkeys(Table.objects.filter(archived=False).exclude(section="").values_list("section", flat=True)))

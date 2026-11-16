@@ -85,6 +85,14 @@ def _related_texts(table, records, fields, user):
         elif field.type in ("file", "image"):
             for row in Attachment.objects.filter(record_id__in=ids, field=field.key):
                 texts.setdefault((row.record_id, field.key), []).append(row.name)
+        elif field.type == "backlink":  # the other side: titles of the records whose link points here
+            source, link = links.backlink_source(field)
+            if link is None:
+                continue
+            visible = services.may_read(user, source)
+            rows = Link.objects.filter(field=link.key, target_id__in=ids, record__table=source, record__deleted_at=None).select_related("record")
+            for row in rows.order_by("record__title"):
+                texts.setdefault((row.target_id, field.key), []).append(row.record.title if visible else _("nicht sichtbar"))
     return {key: ", ".join(values) for key, values in texts.items()}
 
 
@@ -105,7 +113,7 @@ def rows(table, user, ids=None):
     records = list(records.order_by("title"))
     for record in records:  # the list knows its table: no query per record when formulas ask for it
         record.table = table
-    related = _related_texts(table, records, [f for f in fields if f.type in ("link", "file", "image")], user)
+    related = _related_texts(table, records, [f for f in fields if f.type in ("link", "file", "image", "backlink")], user)
     formulas = [f for f in fields if f.type == "formula"]
     context = formula.Context(user)
     if formulas:
@@ -415,9 +423,14 @@ def record_link_options(request, key, pk, field_key):
     """What the picker offers: targets the user may see, without those already linked."""
     table = _table(request, key, edit=True)
     record = _record(table, pk)
-    field = _typed_field(table, field_key, ("link",))
-    linked = {str(t) for t in links.targets(record, field)}
+    field = _typed_field(table, field_key, ("link", "backlink"))
     query = request.GET.get("q", "").strip()
+    if field.type == "backlink":  # the other side: records of the linking table
+        return render(request, "tables/_link_options.html", {
+            "options": links.backlink_candidates(request.user, field, query, record), "field_key": field.key, "q": request.GET.get("q", ""),
+            "link_url": reverse("record_link", args=[table.key, record.pk, field.key]), "create": "", "create_vals": "{}",
+        })
+    linked = {str(t) for t in links.targets(record, field)}
     found = links.candidates(request.user, field, query)
     options = [o for o in found if o["id"] not in linked]
     # A name that is not there yet can be created in the target table right here.
@@ -433,8 +446,18 @@ def record_link_options(request, key, pk, field_key):
 def record_link(request, key, pk, field_key):
     table = _table(request, key, edit=True)
     record = _record(table, pk)
-    field = _typed_field(table, field_key, ("link",))
+    field = _typed_field(table, field_key, ("link", "backlink"))
     problem = ""
+    if field.type == "backlink":
+        if not links.backlink_may_change(request.user, field):
+            raise PermissionDenied
+        try:
+            links.backlink_set(field, record, uuid.UUID(request.POST.get("target", "")), request.POST.get("action") != "remove")
+        except ValueError:
+            return HttpResponseBadRequest()
+        except ValidationError as exc:
+            problem = " ".join(exc.messages)
+        return _widget(request, table, record, field, "tables/_link_widget.html", problem, refocus=request.POST.get("action") != "remove")
     try:
         if request.POST.get("action") == "create":
             made = links.creatable(request.user, field)
@@ -528,7 +551,7 @@ def export_rows(table, user, ids, keys):
     for record in records.values():
         record.table = table
     listed = [records[i] for i in chosen if i in records]
-    related = _related_texts(table, listed, [f for f in fields.values() if f.type in ("link", "file", "image")], user)
+    related = _related_texts(table, listed, [f for f in fields.values() if f.type in ("link", "file", "image", "backlink")], user)
     context = formula.Context(user)
     if any(f.type == "formula" for f in fields.values()):
         context.prefetch(listed)
@@ -543,7 +566,7 @@ def export_rows(table, user, ids, keys):
                 row.append("")
             elif field.type == "formula":
                 row.append(formula.display(record, field, context)[0])
-            elif field.type in ("link", "file", "image"):
+            elif field.type in ("link", "file", "image", "backlink"):
                 row.append(related.get((record.pk, key), ""))
             else:
                 row.append(services.display(record, field, localized=True))

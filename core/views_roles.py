@@ -26,7 +26,8 @@ UMLAUTS = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä": "
 
 # Starting points for a new role, besides empty and a copy of an existing role.
 PRESETS = {
-    "read": (_("Alles lesen"), lambda: ({a.key: rights.READ for a in rights.areas() if a.has_levels}, [])),
+    "read": (_("Alles lesen"), lambda: ({a.key: rights.READ for a in rights.areas(in_use=True) if a.has_levels}, [])),
+    "edit": (_("Alles bearbeiten"), lambda: ({a.key: rights.EDIT if a.edit else rights.READ for a in rights.areas(in_use=True) if a.has_levels}, [])),
     "janitor": (_("Hausmeister"), lambda: ({"home": rights.READ, "pupils": rights.READ, "staff": rights.READ, "devices": rights.EDIT,
                                             "print": rights.READ}, [])),
     "office": (_("Büro"), lambda: ({"home": rights.READ, "pupils": rights.EDIT, "staff": rights.EDIT, "guardians": rights.EDIT,
@@ -35,10 +36,18 @@ PRESETS = {
 }
 
 
+def _is_school():
+    from . import modules
+
+    return "schulverwaltung" in modules.active()
+
+
 def _tables():
     from tables.models import Table
 
-    return list(Table.objects.filter(archived=False))
+    from tables.services import by_section
+
+    return [t for _section, tables in by_section(Table.objects.filter(archived=False)) for t in tables]
 
 
 def _groups(entity, fields):
@@ -115,9 +124,9 @@ def _form_fields(request, role):
 
 def _form_rights(request):
     """{area: level}, [extras], {table key: right} as posted by the editor."""
-    levels = {a.key: request.POST.get(f"area_{a.key}", rights.NONE) for a in rights.areas() if a.has_levels}
+    levels = {a.key: request.POST.get(f"area_{a.key}", rights.NONE) for a in rights.areas(in_use=True) if a.has_levels}
     levels = {k: v if v in rights.LEVELS else rights.NONE for k, v in levels.items()}
-    known = {e.key for a in rights.areas() for e in a.extras}
+    known = {e.key for a in rights.areas(in_use=True) for e in a.extras}
     extras = [key for key in request.POST.getlist("extra") if key in known]
     tables = {t.key: request.POST.get(f"table_{t.key}", "none") for t in _tables()}
     return levels, extras, {k: v if v in ("none", "read", "edit") else "none" for k, v in tables.items()}
@@ -148,7 +157,7 @@ def _nav_preview(granted, tables):
 def summary(levels, extras, tables=(), fields=None):
     """Short sentences of what a role may do, for the list and the editor's side column."""
     sees, edits, may = [], [], []
-    for area in rights.areas():
+    for area in rights.areas(in_use=True):
         level = levels.get(area.key, rights.NONE)
         if area.has_levels and level == rights.EDIT:
             edits.append(str(area.title))
@@ -196,7 +205,8 @@ def roles(request):
     rows = [{"role": r, "users": users.get(r.key, 0), "description": describe(r), "summary": summary(r.areas, r.extras, _role_tables(r), r.fields)}
             for r in UserRole.objects.all()]
     return render(request, "core/roles.html", {
-        "rows": rows, "it_users": users.get(Role.IT, 0), "presets": [(k, v[0]) for k, v in PRESETS.items()],
+        "rows": rows, "it_users": users.get(Role.IT, 0),
+        "presets": [(k, v[0]) for k, v in PRESETS.items() if k in ("read", "edit") or _is_school()],  # Hausmeister and Büro are for schools
         "active_nav": "settings_home",
     })
 
@@ -258,14 +268,14 @@ def _editor_context(request, role, levels=None, extras=None, tables=None, error=
     extras = role.extras if extras is None else extras
     table_rights = {t.key: (t.rights or {}).get(role.key, "none") for t in _tables()} if tables is None else tables
     sections = []
-    for area in rights.areas():
+    for area in rights.areas(in_use=True):
         if area.key == "admin" or (area.key == "tables" and not area.has_levels):
             continue
         if not sections or sections[-1]["title"] != str(area.section):
             sections.append({"title": str(area.section), "areas": []})
         sections[-1]["areas"].append({"area": area, "level": levels.get(area.key, rights.NONE)})
-    admin = next(a for a in rights.areas() if a.key == "admin")
-    design = next(a for a in rights.areas() if a.key == "tables")
+    admin = next(a for a in rights.areas(in_use=True) if a.key == "admin")
+    design = next(a for a in rights.areas(in_use=True) if a.key == "tables")
     granted = rights.capabilities(levels, extras)
     named_tables = [(t.display_name, table_rights.get(t.key, "none")) for t in _tables()]
     return {
@@ -303,7 +313,11 @@ def role_edit(request, key):
         with transaction.atomic():
             role.name, role.names = i18n.rename(role.name, role.names, name, scope)
             role.description = request.POST.get("description", "").strip()[:300]
-            role.areas, role.extras = levels, extras
+            # Areas and switches the editor did not show (a module this database does not use) stay as they were.
+            shown = {a.key for a in rights.areas(in_use=True)}
+            switches = {e.key for a in rights.areas(in_use=True) for e in a.extras}
+            role.areas = {**{k: v for k, v in (role.areas or {}).items() if k not in shown}, **levels}
+            role.extras = [e for e in role.extras or [] if e not in switches] + extras
             role.fields = _form_fields(request, role)
             role.save()
             _save_tables(role, tables)

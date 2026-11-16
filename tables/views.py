@@ -24,6 +24,12 @@ TABS = ("felder", "seite", "rechte", "allgemein")
 @require("tables.design")
 def table_list(request):
     error = ""
+    if request.method == "POST" and "rename_section" in request.POST:
+        old, new = request.POST.get("rename_section", ""), request.POST.get("section", "")
+        moved = services.rename_section(old, new, request=request)
+        if moved:
+            messages.success(request, _("Der Bereich heißt jetzt „%(name)s“.") % {"name": " ".join(new.split()) or _("Tabellen")})
+        return redirect("table_list")
     if request.method == "POST":
         try:
             table = services.create_table(request.POST.get("name"), request=request)
@@ -35,14 +41,15 @@ def table_list(request):
     tables = Table.objects.all()
     counts = {row["table_id"]: row["n"] for row in Record.objects.values("table_id").order_by().annotate(n=Count("id"))}
     rows = [{"table": t, "records": counts.get(t.pk, 0), "fields": t.fields.filter(archived=False).count()} for t in tables]
-    return render(request, "tables/list.html", {"rows": rows, "error": error, "can_import": request.user.can("data.import"),
+    groups = services.by_section(rows, section=lambda row: row["table"].section)
+    return render(request, "tables/list.html", {"rows": rows, "groups": groups, "several": len(groups) > 1 or bool(groups and groups[0][0]), "error": error, "can_import": request.user.can("data.import"),
                                                 "access": services.access_choices(), "active_nav": "settings_home"})
 
 
 def _settings_context(table, tab, **extra):
     fields = services.fields_of(table, include_archived=True)
     return {
-        "table": table, "tab": tab, "fields": fields, "types": services.CREATE_TYPES, "icons": ICONS,
+        "table": table, "tab": tab, "fields": fields, "types": services.CREATE_TYPES, "icons": ICONS, "sections": services.sections(),
         "link_targets": links.target_choices(),
         "title_choices": [f for f in fields if not f.archived and services.may_name(f)],
         "presets": formula.presets(table), "expression_json": json.dumps(""),
@@ -81,6 +88,7 @@ def table_settings(request, key):
                 table.description = request.POST.get("description", "").strip()[:300]
                 table.icon = request.POST.get("icon") if request.POST.get("icon") in ICONS else table.icon
                 table.in_nav = bool(request.POST.get("in_nav"))
+                table.section = " ".join(request.POST.get("section", "").split())[:60]
                 chosen = request.POST.get("title_field", "")
                 named = Field.objects.filter(table=table, key=chosen, archived=False).first() if chosen else None
                 if chosen and (named is None or not services.may_name(named)):
@@ -145,6 +153,12 @@ def table_field_new(request, key):
             config=services.clean_config(type_, request.POST, table), request=request,
         )
         messages.success(request, _("%(field)s wurde angelegt.") % {"field": field.display_label})
+        if type_ == "link" and request.POST.get("backlink") and links.kind_of(field) == "record":
+            # The other side as a field of its own: Räume.Inhaber gives Personen "Inhaber von", editable there too.
+            label = (request.POST.get("reverse") or "").strip() or _("%(field)s von %(table)s") % {"field": field.display_label, "table": table.display_name}
+            other = links.make_backlink(field, label, request=request)
+            if other is not None:
+                messages.success(request, _("In %(table)s gibt es jetzt das Feld %(field)s.") % {"table": other.table.display_name, "field": other.display_label})
     except ValidationError as exc:
         messages.error(request, " ".join(exc.messages))
     return redirect(f"/einstellungen/tabellen/{table.key}/?tab=felder")

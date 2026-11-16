@@ -59,6 +59,14 @@ also become a choice (its values become the options), a number or a date, when e
 values that do not are named. For anything else, create a new field.
 Archiving a field hides it and keeps its values.
 
+## Sections in the sidebar
+
+Under **Allgemein**, a table gets a **Bereich in der Seitenleiste**, e.g. "Bibliothek" or "Verein"
+(existing ones are suggested). Tables with the same section appear together under that heading in the
+sidebar, before "Drucken und Daten"; tables without one stay under "Tabellen". The overview of tables is
+grouped the same way, and **Umbenennen** there renames a section for all its tables at once. The role
+editor lists the tables by section too.
+
 ## Record pages
 
 **Neuer Datensatz** opens the new record with the cursor in its first field. Every field is saved when it
@@ -83,6 +91,17 @@ book.
 - Records, pupils, staff and devices show a section **Verknüpft in eigenen Tabellen** with everything
   that links to them, under the name for the other side.
 - A link to something you may not see shows **nicht sichtbar** instead of a name.
+
+### The other side as a field (Gegenfeld)
+
+When a new link points to another own table, **Dort auch als Feld zeigen** (on by default) adds a field
+of type *Gegenseite einer Verknüpfung* to that table, named like the other side ("Inhaber von"). Example:
+"Räume" has a link "Rauminhaber" to "Personen"; each person then has a field "Inhaber von" listing their
+rooms. Both sides are the same link: adding a room on the person's page sets that room's Rauminhaber, and
+removing it there clears it. Changing it from the other side needs the right to edit the table that holds
+the link (and the link field must not be read-only or hidden for the role). The field can be placed in the
+mask, shown in the list, printed and exported like any other; it cannot be imported, since the values
+belong to the link.
 
 ## Formulas
 

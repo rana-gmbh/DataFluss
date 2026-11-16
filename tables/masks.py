@@ -92,6 +92,10 @@ def _field_entry(item, record, field, user, editable):
     elif field.type == "link":
         entry.update(targets=links.shown_targets(record, field, user), multiple=bool(ft.config(field).get("multiple")),
                      picker_url=f"{base}verknuepfung/{field.key}/suche/", link_url=f"{base}verknuepfung/{field.key}/")
+    elif field.type == "backlink":
+        entry.update(targets=links.backlink_targets(record, field, user), multiple=True,
+                     editable=editable and links.backlink_may_change(user, field),
+                     picker_url=f"{base}verknuepfung/{field.key}/suche/", link_url=f"{base}verknuepfung/{field.key}/")
     elif field.type in ("file", "image"):
         entry.update(files=[{"id": str(a.pk), "name": a.name, "size": a.size, "url": f"{base}datei/{a.pk}/"} for a in links.files(record, field)],
                      files_url=f"{base}dateien/{field.key}/")
@@ -100,7 +104,7 @@ def _field_entry(item, record, field, user, editable):
 
 def editable_type(field):
     kind = ft.TYPES.get(field.type)
-    return kind is not None and kind.storage in ("value", "links", "files")
+    return kind is not None and kind.storage in ("value", "links", "files", "backlinks")
 
 
 def build_view(tree, record, user, readonly=False):

@@ -130,8 +130,11 @@ def _choose_modules(data):
 
     without = [name for name in (data.get("without") or []) if name == "schulverwaltung"]  # the card "Leer"
     if without:
+        from core.permissions import ensure_roles
+
         SchoolSettings.load()
         SchoolSettings.objects.filter(pk=1).update(modules_off=without)
+        ensure_roles()  # Team and Gast instead of the school's roles
     if data.get("modules") is None:
         return
     offered = {module_id for module_id, _title in modules.optional_modules()}

@@ -20,13 +20,15 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("newField", () => ({
     type: "text",
     touched: false,
+    linkTarget: "",
+    init() { this.linkTarget = this.$refs.target?.value || ""; },
     rules: JSON.parse(document.getElementById("type-rules")?.textContent || "[]").map((r) => ({ ...r, re: new RegExp(r.pattern, "i") })),
     guess(label) {
       if (this.touched) return;
       const text = label.trim();
       const hit = text ? this.rules.find((r) => r.re.test(r.fold ? fold(text) : text)) : null;
       this.type = hit ? hit.type : "text";
-      if (hit && hit.target && this.$refs.target) this.$refs.target.value = hit.target;
+      if (hit && hit.target) this.linkTarget = hit.target;
     },
   }));
 });

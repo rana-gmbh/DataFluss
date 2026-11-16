@@ -29,7 +29,9 @@
    "title_field": "f_titel",
    "rights": {
     "sekretariat": "edit",
-    "schulleitung": "edit"
+    "schulleitung": "edit",
+    "team": "edit",
+    "gast": "read"
    },
    "fields": [
     {

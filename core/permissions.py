@@ -128,6 +128,34 @@ def has_capability(user, capability):
     return bool(check and check(user))
 
 
+# A database without Schulverwaltung (a club, a library) starts with these instead of Sekretariat and
+# Schulleitung: one that works with the data, one that only looks.
+NEUTRAL_ROLES = [
+    ("team", _("Team"), {"home": "read", "print": "read", "data": "edit"}),
+    ("gast", _("Gast"), {"home": "read", "print": "read", "data": "read"}),
+]
+
+
+def _neutral_roles(using, existing):
+    """Without Schulverwaltung: Team and Gast instead of the school's roles. Sekretariat and Schulleitung,
+    made by the migration before the database chose to go without, leave again while nobody has them and
+    nobody changed them."""
+    from .models import User, UserRole
+
+    held = set(User.objects.using(using).values_list("role", flat=True))
+    for key in (SEK, SL):
+        if key in existing and key not in held:
+            row = UserRole.objects.using(using).filter(key=key).first()
+            if row and not row.fields and abs((row.updated_at - row.created_at).total_seconds()) < 5:
+                UserRole.objects.using(using).filter(pk=row.pk).delete()  # untracked: every copy of the database does the same
+                existing.discard(key)
+    made = [UserRole(id=UserRole.id_for(key), key=key, name=str(label), names=_translations(label), areas=dict(levels), order=(n + 1) * 10)
+            for n, (key, label, levels) in enumerate(NEUTRAL_ROLES) if key not in existing]
+    if made:
+        UserRole.objects.using(using).bulk_create(made, ignore_conflicts=True)
+        existing.update(r.key for r in made)
+
+
 def _translations(label):
     """{language: name} of a built-in role in the other languages (masks/i18n.py names)."""
     from django.conf import settings
@@ -152,10 +180,13 @@ def ensure_roles(using="default"):
 
     try:
         existing = set(UserRole.objects.using(using).values_list("key", flat=True))
+        school = "schulverwaltung" in active()
     except DatabaseError:
         return []
-    builtin = [(value, label) for value, label in Role.choices if value != IT]
+    builtin = [(value, label) for value, label in Role.choices if value != IT] if school else []
     builtin += [(value, label) for value, label, _module in ROLES]
+    if not school:
+        _neutral_roles(using, existing)
     summaries = dict(ROLE_SUMMARY) | {value: summary for value, summary, _module in ROLE_SUMMARIES}
     made = []
     for order, (value, label) in enumerate(builtin, start=1):

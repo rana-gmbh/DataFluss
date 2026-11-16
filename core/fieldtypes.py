@@ -56,6 +56,9 @@ TYPES = {t.key: t for t in (
     FieldType("file", gettext_lazy("Datei"), grid="file", storage="files", people=False),
     FieldType("image", gettext_lazy("Bild"), grid="image", storage="files", people=False),
     FieldType("formula", gettext_lazy("Berechnung"), grid="formula", storage="computed", people=False),
+    # The other side of a link of another table (tables/links.py backlinks): it shows and changes the links
+    # that point here, without storing anything of its own. Made together with its link, never chosen.
+    FieldType("backlink", gettext_lazy("Gegenseite einer Verknüpfung"), grid="link", storage="backlinks", people=False),
 )}
 
 

@@ -227,6 +227,11 @@ fn database_window<'a>(builder: WebviewWindowBuilder<'a, tauri::Wry, AppHandle>,
             if url.as_str().starts_with(&origin) || url.as_str() == "about:blank" {
                 return true;
             }
+            // Einstellungen → Aktualisierung of a local database: the app's own update check (Sparkle).
+            if url.scheme() == "datafluss" && url.host_str() == Some("aktualisierung") {
+                check_for_updates();
+                return false;
+            }
             if matches!(url.scheme(), "http" | "https" | "mailto") {
                 let _ = opener.opener().open_url(url.as_str(), None::<&str>);
             }
@@ -446,13 +451,17 @@ fn build_menu(app: &AppHandle) -> tauri::Result<tauri::menu::Menu<tauri::Wry>> {
     }
 }
 
+fn check_for_updates() {
+    #[cfg(target_os = "macos")]
+    sparkle::check_now();
+    #[cfg(windows)]
+    winsparkle::check_now();
+}
+
 fn on_menu(app: &AppHandle, id: &str) {
     match id {
         "launcher" => show_launcher(app, None),
-        #[cfg(target_os = "macos")]
-        "updates" => sparkle::check_now(),
-        #[cfg(windows)]
-        "updates" => winsparkle::check_now(),
+        "updates" => check_for_updates(),
         "new" => show_launcher(app, Some("create")),
         "welcome" => show_launcher(app, Some("welcome")),
         "tour" => {

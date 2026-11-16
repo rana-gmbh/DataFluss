@@ -305,3 +305,97 @@ def cleanup():
         gone = ids - exists(ids)
         for link in Link.objects.filter(target_kind=kind, target_id__in=gone):
             link.delete()
+
+
+# ---------------------------------------------------------------- the other side of a link (field type "backlink")
+
+def backlink_source(field):
+    """(source table, link field) a backlink field shows from the other side, or (None, None) when that link
+    is gone or archived."""
+    from .models import Field
+
+    table_key, _sep, link_key = (ft.config(field).get("link") or "").partition(".")
+    link = Field.objects.filter(table__key=table_key, key=link_key, type="link", archived=False).select_related("table").first()
+    return (link.table, link) if link else (None, None)
+
+
+def backlink_records(record, field):
+    """The records of the source table whose link points to this record."""
+    table, link = backlink_source(field)
+    if link is None:
+        return []
+    ids = Link.objects.filter(field=link.key, target_id=record.pk, record__table=table, record__deleted_at=None).values_list("record_id", flat=True)
+    return list(Record.objects.filter(pk__in=list(ids)).order_by("title"))
+
+
+def backlink_targets(record, field, user):
+    """Chips of a backlink field: the linking records, as far as the user may read their table."""
+    from . import services
+
+    table, _link = backlink_source(field)
+    if table is None:
+        return []
+    if user is not None and not services.may_read(user, table):
+        return [{"id": "", "title": _("nicht sichtbar"), "url": "", "visible": False}] if backlink_records(record, field) else []
+    return [{"id": str(r.pk), "title": r.title or _("(ohne Titel)"), "url": f"/tabellen/{table.key}/{r.pk}/", "visible": True}
+            for r in backlink_records(record, field)]
+
+
+def backlink_display(record, field, user=None):
+    return ", ".join(str(t["title"]) for t in backlink_targets(record, field, user))
+
+
+def backlink_may_change(user, field):
+    """Changing a backlink changes the link of the other table: the right to edit that table and its field."""
+    from core import fieldrules
+
+    from . import services
+
+    table, link = backlink_source(field)
+    return link is not None and services.may_edit(user, table) and fieldrules.may_change(user, fieldrules.table_entity(table), link.key)
+
+
+def backlink_candidates(user, field, query, record, limit=20):
+    """What the picker of a backlink offers: records of the source table, without those already linking here."""
+    from . import services
+
+    table, _link = backlink_source(field)
+    if table is None or not services.may_read(user, table):
+        return []
+    rows = Record.objects.filter(table=table)
+    for term in (query or "").strip().lower().split():
+        rows = rows.filter(search_text__contains=term)
+    linked = {r.pk for r in backlink_records(record, field)}
+    return [{"id": str(r.pk), "title": r.title or _("(ohne Titel)"), "sub": table.display_name} for r in rows.order_by("title")[:limit + len(linked)]
+            if r.pk not in linked][:limit]
+
+
+def backlink_set(field, record, source_id, add):
+    """Adds or removes the link of the source record `source_id` to `record` (a single link moves here)."""
+    table, link = backlink_source(field)
+    source = Record.objects.filter(table=table, pk=source_id).first() if link else None
+    if source is None:
+        raise ValidationError(_("Unbekannter Datensatz."))
+    if add:
+        add_target(source, link, str(record.pk))
+    else:
+        remove_target(source, link, str(record.pk))
+
+
+def make_backlink(link, label, request=None):
+    """The field on the other side of a link to an own table: Räume.Inhaber gives Personen."Inhaber von"."""
+    from .models import Field, Table
+    from . import services
+
+    target = Table.objects.filter(key=ft.config(link).get("table", "")).first()
+    if target is None or target.pk == link.table_id:
+        return None
+    taken = set(Field.objects.filter(table=target).values_list("key", flat=True))
+    key = services._unique_key("f_" + (services._slug(label, 50) or "gegenseite"), taken, 60)
+    order = max(Field.objects.filter(table=target).values_list("order", flat=True), default=0) + 10
+    made = Field.objects.create(table=target, key=key, label=label[:100], type="backlink", order=order,
+                                config={"link": f"{link.table.key}.{link.key}"})
+    if not (link.config or {}).get("reverse"):
+        link.config = {**(link.config or {}), "reverse": label[:100]}
+        link.save()
+    return made

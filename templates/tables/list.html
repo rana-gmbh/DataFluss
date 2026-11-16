@@ -4,9 +4,19 @@
 <h1 class="page-title mb-1">{% translate "Tabellen" %}</h1>
 <p class="muted text-[13px] mb-4">{% translate "Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder Termine." %}</p>
 <div class="grid lg:grid-cols-3 gap-4 items-start">
-<div class="lg:col-span-2 surface overflow-x-auto">{% if rows %}<table class="data-table"><thead><tr><th>{% translate "Tabelle" %}</th><th>{% translate "Felder" %}</th><th>{% translate "Datensätze" %}</th></tr></thead><tbody>
-{% for row in rows %}<tr><td><a class="font-medium hover:underline inline-flex items-center gap-2" href="{% url 'table_settings' row.table.key %}">{% icon row.table.icon 'text-[16px] text-[var(--accent)]' %}{{ row.table.display_name }}</a>{% if row.table.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}{% if row.table.description %}<div class="muted text-[12px]">{{ row.table.description }}</div>{% endif %}</td><td class="muted">{{ row.fields }}</td><td class="muted">{{ row.records }}</td></tr>{% endfor %}
-</tbody></table>{% else %}<div class="p-6 text-center"><p class="font-medium">{% translate "Noch keine eigenen Tabellen." %}</p><p class="muted text-[13px] mt-1">{% translate "Legen Sie rechts die erste an." %}</p></div>{% endif %}</div>
+<div class="lg:col-span-2 space-y-4">{% if rows %}{% for section, section_rows in groups %}<div class="surface overflow-x-auto">
+{% if several %}<div class="px-4 pt-3 pb-1 flex flex-wrap items-center gap-2" x-data="{ renaming: false }">
+  <h2 class="font-semibold inline-flex items-center gap-2" x-show="!renaming">{% icon 'layout' 'text-[15px] muted' %}{{ section|default:_("Tabellen") }}</h2>
+  {% if section %}<button type="button" class="btn btn-ghost btn-sm" x-show="!renaming" @click="renaming = true; $nextTick(() => { $refs.name.focus(); $refs.name.select() })">{% translate "Umbenennen" %}</button>
+  <form method="post" class="flex flex-wrap items-center gap-2" x-show="renaming" x-cloak>{% csrf_token %}<input type="hidden" name="rename_section" value="{{ section }}">
+    <input class="input py-1 h-auto w-56" name="section" value="{{ section }}" maxlength="60" x-ref="name" aria-label="{% translate 'Name des Bereichs' %}" @keydown.escape="renaming = false">
+    <button class="btn btn-primary btn-sm">{% translate "Speichern" %}</button><button type="button" class="btn btn-ghost btn-sm" @click="renaming = false">{% translate "Abbrechen" %}</button></form>{% endif %}
+</div>{% endif %}
+<table class="data-table"><thead><tr><th>{% translate "Tabelle" %}</th><th>{% translate "Felder" %}</th><th>{% translate "Datensätze" %}</th></tr></thead><tbody>
+{% for row in section_rows %}<tr><td><a class="font-medium hover:underline inline-flex items-center gap-2" href="{% url 'table_settings' row.table.key %}">{% icon row.table.icon 'text-[16px] text-[var(--accent)]' %}{{ row.table.display_name }}</a>{% if row.table.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}{% if row.table.description %}<div class="muted text-[12px]">{{ row.table.description }}</div>{% endif %}</td><td class="muted">{{ row.fields }}</td><td class="muted">{{ row.records }}</td></tr>{% endfor %}
+</tbody></table></div>{% endfor %}
+<p class="muted text-[12px]">{% translate "Bereiche fassen Tabellen in der Seitenleiste zusammen. Den Bereich einer Tabelle legen Sie in ihren Einstellungen unter „Allgemein“ fest." %}</p>
+{% else %}<div class="surface p-6 text-center"><p class="font-medium">{% translate "Noch keine eigenen Tabellen." %}</p><p class="muted text-[13px] mt-1">{% translate "Legen Sie rechts die erste an." %}</p></div>{% endif %}</div>
 <div class="space-y-4"><form method="post" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Tabelle" %}</h2>
   {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
   <div><label class="label" for="t-name">{% translate "Name" %}</label><input id="t-name" class="input" name="name" required maxlength="100" placeholder="{% translate 'z. B. Bücher' %}"></div>

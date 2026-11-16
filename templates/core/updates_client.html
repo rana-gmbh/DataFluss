@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Aktualisierung" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-1">{% translate "Aktualisierung" %}</h1>
+<div class="surface p-5 max-w-2xl space-y-3">
+  <p class="text-[13px]">{% blocktranslate trimmed with version=version %}Diese Datenbank liegt auf diesem Computer. Sie wird mit der App DataFluss aktualisiert, installiert ist Version {{ version }}.{% endblocktranslate %}</p>
+  <p class="muted text-[13px]">{% translate "Die App sucht von selbst nach neuen Versionen. Ist der Computer mit einem Server verbunden, sollte zuerst der Server aktualisiert sein." %}</p>
+  <a class="btn btn-primary" href="datafluss://aktualisierung">{% icon 'refresh' %}{% translate "Nach Updates suchen" %}</a>
+</div>
+{% endblock %}

@@ -382,7 +382,10 @@ def settings_home(request):
     new_version = request.user.can("admin.update") and updates.update_available()
     from sync.models import Conflict
 
+    from archive import plan
+
     return render(request, "core/settings_home.html", {"basic": "schulverwaltung" in modules.active(), "update_available": new_version, "sync_conflicts": Conflict.objects.filter(resolved_at=None).count(),
+                                                       "on_computer": plan.is_client(),
                                                        "datafluss_version": settings.DATAFLUSS_VERSION})
 
 
@@ -599,6 +602,10 @@ def csrf_failure(request, reason=""):
 
 @require("admin.update")
 def updates_page(request):
+    from archive import plan
+
+    if plan.is_client():  # a database on this computer: the app updates itself (Sparkle / WinSparkle)
+        return render(request, "core/updates_client.html", {"version": settings.DATAFLUSS_VERSION, "active_nav": "settings_home"})
     updates.refresh_deployment()
     return render(request, "core/updates.html", {"status": updates.public_status(), "active_nav": "settings_home"})
 

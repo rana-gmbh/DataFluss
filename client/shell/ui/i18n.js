@@ -64,6 +64,8 @@ window.I18N = (() => {
     "Deutsche Schule Musterstadt": ["Example School", "示例学校", "範例學校"],
     "z. B. Bibliothek am Markt": ["e.g. Market Street Library", "例如：市场街图书馆", "例如：市場街圖書館"],
     "wie die Schule": ["like the school", "与学校相同", "與學校相同"],
+    "wie oben oder eigener Name": ["like above, or a name of your own", "与上面相同或自定义名称", "與上面相同或自訂名稱"],
+    "Bitte einen Namen und einen Benutzernamen angeben.": ["Please enter a name and a username.", "请输入名称和用户名。", "請輸入名稱和使用者名稱。"],
     "Benutzername": ["Username", "用户名", "使用者名稱"],
     "z. B. it": ["e.g. it", "例如 it", "例如 it"],
     "Passwort": ["Password", "密码", "密碼"],

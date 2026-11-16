@@ -51,11 +51,14 @@ def _add_tables(nav, user):
     path instead of a URL name (templates/base.html), and their pages set active_nav to that path."""
     from tables.services import nav_items
 
-    items = [(label, url, icon, "") for label, url, icon, _key in nav_items(user)]
-    if not items:
+    groups = {}
+    for label, url, icon, _key, section in nav_items(user):  # one sidebar section per section of the tables
+        groups.setdefault(section or "", []).append((label, url, icon, ""))
+    if not groups:
         return
     before = next((i for i, (title, _items) in enumerate(nav) if str(title) == str(_("Drucken und Daten"))), len(nav))
-    nav.insert(before, (_("Tabellen"), items))
+    for section, items in reversed(list(groups.items())):
+        nav.insert(before, (section or _("Tabellen"), items))
 
 
 def _tour(user):
@@ -99,6 +102,7 @@ def app_context(request):
         "school": SchoolSettings.load(),
         # The name after the page title and on the sign-in page: the module's, or the platform's without it.
         "product_name": _("Schulverwaltung") if "schulverwaltung" in modules.active() else "DataFluss",
+        "is_school": "schulverwaltung" in modules.active(),  # "Schule" or "Organisation" in settings
         "nav": nav,
         "can_search": bool(user is not None and user.is_authenticated and any(user.can(c) for c in SEARCHERS)),
         "oidc_enabled": settings.OIDC_ENABLED,

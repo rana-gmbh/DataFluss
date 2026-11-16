@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 19:00+0100\n"
+"POT-Creation-Date: 2026-11-16 21:28+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -570,6 +570,9 @@ msgstr "Image"
 msgid "Berechnung"
 msgstr "Calculation"
 
+msgid "Gegenseite einer Verknüpfung"
+msgstr "Other side of a link"
+
 msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
 msgstr "Please enter a valid date, e.g. 24.12.2015."
 
@@ -683,6 +686,12 @@ msgstr "Maintain master data, view passwords and print login sheets."
 
 msgid "Daten und Berichte lesen, keine Passwörter."
 msgstr "Read data and reports, no passwords."
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Gast"
+msgstr "Guest"
 
 msgid "Startseite"
 msgstr "Start page"
@@ -798,11 +807,11 @@ msgstr "Users and roles"
 msgid "Konten anlegen und Rollen festlegen."
 msgstr "Create accounts and set roles."
 
-msgid "Schule und Sprachen"
-msgstr "School and languages"
+msgid "Schule oder Organisation"
+msgstr "School or organisation"
 
-msgid "Name, Logo und Sprachen der Schule."
-msgstr "Name, logo and languages of the school."
+msgid "Name, Logo und Sprachen."
+msgstr "Name, logo and languages."
 
 msgid "Neue Versionen einspielen."
 msgstr "Install new versions."
@@ -1118,6 +1127,9 @@ msgstr "Choose at least one language."
 
 msgid "Alles lesen"
 msgstr "Read everything"
+
+msgid "Alles bearbeiten"
+msgstr "Edit everything"
 
 msgid "Hausmeister"
 msgstr "Caretaker"
@@ -2006,6 +2018,9 @@ msgstr "(untitled)"
 msgid "%(field)s: Bitte ein Bild hochladen (JPEG, PNG, GIF oder WebP)."
 msgstr "%(field)s: Please upload a picture (JPEG, PNG, GIF or WebP)."
 
+msgid "Unbekannter Datensatz."
+msgstr "Unknown record."
+
 msgid "Datensatz"
 msgstr "Record"
 
@@ -2087,6 +2102,10 @@ msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "The table contains records. Archive it instead."
 
 #, python-format
+msgid "Der Bereich heißt jetzt „%(name)s“."
+msgstr "The section is now called “%(name)s”."
+
+#, python-format
 msgid "%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu."
 msgstr "%(table)s has been created. Now add fields."
 
@@ -2115,6 +2134,14 @@ msgstr "The permissions have been saved."
 #, python-format
 msgid "%(field)s wurde angelegt."
 msgstr "%(field)s has been created."
+
+#, python-format
+msgid "%(field)s von %(table)s"
+msgstr "%(field)s of %(table)s"
+
+#, python-format
+msgid "In %(table)s gibt es jetzt das Feld %(field)s."
+msgstr "%(table)s now has the field %(field)s."
 
 #, python-format
 msgid "%(field)s wurde archiviert. Die Werte bleiben erhalten."
@@ -2883,6 +2910,9 @@ msgstr "New role"
 msgid "z. B. Hausmeister"
 msgstr "e.g. Caretaker"
 
+msgid "z. B. Vorstand"
+msgstr "e.g. Board"
+
 msgid "Beginnt mit"
 msgstr "Starts with"
 
@@ -2904,8 +2934,14 @@ msgstr "Everything can be changed afterwards."
 msgid "Schule"
 msgstr "School"
 
+msgid "Organisation"
+msgstr "Organisation"
+
 msgid "Name der Schule"
 msgstr "School name"
+
+msgid "Name der Organisation"
+msgstr "Name of the organisation"
 
 msgid "Kurzname"
 msgstr "Short name"
@@ -2984,8 +3020,11 @@ msgstr "Which languages the interface offers"
 msgid "Neu"
 msgstr "New"
 
-msgid "Neueste Version über Coolify installieren"
-msgstr "Install the latest version via Coolify"
+msgid "Nach einer neuen Version der App suchen"
+msgstr "Check for a new version of the app"
+
+msgid "Neueste Version installieren"
+msgstr "Install the latest version"
 
 msgid "Alle Daten sichern und einspielen"
 msgstr "Back up and restore all data"
@@ -3039,13 +3078,13 @@ msgid "Bestätigen"
 msgstr "Confirm"
 
 msgid ""
-"Installiert die neueste Version von GitHub über Coolify. Vorher wird die "
-"Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit"
-" ist, alle können also normal weiterarbeiten."
+"Installiert die neueste Version auf dem Server. Vorher wird die Datenbank "
+"gesichert. Die bisherige Version läuft weiter, bis die neue bereit ist, alle"
+" können also normal weiterarbeiten."
 msgstr ""
-"Installs the latest version from GitHub via Coolify. The database is backed "
-"up first. The current version keeps running until the new one is ready, so "
-"everyone can keep working as usual."
+"Installs the latest version on the server. The database is backed up first. "
+"The current version keeps running until the new one is ready, so everyone "
+"can keep working as usual."
 
 msgid ""
 "Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
@@ -3084,6 +3123,21 @@ msgstr ""
 
 msgid "Neu in dieser Version"
 msgstr "New in this version"
+
+#, python-format
+msgid ""
+"Diese Datenbank liegt auf diesem Computer. Sie wird mit der App DataFluss "
+"aktualisiert, installiert ist Version %(version)s."
+msgstr ""
+"This database is on this computer. It is updated together with the DataFluss"
+" app; version %(version)s is installed."
+
+msgid ""
+"Die App sucht von selbst nach neuen Versionen. Ist der Computer mit einem "
+"Server verbunden, sollte zuerst der Server aktualisiert sein."
+msgstr ""
+"The app checks for new versions by itself. If the computer is connected to a"
+" server, the server should be updated first."
 
 #, python-format
 msgid ""
@@ -4260,8 +4314,18 @@ msgid ""
 msgstr ""
 "Your own tables with your own fields, for books, loans or appointments, say."
 
+msgid "Name des Bereichs"
+msgstr "Name of the section"
+
 msgid "Datensätze"
 msgstr "Records"
+
+msgid ""
+"Bereiche fassen Tabellen in der Seitenleiste zusammen. Den Bereich einer "
+"Tabelle legen Sie in ihren Einstellungen unter „Allgemein“ fest."
+msgstr ""
+"Sections group tables in the sidebar. You set a table's section in its "
+"settings under “General”."
 
 msgid "Legen Sie rechts die erste an."
 msgstr "Create the first one on the right."
@@ -4321,6 +4385,16 @@ msgstr "Drag to change the order"
 msgid "z. B. Ausleihen"
 msgstr "e.g. Loans"
 
+msgid "Dort auch als Feld zeigen"
+msgstr "Also show it there as a field"
+
+msgid ""
+"Die andere Tabelle bekommt ein Feld mit diesem Namen, z. B. „Inhaber von“, "
+"das die Verknüpfung von ihrer Seite zeigt und ändert."
+msgstr ""
+"The other table gets a field with this name, e.g. “Owner of”, which shows "
+"and changes the link from its side."
+
 msgid "Wie ein Datensatz aussieht"
 msgstr "What a record looks like"
 
@@ -4368,6 +4442,16 @@ msgstr ""
 
 msgid "Symbol"
 msgstr "Icon"
+
+msgid "Bereich in der Seitenleiste"
+msgstr "Section in the sidebar"
+
+msgid ""
+"Tabellen mit demselben Bereich stehen in der Seitenleiste zusammen, etwa "
+"unter „Bibliothek“ oder „Verein“. Leer: unter „Tabellen“."
+msgstr ""
+"Tables with the same section appear together in the sidebar, e.g. under "
+"“Library” or “Club”. Empty: under “Tables”."
 
 msgid "In der Seitenleiste zeigen"
 msgstr "Show in the sidebar"
@@ -4674,6 +4758,9 @@ msgstr "Key"
 
 msgid "Muss geändert werden"
 msgstr "Must be changed"
+
+#~ msgid "Schule und Sprachen"
+#~ msgstr "School and languages"
 
 #, python-brace-format
 #~ msgid "z. B. {Preis} * {Menge}"

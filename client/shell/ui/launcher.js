@@ -375,7 +375,7 @@ async function create() {
   const name = field("name").value.trim() || school;
   const username = field("username").value.trim();
   const password = field("password").value;
-  if (!school || !username) return showError("Bitte den Namen der Schule und einen Benutzernamen angeben.");
+  if (!school || !username) return showError(chosenStart.without.length ? "Bitte einen Namen und einen Benutzernamen angeben." : "Bitte den Namen der Schule und einen Benutzernamen angeben.");
   if (password.length < 12) return showError("Das Passwort braucht mindestens 12 Zeichen.");
   if (password !== field("password2").value) return showError("Die beiden Passwörter stimmen nicht überein.");
   try {

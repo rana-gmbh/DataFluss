@@ -390,7 +390,7 @@ class Checker:
                 raise FormulaError(_("{%(name)s} enthält einen Fehler.") % {"name": field.display_label}, position)
             finally:
                 self.stack.pop()
-        if field.type in ("link", "file", "image"):
+        if field.type in ("link", "file", "image", "backlink"):
             return _list(TEXT)
         return FIELD_TYPES.get(field.type, TEXT)
 
@@ -775,6 +775,15 @@ def _value_of(record, field, context):
         return [Item(links.kind_of(field), i, str(found[i]["title"])) for i in ids]
     if field.type in ("file", "image"):
         return [a.name for a in links.files(record, field)]
+    if field.type == "backlink":  # the records of another table whose link points here
+        source, link = links.backlink_source(field)
+        if link is None:
+            return []
+        if not context.may_read(source):
+            raise Hidden()
+        rows = context.linking(source.key, link.key, record)
+        context.step(len(rows))
+        return [Item("record", r.pk, r.title) for r in rows]
     if field.type == "multichoice":
         return ", ".join(str(field.option_label(v)) for v in (services.value(record, field) or []))
     if field.type == "choice":

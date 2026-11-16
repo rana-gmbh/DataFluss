@@ -11,6 +11,9 @@ and which fields it may only read or not see at all. Roles are set up under
   account keeps its role and cannot be locked.
 - **Sekretariat**, **Schulleitung** and the roles of modules (DaZ-Lehrkraft, Kindergarten-Fachkraft,
   Lehrkraft) start with the rights they always had and can be changed like any other role.
+- A database without Schulverwaltung (the card **Leer** in the app) has no Sekretariat and Schulleitung.
+  It starts with **Team** (edits own tables, prints) and **Gast** (reads them). The role editor then only
+  shows areas of the modules in use, and the suggestions are Alles lesen and Alles bearbeiten.
 
 ## A new role
 

@@ -239,3 +239,68 @@ class TranslatedRoleTests(AppTestCase):
         with translation.override("en"):
             self.assertEqual(row.display_name, "Secretary's office")
         self.assertEqual(row.description, "")
+
+
+class WithoutSchoolTests(AppTestCase):
+    """A database without Schulverwaltung: no school roles, no school areas in the editor."""
+
+    def setUp(self):
+        from core.models import SchoolSettings
+
+        SchoolSettings.load()
+        SchoolSettings.objects.filter(pk=1).update(modules_off=["schulverwaltung"])
+        User.objects.filter(role__in=[Role.SEKRETARIAT, Role.SCHULLEITUNG]).update(role=Role.IT)
+        ensure_roles()
+
+    def test_team_and_guest_instead_of_school_roles(self):
+        keys = set(UserRole.objects.values_list("key", flat=True))  # module roles (premium) may be there too
+        self.assertTrue({"gast", "team"} <= keys)
+        self.assertFalse({Role.SEKRETARIAT, Role.SCHULLEITUNG} & keys)
+        self.assertEqual([key for key, _name in role_choices()][:3], [Role.IT, "team", "gast"])
+
+    def test_editor_and_table_rights_without_school_things(self):
+        from django.urls import reverse
+
+        from core.context_user import set_current_user
+        from tables import services
+
+        keys = [area.key for area in rights.areas(in_use=True)]
+        self.assertNotIn("pupils", keys)
+        self.assertNotIn("vault", keys)
+        self.assertNotIn("admin.fields", [e.key for a in rights.areas(in_use=True) for e in a.extras])
+        self.login(self.it)
+        page = self.client.get(reverse("role_edit", args=["team"])).content.decode()
+        self.assertNotIn("area_pupils", page)
+        self.assertIn("area_data", page)
+        self.assertNotIn("Hausmeister", self.client.get(reverse("roles")).content.decode())
+        set_current_user(self.it)
+        table = services.create_table("Mitglieder")
+        rights_page = self.client.get(reverse("table_settings", args=[table.key]) + "?tab=rechte").content.decode()
+        self.assertNotIn("Sekretariat", rights_page)
+        self.assertIn("Team", rights_page)
+
+    def test_a_changed_or_used_school_role_stays(self):
+        from core.models import SchoolSettings
+
+        SchoolSettings.objects.filter(pk=1).update(modules_off=[])
+        ensure_roles()  # back with Schulverwaltung: the school roles come again
+        self.assertTrue(UserRole.objects.filter(key=Role.SEKRETARIAT).exists())
+        User.objects.create_user("noch-da", password="x" * 14, role=Role.SEKRETARIAT)
+        SchoolSettings.objects.filter(pk=1).update(modules_off=["schulverwaltung"])
+        ensure_roles()
+        self.assertTrue(UserRole.objects.filter(key=Role.SEKRETARIAT).exists())  # an account has it
+
+
+class UpdatePageTests(AppTestCase):
+    def test_on_a_computer_the_app_updates_itself(self):
+        import os
+        from unittest import mock
+
+        from django.urls import reverse
+
+        self.login(self.it)
+        with mock.patch.dict(os.environ, {"SCHULE_CLIENT_DB_NAME": "Test", "SYNC_TOKEN": "x"}):
+            page = self.client.get(reverse("updates"))
+            self.assertContains(page, "datafluss://aktualisierung")
+            self.assertContains(self.client.get(reverse("settings_home")), "Nach einer neuen Version der App suchen")
+        self.assertNotContains(self.client.get(reverse("settings_home")), "Coolify")

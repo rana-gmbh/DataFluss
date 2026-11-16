@@ -29,7 +29,9 @@
    "title_field": "f_raum",
    "rights": {
     "sekretariat": "edit",
-    "schulleitung": "read"
+    "schulleitung": "read",
+    "team": "edit",
+    "gast": "read"
    },
    "fields": [
     {
@@ -117,7 +119,9 @@
    "title_field": "f_bezeichnung",
    "rights": {
     "sekretariat": "edit",
-    "schulleitung": "read"
+    "schulleitung": "read",
+    "team": "edit",
+    "gast": "read"
    },
    "fields": [
     {

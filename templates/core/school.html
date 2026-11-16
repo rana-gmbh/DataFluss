@@ -1,9 +1,9 @@
 {% extends "base.html" %}{% load i18n %}
-{% block title %}{% translate "Schule" %}{% endblock %}
+{% block title %}{% if is_school %}{% translate "Schule" %}{% else %}{% translate "Organisation" %}{% endif %}{% endblock %}
 {% block content %}
-<h1 class="page-title mb-4">{% translate "Schule" %}</h1>
+<h1 class="page-title mb-4">{% if is_school %}{% translate "Schule" %}{% else %}{% translate "Organisation" %}{% endif %}</h1>
 <form method="post" enctype="multipart/form-data" class="surface p-5 space-y-4 max-w-xl">{% csrf_token %}
-  <div><label class="label" for="f-name">{% translate "Name der Schule" %}</label><input id="f-name" class="input" name="name" value="{{ school.name }}"></div>
+  <div><label class="label" for="f-name">{% if is_school %}{% translate "Name der Schule" %}{% else %}{% translate "Name der Organisation" %}{% endif %}</label><input id="f-name" class="input" name="name" value="{{ school.name }}"></div>
   <div><label class="label" for="f-short_name">{% translate "Kurzname" %}</label><input id="f-short_name" class="input" name="short_name" value="{{ school.short_name }}"></div>
   <div><label class="label" for="f-email_domain">{% translate "E-Mail-Domain" %}</label><input id="f-email_domain" class="input" name="email_domain" value="{{ school.email_domain }}"><p class="muted text-[12px] mt-1">{% translate "Der Import warnt bei Adressen außerhalb dieser Domain." %}</p></div>
   <div><label class="label" for="f-confidential_footer">{% translate "Fußzeile für vertrauliche Blätter" %}</label><input id="f-confidential_footer" class="input" name="confidential_footer" value="{{ school.confidential_footer }}"></div>

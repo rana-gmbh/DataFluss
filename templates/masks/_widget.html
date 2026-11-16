@@ -2,7 +2,7 @@
 <div class="min-w-0">
   {% if item.fd.type != 'bool' %}<label class="label" for="f-{{ item.fd.key }}">{{ item.label }}{% if item.fd.required %} <span class="text-[var(--bad)]">*</span>{% endif %}</label>{% endif %}
   {% with key=item.fd.key type=item.fd.type %}
-  {% if type == 'link' %}{% include "tables/_link_widget.html" %}
+  {% if type == 'link' or type == 'backlink' %}{% include "tables/_link_widget.html" %}
   {% elif type == 'file' or type == 'image' %}{% include "tables/_file_widget.html" %}
   {% elif type == 'formula' %}<div class="input flex items-center truncate {% if item.problem %}text-[var(--bad)]{% endif %}" style="background: var(--surface-2)" id="f-{{ key }}" {% if item.problem %}title="{{ item.problem }}"{% endif %}>{{ item.value|default:"–" }}</div>{% if item.problem %}<p class="text-[12px] mt-1 text-[var(--bad)]">{{ item.problem }}</p>{% endif %}
   {% elif not item.editable and type != 'secret' %}

@@ -114,6 +114,8 @@ class TableSource:
             return links.display(record, field, user)
         if field.type in ("file", "image"):
             return ", ".join(a.name for a in links.files(record, field))
+        if field.type == "backlink":
+            return links.backlink_display(record, field, user)
         return str(services.display(record, field, localized=True))
 
     def _photo(self, record, fields):

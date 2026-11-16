@@ -65,7 +65,7 @@ class TableTarget:
         return self._fields
 
     def importable(self):
-        return [f for f in self.fields.values() if f.type not in ("secret", "formula", "file", "image")]
+        return [f for f in self.fields.values() if f.type not in ("secret", "formula", "file", "image", "backlink")]
 
     def targets(self, user=None):
         from core import fieldrules
