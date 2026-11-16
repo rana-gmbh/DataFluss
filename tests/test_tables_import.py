@@ -53,7 +53,7 @@ class TargetTests(ImportCase):
         self.assertEqual(mapping["Gattung"], "f_genre")
         self.assertEqual(mapping["Leser"], "f_leser")
         self.assertEqual(mapping["Unbekannt"], "")
-        self.assertEqual([k for k, _ in self.target.match_keys()], ["f_name", "f_isbn", ALWAYS_NEW])
+        self.assertEqual([k for k, _ in self.target.match_keys()], ["f_isbn", "f_name", ALWAYS_NEW])  # unique first
         self.assertIn(("table:buecher", "Tabelle: Bücher"), targets.choices(self.sek))
         self.assertNotIn("table:buecher", dict(targets.choices(self.sl)))
         self.assertIsNone(targets.target_for("table:gibt-es-nicht"))

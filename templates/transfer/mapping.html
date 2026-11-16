@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load i18n ui %}
 {% block title %}{% translate "Zuordnung" %}{% endblock %}
 {% block content %}
-<h1 class="page-title mb-1">{% translate "Spalten zuordnen" %}{% if target_label %} <span class="badge badge-accent align-middle">{{ target_label }}</span>{% endif %}</h1><p class="muted text-[13px] mb-4">{{ session.filename }} · {% blocktranslate trimmed count n=session.rows|length %}{{ n }} Zeile.{% plural %}{{ n }} Zeilen.{% endblocktranslate %} {% translate "Bekannte Ninox-Spalten sind bereits zugeordnet." %}</p>
+<h1 class="page-title mb-1">{% translate "Spalten zuordnen" %}{% if target_label %} <span class="badge badge-accent align-middle">{{ target_label }}</span>{% endif %}</h1><p class="muted text-[13px] mb-4">{{ session.filename }} · {% blocktranslate trimmed count n=session.rows|length %}{{ n }} Zeile.{% plural %}{{ n }} Zeilen.{% endblocktranslate %} {% translate "Gleichnamige Spalten sind bereits zugeordnet." %}</p>
 <form method="post" class="space-y-4">{% csrf_token %}
 <div class="surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Spalte in der Datei" %}</th><th>{% translate "Beispiele" %}</th><th>{% translate "Ziel" %}</th></tr></thead><tbody>
 {% for c in columns %}<tr><td class="font-medium whitespace-nowrap">{{ c.header }}</td><td class="muted truncate max-w-xs">{{ c.samples|join:" · " }}</td><td class="w-72"><select class="input" name="map_{{ c.index }}" aria-label="{% blocktranslate trimmed with header=c.header %}Ziel für {{ header }}{% endblocktranslate %}">{% for key, label in targets %}<option value="{{ key }}" {% if key == c.target %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></td></tr>{% endfor %}</tbody></table></div>

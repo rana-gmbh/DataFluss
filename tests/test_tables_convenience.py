@@ -215,6 +215,8 @@ class FromFileTests(TableCase):
             "Bezeichnung": "text", "Kategorie": "text", "Anschaffung": "date", "Preis": "number", "Seriennummer": "text",
             "Defekt": "bool", "Kontakt": "email"})
         self.assertEqual(fields["Bezeichnung"].key, "f_name")
+        self.assertTrue(fields["Seriennummer"].unique)  # an identifier with all values different
+        self.assertFalse(fields["Kontakt"].unique)
         self.assertEqual(fields["Preis"].config, {"decimals": 2, "unit": "€"})
         records = {r.title: r for r in Record.objects.filter(table=table)}
         self.assertEqual(set(records), {"Beamer", "Laptop"})
@@ -329,3 +331,31 @@ class TextAfterImportTests(TableCase):
         a = Record.objects.get(table=self.table, title="A")
         self.assertEqual((a.values["f_art"], a.values["f_stueck"], a.values["f_seit"]), ("Roman", 1200, "2024-02-01"))
         self.assertIn(Record.objects.get(table=self.table, title="C").values.get("f_stueck"), (None, ""))
+
+
+class NewOptionImportTests(TableCase):
+    def session(self, user):
+        from tables.importer import TableTarget
+
+        target = TableTarget(self.table)
+        headers = ["Name", "Genre"]
+        session = ImportSession.objects.create(filename="b.csv", entity="table:buecher", headers=headers, rows=[["Momo", "Roman"], ["Emil", "Krimi"]],
+                                               mapping=target.auto_mapping(headers), match_key="_new", user=user)
+        session.report = target.analyse(session)
+        session.status = ImportSession.PREVIEWED
+        session.save()
+        return session
+
+    def test_a_designer_adds_new_choices_with_the_import(self):
+        from tables.importer import TableTarget
+
+        session = self.session(self.it)
+        self.assertEqual((session.report["new_options"], session.report["error"]), (["Genre: Krimi"], 0))
+        self.assertEqual(TableTarget(self.table).commit(session, self.it)["created"], 2)
+        self.genre.refresh_from_db()
+        self.assertIn("Krimi", self.genre.option_values)
+
+    def test_others_get_an_error(self):
+        services.set_rights(self.table, {Role.SEKRETARIAT: EDIT})
+        session = self.session(self.sek)
+        self.assertEqual((session.report["new_options"], session.report["error"]), ([], 1))

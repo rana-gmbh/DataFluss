@@ -176,6 +176,15 @@ def _all_parse(values, parse):
     return True
 
 
+IDENTIFIER = re.compile(r"nummer|\bnr\b|\bid\b|kennung|isbn|serien|inventar|kürzel|code|e-?mail|number|serial|编号|編號",
+                        re.IGNORECASE)
+
+
+def is_identifier(header, values):
+    """A column that names each row once, like a serial or inventory number: unique in the new table."""
+    return bool(IDENTIFIER.search(header or "")) and is_unique(values)
+
+
 def is_unique(values):
     seen = [v.strip() for v in values if v and v.strip()]
     return bool(seen) and len(seen) == len(set(v.casefold() for v in seen)) and len(seen) == len([v for v in values])

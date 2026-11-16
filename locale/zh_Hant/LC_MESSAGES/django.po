@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 17:35+0100\n"
+"POT-Creation-Date: 2026-11-16 17:39+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -3678,6 +3678,9 @@ msgstr "欄位名稱"
 msgid "Feldtyp"
 msgstr "欄位類型"
 
+msgid "Eindeutig: erkennt Zeilen bei späteren Importen"
+msgstr "唯一：在以後的匯入中用於識別列"
+
 #, python-format
 msgid "%(n)s Nachkommastelle"
 msgid_plural "%(n)s Nachkommastellen"
@@ -3893,8 +3896,8 @@ msgid "%(n)s Zeile."
 msgid_plural "%(n)s Zeilen."
 msgstr[0] "%(n)s 列。"
 
-msgid "Bekannte Ninox-Spalten sind bereits zugeordnet."
-msgstr "已識別的 Ninox 欄位已自動對應。"
+msgid "Gleichnamige Spalten sind bereits zugeordnet."
+msgstr "同名的欄已自動對應。"
 
 msgid "Spalte in der Datei"
 msgstr "檔案中的欄位"
@@ -3923,6 +3926,10 @@ msgstr "未變更"
 
 msgid "Hinweise"
 msgstr "提示"
+
+#, python-format
+msgid "Neue Auswahlwerte werden ergänzt: %(options)s"
+msgstr "將新增以下選項：%(options)s"
 
 #, python-format
 msgid "Neue Klassen werden angelegt: %(classes)s"

@@ -31,7 +31,8 @@ Instead of starting empty, **Vorlage hinzufügen …** creates ready-made tables
 **Aus Excel- oder CSV-Datei** on the same page reads a file and lists its columns as fields, each with a
 type guessed from its values: numbers with their decimal places and unit ("12,50 €"), dates, date and
 time, yes/no, e-mail, phone, link, long text, and a choice when few values repeat. Postcodes and other
-numbers with leading zeros stay text. The title column is guessed too (a column named like "Name" or
+numbers with leading zeros stay text. A column named like an identifier (Nummer, Seriennummer, ISBN, …)
+whose values all differ becomes unique, so a later import of the same list updates its rows. The title column is guessed too (a column named like "Name" or
 "Bezeichnung", else the first one whose values differ). After checking, one click creates the table and
 imports every row; the import can be taken back under Import & Export within 24 hours.
 
@@ -125,7 +126,9 @@ A formula of the record's own fields (without links) may give records their titl
 **Import & Export → Importieren** offers the tables you may edit (or **Importieren** in a table's list).
 Columns are matched to fields by name and can be changed. Numbers may carry the field's unit
 ("12,50 €") and German or English separators ("1.234,5", "1,234.5"). Existing records are recognised by a unique
-field or the title field, or every row becomes a new record. Link columns name their targets: records by
+field (preferred) or the title field, or every row becomes a new record. Values of a choice that are not
+options yet are added by an import of someone who designs tables (the check names them); for others
+they are errors. Link columns name their targets: records by
 title, people by "First Last", "Last, First" or e-mail, devices by number, several separated by `;`.
 The preview lists new, changed and unchanged rows and what could not be found. An import can be taken
 back within 24 hours, unless its records were changed since.

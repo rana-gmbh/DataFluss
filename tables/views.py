@@ -321,7 +321,8 @@ def _file_columns(session):
         guess = infer.column(header, values)
         filled = [v.strip() for v in values if v.strip()]
         columns.append({"index": index, "header": header, "guess": guess,
-                        "samples": list(dict.fromkeys(filled))[:3], "unique": infer.is_unique(values), "empty": not filled})
+                        "samples": list(dict.fromkeys(filled))[:3], "unique": infer.is_unique(values), "empty": not filled,
+                        "identifier": guess["type"] in ("text", "number", "email") and infer.is_identifier(header, values)})
     naming = re.compile(r"name|bezeichnung|titel|title|benennung|名称|名稱|标题|標題", re.IGNORECASE)
     title = next((c for c in columns if c["guess"]["type"] == "text" and naming.search(c["header"]) and not c["empty"]), None) \
         or next((c for c in columns if c["guess"]["type"] == "text" and c["unique"]), None) \
@@ -401,6 +402,9 @@ def _table_from_columns(request, session, columns, name):
                 field = first
             else:
                 field = services.create_field(table, label, type_, options_text="\n".join(options), config=guess["config"], request=request)
+            if column["identifier"] and type_ in ("text", "number", "email"):
+                field.unique = True  # a later import of the same list recognises its rows by it
+                field.save()
             if column["index"] == title_index:
                 table.title_field = field.key
             mapping[session.headers[column["index"]]] = field.key

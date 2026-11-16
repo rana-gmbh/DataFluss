@@ -83,8 +83,10 @@ class TableTarget:
 
     def match_keys(self):
         named = services.title_field(self.table, list(self.fields.values()))
-        keys = [(f.key, f.display_label) for f in self.importable() if f.unique or (named and f.key == named.key and f.type != "link")]
-        return keys + [(ALWAYS_NEW, _("Immer neue Datensätze anlegen"))]
+        # A unique field recognises a record for sure; the title only when no other one is unique.
+        unique = [(f.key, f.display_label) for f in self.importable() if f.unique and f.type != "link"]
+        title = [(named.key, named.display_label)] if named and named.type != "link" and named.key not in dict(unique) else []
+        return unique + title + [(ALWAYS_NEW, _("Immer neue Datensätze anlegen"))]
 
     def default_match(self):
         return self.match_keys()[0][0]
@@ -185,11 +187,31 @@ class TableTarget:
             return _("leer")
         return str(ft.display(field, ft.from_store(field, raw), localized=True))
 
+    def _new_options(self, session):
+        """Values of choice columns that are not options yet. Someone who designs tables gets them added (named
+        in the dry run, saved with the import); for everyone else they stay errors. [(field, value)]"""
+        user = session.user
+        if user is None or not user.can("tables.design"):
+            return []
+        added = []
+        for index, header in enumerate(session.headers):
+            field = self.fields.get(session.mapping.get(header))
+            if field is None or field.type not in ("choice", "multichoice"):
+                continue
+            for row in session.rows:
+                raw = str(row[index]).strip() if index < len(row) else ""
+                for part in (_parts(raw.replace(",", ";")) if field.type == "multichoice" else [raw]):
+                    if part and len(field.options) < 200 and _option_value(field, part) == part and part not in field.option_values:
+                        field.options = [*field.options, {"value": part[:100], "color": ""}]
+                        added.append((field, part[:100]))
+        return added
+
     # ------------------------------------------------------------ steps
 
     def analyse(self, session):
         """Dry run: nothing is written."""
         report = {"create": 0, "update": 0, "same": 0, "error": 0, "warnings": 0, "rows": [], "new_classes": []}
+        report["new_options"] = [f"{field.display_label}: {value}" for field, value in self._new_options(session)]
         named = services.title_field(self.table, list(self.fields.values()))
         seen = set()
         for line, row in enumerate(session.rows, start=2):
@@ -236,6 +258,8 @@ class TableTarget:
                 raise person_importer.ImportClosed(str(exc))
             undo = {"records": [], "values": {}, "links": {}}
             result = {"created": 0, "updated": 0, "skipped": 0}
+            for field in {field for field, _value in self._new_options(session)}:
+                field.save()
             fields = list(self.fields.values())
             for row in session.rows:
                 warnings, errors = [], []
