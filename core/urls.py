@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, views_language
+from . import views, views_language, views_roles
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
@@ -16,6 +16,11 @@ urlpatterns = [
     path("einstellungen/benutzer/", views.users, name="users"),
     path("einstellungen/benutzer/zwei-faktor/", views.two_factor_switch, name="two_factor_switch"),
     path("einstellungen/benutzer/<uuid:pk>/", views.user_update, name="user_update"),
+    path("einstellungen/rollen/", views_roles.roles, name="roles"),
+    path("einstellungen/rollen/neu/", views_roles.role_new, name="role_new"),
+    path("einstellungen/rollen/<slug:key>/", views_roles.role_edit, name="role_edit"),
+    path("einstellungen/rollen/<slug:key>/vorschau/", views_roles.role_preview, name="role_preview"),
+    path("einstellungen/rollen/<slug:key>/loeschen/", views_roles.role_delete, name="role_delete"),
     path("einstellungen/protokoll/", views.audit_log, name="audit_log"),
     path("einstellungen/schule/", views.school_settings, name="school_settings"),
     path("einstellungen/sprachen/", views_language.school_languages, name="school_languages"),

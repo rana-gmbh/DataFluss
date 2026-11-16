@@ -9,6 +9,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods, require_POST
 
 from core import audit, modules
+from core.models import role_choices
 from core.permissions import require
 from people.models import Person
 from sync import journal
@@ -55,13 +56,21 @@ def mask_list(request):
         name = request.POST.get("name", "").strip()
         if name:
             base = Mask.objects.filter(entity=entity, is_default=True).first()
-            mask = Mask.objects.create(entity=entity, name=name, match_field=request.POST.get("match_field", ""), match_value=request.POST.get("match_value", "").strip())
+            mask = Mask.objects.create(entity=entity, name=name, match_field=request.POST.get("match_field", ""), match_value=request.POST.get("match_value", "").strip(),
+                                       roles=_chosen_roles(request))
             tree = base.published.tree if base and base.published else default_tree(entity)
             MaskVersion.objects.create(mask=mask, number=1, status=MaskVersion.DRAFT, tree=tree, author=request.user)
             return redirect("mask_builder", pk=mask.pk)
     choices = {e: [f for f in ms.fields_for(e) if f.type in ("choice", "class", "bool")] for e, _ in FieldDefinition.ENTITIES}
     labels = {f.key: f.display_label for f in FieldDefinition.objects.filter(key__in=["school_type", "category"])}
-    return render(request, "masks/list.html", {"masks": Mask.objects.filter(table=None).prefetch_related("versions"), "choices": choices, "match_labels": labels, "active_nav": "settings_home"})
+    return render(request, "masks/list.html", {"masks": Mask.objects.filter(table=None).prefetch_related("versions"), "choices": choices, "match_labels": labels,
+                                               "roles": role_choices(), "active_nav": "settings_home"})
+
+
+def _chosen_roles(request):
+    """The roles a mask is shown to ("Nur für Rollen"); none ticked means everyone."""
+    known = dict(role_choices())
+    return [value for value in request.POST.getlist("roles") if value in known]
 
 
 @require("admin.masks")
@@ -200,6 +209,10 @@ def mask_action(request, pk):
         mask.name, mask.names = i18n.rename(mask.name, mask.names, request.POST.get("name", "")[:80], i18n.scope_for(request, bool(mask.names)))
         mask.save()
         return redirect("mask_list") if request.POST.get("next") == "list" else redirect("mask_builder", pk=pk)
+    if action == "roles":
+        mask.roles = _chosen_roles(request)
+        mask.save()
+        return redirect("mask_list")
     if action == "delete" and not mask.is_default:
         for version in mask.versions.all():
             version.delete()

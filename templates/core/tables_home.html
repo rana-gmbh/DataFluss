@@ -16,11 +16,16 @@
     <li class="flex items-center gap-2">{% if done %}{% icon 'check' 'text-[var(--ok)]' %}<span class="muted line-through">{{ label }}</span>{% else %}<span class="inline-block w-[14px]"></span><a class="hover:underline" href="{{ url }}">{{ label }}</a>{% endif %}</li>
   {% endfor %}</ul>
 </section>{% endif %}
+{% if areas %}<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+{% for title, items in nav %}{% for label, url_name, icon_name, cap in items %}{% if url_name != 'dashboard' and url_name|slice:':1' != '/' %}
+<a href="{% url url_name %}" class="surface p-4 hover:border-[var(--line-strong)] flex items-center gap-2">{% icon icon_name 'text-[18px] text-[var(--accent)]' %}<span class="font-medium">{{ label }}</span></a>
+{% endif %}{% endfor %}{% endfor %}
+</div>{% endif %}
 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
 {% for row in tables %}<a href="{% url 'table_records' row.table.key %}" class="surface p-4 hover:border-[var(--line-strong)]">
   <div class="flex items-center gap-2">{% icon row.table.icon 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold flex-1">{{ row.table.display_name }}</h2><span class="badge">{{ row.records }}</span></div>
   {% if row.table.description %}<p class="muted text-[13px] mt-1">{{ row.table.description }}</p>{% endif %}</a>
-{% empty %}<div class="surface p-6 sm:col-span-2 lg:col-span-3 text-center"><p class="font-medium">{% translate "Noch keine Tabellen." %}</p>
-  <p class="muted text-[13px] mt-1">{% translate "Legen Sie eine eigene an oder beginnen Sie mit einer Vorlage." %}</p></div>{% endfor %}
+{% empty %}{% if request.user|can:'tables.design' %}<div class="surface p-6 sm:col-span-2 lg:col-span-3 text-center"><p class="font-medium">{% translate "Noch keine Tabellen." %}</p>
+  <p class="muted text-[13px] mt-1">{% translate "Legen Sie eine eigene an oder beginnen Sie mit einer Vorlage." %}</p></div>{% endif %}{% endfor %}
 </div>
 {% endblock %}

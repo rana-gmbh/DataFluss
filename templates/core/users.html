@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load ui i18n %}
 {% block title %}{% translate "Benutzer" %}{% endblock %}
 {% block content %}
-<h1 class="page-title mb-4">{% translate "Benutzer und Rollen" %}</h1>
+{% include "core/_users_tabs.html" with tab="users" %}
 {% if temporary %}<div class="surface p-4 mb-4 max-w-2xl" role="status"><p class="text-[13px]">{% blocktranslate trimmed with name=temporary.username %}Neues Passwort für <strong>{{ name }}</strong>. Es wird nur jetzt angezeigt und muss bei der nächsten Anmeldung geändert werden.{% endblocktranslate %}</p><p class="mono text-[15px] mt-2"><span id="temporary-password">{{ temporary.password }}</span> <button class="btn btn-sm" type="button" data-copy="temporary-password">{% icon 'copy' %}{% translate "Kopieren" %}</button></p></div>{% endif %}
 <div class="grid lg:grid-cols-3 gap-4">
 <div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th>{% translate "Benutzer" %}</th><th>{% translate "Rolle" %}</th><th>{% translate "2FA" %}</th><th>{% translate "Status" %}</th><th></th></tr></thead><tbody>
@@ -32,6 +32,8 @@
   <div><label class="label" for="f-role">{% translate "Rolle" %}</label><select id="f-role" class="input" name="role">{% for value, label in roles %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
   <div><label class="label" for="f-password">{% translate "Passwort (mind. 12 Zeichen)" %}</label><input id="f-password" class="input" name="password" type="password" autocomplete="new-password"><p class="muted text-[12px] mt-1">{% translate "Leer lassen, wenn nur Microsoft 365 genutzt wird." %}</p></div>
   <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form>
-<div class="surface p-4"><h2 class="font-semibold mb-2">{% translate "Rollen" %}</h2><dl class="space-y-2 text-[13px]">{% for role, text in role_summary %}<div><dt class="font-medium">{{ role.label }}</dt><dd class="muted">{{ text }}</dd></div>{% endfor %}</dl></div>
+<div class="surface p-4"><div class="flex items-center justify-between gap-2 mb-2"><h2 class="font-semibold">{% translate "Rollen" %}</h2><a class="btn btn-sm" href="{% url 'roles' %}">{% icon 'settings' %}{% translate "Rollen verwalten" %}</a></div>
+  <dl class="space-y-2 text-[13px]"><div><dt class="font-medium">{% translate "IT" %}</dt><dd class="muted">{% translate "Darf alles." %}</dd></div>
+  {% for row in role_rows %}<div><dt><a class="font-medium hover:underline" href="{% url 'role_edit' row.role.key %}">{{ row.role.display_name }}</a></dt><dd class="muted">{{ row.line }}</dd></div>{% endfor %}</dl></div>
 </div></div>
 {% endblock %}

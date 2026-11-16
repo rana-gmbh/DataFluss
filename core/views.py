@@ -32,11 +32,11 @@ from django.views.decorators.http import require_GET, require_http_methods, requ
 from vault import crypto
 
 from .views_language import adopt_cookie_language
-from . import audit, health, modules, updates
+from . import audit, health, modules, permissions, updates, views_roles
 from .context import SEARCHERS
 from .images import image_extension, too_large
-from .models import AuditEvent, ChangeLog, Role, SchoolSettings, User
-from .permissions import offered_roles, require, role_summary
+from .models import AuditEvent, ChangeLog, Role, SchoolSettings, User, UserRole
+from .permissions import offered_roles, require
 
 # One attacker cannot lock an account for everyone else, and spreading guesses over accounts does not help.
 MAX_FAILURES = 8
@@ -246,6 +246,8 @@ def dashboard(request):
             response = home(request)
             if response is not None:
                 return response
+        if request.user.can("home.view"):
+            return _tables_home(request, areas=True)  # a role without people: its areas and tables
         raise PermissionDenied
     pupils = Person.objects.filter(kind="pupil", archived=False)
     staff = Person.objects.filter(kind="staff", archived=False)
@@ -276,7 +278,7 @@ def dashboard(request):
     return render(request, "core/dashboard.html", context)
 
 
-def _tables_home(request):
+def _tables_home(request, areas=False):
     """The start page of a database without Schulverwaltung: its tables, warnings and first steps."""
     from tables import services
     from tables.models import Record
@@ -284,7 +286,7 @@ def _tables_home(request):
     readable = services.readable(request.user)
     counts = dict(Record.objects.filter(table__in=readable).values("table_id").order_by().annotate(n=Count("id")).values_list("table_id", "n"))
     context = {
-        "tables": [{"table": t, "records": counts.get(t.pk, 0)} for t in readable],
+        "tables": [{"table": t, "records": counts.get(t.pk, 0)} for t in readable], "areas": areas,
         "update_available": request.user.can("admin.update") and updates.update_available(background_check=True),
         "warnings": health.warnings_for(request.user),
     }
@@ -366,9 +368,9 @@ def global_search(request):
     return render(request, "core/_search_results.html", {"results": results, "query": query})
 
 
-@require("admin.audit")
+@require("settings.open")
 def settings_home(request):
-    if not request.user.can("admin.users"):
+    if [c for c in permissions.SETTINGS if request.user.can(c)] == ["admin.audit"]:
         return redirect("audit_log")  # Protokoll is all there is for this role.
     new_version = request.user.can("admin.update") and updates.update_available()
     from sync.models import Conflict
@@ -396,7 +398,8 @@ def _users_page(request, error="", temporary=None):
         request, "core/users.html",
         {
             "users": User.objects.order_by("username"), "roles": offered_roles(), "error": error, "temporary": temporary,
-            "role_summary": role_summary(), "two_factor_on": SchoolSettings.load().require_2fa,
+            "role_rows": [{"role": r, "line": r.description or views_roles.summary(r.areas, r.extras)[0]} for r in UserRole.objects.all()],
+            "two_factor_on": SchoolSettings.load().require_2fa,
         },
     )
 
@@ -416,6 +419,8 @@ def users(request):
                 raise ValidationError(_("Dieser Benutzername ist vergeben."))
             if role not in dict(offered_roles()):
                 raise ValidationError(_("Unbekannte Rolle."))
+            if not views_roles.may_assign(request.user, role):
+                raise ValidationError(_("Sie können nur Rollen vergeben, die nicht mehr dürfen als Ihre eigene."))
             if password:
                 validate_password(password)
             user = User(
@@ -450,10 +455,22 @@ def two_factor_switch(request):
 def user_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     action = request.POST.get("action")
+    if not views_roles.may_assign(request.user, user.role):
+        # An account that may do more than the manager (an IT account, say) stays as it is.
+        messages.error(request, _("Dieses Konto darf mehr als Ihres; ändern kann es nur IT."))
+        return redirect("users")
     if action == "role" and request.POST.get("role") in dict(offered_roles()):
-        user.role = request.POST["role"]
-        user.save(update_fields=["role"])
-        audit.log("user_changed", f"Rolle von {user.username}: {user.role}", request=request, target=user.pk)
+        chosen = request.POST["role"]
+        if views_roles.last_it(user) and chosen != Role.IT:
+            messages.error(request, _("Das letzte IT-Konto behält seine Rolle, sonst könnte niemand mehr alles verwalten."))
+        elif (user == request.user and request.user.role != Role.IT) or not views_roles.may_assign(request.user, chosen):
+            messages.error(request, _("Sie können nur Rollen vergeben, die nicht mehr dürfen als Ihre eigene."))
+        else:
+            user.role = chosen
+            user.save(update_fields=["role"])
+            audit.log("user_changed", f"Rolle von {user.username}: {user.role}", request=request, target=user.pk)
+    elif action == "toggle" and user != request.user and views_roles.last_it(user):
+        messages.error(request, _("Das letzte IT-Konto lässt sich nicht sperren."))
     elif action == "toggle" and user != request.user:
         user.is_active = not user.is_active
         user.save(update_fields=["is_active"])

@@ -24,7 +24,9 @@
 {% if request.user|can:'admin.backup' %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'backups' %}">{% icon 'archive' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Sicherung" %}</h2><p class="muted text-[13px]">{% translate "Alle Daten sichern und einspielen" %}</p></a>
 {% endif %}
+{% if request.user|can:'admin.audit' %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'audit_log' %}">{% icon 'history' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Protokoll" %}</h2><p class="muted text-[13px]">{% translate "Anmeldungen, angezeigte Passwörter, Ausdrucke" %}</p></a>
+{% endif %}
 </div>
 <p class="muted text-[12px] mt-6">DataFluss {{ datafluss_version }}</p>
 {% endblock %}

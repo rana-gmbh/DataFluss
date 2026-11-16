@@ -1,0 +1,5 @@
+{% load i18n %}<h2 class="font-semibold mb-1.5">{% translate "Diese Rolle kann" %}</h2>
+<ul class="text-[13px] space-y-1">{% for line in summary %}<li>{{ line }}</li>{% endfor %}</ul>
+<h3 class="label mt-4">{% translate "Seitenleiste" %}</h3>
+{% if nav_preview %}<div class="text-[12.5px] space-y-2">{% for title, items in nav_preview %}<div><div class="muted uppercase text-[10.5px] tracking-wide">{{ title }}</div>{% for item in items %}<div>{{ item }}</div>{% endfor %}</div>{% endfor %}</div>
+{% else %}<p class="muted text-[12.5px]">{% translate "Leer: Konten mit dieser Rolle sehen nichts." %}</p>{% endif %}

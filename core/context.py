@@ -40,7 +40,7 @@ NAV = [
         _("Verwaltung"),
         [
             (_("Sicherung"), "backups", "archive", "admin.backup"),
-            (_("Einstellungen"), "settings_home", "settings", "admin.audit"),
+            (_("Einstellungen"), "settings_home", "settings", "settings.open"),
         ],
     ),
 ]

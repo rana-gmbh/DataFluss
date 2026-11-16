@@ -93,9 +93,16 @@ def role_capabilities(user):
     return granted
 
 
+# "Einstellungen" opens for anyone with one of these; it is not a right of its own (core/context.py NAV).
+SETTINGS = ("admin.masks", "admin.fields", "tables.design", "admin.platforms", "admin.users", "admin.school",
+            "admin.update", "admin.backup", "admin.audit")
+
+
 def has_capability(user, capability):
     if not user or not user.is_authenticated or not user.is_active:
         return False
+    if capability == "settings.open":
+        return any(has_capability(user, c) for c in SETTINGS)
     module = CAPABILITY_MODULES.get(capability)
     if module and module not in active():
         return False  # a module this database does not use

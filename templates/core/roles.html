@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Rollen" %}{% endblock %}
+{% block content %}
+{% include "core/_users_tabs.html" with tab="roles" %}
+<p class="muted text-[13px] mb-4 max-w-3xl">{% translate "Eine Rolle legt fest, welche Bereiche ein Konto sieht, was es bearbeiten darf und welche Felder es nur lesen oder gar nicht sehen soll. Jedes Konto hat genau eine Rolle." %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 space-y-3">
+  <div class="surface p-4 flex items-start gap-3">
+    <span class="avatar" style="width:36px;height:36px">{% icon 'shield' 'text-[16px]' %}</span>
+    <div class="flex-1 min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="font-semibold">{% translate "IT" %}</h2><span class="badge">{% icon 'lock' 'text-[11px]' %}{% translate "Fest" %}</span>
+      <span class="muted text-[12px]">{% blocktranslate trimmed count n=it_users %}{{ n }} Konto{% plural %}{{ n }} Konten{% endblocktranslate %}</span></div>
+      <p class="muted text-[13px] mt-0.5">{% translate "Darf alles. Diese Rolle lässt sich nicht ändern, damit sich niemand aussperren kann." %}</p></div>
+  </div>
+  {% for row in rows %}
+  <a class="surface p-4 flex items-start gap-3 hover:border-[var(--accent)] transition-colors" href="{% url 'role_edit' row.role.key %}">
+    <span class="avatar" style="width:36px;height:36px">{% icon 'users' 'text-[16px]' %}</span>
+    <div class="flex-1 min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="font-semibold">{{ row.role.display_name }}</h2>
+      <span class="muted text-[12px]">{% blocktranslate trimmed count n=row.users %}{{ n }} Konto{% plural %}{{ n }} Konten{% endblocktranslate %}</span></div>
+      {% if row.role.description %}<p class="muted text-[13px] mt-0.5">{{ row.role.description }}</p>{% endif %}
+      <ul class="text-[12.5px] mt-1.5 space-y-0.5">{% for line in row.summary %}<li>{{ line }}</li>{% endfor %}</ul></div>
+    {% icon 'chevron' 'text-[16px] muted mt-1' %}
+  </a>
+  {% endfor %}
+</div>
+<form method="post" action="{% url 'role_new' %}" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Rolle" %}</h2>
+  <div><label class="label" for="r-name">{% translate "Name" %}</label><input id="r-name" class="input" name="name" required maxlength="80" placeholder="{% translate 'z. B. Hausmeister' %}"></div>
+  <div><label class="label" for="r-start">{% translate "Beginnt mit" %}</label><select id="r-start" class="input" name="start">
+    <option value="">{% translate "Nur der Startseite" %}</option>
+    <optgroup label="{% translate 'Vorschläge' %}">{% for key, label in presets %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</optgroup>
+    <optgroup label="{% translate 'Kopie einer Rolle' %}">{% for row in rows %}<option value="copy:{{ row.role.key }}">{{ row.role.display_name }}</option>{% endfor %}</optgroup>
+  </select></div>
+  <button class="btn btn-primary w-full">{% icon 'plus' %}{% translate "Anlegen und Rechte festlegen" %}</button>
+  <p class="muted text-[12px]">{% translate "Alles lässt sich danach ändern." %}</p></form>
+</div>
+{% endblock %}

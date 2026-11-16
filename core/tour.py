@@ -19,7 +19,7 @@ STEPS = [
      "text": _("Tabellen, die Ihre Schule selbst gestaltet: mit eigenen Feldern, Verknüpfungen und Berechnungen. Listen und Datensätze funktionieren wie bei den Personen.")},
     {"anchor": "nav-reports", "capability": "print.run", "title": _("Drucken"),
      "text": _("Druckvorlagen für Ausweise, Listen und Briefe, mit einem Designer zum Anpassen.")},
-    {"anchor": "nav-settings_home", "capability": "admin.audit", "title": _("Einstellungen"),
+    {"anchor": "nav-settings_home", "capability": "settings.open", "title": _("Einstellungen"),
      "text": _("Masken, eigene Felder und Tabellen, Benutzer, Sicherung und Synchronisation.")},
     {"anchor": "database", "title": _("Datenbanken"),
      "text": _("Hier wechseln Sie zwischen den Datenbanken auf diesem Computer.")},

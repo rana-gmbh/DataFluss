@@ -1,0 +1,5 @@
+{% load i18n %}<h1 class="page-title mb-3">{% translate "Benutzer und Rollen" %}</h1>
+<div class="record-tabs flex border-b mb-4" style="border-color: var(--line)" role="tablist">
+  <a class="tab {% if tab == 'users' %}active{% endif %}" href="{% url 'users' %}" {% if tab == 'users' %}aria-current="page"{% endif %}>{% translate "Benutzer" %}</a>
+  <a class="tab {% if tab == 'roles' %}active{% endif %}" href="{% url 'roles' %}" {% if tab == 'roles' %}aria-current="page"{% endif %}>{% translate "Rollen" %}</a>
+</div>
