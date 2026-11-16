@@ -124,7 +124,7 @@ The Mac side is `sync/client.py` (in the sidecar, thread "sync"), the server sid
 
 A teacher's Mac (role Lehrkraft, or any sign-in linked to staff) holds only the lessons and classes of
 its user, and pupils without home data (`sync/scope.py`). The server takes from it only what the user
-could change in the browser, record by record (`teaching/sync_rules.py`); the entry period is judged by
+could change in the browser, record by record (the premium module's `teaching/sync_rules.py`); the entry period is judged by
 the day of the change on the Mac, up to two weeks back. The end-to-end test runs such a Mac as `mac4`.
 
 ## Releases and updates (macOS)
