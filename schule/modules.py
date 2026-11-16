@@ -2,7 +2,7 @@
 
 Read by the settings, the URLs and the sidecar build, so nothing here may import Django.
 
-    platform         the DataFluss platform: accounts, masks, prints, import and export, backups, sync, vault
+    platform         the DataFluss platform: accounts, masks, prints, import and export, backups, sync, vault, own tables
     schulverwaltung  the basic module Schulverwaltung: people, classes, devices
 
 DATAFLUSS_MODULES lists the optional modules to load, comma-separated ("premium" or ""). Without it,
@@ -18,7 +18,7 @@ from importlib.util import find_spec
 from . import bundles
 
 MODULES = {
-    "platform": ("core", "vault", "masks", "prints", "transfer", "archive", "sync"),
+    "platform": ("core", "vault", "masks", "prints", "transfer", "archive", "tables", "sync"),
     "schulverwaltung": ("people", "devices"),
 }
 REQUIRED = ("platform", "schulverwaltung")
@@ -31,7 +31,7 @@ TITLES = {
 # The order of INSTALLED_APPS and of the URL includes, unchanged from before the modules: templates,
 # static files and URL names resolve in this order.
 ORDER = [
-    "core", "people", "devices", "vault", "masks", "prints", "transfer", "archive",
+    "core", "people", "devices", "vault", "masks", "prints", "transfer", "archive", "tables",
     "sync",
 ]
 

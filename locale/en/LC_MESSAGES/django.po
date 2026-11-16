@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-15 22:44+0100\n"
+"POT-Creation-Date: 2026-11-16 11:40+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -110,7 +110,8 @@ msgstr ""
 "no off-site copy is set up."
 
 #, python-format
-msgid "Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
+msgid ""
+"Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
 msgstr "Last automatic backup: %(day)s, verified and copied off-site."
 
 msgid "Kopie wird übertragen"
@@ -147,17 +148,18 @@ msgstr "DataFluss may not write to the folder %(folder)s."
 msgid ""
 "Bitte einen Ordner außerhalb der Datenbank wählen, am besten auf einem "
 "anderen Laufwerk."
-msgstr "Please choose a folder outside the database, ideally on another drive."
+msgstr ""
+"Please choose a folder outside the database, ideally on another drive."
 
 msgid "Die Sicherung liegt geprüft im gewählten Ordner."
 msgstr "The backup is in the chosen folder and has been verified."
 
 msgid ""
-"Für diese Datenbank ist keine regelmäßige Sicherung eingerichtet. Geht dieser"
-" Computer verloren, sind die Daten weg."
+"Für diese Datenbank ist keine regelmäßige Sicherung eingerichtet. Geht "
+"dieser Computer verloren, sind die Daten weg."
 msgstr ""
-"No regular backup is set up for this database. If this computer is lost, the "
-"data is gone."
+"No regular backup is set up for this database. If this computer is lost, the"
+" data is gone."
 
 #, python-format
 msgid "Die Sicherung vom %(day)s ist fehlgeschlagen: %(problem)s"
@@ -172,11 +174,11 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Die letzte Sicherung ist vom %(day)s. Sie entsteht nur, während die Datenbank"
-" geöffnet ist."
+"Die letzte Sicherung ist vom %(day)s. Sie entsteht nur, während die "
+"Datenbank geöffnet ist."
 msgstr ""
-"The last backup is from %(day)s. Backups are only made while the database is "
-"open."
+"The last backup is from %(day)s. Backups are only made while the database is"
+" open."
 
 #, python-format
 msgid "Letzte Sicherung: %(day)s, geprüft, in %(folder)s."
@@ -205,8 +207,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Diese Sicherung enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
-"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem Modul"
-" einspielen."
+"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem "
+"Modul einspielen."
 msgstr ""
 "This backup contains data of the module %(names)s, which this DataFluss "
 "version lacks. It can only be restored in a DataFluss version with that "
@@ -222,8 +224,8 @@ msgid "Datenbank wird angepasst"
 msgstr "Updating database structure"
 
 msgid ""
-"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht "
-"es die Rolle IT."
+"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht"
+" es die Rolle IT."
 msgstr ""
 "This account may not restore backups on the server. That needs the IT role."
 
@@ -266,8 +268,8 @@ msgstr "No DataFluss server answers at this address."
 
 #, python-format
 msgid ""
-"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version "
-"1.1 oder neuer."
+"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version"
+" 1.1 oder neuer."
 msgstr ""
 "The server has DataFluss %(version)s. The transfer needs version 1.1 or "
 "newer."
@@ -286,8 +288,8 @@ msgid ""
 "Die Datenbank ist auf dem Server. Arbeiten Sie ab jetzt mit dem Server: "
 "Änderungen in dieser Datenbank auf dem Computer erreichen ihn nicht mehr."
 msgstr ""
-"The database is on the server. From now on, work with the server: changes in "
-"this database on the computer no longer reach it."
+"The database is on the server. From now on, work with the server: changes in"
+" this database on the computer no longer reach it."
 
 #, python-format
 msgid "Der Server antwortet mit %(code)s."
@@ -311,8 +313,8 @@ msgid ""
 "Die vollständige Sicherung des Servers liegt in der Liste unten. Bitte "
 "herunterladen und an einem anderen Ort aufbewahren."
 msgstr ""
-"The server's full backup is in the list below. Please download it and keep it"
-" somewhere else."
+"The server's full backup is in the list below. Please download it and keep "
+"it somewhere else."
 
 msgid "Es läuft bereits ein Sicherungsvorgang."
 msgstr "A backup is already running."
@@ -511,6 +513,126 @@ msgstr "Import & export"
 msgid "Verwaltung"
 msgstr "Administration"
 
+msgid "Text"
+msgstr "Text"
+
+msgid "Text (mehrzeilig)"
+msgstr "Text (multi-line)"
+
+msgid "Zahl"
+msgstr "Number"
+
+msgid "Ja/Nein"
+msgstr "Yes/No"
+
+msgid "Auswahl"
+msgstr "Choice"
+
+msgid "Mehrfachauswahl"
+msgstr "Multiple choice"
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Datum und Uhrzeit"
+msgstr "Date and time"
+
+msgid "E-Mail"
+msgstr "Email"
+
+msgid "Telefon"
+msgstr "Phone"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Geheim (verschlüsselt)"
+msgstr "Secret (encrypted)"
+
+msgid "Klasse"
+msgstr "Class"
+
+msgid "Verknüpfung"
+msgstr "Link"
+
+msgid "Datei"
+msgstr "File"
+
+msgid "Bild"
+msgstr "Image"
+
+msgid "Berechnung"
+msgstr "Calculation"
+
+msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
+msgstr "Please enter a valid date, e.g. 24.12.2015."
+
+msgid "Bitte Datum und Uhrzeit eingeben, z. B. 24.12.2015 18:30."
+msgstr "Please enter a date and time, e.g. 24.12.2015 18:30."
+
+#, python-format
+msgid "%(field)s: Bitte eine ganze Zahl eingeben."
+msgstr "%(field)s: Please enter a whole number."
+
+#, python-format
+msgid "%(field)s: Bitte eine Zahl eingeben."
+msgstr "%(field)s: Please enter a number."
+
+#, python-format
+msgid "%(field)s: mindestens %(n)s."
+msgstr "%(field)s: at least %(n)s."
+
+#, python-format
+msgid "%(field)s: höchstens %(n)s."
+msgstr "%(field)s: at most %(n)s."
+
+#, python-format
+msgid "%(field)s: Unbekannter Datensatz."
+msgstr "%(field)s: Unknown record."
+
+#, python-format
+msgid "%(field)s: Hier passt nur ein Datensatz."
+msgstr "%(field)s: Only one record fits here."
+
+#, python-format
+msgid "%(field)s wird berechnet und kann nicht eingegeben werden."
+msgstr "%(field)s is calculated and cannot be entered."
+
+#, python-format
+msgid "%(field)s: Dateien werden hochgeladen, nicht eingegeben."
+msgstr "%(field)s: Files are uploaded, not typed in."
+
+#, python-format
+msgid "%(field)s ist ein Pflichtfeld."
+msgstr "%(field)s is required."
+
+msgid "Bitte eine gültige E-Mail-Adresse eingeben."
+msgstr "Please enter a valid email address."
+
+msgid "Bitte einen gültigen Link eingeben."
+msgstr "Please enter a valid link."
+
+msgid "Bitte eine gültige Telefonnummer eingeben."
+msgstr "Please enter a valid phone number."
+
+#, python-format
+msgid "%(field)s: Unbekannte Auswahl."
+msgstr "%(field)s: Unknown option."
+
+#, python-format
+msgid "%(field)s nimmt keine Werte auf."
+msgstr "%(field)s does not hold values."
+
+#, python-format
+msgid "%(field)s: Ungültiger Wert."
+msgstr "%(field)s: Invalid value."
+
+msgid "Ja"
+msgstr "Yes"
+
+msgid "Nein"
+msgstr "No"
+
 #, python-format
 msgid "Auf dem Server sind nur noch %(gb)s GB frei."
 msgstr "Only %(gb)s GB left on the server."
@@ -541,8 +663,8 @@ msgid ""
 "Version mit diesem Modul öffnen."
 msgstr ""
 "This database contains data of the module %(names)s, which this DataFluss "
-"version lacks. It stays unchanged and can be opened with a DataFluss version "
-"that has the module."
+"version lacks. It stays unchanged and can be opened with a DataFluss version"
+" that has the module."
 
 msgid ""
 "Voller Zugriff, inklusive Masken, Vorlagen, Benutzer und Export von "
@@ -593,8 +715,8 @@ msgid ""
 "In den Listen ändert ein Doppelklick eine Zelle. Spalten, Filter und "
 "Sortierung lassen sich als eigene Ansicht speichern."
 msgstr ""
-"In the lists, a double click changes a cell. Columns, filters and sorting can"
-" be saved as your own view."
+"In the lists, a double click changes a cell. Columns, filters and sorting "
+"can be saved as your own view."
 
 msgid "Drucken"
 msgstr "Print"
@@ -619,8 +741,8 @@ msgid "Abgleich"
 msgstr "Comparison"
 
 msgid ""
-"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung gehen"
-" nicht verloren, sie folgen später."
+"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung "
+"gehen nicht verloren, sie folgen später."
 msgstr ""
 "Shows whether sync with the server is running. Changes made without a "
 "connection are not lost; they follow later."
@@ -632,8 +754,8 @@ msgid ""
 "Sprache, hell oder dunkel, Passwort und Abmelden. Mit dem Fragezeichen "
 "startet dieser Rundgang wieder."
 msgstr ""
-"Language, light or dark, password and sign-out. The question mark starts this"
-" tour again."
+"Language, light or dark, password and sign-out. The question mark starts "
+"this tour again."
 
 msgid "Erste Schritte"
 msgstr "Getting started"
@@ -650,7 +772,8 @@ msgstr "GitHub is not responding."
 msgid "GitHub ist nicht erreichbar."
 msgstr "GitHub cannot be reached."
 
-msgid "Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
+msgid ""
+"Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
 msgstr "The database could not be backed up. Nothing was changed."
 
 msgid "Coolify lehnt das Token ab."
@@ -695,30 +818,31 @@ msgid ""
 "Die neue Version wurde nicht übernommen. Die bisherige Version läuft weiter."
 msgstr "The new version was not applied. The previous version keeps running."
 
-msgid "Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
+msgid ""
+"Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
 msgstr "The database was rolled back to its state before the update."
 
 #, python-format
 msgid ""
-"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung %(name)s"
-" von Hand einspielen."
+"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung "
+"%(name)s von Hand einspielen."
 msgstr ""
 "The database could not be rolled back. Please restore the backup %(name)s "
 "manually."
 
 #, python-format
 msgid ""
-"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch "
-"hier, bitte die Sicherung %(name)s von Hand einspielen."
+"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch"
+" hier, bitte die Sicherung %(name)s von Hand einspielen."
 msgstr ""
-"The database is being rolled back. If this is still here after a few minutes,"
-" please restore the backup %(name)s manually."
+"The database is being rolled back. If this is still here after a few "
+"minutes, please restore the backup %(name)s manually."
 
 #, python-format
 msgid ""
-"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand "
-"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, geht"
-" dabei verloren."
+"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand"
+" von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
+"geht dabei verloren."
 msgstr ""
 "The new version has already changed the database. It can be rolled back to "
 "its state from %(when)s. Everything saved since then will be lost."
@@ -726,12 +850,12 @@ msgstr ""
 #, python-format
 msgid ""
 "Auf diesem Mac kann sich nur das Konto anmelden, mit dem diese Datenbank "
-"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit "
-"„Mit Server verbinden“ eine eigene Datenbank anlegen."
+"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit"
+" „Mit Server verbinden“ eine eigene Datenbank anlegen."
 msgstr ""
 "Only the account that connected this database can sign in on this Mac "
-"(%(owners)s). For %(name)s, please create a database of its own on the start "
-"screen with “Connect to server”."
+"(%(owners)s). For %(name)s, please create a database of its own on the start"
+" screen with “Connect to server”."
 
 msgid "Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen."
 msgstr "Too many failed attempts. Please try again in 15 minutes."
@@ -931,9 +1055,6 @@ msgstr "Description of the damage"
 msgid "Schaden an"
 msgstr "Damage to"
 
-msgid "Datum"
-msgstr "Date"
-
 msgid "Status"
 msgstr "Status"
 
@@ -990,39 +1111,6 @@ msgstr "This device does not exist."
 msgid "Bitte den Schaden beschreiben."
 msgstr "Please describe the damage."
 
-msgid "Text"
-msgstr "Text"
-
-msgid "Text (mehrzeilig)"
-msgstr "Text (multi-line)"
-
-msgid "Zahl"
-msgstr "Number"
-
-msgid "Ja/Nein"
-msgstr "Yes/No"
-
-msgid "Auswahl"
-msgstr "Choice"
-
-msgid "Mehrfachauswahl"
-msgstr "Multiple choice"
-
-msgid "E-Mail"
-msgstr "Email"
-
-msgid "Telefon"
-msgstr "Phone"
-
-msgid "Link"
-msgstr "Link"
-
-msgid "Geheim (verschlüsselt)"
-msgstr "Secret (encrypted)"
-
-msgid "Klasse"
-msgstr "Class"
-
 msgid "Foto"
 msgstr "Photo"
 
@@ -1043,36 +1131,6 @@ msgstr "Comments"
 
 msgid "Änderungsverlauf"
 msgstr "Change history"
-
-msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
-msgstr "Please enter a valid date, e.g. 24.12.2015."
-
-#, python-format
-msgid "%(field)s ist ein Pflichtfeld."
-msgstr "%(field)s is required."
-
-#, python-format
-msgid "%(field)s: Bitte eine ganze Zahl eingeben."
-msgstr "%(field)s: Please enter a whole number."
-
-msgid "Bitte eine gültige E-Mail-Adresse eingeben."
-msgstr "Please enter a valid email address."
-
-msgid "Bitte einen gültigen Link eingeben."
-msgstr "Please enter a valid link."
-
-msgid "Bitte eine gültige Telefonnummer eingeben."
-msgstr "Please enter a valid phone number."
-
-#, python-format
-msgid "%(field)s: Unbekannte Auswahl."
-msgstr "%(field)s: Unknown option."
-
-msgid "Ja"
-msgstr "Yes"
-
-msgid "Nein"
-msgstr "No"
 
 #, python-format
 msgid "%(field)s kann nicht geändert werden."
@@ -1176,9 +1234,6 @@ msgstr "Entry"
 msgid "Archiviert"
 msgstr "Archived"
 
-msgid "Bild"
-msgstr "Image"
-
 msgid "Neue Codes/Accounts"
 msgstr "New codes/accounts"
 
@@ -1244,12 +1299,13 @@ msgstr "%(name)s (copy)"
 msgid ""
 "Das Schuljahr %(name)s gibt es bereits. Der Wechsel wurde nicht noch einmal "
 "ausgeführt."
-msgstr "School year %(name)s already exists. The changeover was not run again."
+msgstr ""
+"School year %(name)s already exists. The changeover was not run again."
 
 #, python-format
 msgid ""
-"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch "
-"einmal ausgeführt."
+"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch"
+" einmal ausgeführt."
 msgstr ""
 "School year %(name)s hasn't started yet. The changeover was not run again."
 
@@ -1341,8 +1397,8 @@ msgid ""
 "Das Modul %(names)s wurde vom Server geladen. Bitte noch einmal verbinden, "
 "mit einem neuen Code aus der Authenticator-App."
 msgstr ""
-"The module %(names)s was loaded from the server. Please connect again, with a"
-" new code from the authenticator app."
+"The module %(names)s was loaded from the server. Please connect again, with "
+"a new code from the authenticator app."
 
 #, python-format
 msgid ""
@@ -1378,9 +1434,9 @@ msgstr "Computer and server have different versions. Please update both."
 
 msgid ""
 "Der Server wurde aus einer Sicherung wiederhergestellt. Diese Kopie gleicht "
-"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen notieren,"
-" die Datenbank auf diesem Computer entfernen und neu mit dem Server "
-"verbinden."
+"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen "
+"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server"
+" verbinden."
 msgstr ""
 "The server was restored from a backup, so this copy no longer syncs: please "
 "note any changes not yet sent, remove the database from this computer and "
@@ -1406,7 +1462,8 @@ msgstr ""
 msgid ""
 "Bitte zuerst in der Webversion anmelden und die Zwei-Faktor-Anmeldung "
 "einrichten."
-msgstr "Please sign in to the web version first and set up two-factor sign-in."
+msgstr ""
+"Please sign in to the web version first and set up two-factor sign-in."
 
 msgid "Der Code aus der Authenticator-App stimmt nicht."
 msgstr "The code from the authenticator app is incorrect."
@@ -1458,12 +1515,83 @@ msgid ""
 msgstr ""
 "The record has been deleted, so the other version can no longer be applied."
 
+#, python-format
+msgid "%(field)s ist archiviert und kann nicht geändert werden."
+msgstr "%(field)s is archived and cannot be changed."
+
+#, python-format
+msgid "%(field)s kann hier nicht eingegeben werden."
+msgstr "%(field)s cannot be entered here."
+
+#, python-format
+msgid "%(field)s: höchstens %(n)s Zeichen."
+msgstr "%(field)s: at most %(n)s characters."
+
+#, python-format
+msgid "%(field)s: Diesen Wert hat schon ein anderer Datensatz."
+msgstr "%(field)s: Another record already has this value."
+
+#, python-format
+msgid "Unbekanntes Feld %(key)s."
+msgstr "Unknown field %(key)s."
+
+msgid "Bitte einen Namen für die Tabelle eingeben."
+msgstr "Please enter a name for the table."
+
+msgid "Bitte die Zahl der Nachkommastellen angeben (0 bis 6)."
+msgstr "Please enter the number of decimal places (0 to 6)."
+
+msgid "Bitte als Grenze eine Zahl eingeben."
+msgstr "Please enter a number as the limit."
+
+msgid ""
+"Dieser Typ passt nicht zu den eingetragenen Werten. Legen Sie besser ein "
+"neues Feld an."
+msgstr "This type does not fit the values entered. Better create a new field."
+
+msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
+msgstr "The table contains records. Archive it instead."
+
+#, python-format
+msgid "%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu."
+msgstr "%(table)s has been created. Now add fields."
+
 msgid "Kein Zugriff"
 msgstr "No access"
 
+msgid "Lesen"
+msgstr "Read"
+
+msgid "Bearbeiten"
+msgstr "Edit"
+
+#, python-format
+msgid "%(table)s wurde archiviert. Die Datensätze bleiben erhalten."
+msgstr "%(table)s has been archived. The records are kept."
+
+msgid "Die Tabelle wurde gelöscht."
+msgstr "The table has been deleted."
+
+msgid "Unbekanntes Feld."
+msgstr "Unknown field."
+
+msgid "Die Rechte wurden gespeichert."
+msgstr "The permissions have been saved."
+
+#, python-format
+msgid "%(field)s wurde angelegt."
+msgstr "%(field)s has been created."
+
+#, python-format
+msgid "%(field)s wurde archiviert. Die Werte bleiben erhalten."
+msgstr "%(field)s has been archived. The values are kept."
+
+msgid "Der Typ wurde geändert."
+msgstr "The type has been changed."
+
 msgid ""
-"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich "
-"an die IT."
+"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
+" an die IT."
 msgstr ""
 "Your role doesn't allow access to this page. If you need it, contact IT."
 
@@ -1483,8 +1611,8 @@ msgid "Hier ist etwas schiefgegangen"
 msgstr "Something went wrong"
 
 msgid ""
-"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert haben,"
-" prüfen Sie bitte, ob es angekommen ist."
+"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert "
+"haben, prüfen Sie bitte, ob es angekommen ist."
 msgstr ""
 "The error has been logged for IT. If you were just saving something, please "
 "check whether it went through."
@@ -1493,8 +1621,8 @@ msgid "Zur Startseite"
 msgstr "Go to home page"
 
 msgid ""
-"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle "
-"Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
+"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle"
+" Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
 "einem anderen Ort auf. Sie lässt sich in jeder Installation der "
 "Schulverwaltung einspielen."
 msgstr ""
@@ -1506,8 +1634,8 @@ msgid "Regelmäßige Sicherung"
 msgstr "Regular backup"
 
 msgid ""
-"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem "
-"anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
+"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem"
+" anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
 "Datenbank geöffnet ist."
 msgstr ""
 "DataFluss puts the backup in a folder of your choice, ideally on another "
@@ -1574,24 +1702,24 @@ msgid ""
 "Diese Datenbank wurde auf %(url)s übertragen. Arbeiten Sie ab jetzt mit dem "
 "Server: Änderungen hier erreichen ihn nicht mehr."
 msgstr ""
-"This database was transferred to %(url)s. From now on, work with the server: "
-"changes here no longer reach it."
+"This database was transferred to %(url)s. From now on, work with the server:"
+" changes here no longer reach it."
 
 msgid "Mit dem Server verbinden …"
 msgstr "Connect to the server …"
 
 msgid ""
 "Die ganze Datenbank mit allen Konten, Bildern und Dokumenten wird zu den "
-"Daten eines DataFluss-Servers. Danach gelten auf dem Server die Konten dieser"
-" Datenbank. Am besten auf einem neuen Server, auf dem bisher nur das erste "
-"IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss nach und "
-"legt vorher eine Sicherung davon auf dem Server ab."
+"Daten eines DataFluss-Servers. Danach gelten auf dem Server die Konten "
+"dieser Datenbank. Am besten auf einem neuen Server, auf dem bisher nur das "
+"erste IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss "
+"nach und legt vorher eine Sicherung davon auf dem Server ab."
 msgstr ""
-"The whole database with all accounts, pictures and documents becomes the data"
-" of a DataFluss server. Afterwards the server uses this database's accounts. "
-"Best on a new server that only has its first IT account. If the server "
-"already holds data, DataFluss asks first and stores a backup of it on the "
-"server beforehand."
+"The whole database with all accounts, pictures and documents becomes the "
+"data of a DataFluss server. Afterwards the server uses this database's "
+"accounts. Best on a new server that only has its first IT account. If the "
+"server already holds data, DataFluss asks first and stores a backup of it on"
+" the server beforehand."
 
 msgid "Adresse des Servers"
 msgstr "Server address"
@@ -1613,8 +1741,8 @@ msgid ""
 "Mindestens %(n)s Zeichen. Es schützt die Datei unterwegs und die Sicherung, "
 "die der Server vorher von seinem bisherigen Stand anlegt."
 msgstr ""
-"At least %(n)s characters. It protects the file on its way and the backup the"
-" server makes of its previous state beforehand."
+"At least %(n)s characters. It protects the file on its way and the backup "
+"the server makes of its previous state beforehand."
 
 msgid "Übertragen …"
 msgstr "Transfer …"
@@ -1627,8 +1755,8 @@ msgid ""
 "Sicherung des Servers mit allen Daten lässt sich hierher laden. Dafür noch "
 "einmal mit Passwort und Code bestätigen."
 msgstr ""
-"This database only holds what your account may see. The server's full backup "
-"with all data can be downloaded here. Confirm once more with your password "
+"This database only holds what your account may see. The server's full backup"
+" with all data can be downloaded here. Confirm once more with your password "
 "and code."
 
 msgid "Ihr Passwort"
@@ -1663,8 +1791,8 @@ msgid ""
 "Eine Sicherung von dieser oder einer anderen Installation. Das Hochladen "
 "ändert noch nichts, eingespielt wird erst in der Liste unten."
 msgstr ""
-"A backup from this or another installation. Uploading doesn't change anything"
-" yet; restoring happens in the list below."
+"A backup from this or another installation. Uploading doesn't change "
+"anything yet; restoring happens in the list below."
 
 msgid "Datei auswählen"
 msgstr "Choose file"
@@ -1674,9 +1802,6 @@ msgstr "Backups in this database"
 
 msgid "Sicherungen auf diesem Server"
 msgstr "Backups on this server"
-
-msgid "Datei"
-msgstr "File"
 
 msgid "Stand"
 msgstr "As of"
@@ -1734,8 +1859,8 @@ msgid "Alle Daten dieser Installation werden ersetzt."
 msgstr "All data in this installation will be replaced."
 
 msgid ""
-"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der "
-"Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
+"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der"
+" Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
 "automatisch als Sicherung mit demselben Passwort abgelegt."
 msgstr ""
 "This also affects user accounts: afterwards the sign-in details from the "
@@ -1822,8 +1947,8 @@ msgid "Für alle Sprachen"
 msgstr "For all languages"
 
 msgid ""
-"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben wurden,"
-" werden ersetzt."
+"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben "
+"wurden, werden ersetzt."
 msgstr ""
 "The new name applies everywhere. Names set for individual languages are "
 "replaced."
@@ -1886,7 +2011,8 @@ msgstr "Add"
 msgid ""
 "Niemand im Personal mit diesem Namen. Anlegen macht einen Eintrag ohne "
 "Personal."
-msgstr "Nobody in Staff with this name. Creating makes an entry without Staff."
+msgstr ""
+"Nobody in Staff with this name. Creating makes an entry without Staff."
 
 msgid "Protokoll"
 msgstr "Audit log"
@@ -1967,8 +2093,8 @@ msgid "Felder, Auswahlwerte und Masken umbenennen"
 msgstr "Rename fields, options and layouts"
 
 msgid ""
-"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für "
-"eine Sprache umbenennt."
+"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für"
+" eine Sprache umbenennt."
 msgstr ""
 "Names stay in the language they were entered in until someone renames them "
 "for a language."
@@ -1989,7 +2115,8 @@ msgid ""
 "Die Sicherung wurde eingespielt. Bitte melden Sie sich mit einem Konto aus "
 "der Sicherung an."
 msgstr ""
-"The backup has been restored. Please sign in with an account from the backup."
+"The backup has been restored. Please sign in with an account from the "
+"backup."
 
 msgid "Mit Microsoft 365 anmelden"
 msgstr "Sign in with Microsoft 365"
@@ -2045,21 +2172,21 @@ msgid "Sprachen, die in dieser Datenbank zur Auswahl stehen"
 msgstr "Languages available in this database"
 
 msgid ""
-"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, oder"
-" die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene Wahl "
-"bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
+"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, "
+"oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene "
+"Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
 msgstr ""
 "Anyone who chose a language that is no longer allowed sees German, or the "
-"first allowed language if German is not allowed. Their own choice is kept and"
-" applies again as soon as the language is allowed."
+"first allowed language if German is not allowed. Their own choice is kept "
+"and applies again as soon as the language is allowed."
 
 msgid ""
 "Ist nur eine Sprache erlaubt, verschwindet die Sprachauswahl, und beim "
 "Umbenennen wird nicht mehr nachgefragt: Die übrigen Sprachen behalten ihre "
 "Namen."
 msgstr ""
-"If only one language is allowed, the language menu disappears and renaming no"
-" longer asks: the other languages keep their names."
+"If only one language is allowed, the language menu disappears and renaming "
+"no longer asks: the other languages keep their names."
 
 msgid "Verbundene Macs übernehmen diese Auswahl beim nächsten Abgleich."
 msgstr "Connected Macs take over this choice at the next sync."
@@ -2075,6 +2202,12 @@ msgstr "Fields"
 
 msgid "Eigene Felder anlegen und verwalten"
 msgstr "Create and manage custom fields"
+
+msgid "Tabellen"
+msgstr "Tables"
+
+msgid "Eigene Tabellen mit eigenen Feldern anlegen"
+msgstr "Create your own tables with your own fields"
 
 msgid "Plattformen"
 msgstr "Platforms"
@@ -2121,7 +2254,8 @@ msgstr "Set up two-factor sign-in"
 msgid ""
 "Scannen Sie den Code mit einer Authenticator-App und geben Sie danach den "
 "angezeigten Code ein."
-msgstr "Scan the code with an authenticator app, then enter the code it shows."
+msgstr ""
+"Scan the code with an authenticator app, then enter the code it shows."
 
 msgid "QR-Code für die Authenticator-App"
 msgstr "QR code for the authenticator app"
@@ -2146,16 +2280,16 @@ msgstr "Confirm"
 
 msgid ""
 "Installiert die neueste Version von GitHub über Coolify. Vorher wird die "
-"Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit "
-"ist, alle können also normal weiterarbeiten."
+"Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit"
+" ist, alle können also normal weiterarbeiten."
 msgstr ""
 "Installs the latest version from GitHub via Coolify. The database is backed "
 "up first. The current version keeps running until the new one is ready, so "
 "everyone can keep working as usual."
 
 msgid ""
-"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht in"
-" <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
+"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
+"in <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
 msgstr ""
 "The connection to Coolify hasn't been set up yet. Instructions are in <span "
 "class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
@@ -2185,16 +2319,16 @@ msgid ""
 "Die Anwendung bleibt während der Aktualisierung normalerweise erreichbar. "
 "Sehr selten kann es beim Umschalten eine kurze Unterbrechung geben."
 msgstr ""
-"The application normally stays available during the update. Very rarely there"
-" may be a short interruption during the switchover."
+"The application normally stays available during the update. Very rarely "
+"there may be a short interruption during the switchover."
 
 msgid "Neu in dieser Version"
 msgstr "New in this version"
 
 #, python-format
 msgid ""
-"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt und"
-" muss bei der nächsten Anmeldung geändert werden."
+"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt "
+"und muss bei der nächsten Anmeldung geändert werden."
 msgstr ""
 "New password for <strong>%(name)s</strong>. It's only shown now and must be "
 "changed at the next sign-in."
@@ -2610,9 +2744,6 @@ msgstr "Source"
 msgid "Liste"
 msgstr "List"
 
-msgid "Bearbeiten"
-msgstr "Edit"
-
 msgid "Duplizieren"
 msgstr "Duplicate"
 
@@ -2846,8 +2977,8 @@ msgid ""
 "Klick öffnet den Datensatz, Doppelklick ändert die Zelle, ein Klick auf den "
 "Spaltentitel filtert."
 msgstr ""
-"Click opens the record, double-click edits the cell, clicking a column title "
-"filters."
+"Click opens the record, double-click edits the cell, clicking a column title"
+" filters."
 
 msgid "In der Liste filtern"
 msgstr "Filter the list"
@@ -2926,11 +3057,11 @@ msgstr "Becomes"
 
 #, python-format
 msgid ""
-"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das "
-"lässt sich nur über eine Sicherung zurücknehmen."
+"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das"
+" lässt sich nur über eine Sicherung zurücknehmen."
 msgstr ""
-"Move up %(total)s pupils and archive %(leaving)s of them as leavers? This can"
-" only be undone from a backup."
+"Move up %(total)s pupils and archive %(leaving)s of them as leavers? This "
+"can only be undone from a backup."
 
 msgid "Wechsel durchführen"
 msgstr "Run the changeover"
@@ -3025,8 +3156,8 @@ msgid "Abgleich prüfen"
 msgstr "Review sync conflicts"
 
 msgid ""
-"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere Änderung"
-" gilt bereits. Bestätigen oder die andere Fassung übernehmen."
+"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere "
+"Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen."
 msgstr ""
 "The same field was changed differently in two places. The newer change "
 "already applies. Confirm it or use the other version."
@@ -3077,8 +3208,8 @@ msgstr "Disconnected"
 
 #, python-format
 msgid ""
-"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt "
-"mit dem Server."
+"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt"
+" mit dem Server."
 msgstr ""
 "Disconnect %(name)s? The Mac will delete its copy of the data the next time "
 "it contacts the server."
@@ -3121,12 +3252,131 @@ msgstr ""
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "For this, please open the school administration in your browser."
 
+msgid "Nachkommastellen"
+msgstr "Decimal places"
+
+msgid "Einheit"
+msgstr "Unit"
+
+msgid "Mindestens"
+msgstr "Minimum"
+
+msgid "Höchstens"
+msgstr "Maximum"
+
+msgid "Eindeutig"
+msgstr "Unique"
+
+msgid "Typ ändern"
+msgstr "Change type"
+
+#, python-format
+msgid "Typ ändern? Der eingetragene Wert wird umgewandelt."
+msgid_plural "Typ ändern? Die %(n)s eingetragenen Werte werden umgewandelt."
+msgstr[0] "Change the type? The value entered will be converted."
+msgstr[1] "Change the type? The %(n)s values entered will be converted."
+
+#, python-format
+msgid "%(n)s Datensatz hat hier einen Wert."
+msgid_plural "%(n)s Datensätze haben hier einen Wert."
+msgstr[0] "%(n)s record has a value here."
+msgstr[1] "%(n)s records have a value here."
+
+msgid "Feld archivieren? Die Werte bleiben erhalten."
+msgstr "Archive the field? The values are kept."
+
+msgid ""
+"Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder "
+"Termine."
+msgstr ""
+"Your own tables with your own fields, for books, loans or appointments, say."
+
+msgid "Tabelle"
+msgstr "Table"
+
+msgid "Datensätze"
+msgstr "Records"
+
+msgid "Noch keine eigenen Tabellen."
+msgstr "No tables of your own yet."
+
+msgid "Legen Sie rechts die erste an."
+msgstr "Create the first one on the right."
+
+msgid "Neue Tabelle"
+msgstr "New table"
+
+msgid "z. B. Bücher"
+msgstr "e.g. Books"
+
+msgid ""
+"Die Tabelle beginnt mit einem Feld „Name“. Wer sie sehen und bearbeiten "
+"darf, legen Sie unter Rechte fest."
+msgstr ""
+"The table starts with a field “Name”. Who may see and edit it is set under "
+"Permissions."
+
+msgid "Rechte"
+msgstr "Permissions"
+
+msgid "Allgemein"
+msgstr "General"
+
+msgid "Ziehen, um die Reihenfolge zu ändern"
+msgstr "Drag to change the order"
+
+msgid "Titel"
+msgstr "Title"
+
+msgid "Wer darf die Datensätze sehen und bearbeiten?"
+msgstr "Who may see and edit the records?"
+
+msgid ""
+"IT darf immer alles. Verbundene Computer erhalten nur Tabellen, die die "
+"Rolle ihres Kontos lesen darf."
+msgstr ""
+"IT may always do everything. Connected computers only receive tables their "
+"account’s role may read."
+
+msgid "Rechte speichern"
+msgstr "Save permissions"
+
+msgid "Titel eines Datensatzes"
+msgstr "Title of a record"
+
+msgid "Erstes passendes Feld"
+msgstr "First suitable field"
+
+msgid ""
+"So heißt ein Datensatz in Verknüpfungen, in der Suche und im Papierkorb."
+msgstr ""
+"This is what a record is called in links, in the search and in the recycle "
+"bin."
+
+msgid "Symbol"
+msgstr "Icon"
+
+msgid "In der Seitenleiste zeigen"
+msgstr "Show in the sidebar"
+
+msgid ""
+"Tabelle archivieren? Sie verschwindet aus der Seitenleiste, die Datensätze "
+"bleiben erhalten."
+msgstr ""
+"Archive the table? It disappears from the sidebar; the records are kept."
+
+msgid "Tabelle mit allen Feldern endgültig löschen?"
+msgstr "Delete the table with all its fields for good?"
+
+msgid "Eine Tabelle mit Datensätzen lässt sich nur archivieren."
+msgstr "A table with records can only be archived."
+
 msgid "Importieren"
 msgstr "Import"
 
 msgid ""
-"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor etwas"
-" gespeichert wird."
+"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
+"etwas gespeichert wird."
 msgstr ""
 "CSV or Excel. You map the columns and see a review before anything is saved."
 
@@ -3224,11 +3474,11 @@ msgstr "Review"
 
 #, python-format
 msgid ""
-"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern vorhandene"
-" Werte nicht."
+"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern "
+"vorhandene Werte nicht."
 msgstr ""
-"%(filename)s. Nothing has been saved yet. Empty cells do not change existing "
-"values."
+"%(filename)s. Nothing has been saved yet. Empty cells do not change existing"
+" values."
 
 msgid "Geändert"
 msgstr "Changed"
@@ -3289,8 +3539,8 @@ msgstr "Manage platforms"
 msgid ""
 "Passwörter sind verschlüsselt. Jede Anzeige wird im Protokoll festgehalten."
 msgstr ""
-"Passwords are encrypted. Every time one is shown, it is recorded in the audit"
-" log."
+"Passwords are encrypted. Every time one is shown, it is recorded in the "
+"audit log."
 
 #, python-format
 msgid "%(have)s von %(expected)s Zugängen"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-15 22:44+0100\n"
+"POT-Creation-Date: 2026-11-16 11:40+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -103,7 +103,8 @@ msgid ""
 msgstr "最近一次自动备份：%(day)s，已校验。由于未设置异地副本，备份仅存于此服务器。"
 
 #, python-format
-msgid "Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
+msgid ""
+"Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
 msgstr "最近一次自动备份：%(day)s，已校验并已复制到异地。"
 
 msgid "Kopie wird übertragen"
@@ -146,8 +147,8 @@ msgid "Die Sicherung liegt geprüft im gewählten Ordner."
 msgstr "备份已校验，位于所选文件夹中。"
 
 msgid ""
-"Für diese Datenbank ist keine regelmäßige Sicherung eingerichtet. Geht dieser"
-" Computer verloren, sind die Daten weg."
+"Für diese Datenbank ist keine regelmäßige Sicherung eingerichtet. Geht "
+"dieser Computer verloren, sind die Daten weg."
 msgstr "此数据库未设置定期备份。如果这台电脑丢失，数据也将丢失。"
 
 #, python-format
@@ -161,8 +162,8 @@ msgstr "定期备份已设置。第一份备份将在几分钟内生成。"
 
 #, python-format
 msgid ""
-"Die letzte Sicherung ist vom %(day)s. Sie entsteht nur, während die Datenbank"
-" geöffnet ist."
+"Die letzte Sicherung ist vom %(day)s. Sie entsteht nur, während die "
+"Datenbank geöffnet ist."
 msgstr "最近一次备份是 %(day)s。只有在数据库打开时才会备份。"
 
 #, python-format
@@ -190,9 +191,10 @@ msgstr "此备份来自较新的版本。请先更新本系统。"
 #, python-format
 msgid ""
 "Diese Sicherung enthält Daten des Moduls %(names)s, das in dieser DataFluss-"
-"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem Modul"
-" einspielen."
-msgstr "此备份包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。只能在带有该模块的 DataFluss 版本中恢复。"
+"Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem "
+"Modul einspielen."
+msgstr ""
+"此备份包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。只能在带有该模块的 DataFluss 版本中恢复。"
 
 msgid "Diese Sicherungsdatei enthält ungültige Einträge."
 msgstr "此备份文件包含无效条目。"
@@ -204,8 +206,8 @@ msgid "Datenbank wird angepasst"
 msgstr "正在更新数据库结构"
 
 msgid ""
-"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht "
-"es die Rolle IT."
+"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht"
+" es die Rolle IT."
 msgstr "此账户无权在服务器上恢复备份。这需要 IT 角色。"
 
 msgid "Ungültige Anfrage."
@@ -247,8 +249,8 @@ msgstr "此地址没有 DataFluss 服务器响应。"
 
 #, python-format
 msgid ""
-"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version "
-"1.1 oder neuer."
+"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version"
+" 1.1 oder neuer."
 msgstr "服务器的 DataFluss 版本为 %(version)s。传输需要 1.1 或更高版本。"
 
 msgid "Wird auf den Server übertragen"
@@ -486,6 +488,126 @@ msgstr "导入与导出"
 msgid "Verwaltung"
 msgstr "管理"
 
+msgid "Text"
+msgstr "文本"
+
+msgid "Text (mehrzeilig)"
+msgstr "文本（多行）"
+
+msgid "Zahl"
+msgstr "数字"
+
+msgid "Ja/Nein"
+msgstr "是/否"
+
+msgid "Auswahl"
+msgstr "单选"
+
+msgid "Mehrfachauswahl"
+msgstr "多选"
+
+msgid "Datum"
+msgstr "日期"
+
+msgid "Datum und Uhrzeit"
+msgstr "日期和时间"
+
+msgid "E-Mail"
+msgstr "电子邮箱"
+
+msgid "Telefon"
+msgstr "电话"
+
+msgid "Link"
+msgstr "链接"
+
+msgid "Geheim (verschlüsselt)"
+msgstr "机密（加密）"
+
+msgid "Klasse"
+msgstr "班级"
+
+msgid "Verknüpfung"
+msgstr "关联"
+
+msgid "Datei"
+msgstr "文件"
+
+msgid "Bild"
+msgstr "图片"
+
+msgid "Berechnung"
+msgstr "计算"
+
+msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
+msgstr "请输入有效日期，例如 24.12.2015。"
+
+msgid "Bitte Datum und Uhrzeit eingeben, z. B. 24.12.2015 18:30."
+msgstr "请输入日期和时间，例如 24.12.2015 18:30。"
+
+#, python-format
+msgid "%(field)s: Bitte eine ganze Zahl eingeben."
+msgstr "%(field)s：请输入整数。"
+
+#, python-format
+msgid "%(field)s: Bitte eine Zahl eingeben."
+msgstr "%(field)s：请输入数字。"
+
+#, python-format
+msgid "%(field)s: mindestens %(n)s."
+msgstr "%(field)s：至少 %(n)s。"
+
+#, python-format
+msgid "%(field)s: höchstens %(n)s."
+msgstr "%(field)s：最多 %(n)s。"
+
+#, python-format
+msgid "%(field)s: Unbekannter Datensatz."
+msgstr "%(field)s：未知记录。"
+
+#, python-format
+msgid "%(field)s: Hier passt nur ein Datensatz."
+msgstr "%(field)s：此处只能选一条记录。"
+
+#, python-format
+msgid "%(field)s wird berechnet und kann nicht eingegeben werden."
+msgstr "%(field)s 为计算字段，无法输入。"
+
+#, python-format
+msgid "%(field)s: Dateien werden hochgeladen, nicht eingegeben."
+msgstr "%(field)s：文件需上传，不能输入。"
+
+#, python-format
+msgid "%(field)s ist ein Pflichtfeld."
+msgstr "%(field)s 为必填项。"
+
+msgid "Bitte eine gültige E-Mail-Adresse eingeben."
+msgstr "请输入有效的电子邮箱地址。"
+
+msgid "Bitte einen gültigen Link eingeben."
+msgstr "请输入有效的链接。"
+
+msgid "Bitte eine gültige Telefonnummer eingeben."
+msgstr "请输入有效的电话号码。"
+
+#, python-format
+msgid "%(field)s: Unbekannte Auswahl."
+msgstr "%(field)s：未知选项。"
+
+#, python-format
+msgid "%(field)s nimmt keine Werte auf."
+msgstr "%(field)s 不存储值。"
+
+#, python-format
+msgid "%(field)s: Ungültiger Wert."
+msgstr "%(field)s：无效的值。"
+
+msgid "Ja"
+msgstr "是"
+
+msgid "Nein"
+msgstr "否"
+
 #, python-format
 msgid "Auf dem Server sind nur noch %(gb)s GB frei."
 msgstr "服务器仅剩 %(gb)s GB 可用空间。"
@@ -515,7 +637,8 @@ msgid ""
 "Version fehlt. Sie bleibt unverändert und lässt sich mit einer DataFluss-"
 "Version mit diesem Modul öffnen."
 msgstr ""
-"此数据库包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。数据库保持不变，可用带有该模块的 DataFluss 版本打开。"
+"此数据库包含模块 %(names)s 的数据，而当前 DataFluss 版本没有该模块。数据库保持不变，可用带有该模块的 DataFluss "
+"版本打开。"
 
 msgid ""
 "Voller Zugriff, inklusive Masken, Vorlagen, Benutzer und Export von "
@@ -583,8 +706,8 @@ msgid "Abgleich"
 msgstr "同步比对"
 
 msgid ""
-"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung gehen"
-" nicht verloren, sie folgen später."
+"Zeigt, ob der Abgleich mit dem Server läuft. Änderungen ohne Verbindung "
+"gehen nicht verloren, sie folgen später."
 msgstr "显示与服务器的同步是否正在进行。离线时的修改不会丢失，稍后会同步。"
 
 msgid "Ihr Konto"
@@ -610,7 +733,8 @@ msgstr "GitHub 无响应。"
 msgid "GitHub ist nicht erreichbar."
 msgstr "无法连接 GitHub。"
 
-msgid "Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
+msgid ""
+"Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
 msgstr "无法备份数据库。未做任何更改。"
 
 msgid "Coolify lehnt das Token ab."
@@ -649,33 +773,34 @@ msgid ""
 "Die neue Version wurde nicht übernommen. Die bisherige Version läuft weiter."
 msgstr "新版本未生效。旧版本继续运行。"
 
-msgid "Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
+msgid ""
+"Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
 msgstr "数据库已回滚到更新前的状态。"
 
 #, python-format
 msgid ""
-"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung %(name)s"
-" von Hand einspielen."
+"Die Datenbank konnte nicht zurückgesetzt werden. Bitte die Sicherung "
+"%(name)s von Hand einspielen."
 msgstr "数据库无法回滚。请手动恢复备份 %(name)s。"
 
 #, python-format
 msgid ""
-"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch "
-"hier, bitte die Sicherung %(name)s von Hand einspielen."
+"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch"
+" hier, bitte die Sicherung %(name)s von Hand einspielen."
 msgstr "数据库正在回滚。如果几分钟后仍显示此消息，请手动恢复备份 %(name)s。"
 
 #, python-format
 msgid ""
-"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand "
-"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, geht"
-" dabei verloren."
+"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand"
+" von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
+"geht dabei verloren."
 msgstr "新版本已更改数据库。可将其回滚到 %(when)s 的状态。此后保存的所有内容都将丢失。"
 
 #, python-format
 msgid ""
 "Auf diesem Mac kann sich nur das Konto anmelden, mit dem diese Datenbank "
-"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit "
-"„Mit Server verbinden“ eine eigene Datenbank anlegen."
+"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit"
+" „Mit Server verbinden“ eine eigene Datenbank anlegen."
 msgstr ""
 "此 Mac 上只能登录连接此数据库的账户（%(owners)s）。如需使用 %(name)s，请在启动界面通过“连接到服务器”创建一个单独的数据库。"
 
@@ -877,9 +1002,6 @@ msgstr "损坏描述"
 msgid "Schaden an"
 msgstr "损坏部位"
 
-msgid "Datum"
-msgstr "日期"
-
 msgid "Status"
 msgstr "状态"
 
@@ -934,39 +1056,6 @@ msgstr "该设备不存在。"
 msgid "Bitte den Schaden beschreiben."
 msgstr "请描述损坏情况。"
 
-msgid "Text"
-msgstr "文本"
-
-msgid "Text (mehrzeilig)"
-msgstr "文本（多行）"
-
-msgid "Zahl"
-msgstr "数字"
-
-msgid "Ja/Nein"
-msgstr "是/否"
-
-msgid "Auswahl"
-msgstr "单选"
-
-msgid "Mehrfachauswahl"
-msgstr "多选"
-
-msgid "E-Mail"
-msgstr "电子邮箱"
-
-msgid "Telefon"
-msgstr "电话"
-
-msgid "Link"
-msgstr "链接"
-
-msgid "Geheim (verschlüsselt)"
-msgstr "机密（加密）"
-
-msgid "Klasse"
-msgstr "班级"
-
 msgid "Foto"
 msgstr "照片"
 
@@ -987,36 +1076,6 @@ msgstr "评论"
 
 msgid "Änderungsverlauf"
 msgstr "修改记录"
-
-msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
-msgstr "请输入有效日期，例如 24.12.2015。"
-
-#, python-format
-msgid "%(field)s ist ein Pflichtfeld."
-msgstr "%(field)s 为必填项。"
-
-#, python-format
-msgid "%(field)s: Bitte eine ganze Zahl eingeben."
-msgstr "%(field)s：请输入整数。"
-
-msgid "Bitte eine gültige E-Mail-Adresse eingeben."
-msgstr "请输入有效的电子邮箱地址。"
-
-msgid "Bitte einen gültigen Link eingeben."
-msgstr "请输入有效的链接。"
-
-msgid "Bitte eine gültige Telefonnummer eingeben."
-msgstr "请输入有效的电话号码。"
-
-#, python-format
-msgid "%(field)s: Unbekannte Auswahl."
-msgstr "%(field)s：未知选项。"
-
-msgid "Ja"
-msgstr "是"
-
-msgid "Nein"
-msgstr "否"
 
 #, python-format
 msgid "%(field)s kann nicht geändert werden."
@@ -1120,9 +1179,6 @@ msgstr "入校"
 msgid "Archiviert"
 msgstr "已归档"
 
-msgid "Bild"
-msgstr "图片"
-
 msgid "Neue Codes/Accounts"
 msgstr "新代码/账号"
 
@@ -1192,8 +1248,8 @@ msgstr "学年 %(name)s 已存在，未再次执行学年切换。"
 
 #, python-format
 msgid ""
-"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch "
-"einmal ausgeführt."
+"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch"
+" einmal ausgeführt."
 msgstr "学年 %(name)s 尚未开始，未再次执行学年切换。"
 
 msgid "Diese Datei ist kein gültiges Bild."
@@ -1313,9 +1369,9 @@ msgstr "电脑和服务器的版本不同。请更新两者。"
 
 msgid ""
 "Der Server wurde aus einer Sicherung wiederhergestellt. Diese Kopie gleicht "
-"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen notieren,"
-" die Datenbank auf diesem Computer entfernen und neu mit dem Server "
-"verbinden."
+"sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen "
+"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server"
+" verbinden."
 msgstr "服务器已从备份恢复，因此此副本不再同步：请记下尚未上传的修改，从本电脑删除该数据库，然后重新连接服务器。"
 
 msgid "Kein Gerät angemeldet."
@@ -1386,12 +1442,83 @@ msgid ""
 "übernehmen."
 msgstr "该记录已删除，无法再采用另一版本。"
 
+#, python-format
+msgid "%(field)s ist archiviert und kann nicht geändert werden."
+msgstr "%(field)s 已归档，无法更改。"
+
+#, python-format
+msgid "%(field)s kann hier nicht eingegeben werden."
+msgstr "%(field)s 无法在此输入。"
+
+#, python-format
+msgid "%(field)s: höchstens %(n)s Zeichen."
+msgstr "%(field)s：最多 %(n)s 个字符。"
+
+#, python-format
+msgid "%(field)s: Diesen Wert hat schon ein anderer Datensatz."
+msgstr "%(field)s：已有其他记录使用此值。"
+
+#, python-format
+msgid "Unbekanntes Feld %(key)s."
+msgstr "未知字段 %(key)s。"
+
+msgid "Bitte einen Namen für die Tabelle eingeben."
+msgstr "请输入表格名称。"
+
+msgid "Bitte die Zahl der Nachkommastellen angeben (0 bis 6)."
+msgstr "请输入小数位数（0 到 6）。"
+
+msgid "Bitte als Grenze eine Zahl eingeben."
+msgstr "请输入数字作为限制。"
+
+msgid ""
+"Dieser Typ passt nicht zu den eingetragenen Werten. Legen Sie besser ein "
+"neues Feld an."
+msgstr "此类型与已填写的值不符，建议新建字段。"
+
+msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
+msgstr "该表格包含记录，请改为归档。"
+
+#, python-format
+msgid "%(table)s wurde angelegt. Fügen Sie jetzt Felder hinzu."
+msgstr "已创建 %(table)s。现在请添加字段。"
+
 msgid "Kein Zugriff"
 msgstr "无权访问"
 
+msgid "Lesen"
+msgstr "查看"
+
+msgid "Bearbeiten"
+msgstr "编辑"
+
+#, python-format
+msgid "%(table)s wurde archiviert. Die Datensätze bleiben erhalten."
+msgstr "%(table)s 已归档，记录会保留。"
+
+msgid "Die Tabelle wurde gelöscht."
+msgstr "表格已删除。"
+
+msgid "Unbekanntes Feld."
+msgstr "未知字段。"
+
+msgid "Die Rechte wurden gespeichert."
+msgstr "权限已保存。"
+
+#, python-format
+msgid "%(field)s wurde angelegt."
+msgstr "已创建 %(field)s。"
+
+#, python-format
+msgid "%(field)s wurde archiviert. Die Werte bleiben erhalten."
+msgstr "%(field)s 已归档，值会保留。"
+
+msgid "Der Typ wurde geändert."
+msgstr "类型已更改。"
+
 msgid ""
-"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich "
-"an die IT."
+"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
+" an die IT."
 msgstr "您的角色无权访问此页面。如有需要，请联系 IT。"
 
 msgid "Nicht gefunden"
@@ -1410,16 +1537,16 @@ msgid "Hier ist etwas schiefgegangen"
 msgstr "出错了"
 
 msgid ""
-"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert haben,"
-" prüfen Sie bitte, ob es angekommen ist."
+"Der Fehler wurde für die IT notiert. Wenn Sie gerade etwas gespeichert "
+"haben, prüfen Sie bitte, ob es angekommen ist."
 msgstr "已为 IT 记录此错误。如果您刚才保存了内容，请检查是否已保存成功。"
 
 msgid "Zur Startseite"
 msgstr "返回首页"
 
 msgid ""
-"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle "
-"Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
+"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle"
+" Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
 "einem anderen Ort auf. Sie lässt sich in jeder Installation der "
 "Schulverwaltung einspielen."
 msgstr "备份包含整个数据库（含所有账号）以及所有图片和文档。请下载该文件并存放在其他地方。它可以恢复到任何一个学校管理系统中。"
@@ -1428,8 +1555,8 @@ msgid "Regelmäßige Sicherung"
 msgstr "定期备份"
 
 msgid ""
-"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem "
-"anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
+"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem"
+" anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
 "Datenbank geöffnet ist."
 msgstr "DataFluss 会把备份存放在您选择的文件夹中，最好位于另一个驱动器或云文件夹中。备份在数据库打开时进行。"
 
@@ -1498,10 +1625,10 @@ msgstr "连接到服务器 …"
 
 msgid ""
 "Die ganze Datenbank mit allen Konten, Bildern und Dokumenten wird zu den "
-"Daten eines DataFluss-Servers. Danach gelten auf dem Server die Konten dieser"
-" Datenbank. Am besten auf einem neuen Server, auf dem bisher nur das erste "
-"IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss nach und "
-"legt vorher eine Sicherung davon auf dem Server ab."
+"Daten eines DataFluss-Servers. Danach gelten auf dem Server die Konten "
+"dieser Datenbank. Am besten auf einem neuen Server, auf dem bisher nur das "
+"erste IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss "
+"nach und legt vorher eine Sicherung davon auf dem Server ab."
 msgstr ""
 "整个数据库（包括所有账户、图片和文档）将成为 DataFluss 服务器的数据。之后服务器将使用此数据库的账户。最好用于只创建了第一个 IT "
 "账户的新服务器。如果服务器上已有数据，DataFluss 会先询问，并事先在服务器上保存一份备份。"
@@ -1579,9 +1706,6 @@ msgstr "此数据库中的备份"
 msgid "Sicherungen auf diesem Server"
 msgstr "此服务器上的备份"
 
-msgid "Datei"
-msgstr "文件"
-
 msgid "Stand"
 msgstr "数据时间"
 
@@ -1638,8 +1762,8 @@ msgid "Alle Daten dieser Installation werden ersetzt."
 msgstr "此系统中的所有数据都将被替换。"
 
 msgid ""
-"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der "
-"Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
+"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der"
+" Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
 "automatisch als Sicherung mit demselben Passwort abgelegt."
 msgstr "这也包括用户账户：之后将使用备份中的登录信息，所有人都会被退出登录。在此之前，当前数据会自动保存为一个使用相同密码的备份。"
 
@@ -1723,8 +1847,8 @@ msgid "Für alle Sprachen"
 msgstr "所有语言"
 
 msgid ""
-"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben wurden,"
-" werden ersetzt."
+"Der neue Name gilt überall. Namen, die für einzelne Sprachen vergeben "
+"wurden, werden ersetzt."
 msgstr "新名称将在所有地方生效。为单独语言设置的名称将被替换。"
 
 msgid "Entscheidung merken und nicht mehr fragen"
@@ -1865,8 +1989,8 @@ msgid "Felder, Auswahlwerte und Masken umbenennen"
 msgstr "重命名字段、选项和表单布局"
 
 msgid ""
-"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für "
-"eine Sprache umbenennt."
+"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für"
+" eine Sprache umbenennt."
 msgstr "名称会保持输入时所用的语言，直到有人为某种语言重命名。"
 
 msgid "Jedes Mal fragen"
@@ -1940,9 +2064,9 @@ msgid "Sprachen, die in dieser Datenbank zur Auswahl stehen"
 msgstr "此数据库中可选的语言"
 
 msgid ""
-"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, oder"
-" die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene Wahl "
-"bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
+"Wer eine Sprache gewählt hat, die nicht mehr erlaubt ist, sieht Deutsch, "
+"oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene "
+"Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
 msgstr "选择了不再允许的语言的用户将看到德语；如果德语不被允许，则看到第一个允许的语言。用户自己的选择会被保留，一旦该语言重新被允许即再次生效。"
 
 msgid ""
@@ -1965,6 +2089,12 @@ msgstr "字段"
 
 msgid "Eigene Felder anlegen und verwalten"
 msgstr "创建和管理自定义字段"
+
+msgid "Tabellen"
+msgstr "表格"
+
+msgid "Eigene Tabellen mit eigenen Feldern anlegen"
+msgstr "创建自定义表格和字段"
 
 msgid "Plattformen"
 msgstr "平台"
@@ -2036,14 +2166,16 @@ msgstr "确认"
 
 msgid ""
 "Installiert die neueste Version von GitHub über Coolify. Vorher wird die "
-"Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit "
-"ist, alle können also normal weiterarbeiten."
-msgstr "通过 Coolify 从 GitHub 安装最新版本。安装前会先备份数据库。在新版本就绪之前，当前版本会继续运行，因此所有人都可以照常工作。"
+"Datenbank gesichert. Die bisherige Version läuft weiter, bis die neue bereit"
+" ist, alle können also normal weiterarbeiten."
+msgstr ""
+"通过 Coolify 从 GitHub 安装最新版本。安装前会先备份数据库。在新版本就绪之前，当前版本会继续运行，因此所有人都可以照常工作。"
 
 msgid ""
-"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht in"
-" <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
-msgstr "尚未设置与 Coolify 的连接。说明见 <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>。"
+"Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
+"in <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
+msgstr ""
+"尚未设置与 Coolify 的连接。说明见 <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>。"
 
 msgid "Installiert"
 msgstr "已安装"
@@ -2076,8 +2208,8 @@ msgstr "此版本新增内容"
 
 #, python-format
 msgid ""
-"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt und"
-" muss bei der nächsten Anmeldung geändert werden."
+"Neues Passwort für <strong>%(name)s</strong>. Es wird nur jetzt angezeigt "
+"und muss bei der nächsten Anmeldung geändert werden."
 msgstr "<strong>%(name)s</strong> 的新密码。仅在此时显示，下次登录时必须修改。"
 
 msgid "Kopieren"
@@ -2480,9 +2612,6 @@ msgstr "来源"
 msgid "Liste"
 msgstr "列表"
 
-msgid "Bearbeiten"
-msgstr "编辑"
-
 msgid "Duplizieren"
 msgstr "复制"
 
@@ -2782,8 +2911,8 @@ msgstr "变为"
 
 #, python-format
 msgid ""
-"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das "
-"lässt sich nur über eine Sicherung zurücknehmen."
+"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das"
+" lässt sich nur über eine Sicherung zurücknehmen."
 msgstr "将 %(total)s 名学生升级，并将其中 %(leaving)s 名作为离校归档？此操作只能通过备份撤销。"
 
 msgid "Wechsel durchführen"
@@ -2877,8 +3006,8 @@ msgid "Abgleich prüfen"
 msgstr "检查同步冲突"
 
 msgid ""
-"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere Änderung"
-" gilt bereits. Bestätigen oder die andere Fassung übernehmen."
+"Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere "
+"Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen."
 msgstr "同一字段在两处被改成了不同的值。较新的更改已生效。请确认，或采用另一版本。"
 
 msgid "Datensatz und Feld"
@@ -2926,8 +3055,8 @@ msgstr "已断开"
 
 #, python-format
 msgid ""
-"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt "
-"mit dem Server."
+"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt"
+" mit dem Server."
 msgstr "断开 %(name)s？该 Mac 下次连接服务器时会删除其数据副本。"
 
 msgid "Trennen"
@@ -2956,18 +3085,127 @@ msgid ""
 "Bitte dafür die Schulverwaltung im Browser öffnen: <a class=\"underline\" "
 "href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>."
 msgstr ""
-"请在浏览器中打开学校管理系统进行此操作：<a class=\"underline\" href=\"%(url)s\" target=\"_blank\""
-" rel=\"noopener\">%(url)s</a>。"
+"请在浏览器中打开学校管理系统进行此操作：<a class=\"underline\" href=\"%(url)s\" "
+"target=\"_blank\" rel=\"noopener\">%(url)s</a>。"
 
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "请在浏览器中打开学校管理系统进行此操作。"
+
+msgid "Nachkommastellen"
+msgstr "小数位数"
+
+msgid "Einheit"
+msgstr "单位"
+
+msgid "Mindestens"
+msgstr "最小值"
+
+msgid "Höchstens"
+msgstr "最大值"
+
+msgid "Eindeutig"
+msgstr "唯一"
+
+msgid "Typ ändern"
+msgstr "更改类型"
+
+#, python-format
+msgid "Typ ändern? Der eingetragene Wert wird umgewandelt."
+msgid_plural "Typ ändern? Die %(n)s eingetragenen Werte werden umgewandelt."
+msgstr[0] "更改类型？已填写的 %(n)s 个值将被转换。"
+
+#, python-format
+msgid "%(n)s Datensatz hat hier einen Wert."
+msgid_plural "%(n)s Datensätze haben hier einen Wert."
+msgstr[0] "%(n)s 条记录在此有值。"
+
+msgid "Feld archivieren? Die Werte bleiben erhalten."
+msgstr "归档此字段？值会保留。"
+
+msgid ""
+"Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder "
+"Termine."
+msgstr "自定义表格和字段，例如用于图书、借阅或预约。"
+
+msgid "Tabelle"
+msgstr "表格"
+
+msgid "Datensätze"
+msgstr "记录"
+
+msgid "Noch keine eigenen Tabellen."
+msgstr "还没有自定义表格。"
+
+msgid "Legen Sie rechts die erste an."
+msgstr "请在右侧创建第一个。"
+
+msgid "Neue Tabelle"
+msgstr "新建表格"
+
+msgid "z. B. Bücher"
+msgstr "例如：图书"
+
+msgid ""
+"Die Tabelle beginnt mit einem Feld „Name“. Wer sie sehen und bearbeiten "
+"darf, legen Sie unter Rechte fest."
+msgstr "表格自带一个“名称”字段。谁可以查看和编辑，请在“权限”中设置。"
+
+msgid "Rechte"
+msgstr "权限"
+
+msgid "Allgemein"
+msgstr "常规"
+
+msgid "Ziehen, um die Reihenfolge zu ändern"
+msgstr "拖动以更改顺序"
+
+msgid "Titel"
+msgstr "标题"
+
+msgid "Wer darf die Datensätze sehen und bearbeiten?"
+msgstr "谁可以查看和编辑记录？"
+
+msgid ""
+"IT darf immer alles. Verbundene Computer erhalten nur Tabellen, die die "
+"Rolle ihres Kontos lesen darf."
+msgstr "IT 始终拥有全部权限。已连接的电脑只会收到其账户角色可以查看的表格。"
+
+msgid "Rechte speichern"
+msgstr "保存权限"
+
+msgid "Titel eines Datensatzes"
+msgstr "记录标题"
+
+msgid "Erstes passendes Feld"
+msgstr "第一个合适的字段"
+
+msgid ""
+"So heißt ein Datensatz in Verknüpfungen, in der Suche und im Papierkorb."
+msgstr "记录在关联、搜索和回收站中显示的名称。"
+
+msgid "Symbol"
+msgstr "图标"
+
+msgid "In der Seitenleiste zeigen"
+msgstr "在侧边栏中显示"
+
+msgid ""
+"Tabelle archivieren? Sie verschwindet aus der Seitenleiste, die Datensätze "
+"bleiben erhalten."
+msgstr "归档此表格？它将从侧边栏中消失，记录会保留。"
+
+msgid "Tabelle mit allen Feldern endgültig löschen?"
+msgstr "永久删除此表格及其所有字段？"
+
+msgid "Eine Tabelle mit Datensätzen lässt sich nur archivieren."
+msgstr "包含记录的表格只能归档。"
 
 msgid "Importieren"
 msgstr "导入"
 
 msgid ""
-"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor etwas"
-" gespeichert wird."
+"CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
+"etwas gespeichert wird."
 msgstr "CSV 或 Excel。您先对应各列，并在保存前查看检查结果。"
 
 msgid "In welchen Bereich?"
@@ -3061,8 +3299,8 @@ msgstr "检查"
 
 #, python-format
 msgid ""
-"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern vorhandene"
-" Werte nicht."
+"%(filename)s. Bisher wurde nichts gespeichert. Leere Zellen ändern "
+"vorhandene Werte nicht."
 msgstr "%(filename)s。尚未保存任何内容。空单元格不会更改现有值。"
 
 msgid "Geändert"

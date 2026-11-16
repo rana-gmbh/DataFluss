@@ -58,6 +58,14 @@ class ModuleScope:
         """The day a pushed change was made, for rules that depend on it, or None."""
         return None
 
+    def hide(self, scope, model):
+        """Field maskers for the module's own models ({field: function(value)}), as Scope.hide."""
+        return {}
+
+    def ignored(self, scope, model):
+        """Keys of the module's own models that this device never sends, as Scope.ignored_keys."""
+        return set()
+
 
 def module_scopes():
     from core import modules
@@ -178,6 +186,12 @@ class Scope:
 
     def hide(self, model):
         """Field maskers for what this user may not see on its device."""
+        maskers = {}
+        for module in self.modules:
+            maskers.update(module.hide(self, model))
+        return {**self._hide(model), **maskers}
+
+    def _hide(self, model):
         label = codec.entity_of(model)
         if label == "people.person" and not self.knows_people:
             return _teacher_view_of_person()
@@ -240,6 +254,12 @@ class Scope:
 
     def ignored_keys(self, model):
         """Keys a device without vault access never sends, so its pushes leave them alone."""
+        keys = set()
+        for module in self.modules:
+            keys |= module.ignored(self, model)
+        return self._ignored_keys(model) | keys
+
+    def _ignored_keys(self, model):
         label = codec.entity_of(model)
         if label == "people.person" and not self.knows_people:
             return set(_teacher_view_of_person())

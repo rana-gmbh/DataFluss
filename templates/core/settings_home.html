@@ -7,6 +7,8 @@
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'mask_list' %}">{% icon 'layout' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Masken" %}</h2><p class="muted text-[13px]">{% translate "Eingabemasken per Drag & Drop gestalten" %}</p></a>
 {% endif %}{% if request.user|can:'admin.fields' %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'field_list' %}">{% icon 'rows' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Felder" %}</h2><p class="muted text-[13px]">{% translate "Eigene Felder anlegen und verwalten" %}</p></a>
+{% endif %}{% if request.user|can:'tables.design' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'table_list' %}">{% icon 'table' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Tabellen" %}</h2><p class="muted text-[13px]">{% translate "Eigene Tabellen mit eigenen Feldern anlegen" %}</p></a>
 {% endif %}{% if request.user|can:'admin.platforms' %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'platforms' %}">{% icon 'key' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Plattformen" %}</h2><p class="muted text-[13px]">{% translate "Anbieter für Zugangsdaten verwalten" %}</p></a>
 {% endif %}{% if request.user|can:'admin.users' %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}{% load ui i18n static %}
+{% block title %}{{ table.display_name }}{% endblock %}
+{% block scripts %}<script src="{% static 'vendor/Sortable.min.js' %}" defer></script><script src="{% static 'js/tables.js' %}" defer></script>{% endblock %}
+{% block content %}
+<a class="muted text-[13px] hover:underline" href="{% url 'table_list' %}">{% translate "Tabellen" %}</a>
+<div class="flex items-center gap-2 mb-4 mt-1"><h1 class="page-title flex-1 inline-flex items-center gap-2">{% icon table.icon 'text-[22px] text-[var(--accent)]' %}{{ table.display_name }}{% if table.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}</h1>
+<nav class="flex gap-1" aria-label="{% translate 'Bereiche' %}">
+  <a class="btn btn-sm {% if tab == 'felder' %}btn-primary{% endif %}" href="?tab=felder" {% if tab == 'felder' %}aria-current="page"{% endif %}>{% translate "Felder" %}</a>
+  <a class="btn btn-sm {% if tab == 'rechte' %}btn-primary{% endif %}" href="?tab=rechte" {% if tab == 'rechte' %}aria-current="page"{% endif %}>{% translate "Rechte" %}</a>
+  <a class="btn btn-sm {% if tab == 'allgemein' %}btn-primary{% endif %}" href="?tab=allgemein" {% if tab == 'allgemein' %}aria-current="page"{% endif %}>{% translate "Allgemein" %}</a></nav></div>
+
+{% if tab == 'felder' %}
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 surface overflow-x-auto"><table class="data-table"><thead><tr><th class="w-6"></th><th>{% translate "Bezeichnung" %}</th><th>{% translate "Typ" %}</th><th>{% translate "Liste" %}</th></tr></thead>
+<tbody data-field-order="{% url 'table_field_order' table.key %}">
+{% for f in fields %}<tr data-key="{{ f.key }}"><td class="cursor-grab muted" data-handle title="{% translate 'Ziehen, um die Reihenfolge zu ändern' %}">{% icon 'grip' %}</td><td><a class="font-medium hover:underline" href="{% url 'table_field' table.key f.pk %}">{{ f.display_label }}</a>{% if f.required %} <span class="text-[var(--bad)]">*</span>{% endif %}{% if f.key == table.title_field %} <span class="badge">{% translate "Titel" %}</span>{% endif %}{% if f.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}</td><td class="muted">{{ f.type_label }}</td><td>{% if f.in_grid %}{% translate "Ja" %}{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>
+<form method="post" action="{% url 'table_field_new' table.key %}" class="surface p-4 space-y-3" x-data="{ type: 'text' }">{% csrf_token %}<h2 class="font-semibold">{% translate "Neues Feld" %}</h2>
+  <div><label class="label" for="f-label">{% translate "Bezeichnung" %}</label><input id="f-label" class="input" name="label" required maxlength="100"></div>
+  <div><label class="label" for="f-type">{% translate "Typ" %}</label><select id="f-type" class="input" name="type" x-model="type">{% for v, l in types %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+  <div x-show="type === 'choice' || type === 'multichoice'" x-cloak><label class="label" for="f-options">{% translate "Optionen, eine pro Zeile" %}</label><textarea id="f-options" class="input" name="options"></textarea></div>
+  <div x-show="type === 'number'" x-cloak class="space-y-3">
+    <div><label class="label" for="f-decimals">{% translate "Nachkommastellen" %}</label><input id="f-decimals" class="input" name="decimals" type="number" min="0" max="6" value="0"></div>
+    <div><label class="label" for="f-unit">{% translate "Einheit" %}</label><input id="f-unit" class="input" name="unit" maxlength="10" placeholder="€"></div></div>
+  <div><label class="label" for="f-help_text">{% translate "Hilfetext" %}</label><input id="f-help_text" class="input" name="help_text" maxlength="200"></div>
+  <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="required" class="accent-[var(--accent)]">{% translate "Pflichtfeld" %}</label>
+  <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="in_grid" checked class="accent-[var(--accent)]">{% translate "In der Liste anzeigen" %}</label>
+  <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button></form></div>
+
+{% elif tab == 'rechte' %}
+<form method="post" action="{% url 'table_rights' table.key %}" class="surface p-5 max-w-2xl">{% csrf_token %}
+  <h2 class="font-semibold mb-1">{% translate "Wer darf die Datensätze sehen und bearbeiten?" %}</h2>
+  <p class="muted text-[13px] mb-4">{% translate "IT darf immer alles. Verbundene Computer erhalten nur Tabellen, die die Rolle ihres Kontos lesen darf." %}</p>
+  <table class="data-table"><thead><tr><th>{% translate "Rolle" %}</th>{% for value, label in rights %}<th class="text-center">{{ label }}</th>{% endfor %}</tr></thead><tbody>
+  {% for role in roles %}<tr><td>{{ role.label }}</td>{% for value, label in rights %}<td class="text-center"><input type="radio" name="right_{{ role.value }}" value="{{ value }}" {% if role.right == value %}checked{% endif %} class="accent-[var(--accent)]" aria-label="{{ role.label }}: {{ label }}"></td>{% endfor %}</tr>{% endfor %}
+  </tbody></table>
+  <button class="btn btn-primary mt-4">{% translate "Rechte speichern" %}</button></form>
+
+{% else %}
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<form method="post" class="lg:col-span-2 surface p-5 space-y-3" data-names data-has-translations="{% if table.has_names %}1{% endif %}">{% csrf_token %}
+  <div><label class="label" for="t-name">{% translate "Name" %}</label><input id="t-name" class="input" name="name" value="{{ table.display_name }}" required maxlength="100" data-name-input></div>
+  <div><label class="label" for="t-description">{% translate "Beschreibung" %}</label><input id="t-description" class="input" name="description" value="{{ table.description }}" maxlength="300"></div>
+  <div><label class="label" for="t-title">{% translate "Titel eines Datensatzes" %}</label><select id="t-title" class="input" name="title_field"><option value="">{% translate "Erstes passendes Feld" %}</option>{% for f in title_choices %}<option value="{{ f.key }}" {% if f.key == table.title_field %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select>
+    <p class="muted text-[12px] mt-1">{% translate "So heißt ein Datensatz in Verknüpfungen, in der Suche und im Papierkorb." %}</p></div>
+  <fieldset><legend class="label">{% translate "Symbol" %}</legend><div class="flex flex-wrap gap-1.5">{% for name in icons %}<label class="btn btn-icon has-[:checked]:bg-[var(--accent)] has-[:checked]:text-white has-[:focus-visible]:ring-2" title="{{ name }}"><input type="radio" name="icon" value="{{ name }}" class="sr-only" {% if name == table.icon %}checked{% endif %} aria-label="{{ name }}">{% icon name %}</label>{% endfor %}</div></fieldset>
+  <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="in_nav" {% if table.in_nav %}checked{% endif %} class="accent-[var(--accent)]">{% translate "In der Seitenleiste zeigen" %}</label>
+  <button class="btn btn-primary">{% translate "Speichern" %}</button></form>
+<div class="surface p-4 space-y-2"><h2 class="font-semibold">{% translate "Tabelle" %}</h2>
+  <form method="post">{% csrf_token %}{% if table.archived %}<button class="btn w-full" name="action" value="restore">{% translate "Wiederherstellen" %}</button>{% else %}<button class="btn w-full" name="action" value="archive" data-confirm="{% translate 'Tabelle archivieren? Sie verschwindet aus der Seitenleiste, die Datensätze bleiben erhalten.' %}">{% translate "Archivieren" %}</button>{% endif %}</form>
+  {% if not has_records %}<form method="post">{% csrf_token %}<button class="btn btn-danger w-full" name="action" value="delete" data-confirm="{% translate 'Tabelle mit allen Feldern endgültig löschen?' %}">{% translate "Löschen" %}</button></form>
+  {% else %}<p class="muted text-[12px]">{% translate "Eine Tabelle mit Datensätzen lässt sich nur archivieren." %}</p>{% endif %}</div></div>
+{% endif %}
+{% endblock %}

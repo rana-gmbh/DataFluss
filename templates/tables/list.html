@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Tabellen" %}{% endblock %}
+{% block content %}
+<h1 class="page-title mb-1">{% translate "Tabellen" %}</h1>
+<p class="muted text-[13px] mb-4">{% translate "Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder Termine." %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 surface overflow-x-auto">{% if rows %}<table class="data-table"><thead><tr><th>{% translate "Tabelle" %}</th><th>{% translate "Felder" %}</th><th>{% translate "Datensätze" %}</th></tr></thead><tbody>
+{% for row in rows %}<tr><td><a class="font-medium hover:underline inline-flex items-center gap-2" href="{% url 'table_settings' row.table.key %}">{% icon row.table.icon 'text-[16px] text-[var(--accent)]' %}{{ row.table.display_name }}</a>{% if row.table.archived %} <span class="badge">{% translate "Archiviert" %}</span>{% endif %}{% if row.table.description %}<div class="muted text-[12px]">{{ row.table.description }}</div>{% endif %}</td><td class="muted">{{ row.fields }}</td><td class="muted">{{ row.records }}</td></tr>{% endfor %}
+</tbody></table>{% else %}<div class="p-6 text-center"><p class="font-medium">{% translate "Noch keine eigenen Tabellen." %}</p><p class="muted text-[13px] mt-1">{% translate "Legen Sie rechts die erste an." %}</p></div>{% endif %}</div>
+<form method="post" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Neue Tabelle" %}</h2>
+  {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
+  <div><label class="label" for="t-name">{% translate "Name" %}</label><input id="t-name" class="input" name="name" required maxlength="100" placeholder="{% translate 'z. B. Bücher' %}"></div>
+  <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button>
+  <p class="muted text-[12px]">{% translate "Die Tabelle beginnt mit einem Feld „Name“. Wer sie sehen und bearbeiten darf, legen Sie unter Rechte fest." %}</p></form></div>
+{% endblock %}

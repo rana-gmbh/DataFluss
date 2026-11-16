@@ -32,6 +32,7 @@ from core.models import SchoolSettings, User
 from devices.models import Asset
 from masks.models import FieldDefinition
 from people.models import Person
+from tables.models import Record
 from vault import crypto
 from vault.models import Credential
 
@@ -81,7 +82,12 @@ def _secrets():
     def person(custom, pk, convert):
         return {k: convert(v, f"person:{pk}:{k}") if k in person_keys else v for k, v in custom.items()}
 
+    def record(values, pk, convert):  # own tables mark secret values as {"secret": …} (tables/models.py)
+        return {k: {"secret": convert(v["secret"], f"record:{pk}:{k}")} if isinstance(v, dict) and set(v) == {"secret"} else v
+                for k, v in (values or {}).items()}
+
     return {
+        Record: ("values", record),
         User: ("totp_secret", lambda value, pk, convert: convert(value, f"totp:{pk}")),
         Asset: ("product_key_enc", lambda value, pk, convert: convert(value, f"asset:{pk}:key")),
         Credential: ("secrets", lambda value, pk, convert: {k: convert(v, f"credential:{pk}:{k}") for k, v in value.items()}),

@@ -145,8 +145,9 @@ def _ids(spec, raw):
     return list(dict.fromkeys(ids))
 
 
-def clean(spec, raw):
-    """Turn form input into the Python value, or raise ValidationError."""
+def clean(spec, raw, check_required=True):
+    """Turn form input into the Python value, or raise ValidationError. Without check_required an empty
+    value passes even for a required field (sync and import judge the stored value, not a form)."""
     if isinstance(raw, str):
         raw = raw.strip()
     empty = raw in (None, "", [])
@@ -155,7 +156,7 @@ def clean(spec, raw):
         raise ValidationError(_("%(field)s wird berechnet und kann nicht eingegeben werden.") % {"field": spec.display_label})
     if kind in ("file", "image"):
         raise ValidationError(_("%(field)s: Dateien werden hochgeladen, nicht eingegeben.") % {"field": spec.display_label})
-    if spec.required and empty:
+    if check_required and spec.required and empty:
         raise ValidationError(_("%(field)s ist ein Pflichtfeld.") % {"field": spec.display_label})
     if kind == "bool":
         return str(raw).lower() in ("1", "true", "on", "ja", "yes")
@@ -194,6 +195,39 @@ def clean(spec, raw):
     if kind == "link":
         return _ids(spec, raw)
     return raw
+
+
+def check_stored(spec, raw):
+    """Raise ValidationError unless `raw` is a stored value that `clean` and `to_store` could have made:
+    the server judges what a device sends this way, as a browser save would be judged."""
+    kind = TYPES.get(spec.type)
+    if kind is None or kind.storage != "value":
+        raise ValidationError(_("%(field)s nimmt keine Werte auf.") % {"field": spec.display_label})
+    if raw in (None, "", []):
+        return
+    if spec.type == "secret":
+        if not (isinstance(raw, dict) and set(raw) == {"secret"} and isinstance(raw["secret"], str)):
+            raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+        return
+    if spec.type == "bool":
+        if not isinstance(raw, bool):
+            raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+        return
+    if spec.type in ("date", "datetime", "number"):
+        value = from_store(spec, raw)
+        if value is raw and isinstance(raw, str):  # did not parse
+            raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+        if spec.type == "number" and _number(spec, format(value, "f") if isinstance(value, Decimal) else str(value)) != value:
+            raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+        if spec.type == "datetime" and timezone.is_naive(value):
+            raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+        return
+    if spec.type == "multichoice" and not (isinstance(raw, list) and all(isinstance(v, str) for v in raw)):
+        raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+    if spec.type != "multichoice" and not isinstance(raw, str):
+        raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+    if to_store(spec, clean(spec, raw, check_required=False)) != raw:
+        raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
 
 
 def to_store(spec, value):

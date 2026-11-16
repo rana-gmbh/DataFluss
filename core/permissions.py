@@ -35,6 +35,7 @@ CAPABILITIES = {
     "admin.school": {IT},
     "admin.update": {IT},
     "admin.backup": {IT},
+    "tables.design": {IT},  # own tables: tables, fields, rights; records follow each table's rights
 }
 
 ROLE_SUMMARY = [
