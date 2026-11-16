@@ -412,9 +412,16 @@ def record_link_options(request, key, pk, field_key):
     record = _record(table, pk)
     field = _typed_field(table, field_key, ("link",))
     linked = {str(t) for t in links.targets(record, field)}
-    options = [o for o in links.candidates(request.user, field, request.GET.get("q", "")) if o["id"] not in linked]
-    return render(request, "tables/_link_options.html", {"options": options, "field_key": field.key, "q": request.GET.get("q", ""),
-                                                         "link_url": reverse("record_link", args=[table.key, record.pk, field.key])})
+    query = request.GET.get("q", "").strip()
+    found = links.candidates(request.user, field, query)
+    options = [o for o in found if o["id"] not in linked]
+    # A name that is not there yet can be created in the target table right here.
+    create = query and links.creatable(request.user, field) and not any(o["title"].casefold() == query.casefold() for o in found)
+    return render(request, "tables/_link_options.html", {
+        "options": options, "field_key": field.key, "q": request.GET.get("q", ""),
+        "link_url": reverse("record_link", args=[table.key, record.pk, field.key]),
+        "create": query[:300] if create else "", "create_vals": json.dumps({"action": "create", "title": query[:300]}),
+    })
 
 
 @require_POST
@@ -424,6 +431,14 @@ def record_link(request, key, pk, field_key):
     field = _typed_field(table, field_key, ("link",))
     problem = ""
     try:
+        if request.POST.get("action") == "create":
+            made = links.creatable(request.user, field)
+            title = request.POST.get("title", "").strip()[:300]
+            if made is None or not title:
+                raise PermissionDenied
+            target = services.create_record(made[0], {made[1].key: title})
+            links.add_target(record, field, str(target.pk))
+            return _widget(request, table, record, field, "tables/_link_widget.html", refocus=True)
         target = str(uuid.UUID(request.POST.get("target", "")))
         if request.POST.get("action") == "remove":
             links.remove_target(record, field, target)

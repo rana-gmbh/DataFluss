@@ -183,6 +183,20 @@ def display(record, field, user=None):
     return ", ".join(str(t["title"]) for t in shown_targets(record, field, user))
 
 
+def creatable(user, field):
+    """(table, title field) when the picker may create a missing target by its title: a link to an own table
+    the user may edit, whose records are named by a text field."""
+    from . import services
+
+    if kind_of(field) != Link.RECORD:
+        return None
+    table = target_table(field)
+    if table is None or table.archived or not services.may_edit(user, table):
+        return None
+    named = services.title_field(table, services.fields_of(table))
+    return (table, named) if named is not None and named.type == "text" else None
+
+
 def candidates(user, field, query, limit=20):
     """What the picker offers for `query`: only targets the user may see."""
     from . import services

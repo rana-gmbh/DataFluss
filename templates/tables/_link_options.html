@@ -1,3 +1,5 @@
-{% load i18n %}<span data-q="{{ q }}" hidden></span>{% for option in options %}<button type="button" role="option" class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px] flex justify-between gap-2"
+{% load i18n ui %}<span data-q="{{ q }}" hidden></span>{% for option in options %}<button type="button" role="option" class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px] flex justify-between gap-2"
   hx-post="{{ link_url }}" hx-vals='{"action": "add", "target": "{{ option.id }}"}' hx-target="#link-{{ field_key }}" hx-swap="outerHTML"><span class="truncate">{{ option.title }}</span>{% if option.sub %}<span class="muted truncate">{{ option.sub }}</span>{% endif %}</button>
-{% empty %}<p class="muted text-[13px] px-2.5 py-1.5">{% translate "Nichts gefunden." %}</p>{% endfor %}
+{% empty %}{% if not create %}<p class="muted text-[13px] px-2.5 py-1.5">{% translate "Nichts gefunden." %}</p>{% endif %}{% endfor %}
+{% if create %}<button type="button" role="option" data-create class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px] flex items-center gap-1.5 text-[var(--accent)]"
+  hx-post="{{ link_url }}" hx-vals='{{ create_vals }}' hx-target="#link-{{ field_key }}" hx-swap="outerHTML">{% icon 'plus' 'text-[13px]' %}<span class="truncate">{% blocktranslate trimmed with name=create %}„{{ name }}“ neu anlegen{% endblocktranslate %}</span></button>{% endif %}

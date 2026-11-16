@@ -72,7 +72,9 @@ A link field points to records of another own table, or to pupils, staff or devi
 target or several, and it can have a name for the other side, such as "Ausleihen" for loans pointing to a
 book.
 
-- On the record page, a search box offers the targets you may see. Chips show what is linked.
+- On the record page, a search box offers the targets you may see; arrow keys and Enter pick one. Chips show
+  what is linked. A name that is not there yet can be created in the target table right from the search
+  ("„Pippi“ neu anlegen"), if you may edit that table.
 - Records, pupils, staff and devices show a section **Verknüpft in eigenen Tabellen** with everything
   that links to them, under the name for the other side.
 - A link to something you may not see shows **nicht sichtbar** instead of a name.

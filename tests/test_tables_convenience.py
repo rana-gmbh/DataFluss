@@ -296,3 +296,19 @@ class ReversePathTests(TableCase):
         self.assertEqual(formula.check(stored, schema), "number")
         field = services.create_field(self.table, "Gebühren", "formula", config=services.formula_config(self.table, {"expression": "sum({Ausleihen}.{Gebühr})"}))
         self.assertEqual(formula.compute(self.momo, field), 3.5)
+
+
+class CreateTargetTests(HistoryAndPickerTests):
+    def test_a_missing_target_is_created_from_the_search(self):
+        url = reverse("record_link_options", args=["buecher", self.momo.pk, "f_regal"])
+        self.assertContains(self.client.get(url, {"q": "Neues Buch"}), "neu anlegen")
+        self.assertNotContains(self.client.get(url, {"q": "krabat"}), "neu anlegen")  # it exists
+        answer = self.client.post(reverse("record_link", args=["buecher", self.momo.pk, "f_regal"]), {"action": "create", "title": "Neues Buch"})
+        made = Record.objects.get(table=self.table, title="Neues Buch")
+        self.assertEqual(links.targets(self.momo, self.shelf), [made.pk])
+        self.assertContains(answer, "Neues Buch")
+
+    def test_only_who_may_edit_the_target_table(self):
+        services.set_rights(self.table, {Role.SEKRETARIAT: "read"})
+        self.login(self.sek)
+        self.assertEqual(self.client.post(reverse("record_link", args=["buecher", self.momo.pk, "f_regal"]), {"action": "create", "title": "X"}).status_code, 403)

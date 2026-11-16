@@ -39,7 +39,8 @@ document.addEventListener("alpine:init", () => {
       this.active = 0;
       this.mark();
       // htmx ignores a click on new content until its swap is fully done, hence the extra tick.
-      if (this.pending && this.fresh()) { this.pending = false; setTimeout(() => this.options()[0]?.click()); }
+      // Enter pressed before the list was seen picks a match, but never creates a new record.
+      if (this.pending && this.fresh()) { this.pending = false; setTimeout(() => this.options().find((o) => !o.hasAttribute("data-create"))?.click()); }
     },
   }));
 });
