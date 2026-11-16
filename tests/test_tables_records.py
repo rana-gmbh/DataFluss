@@ -94,7 +94,8 @@ class RecordPageTests(RecordCase):
         self.login(self.sek)
         answer = self.client.post(self.url("record_field", self.momo.pk, "f_name"), {"value": "Momo (neu)"})
         trigger = json.loads(answer["HX-Trigger"])["fieldSaved"]
-        self.assertEqual((trigger["old"], trigger["reload"]), ("Momo", True))
+        # No formulas or conditions here: the form stays, only the heading follows the new title.
+        self.assertEqual((trigger["old"], trigger["reload"], trigger["title"]), ("Momo", False, "Momo (neu)"))
         self.assertEqual(Record.objects.get(pk=self.momo.pk).title, "Momo (neu)")
         answer = self.client.post(self.url("record_field", self.momo.pk, "f_preis"), {"value": "billig"})
         self.assertIn("fieldError", json.loads(answer["HX-Trigger"]))

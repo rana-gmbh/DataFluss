@@ -265,9 +265,8 @@ def record_field(request, key, pk, field_key):
         response["HX-Trigger"] = json.dumps({"fieldError": {"key": field_key, "message": " ".join(exc.messages)}})
         return response
     tree = table_masks.tree_for(table, request.user)
-    named = services.title_field(table, services.fields_of(table))
     has_formulas = any(f.type == "formula" for f in services.fields_of(table))  # computed values follow every change
-    reload_form = has_formulas or field_key in table_masks.condition_fields(tree) or bool(named and field_key == named.key)
+    reload_form = has_formulas or field_key in table_masks.condition_fields(tree)  # the heading follows the title by itself
     undoable = field.type not in ("secret", "multichoice") and str(previous) != str(saved)
     response["HX-Trigger"] = json.dumps({"fieldSaved": {
         "key": field_key, "label": str(field.display_label), "undoable": undoable, "old": str(previous),

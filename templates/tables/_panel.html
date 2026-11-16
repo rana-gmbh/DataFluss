@@ -1,6 +1,6 @@
 {% extends "core/_panel.html" %}{% load i18n ui %}
 {% block lead %}<span class="avatar" style="width:40px;height:40px">{% icon table.icon 'text-[18px]' %}</span>{% endblock %}
-{% block heading %}{{ record.title|default:_("(ohne Titel)") }}{% endblock %}
+{% block heading %}<span data-record-title>{{ record.title|default:_("(ohne Titel)") }}</span>{% endblock %}
 {% block badges %}<span class="badge badge-accent">{{ table.display_name }}</span>{% endblock %}
 {% block record_id %}{{ record.pk }}{% endblock %}
 {% block page_url %}{% url 'record_detail' table.key record.pk %}{% endblock %}

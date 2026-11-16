@@ -281,6 +281,20 @@ def main():
         check("empty: no pupils", sidecar.request("GET", "/schueler/")[0], 403)
         sidecar.close()
 
+        # 4b. "Leer" with the platform's templates that need no module, as the wizard offers them
+        kept_dir = work / "empty-templates"
+        kept_dir.mkdir()
+        sidecar = Sidecar(command, kept_dir, new_keys(), task="demo")
+        logins = {row["username"]: row["password"] for row in sidecar.run_task(
+            "demo", {"modules": [], "without": ["schulverwaltung"], "templates": ["inventar", "termine"]})["logins"]}
+        sidecar.wait_ready()
+        check("empty with templates: IT signs in", sidecar.sign_in("it", logins["it"]), (302, "/"))
+        status, page, _ = sidecar.request("GET", "/api/tabellen/inv_raeume/")
+        check("empty with templates: rooms add up their items", (status, b"2991" in page), (200, True))
+        status, page, _ = sidecar.request("GET", "/api/tabellen/ter_termine/")
+        check("empty with templates: sample events", (status, b"Weihnachtsfeier" in page), (200, True))
+        sidecar.close()
+
         # 5. A database with Schulverwaltung and the library template, with its sample records
         library_dir = work / "library"
         library_dir.mkdir()

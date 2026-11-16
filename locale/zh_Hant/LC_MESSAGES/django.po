@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:47+0100\n"
+"POT-Creation-Date: 2026-11-16 17:24+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -490,6 +490,9 @@ msgstr "管理"
 
 msgid "Tabellen"
 msgstr "表格"
+
+msgid "Schulverwaltung"
+msgstr "學校管理"
 
 msgid "Text"
 msgstr "文字"
@@ -1751,6 +1754,15 @@ msgstr "範例記錄"
 msgid "Beispiel %(n)s"
 msgstr "範例 %(n)s"
 
+msgid "Nur IT"
+msgstr "僅限 IT"
+
+msgid "Alle Rollen lesen"
+msgstr "所有角色可查看"
+
+msgid "Alle Rollen bearbeiten"
+msgstr "所有角色可編輯"
+
 #, python-format
 msgid "%(field)s kann hier nicht eingegeben werden."
 msgstr "%(field)s 無法在此輸入。"
@@ -1845,6 +1857,41 @@ msgstr "%(template)s：已新增 %(n)s 項。"
 msgid "Angepasst und deshalb nicht aktualisiert: %(items)s."
 msgstr "已被修改，因此未更新：%(items)s。"
 
+msgid "Bitte eine Datei wählen."
+msgstr "請選擇檔案。"
+
+msgid "Die Datei konnte nicht gelesen werden. Bitte CSV oder XLSX verwenden."
+msgstr "無法讀取檔案。請使用 CSV 或 XLSX。"
+
+#, python-format
+msgid "Spalte %(n)s"
+msgstr "第 %(n)s 欄"
+
+msgid "In der Datei wurden keine Daten gefunden."
+msgstr "檔案中找不到資料。"
+
+#, python-format
+msgid "%(table)s wurde mit %(count)s Datensätzen angelegt."
+msgstr "已建立 %(table)s，含 %(count)s 筆記錄。"
+
+#, python-format
+msgid ""
+"%(n)s Zeilen passten nicht und wurden übersprungen (Details unter Import & "
+"Export)."
+msgstr "%(n)s 列不符合要求，已略過（詳見「匯入與匯出」）。"
+
+msgid "Bitte mindestens eine Spalte übernehmen."
+msgstr "請至少選擇一欄。"
+
+#, python-format
+msgid "%(name)s liegt im Papierkorb."
+msgstr "%(name)s 已移至資源回收筒。"
+
+#, python-format
+msgid "%(count)d Datensatz ist wieder da."
+msgid_plural "%(count)d Datensätze sind wieder da."
+msgstr[0] "%(count)d 筆記錄已還原。"
+
 msgid ""
 "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
 " an die IT."
@@ -1858,9 +1905,6 @@ msgstr "此頁面或記錄已不存在。"
 
 msgid "Fehler"
 msgstr "錯誤"
-
-msgid "Schulverwaltung"
-msgstr "學校管理"
 
 msgid "Hier ist etwas schiefgegangen"
 msgstr "發生錯誤"
@@ -3487,6 +3531,9 @@ msgstr "搜尋並新增…"
 msgid "Suchen und ersetzen …"
 msgstr "搜尋並取代…"
 
+msgid "Alle wiederherstellen"
+msgstr "全部還原"
+
 msgid "Zur Tabelle"
 msgstr "返回表格"
 
@@ -3580,6 +3627,58 @@ msgstr[0] "%(n)s 筆記錄在此有值。"
 msgid "Feld archivieren? Die Werte bleiben erhalten."
 msgstr "封存此欄位？值會保留。"
 
+msgid "Neue Tabelle aus Datei"
+msgstr "從檔案新增表格"
+
+#, python-format
+msgid ""
+"%(file)s: %(rows)s Zeile. Die Feldtypen sind aus den Werten geschätzt; "
+"ändern Sie, was nicht passt."
+msgid_plural ""
+"%(file)s: %(rows)s Zeilen. Die Feldtypen sind aus den Werten geschätzt; "
+"ändern Sie, was nicht passt."
+msgstr[0] "%(file)s：%(rows)s 列。欄位類型根據數值推測；請修改不合適的。"
+
+msgid "Name der Tabelle"
+msgstr "表格名稱"
+
+msgid "Zugriff"
+msgstr "存取權限"
+
+msgid "Übernehmen"
+msgstr "採用"
+
+msgid "Beispiele"
+msgstr "範例"
+
+#, python-format
+msgid "%(name)s übernehmen"
+msgstr "採用 %(name)s"
+
+msgid "Name des Feldes"
+msgstr "欄位名稱"
+
+msgid "Feldtyp"
+msgstr "欄位類型"
+
+#, python-format
+msgid "%(n)s Nachkommastelle"
+msgid_plural "%(n)s Nachkommastellen"
+msgstr[0] "%(n)s 位小數"
+
+#, python-format
+msgid "%(name)s als Titel"
+msgstr "以 %(name)s 作為標題"
+
+msgid ""
+"Der Titel nennt einen Datensatz in Listen, Verknüpfungen und der Suche. Nach"
+" dem Anlegen lässt sich der Import unter Import & Export 24 Stunden lang "
+"zurücknehmen."
+msgstr "標題用於在清單、關聯和搜尋中稱呼一筆記錄。建立後，可在「匯入與匯出」中於 24 小時內撤銷此次匯入。"
+
+msgid "Tabelle anlegen und Daten übernehmen"
+msgstr "建立表格並匯入資料"
+
 msgid ""
 "Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder "
 "Termine."
@@ -3598,9 +3697,33 @@ msgid "z. B. Bücher"
 msgstr "例如：圖書"
 
 msgid ""
-"Die Tabelle beginnt mit einem Feld „Name“. Wer sie sehen und bearbeiten "
-"darf, legen Sie unter Rechte fest."
-msgstr "表格自帶一個「名稱」欄位。誰可以檢視和編輯，請在「權限」中設定。"
+"Die Tabelle beginnt mit einem Feld „Name“. Rechte je Rolle lassen sich "
+"später unter Rechte genauer festlegen."
+msgstr "表格以一個「名稱」欄位開始。各角色的權限可稍後在「權限」中細調。"
+
+msgid "Aus Excel- oder CSV-Datei"
+msgstr "從 Excel 或 CSV 檔案"
+
+msgid "Jede Spalte wird ein Feld mit passendem Typ, jede Zeile ein Datensatz."
+msgstr "每一欄成為一個合適類型的欄位，每一列成為一筆記錄。"
+
+msgid "In den Papierkorb"
+msgstr "移至資源回收筒"
+
+msgid "Diesen Datensatz in den Papierkorb legen?"
+msgstr "將此記錄移至資源回收筒？"
+
+msgid "Neuer Datensatz. Alles wird beim Verlassen eines Feldes gespeichert."
+msgstr "新記錄。離開欄位時會自動儲存。"
+
+msgid "Verwerfen"
+msgstr "捨棄"
+
+msgid "Weiterer Datensatz"
+msgstr "再建一筆記錄"
+
+msgid "Fertig"
+msgstr "完成"
 
 msgid "Tabelle gestalten"
 msgstr "設計表格"
@@ -3759,18 +3882,12 @@ msgstr "已識別的 Ninox 欄位已自動對應。"
 msgid "Spalte in der Datei"
 msgstr "檔案中的欄位"
 
-msgid "Beispiele"
-msgstr "範例"
-
 msgid "Ziel"
 msgstr "目標欄位"
 
 #, python-format
 msgid "Ziel für %(header)s"
 msgstr "%(header)s 的目標欄位"
-
-msgid "Verwerfen"
-msgstr "捨棄"
 
 msgid "Prüfung"
 msgstr "檢查"
@@ -3949,15 +4066,6 @@ msgstr "可透過備份復原。"
 
 msgid "Die Tabelle gibt es nicht mehr."
 msgstr "該表格已不存在。"
-
-msgid "Bitte eine Datei wählen."
-msgstr "請選擇檔案。"
-
-msgid "Die Datei konnte nicht gelesen werden. Bitte CSV oder XLSX verwenden."
-msgstr "無法讀取檔案。請使用 CSV 或 XLSX。"
-
-msgid "In der Datei wurden keine Daten gefunden."
-msgstr "檔案中找不到資料。"
 
 #, python-format
 msgid ""

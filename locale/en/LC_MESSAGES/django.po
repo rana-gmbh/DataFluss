@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 13:47+0100\n"
+"POT-Creation-Date: 2026-11-16 17:24+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -515,6 +515,9 @@ msgstr "Administration"
 
 msgid "Tabellen"
 msgstr "Tables"
+
+msgid "Schulverwaltung"
+msgstr "School administration"
 
 msgid "Text"
 msgstr "Text"
@@ -1826,6 +1829,15 @@ msgstr "Sample record"
 msgid "Beispiel %(n)s"
 msgstr "Example %(n)s"
 
+msgid "Nur IT"
+msgstr "IT only"
+
+msgid "Alle Rollen lesen"
+msgstr "All roles read"
+
+msgid "Alle Rollen bearbeiten"
+msgstr "All roles edit"
+
 #, python-format
 msgid "%(field)s kann hier nicht eingegeben werden."
 msgstr "%(field)s cannot be entered here."
@@ -1920,6 +1932,43 @@ msgstr "%(template)s: %(n)s created."
 msgid "Angepasst und deshalb nicht aktualisiert: %(items)s."
 msgstr "Changed here and therefore not updated: %(items)s."
 
+msgid "Bitte eine Datei wählen."
+msgstr "Please choose a file."
+
+msgid "Die Datei konnte nicht gelesen werden. Bitte CSV oder XLSX verwenden."
+msgstr "The file could not be read. Please use CSV or XLSX."
+
+#, python-format
+msgid "Spalte %(n)s"
+msgstr "Column %(n)s"
+
+msgid "In der Datei wurden keine Daten gefunden."
+msgstr "No data found in the file."
+
+#, python-format
+msgid "%(table)s wurde mit %(count)s Datensätzen angelegt."
+msgstr "%(table)s was created with %(count)s records."
+
+#, python-format
+msgid ""
+"%(n)s Zeilen passten nicht und wurden übersprungen (Details unter Import & "
+"Export)."
+msgstr ""
+"%(n)s rows did not fit and were skipped (details under Import & Export)."
+
+msgid "Bitte mindestens eine Spalte übernehmen."
+msgstr "Please take over at least one column."
+
+#, python-format
+msgid "%(name)s liegt im Papierkorb."
+msgstr "%(name)s is in the bin."
+
+#, python-format
+msgid "%(count)d Datensatz ist wieder da."
+msgid_plural "%(count)d Datensätze sind wieder da."
+msgstr[0] "%(count)d record is back."
+msgstr[1] "%(count)d records are back."
+
 msgid ""
 "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
 " an die IT."
@@ -1934,9 +1983,6 @@ msgstr "This page or record no longer exists."
 
 msgid "Fehler"
 msgstr "Error"
-
-msgid "Schulverwaltung"
-msgstr "School administration"
 
 msgid "Hier ist etwas schiefgegangen"
 msgstr "Something went wrong"
@@ -3651,6 +3697,9 @@ msgstr "Search and add …"
 msgid "Suchen und ersetzen …"
 msgstr "Search and replace …"
 
+msgid "Alle wiederherstellen"
+msgstr "Restore all"
+
 msgid "Zur Tabelle"
 msgstr "To the table"
 
@@ -3754,6 +3803,66 @@ msgstr[1] "%(n)s records have a value here."
 msgid "Feld archivieren? Die Werte bleiben erhalten."
 msgstr "Archive the field? The values are kept."
 
+msgid "Neue Tabelle aus Datei"
+msgstr "New table from a file"
+
+#, python-format
+msgid ""
+"%(file)s: %(rows)s Zeile. Die Feldtypen sind aus den Werten geschätzt; "
+"ändern Sie, was nicht passt."
+msgid_plural ""
+"%(file)s: %(rows)s Zeilen. Die Feldtypen sind aus den Werten geschätzt; "
+"ändern Sie, was nicht passt."
+msgstr[0] ""
+"%(file)s: %(rows)s row. The field types are guessed from the values; change "
+"what does not fit."
+msgstr[1] ""
+"%(file)s: %(rows)s rows. The field types are guessed from the values; change"
+" what does not fit."
+
+msgid "Name der Tabelle"
+msgstr "Name of the table"
+
+msgid "Zugriff"
+msgstr "Access"
+
+msgid "Übernehmen"
+msgstr "Use"
+
+msgid "Beispiele"
+msgstr "Examples"
+
+#, python-format
+msgid "%(name)s übernehmen"
+msgstr "Use %(name)s"
+
+msgid "Name des Feldes"
+msgstr "Name of the field"
+
+msgid "Feldtyp"
+msgstr "Field type"
+
+#, python-format
+msgid "%(n)s Nachkommastelle"
+msgid_plural "%(n)s Nachkommastellen"
+msgstr[0] "%(n)s decimal place"
+msgstr[1] "%(n)s decimal places"
+
+#, python-format
+msgid "%(name)s als Titel"
+msgstr "%(name)s as title"
+
+msgid ""
+"Der Titel nennt einen Datensatz in Listen, Verknüpfungen und der Suche. Nach"
+" dem Anlegen lässt sich der Import unter Import & Export 24 Stunden lang "
+"zurücknehmen."
+msgstr ""
+"The title names a record in lists, links and search. After creating, the "
+"import can be taken back under Import & Export for 24 hours."
+
+msgid "Tabelle anlegen und Daten übernehmen"
+msgstr "Create table and take over the data"
+
 msgid ""
 "Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder "
 "Termine."
@@ -3773,11 +3882,35 @@ msgid "z. B. Bücher"
 msgstr "e.g. Books"
 
 msgid ""
-"Die Tabelle beginnt mit einem Feld „Name“. Wer sie sehen und bearbeiten "
-"darf, legen Sie unter Rechte fest."
+"Die Tabelle beginnt mit einem Feld „Name“. Rechte je Rolle lassen sich "
+"später unter Rechte genauer festlegen."
 msgstr ""
-"The table starts with a field “Name”. Who may see and edit it is set under "
-"Permissions."
+"The table starts with one field, “Name”. Rights for each role can be set in "
+"detail later under Rights."
+
+msgid "Aus Excel- oder CSV-Datei"
+msgstr "From an Excel or CSV file"
+
+msgid "Jede Spalte wird ein Feld mit passendem Typ, jede Zeile ein Datensatz."
+msgstr "Each column becomes a field of a fitting type, each row a record."
+
+msgid "In den Papierkorb"
+msgstr "Move to the bin"
+
+msgid "Diesen Datensatz in den Papierkorb legen?"
+msgstr "Move this record to the bin?"
+
+msgid "Neuer Datensatz. Alles wird beim Verlassen eines Feldes gespeichert."
+msgstr "New record. Everything is saved when you leave a field."
+
+msgid "Verwerfen"
+msgstr "Discard"
+
+msgid "Weiterer Datensatz"
+msgstr "Another record"
+
+msgid "Fertig"
+msgstr "Done"
 
 msgid "Tabelle gestalten"
 msgstr "Design table"
@@ -3948,18 +4081,12 @@ msgstr "Known Ninox columns are already mapped."
 msgid "Spalte in der Datei"
 msgstr "Column in the file"
 
-msgid "Beispiele"
-msgstr "Examples"
-
 msgid "Ziel"
 msgstr "Target"
 
 #, python-format
 msgid "Ziel für %(header)s"
 msgstr "Target for %(header)s"
-
-msgid "Verwerfen"
-msgstr "Discard"
 
 msgid "Prüfung"
 msgstr "Review"
@@ -4145,15 +4272,6 @@ msgstr "Can be undone through the backup."
 
 msgid "Die Tabelle gibt es nicht mehr."
 msgstr "The table no longer exists."
-
-msgid "Bitte eine Datei wählen."
-msgstr "Please choose a file."
-
-msgid "Die Datei konnte nicht gelesen werden. Bitte CSV oder XLSX verwenden."
-msgstr "The file could not be read. Please use CSV or XLSX."
-
-msgid "In der Datei wurden keine Daten gefunden."
-msgstr "No data found in the file."
 
 #, python-format
 msgid ""

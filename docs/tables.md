@@ -10,9 +10,12 @@ Designing tables needs the IT role. Who may read or edit the records is set for 
 ## Creating a table
 
 **Verwaltung → Einstellungen → Tabellen → Neue Tabelle.** The new table starts with one field, "Name".
-Its settings have four tabs:
+**Zugriff** sets every other role at once: only IT, everyone reads, or everyone edits; the Rechte tab sets
+each role on its own later. Its settings have four tabs:
 
-- **Felder:** add fields, drag them into order, open one to edit it.
+- **Felder:** add fields, drag them into order, open one to edit it. While a field's name is typed, the
+  type is guessed from it ("E-Mail", "Geburtsdatum", "Preis", "Bemerkung", "Bezahlt?"); a name like another
+  table's ("Buch" for "Bücher") or like pupils, staff or devices proposes a link to it.
 - **Datensatzseite:** arrange the record page in the mask designer (see below).
 - **Rechte:** for every role: no access, read or edit. IT always has full access.
 - **Allgemein:** name, description, icon, whether it shows in the sidebar, and which field gives a
@@ -22,6 +25,15 @@ A table with records can only be archived, not deleted. An archived table can st
 changed, and it leaves the sidebar.
 
 Instead of starting empty, **Vorlage hinzufügen …** creates ready-made tables (see *Templates*).
+
+### A table from a file
+
+**Aus Excel- oder CSV-Datei** on the same page reads a file and lists its columns as fields, each with a
+type guessed from its values: numbers with their decimal places and unit ("12,50 €"), dates, date and
+time, yes/no, e-mail, phone, link, long text, and a choice when few values repeat. Postcodes and other
+numbers with leading zeros stay text. The title column is guessed too (a column named like "Name" or
+"Bezeichnung", else the first one whose values differ). After checking, one click creates the table and
+imports every row; the import can be taken back under Import & Export within 24 hours.
 
 ## Field types
 
@@ -43,6 +55,11 @@ choice → text, number → text, …). Values are converted. For anything else,
 Archiving a field hides it and keeps its values.
 
 ## Record pages
+
+**Neuer Datensatz** opens the new record with the cursor in its first field. Every field is saved when it
+is left. The bar above offers **Weiterer Datensatz** for entering several in a row, and **Verwerfen**,
+which removes a record that was never filled in (one with values goes to the bin). Records can be put in
+the bin from their page or from the list; the bin brings back one or all.
 
 Without any design, a record page shows all fields. **Datensatzseite → Im Maskendesigner gestalten**
 opens the same designer as for pupils: tabs, sections, widths, notes, conditions ("show if") and the
@@ -79,7 +96,8 @@ sum({Positionen}.{Betrag})
 - **Fields** are written in braces with their name, in any language the field has a name in. Renaming a
   field never breaks a formula.
 - **Linked records:** `{Buch}.{Preis}` gives the price of the linked book(s); records of other tables
-  that link here are written with the name for the other side, `{Ausleihen}`.
+  that link here are written with the name for the other side, `{Ausleihen}`, and their fields the same
+  way: `sum({Gegenstände}.{Wert})` for a room adds up the value of the items in it.
 - **Values:** numbers (`12.5`), text in quotes (`"Text"`), `true`, `false`, `null`.
 - **Operators:** `+ - * /`, `&` joins text, `= != < <= > >=`, `and`, `or`, `not`, parentheses.
   A date plus a number is a date that many days later; a date minus a date is the number of days.
@@ -101,7 +119,8 @@ A formula of the record's own fields (without links) may give records their titl
 ## Import and export
 
 **Import & Export → Importieren** offers the tables you may edit (or **Importieren** in a table's list).
-Columns are matched to fields by name and can be changed. Existing records are recognised by a unique
+Columns are matched to fields by name and can be changed. Numbers may carry the field's unit
+("12,50 €") and German or English separators ("1.234,5", "1,234.5"). Existing records are recognised by a unique
 field or the title field, or every row becomes a new record. Link columns name their targets: records by
 title, people by "First Last", "Last, First" or e-mail, devices by number, several separated by `;`.
 The preview lists new, changed and unchanged rows and what could not be found. An import can be taken
@@ -130,7 +149,9 @@ one step: **Tabellen → Vorlage hinzufügen …**, or when creating a new datab
 template again, or a newer version of it, only adds what is missing; nothing is deleted, and what you
 changed is kept and named.
 
-DataFluss comes with **Bibliothek** (books and loans to pupils). Modules can bring further templates.
+DataFluss comes with **Bibliothek** (books and loans to pupils; needs Schulverwaltung), **Inventar** (rooms
+and the items in them, with value, condition, labels and room lists) and **Termine** (events with place,
+kind and a notice to print). Modules can bring further templates.
 
 ### Writing a template
 
@@ -165,9 +186,11 @@ a bundle like any other module.
   records of another table linking here).
 - In demo records, a link names its target record by title.
 - A newer version raises `version`; it may add tables, fields and the rest, never remove them.
+- Table keys of a template should start with a short prefix of its own (`inv_raeume`), so they never meet
+  a table someone made by hand. A formula may use formulas of other tables of the template, in any order.
 
 ## Databases without Schulverwaltung
 
 When creating a database in the app, the card **Leer** starts without pupils, staff and devices: own
 tables only. Its start page lists the tables, and printing, import and links offer tables only. Templates
-that need Schulverwaltung, like the library, are not offered there.
+that need Schulverwaltung, like the library, are not offered there; Inventar and Termine are.

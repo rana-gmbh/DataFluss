@@ -52,3 +52,30 @@ document.addEventListener("alpine:initialized", () => setTimeout(() => {
     .find((el) => el.type !== "hidden" && !el.disabled && !el.readOnly && el.offsetParent !== null);
   first?.focus();
 }));
+
+// The record form reloads after a save when computed fields or conditions follow it. The field being typed
+// in meanwhile (Tab moved on) keeps its focus, its unsaved text and the cursor.
+(function () {
+  let editing = null;
+  document.addEventListener("htmx:beforeSwap", (e) => {
+    const form = e.detail.target;
+    if (!form || form.id !== "record-form") return;
+    const el = document.activeElement;
+    editing = el && el.id && form.contains(el) && el.matches("input, textarea, select")
+      ? { id: el.id, value: el.value, checked: el.checked, start: el.selectionStart, end: el.selectionEnd } : null;
+  });
+  document.addEventListener("htmx:afterSwap", () => {
+    if (!editing) return;
+    const was = editing;
+    editing = null;
+    // The new form's tabs are hidden (x-cloak) until Alpine has set them up, and a hidden field takes no focus.
+    setTimeout(() => {
+      const el = document.getElementById(was.id);
+      if (!el) return;
+      if (el.type === "checkbox" || el.type === "radio") el.checked = was.checked;
+      else if (el.value !== was.value) el.value = was.value;
+      el.focus();
+      try { if (was.start !== null) el.setSelectionRange(was.start, was.end); } catch (err) {}
+    });
+  });
+})();
