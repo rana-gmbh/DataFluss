@@ -152,3 +152,86 @@ class NewPersonTests(AppTestCase):
 
         made = Person.objects.get(first_name="Neu")
         self.assertEqual((made.birth_date, made.gender), (None, ""))
+
+
+class SyncTests(AppTestCase):
+    """A synced computer never holds what its role does not see, and cannot change what it may only read."""
+
+    def setUp(self):
+        from core import hlc
+
+        set_current_user(self.it)
+        self.health = create_field("pupil", "Gesundheit", "text")
+        ms.set_value(self.pupil, self.health, "Asthma-Spray")
+        self.pupil.school_type = "GY"
+        self.pupil.save()
+        self.table = services.create_table("Bücher")
+        self.price = services.create_field(self.table, "Preis", "number", config={"decimals": 2})
+        services.set_rights(self.table, {Role.SEKRETARIAT: "edit"})
+        self.momo = services.create_record(self.table, {"f_name": "Momo", "f_preis": "10"})
+        set_current_user(None)
+        self.hlc = hlc
+        role = UserRole.objects.get(key=Role.SEKRETARIAT)
+        role.fields = {"pupil": {self.health.key: "hidden", "school_type": "hidden", "email": "read"}, "table:buecher": {"f_preis": "hidden"}}
+        role.save()
+        self.office = User.objects.get(pk=self.sek.pk)
+
+    def records(self, page, entity):
+        return {r["id"]: r["f"] for r in page["records"] if r["e"] == entity}
+
+    def test_hidden_values_never_reach_the_computer(self):
+        from .test_sync_server import device_for, first_copy
+
+        device = device_for(self.office)
+        page = self._all(device)
+        person = self.records(page, "people.person")[str(self.pupil.pk)]
+        self.assertNotIn(self.health.key, person["custom"])
+        self.assertEqual(person["school_type"], "")
+        self.assertEqual(person["first_name"], "Lena")
+        record = self.records(page, "tables.record")[str(self.momo.pk)]
+        self.assertNotIn("f_preis", record["values"])
+        first_copy(device)
+
+    def _all(self, device):
+        from sync import server
+
+        page = server.pull(device)
+        merged = {"records": list(page["records"])}
+        while not page["done"]:
+            page = server.pull(device, page["page"])
+            merged["records"] += page["records"]
+        server.pull(device, page["page"])
+        device.refresh_from_db()
+        return merged
+
+    def test_read_only_changes_are_refused(self):
+        from sync import server
+        from sync.models import FieldVersion
+
+        from .test_sync_server import device_for
+
+        device = device_for(self.office)
+        self._all(device)
+        base = FieldVersion.objects.get(record_id=self.pupil.pk, key="+").hlc
+        server.push(device, "b1", [{"e": "people.person", "id": str(self.pupil.pk), "op": "set", "k": "email", "val": "neu@x.de",
+                                    "v": self.hlc.tick(), "base": base}])
+        self.pupil.refresh_from_db()
+        self.assertEqual(self.pupil.email, "lena@schule.example")
+        server.push(device, "b2", [{"e": "people.person", "id": str(self.pupil.pk), "op": "set", "k": "last_name", "val": "Neu",
+                                    "v": self.hlc.tick(), "base": base}])
+        self.pupil.refresh_from_db()
+        self.assertEqual(self.pupil.last_name, "Neu")
+
+    def test_a_rule_change_sends_the_records_again(self):
+        from .test_sync_server import device_for
+
+        device = device_for(self.office)
+        self._all(device)
+        role = UserRole.objects.get(key=Role.SEKRETARIAT)
+        role.fields = {}
+        role.save()
+        device.refresh_from_db()
+        self.assertIn(["people.person", str(self.pupil.pk)], device.resend)
+        self.assertIn(["tables.record", str(self.momo.pk)], device.resend)
+        page = self._all(device)
+        self.assertEqual(self.records(page, "people.person")[str(self.pupil.pk)]["custom"][self.health.key], "Asthma-Spray")

@@ -210,7 +210,9 @@ class SyncScopeTests(TableCase):
 
     def test_secret_values_stay_off_devices_without_vault_access(self):
         services.set_rights(self.table, {Role.SCHULLEITUNG: READ, Role.SEKRETARIAT: EDIT})
-        masked = Scope(self.sl).hide(Record)["values"](Record.objects.get(pk=self.record.pk).values)
+        from sync import codec
+
+        masked = codec.snapshot(Record.objects.get(pk=self.record.pk), Scope(self.sl).hide(Record))["values"]
         self.assertEqual(masked, {"f_name": "Momo"})
         self.assertIn("values.f_code", Scope(self.sl).ignored_keys(Record))
         self.assertEqual(Scope(self.sek).hide(Record), {})  # the secretariat sees passwords anyway

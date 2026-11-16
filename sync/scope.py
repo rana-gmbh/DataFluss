@@ -214,25 +214,83 @@ class Scope:
             maskers.update(module.hide(self, model))
         return {**self._hide(model), **maskers}
 
+    def _person_rules(self):
+        """Masks of a person's fields this role does not see, by kind (core/fieldrules.py): {kind: hidden keys}."""
+        from core import fieldrules
+
+        return {kind: keys for kind in ("pupil", "staff") if (keys := fieldrules.hidden(self.user, kind))}
+
     def _hide(self, model):
         label = codec.entity_of(model)
         if label == "people.person" and not self.knows_people:
             return _teacher_view_of_person()
+        if label == "people.person":
+            return self._hide_person()
         if self.vault:
             return {}
-        if label == "people.person":
-            secret = _secret_person_keys()
-            return {"custom": lambda value: {k: v for k, v in (value or {}).items() if k not in secret}}
         if label == "devices.asset":
             return {"product_key_enc": lambda value: ""}
         return {}
 
+    def _hide_person(self):
+        from people.models import Person
+
+        hidden = self._person_rules()
+        secret = set() if self.vault else _secret_person_keys()
+        if not hidden and not secret:
+            return {}
+
+        @codec.per_record
+        def custom(value, person):
+            unseen = hidden.get(person.kind, set()) | secret
+            return {k: v for k, v in (value or {}).items() if k not in unseen}
+
+        maskers = {"custom": custom}
+        columns = {f.name: f for f in Person._meta.concrete_fields}
+        for name in {("current_class" if key == "klasse" else key) for keys in hidden.values() for key in keys}:
+            if name not in columns or name in ("kind", "first_name", "last_name"):
+                continue
+            blank = _blank(columns[name])
+
+            def column(value, person, name=name, blank=blank):
+                keys = hidden.get(person.kind, set())
+                return blank(value) if name in keys or (name == "current_class" and "klasse" in keys) else value
+
+            maskers[name] = codec.per_record(column)
+        return maskers
+
     # ------------------------------------------------------------ writing
+
+    def _touches_fixed_fields(self, label, pk, keys):
+        """Whether a change of an existing person or table record touches a field the role may only read or
+        does not see (core/fieldrules.py); the whole change is refused, and the server's copy goes back."""
+        from core import fieldrules
+
+        if label == "people.person":
+            from people.models import Person
+
+            kind = Person._base_manager.filter(pk=pk).values_list("kind", flat=True).first()
+            if kind is None:
+                return False
+            fixed = fieldrules.read_only(self.user, kind)
+            names = {("current_class" if key == "klasse" else key) for key in fixed} | {f"custom.{key}" for key in fixed}
+        elif label == "tables.record":
+            from tables.models import Record
+
+            row = Record._base_manager.filter(pk=pk).select_related("table").first()
+            if row is None:
+                return False
+            names = {f"values.{key}" for key in fieldrules.read_only(self.user, fieldrules.table_entity(row.table))}
+        else:
+            return False
+        return bool(names & set(keys))
 
     def may_write(self, model, pk, keys):
         """Whether the device's user may make this change. Scope is checked after the whole push."""
         can, label = self.user.can, codec.entity_of(model)
         app = label.split(".")[0]
+        if self._touches_fixed_fields(label, pk, keys):
+            return False
         if label == "core.savedview":
             from core.models import SavedView
 

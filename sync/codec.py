@@ -93,6 +93,17 @@ def snapshot_fields(model):
     return [f for f in model._meta.concrete_fields if not f.primary_key]
 
 
+def per_record(masker):
+    """Marks a masker that needs the record too (masker(value, instance)): what a role may see of a
+    person depends on its kind, of a table's record on its table (core/fieldrules.py)."""
+    masker.per_record = True
+    return masker
+
+
+def _mask(masker, value, instance):
+    return masker(value, instance) if getattr(masker, "per_record", False) else masker(value)
+
+
 def snapshot(instance, hide=None):
     """All fields of a record, for a node that does not have it yet.
 
@@ -101,7 +112,7 @@ def snapshot(instance, hide=None):
     data = {}
     for field in snapshot_fields(type(instance)):
         value = encode_value(field, getattr(instance, field.attname))
-        data[field.name] = hide[field.name](value) if field.name in hide else value
+        data[field.name] = _mask(hide[field.name], value, instance) if field.name in hide else value
     return data
 
 
@@ -112,7 +123,7 @@ def encode_key(instance, key, hide=None):
     field = type(instance)._meta.get_field(name)
     value = encode_value(field, getattr(instance, field.attname))
     if name in hide:
-        value = hide[name](value)
+        value = _mask(hide[name], value, instance)
     if sub is None:
         return value
     return value[sub] if isinstance(value, dict) and sub in value else ABSENT

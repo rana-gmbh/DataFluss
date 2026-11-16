@@ -211,6 +211,21 @@ def tables():
     check("tables: records leave a computer whose right was taken away", run("mac2", HOLDS.format(ids["momo"], ids["geheim"])), [False, False])
 
 
+def field_rules():
+    """Roles (core/fieldrules.py): a field the role does not see leaves its computer, and comes back with the right."""
+    RULE = ("import json; from core.models import Role, UserRole; from people.models import Person\n"
+            "r = UserRole.objects.get(key=Role.SCHULLEITUNG); r.fields = {rules}; r.save()\n"
+            "p = Person.objects.filter(kind='pupil').exclude(email='').order_by('last_name').first(); print('@@' + json.dumps([str(p.pk), p.email]))")
+    pk, email = run("server", RULE.format(rules="{'pupil': {'email': 'hidden'}}"))
+    sync("mac2")
+    check("roles: a hidden field leaves the computer", person_field("mac2", pk, "email"), "")
+    ROLE = "import json; from core.models import UserRole; print('@@' + json.dumps(UserRole.objects.get(key='schulleitung').fields))"
+    check("roles: the computer knows the role's rules", run("mac2", ROLE), {"pupil": {"email": "hidden"}})
+    run("server", RULE.format(rules="{}"))
+    sync("mac2")
+    check("roles: and comes back when the role may see it again", person_field("mac2", pk, "email"), email)
+
+
 if __name__ == "__main__":
     write_env()
     start_server()
@@ -219,6 +234,7 @@ if __name__ == "__main__":
     register("mac2", "leitung")
     register("mac3", "it")
     scoping()
+    field_rules()
     tables()
     # Scenarios of modules: DATAFLUSS_E2E_SCENARIOS names their files (a module's own repository), and
     # premium.py beside this file runs when the premium module is in this repository.

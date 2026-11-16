@@ -4,11 +4,35 @@ A device gets the tables its user's role may read, with their fields and records
 needs `tables.design`; records need the edit right on their table, checked after the push, when a new
 record's table is known. Secret values stay off devices without vault access.
 """
+from sync import codec
 from sync.scope import ModuleScope
 
 
 def _secret(value):
     return isinstance(value, dict) and set(value) == {"secret"}
+
+
+def _hidden_by_table(scope):
+    """{table id: keys of fields the user's role does not see} (core/fieldrules.py), once per scope."""
+    if not hasattr(scope, "_table_hidden"):
+        from core import fieldrules
+
+        from .models import Table
+
+        scope._table_hidden = {t.pk: keys for t in Table._base_manager.all()
+                               if (keys := fieldrules.hidden(scope.user, fieldrules.table_entity(t)))}
+    return scope._table_hidden
+
+
+def _read_only_by_table(scope):
+    if not hasattr(scope, "_table_read_only"):
+        from core import fieldrules
+
+        from .models import Table
+
+        scope._table_read_only = {t.pk: keys for t in Table._base_manager.all()
+                                  if (keys := fieldrules.read_only(scope.user, fieldrules.table_entity(t)))}
+    return scope._table_read_only
 
 
 class TablesScope(ModuleScope):
@@ -26,8 +50,13 @@ class TablesScope(ModuleScope):
         add(Table, Table._base_manager.filter(pk__in=tables))
         add(Field, Field._base_manager.filter(table_id__in=tables))
         add(Record, Record._base_manager.filter(table_id__in=tables))
-        add(Link, Link._base_manager.filter(record__table_id__in=tables))
-        add(Attachment, Attachment._base_manager.filter(record__table_id__in=tables))
+        links = Link._base_manager.filter(record__table_id__in=tables)
+        files = Attachment._base_manager.filter(record__table_id__in=tables)
+        for table_id, keys in _hidden_by_table(scope).items():  # links and files of fields the role does not see stay away
+            links = links.exclude(record__table_id=table_id, field__in=keys)
+            files = files.exclude(record__table_id=table_id, field__in=keys)
+        add(Link, links)
+        add(Attachment, files)
         add(Mask, Mask._base_manager.filter(table_id__in=tables))
         add(MaskVersion, MaskVersion._base_manager.filter(mask__table_id__in=tables))
 
@@ -52,6 +81,10 @@ class TablesScope(ModuleScope):
         label = model._meta.label_lower
         if label not in ("tables.record", "tables.link", "tables.attachment"):
             return True
+        if label != "tables.record":  # a link or file of a field the role may only read or not see
+            row = model._base_manager.filter(pk=pk).values_list("record__table_id", "field").first()
+            if row and row[1] in _read_only_by_table(scope).get(row[0], set()):
+                return False
         from . import links, services
         from .models import Field, Record
 
@@ -72,9 +105,19 @@ class TablesScope(ModuleScope):
         return row.pk == links.link_id(row.record_id, field.key, row.target_id if multiple else None)
 
     def hide(self, scope, model):
-        if scope.vault or model._meta.label_lower != "tables.record":
+        if model._meta.label_lower != "tables.record":
             return {}
-        return {"values": lambda value: {k: v for k, v in (value or {}).items() if not _secret(v)}}
+        hidden = _hidden_by_table(scope)
+        if scope.vault and not hidden:
+            return {}
+        vault = scope.vault
+
+        @codec.per_record
+        def values(value, record):
+            unseen = hidden.get(record.table_id, set())
+            return {k: v for k, v in (value or {}).items() if k not in unseen and (vault or not _secret(v))}
+
+        return {"values": values}
 
     def ignored(self, scope, model):
         if scope.vault or model._meta.label_lower != "tables.record":
