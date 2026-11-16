@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 12:15+0100\n"
+"POT-Creation-Date: 2026-11-16 12:48+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1448,6 +1448,130 @@ msgid ""
 "übernehmen."
 msgstr "該記錄已刪除，無法再採用另一版本。"
 
+#, python-format
+msgid "Die Formel ist zu lang (höchstens %(n)s Zeichen)."
+msgstr "公式過長（最多 %(n)s 個字元）。"
+
+#, python-format
+msgid "Unerwartetes Zeichen „%(c)s“."
+msgstr "意外的字元「%(c)s」。"
+
+#, python-format
+msgid "Erwartet: %(what)s."
+msgstr "應為：%(what)s。"
+
+msgid "Die Formel ist leer."
+msgstr "公式為空。"
+
+#, python-format
+msgid "Unerwartet: „%(t)s“."
+msgstr "意外：「%(t)s」。"
+
+msgid "Die Formel ist zu tief verschachtelt."
+msgstr "公式巢狀過深。"
+
+msgid "Die Formel endet zu früh."
+msgstr "公式提前結束。"
+
+#, python-format
+msgid "Unbekanntes Feld {%(name)s}."
+msgstr "未知欄位 {%(name)s}。"
+
+#, python-format
+msgid "{%(name)s} ist keine Verknüpfung zu einer Tabelle."
+msgstr "{%(name)s} 不是指向表格的關聯。"
+
+msgid "Geheime Felder können nicht berechnet werden."
+msgstr "加密欄位不能用於計算。"
+
+#, python-format
+msgid "Die Formel hängt von sich selbst ab (über {%(name)s})."
+msgstr "公式依賴於自身（透過 {%(name)s}）。"
+
+#, python-format
+msgid "{%(name)s} enthält einen Fehler."
+msgstr "{%(name)s} 包含錯誤。"
+
+msgid "Minus passt nur vor eine Zahl."
+msgstr "負號只能放在數字前。"
+
+msgid "Verglichen werden nur Werte derselben Art."
+msgstr "只能比較同類的值。"
+
+#, python-format
+msgid ""
+"Mit „%(op)s“ werden nur Zahlen gerechnet (und Tage zu einem Datum gezählt)."
+msgstr "「%(op)s」只能用於數字（以及在日期上加減天數）。"
+
+#, python-format
+msgid "Unbekannte Funktion %(name)s()."
+msgstr "未知函數 %(name)s()。"
+
+#, python-format
+msgid "%(name)s() erwartet %(n)s Angaben."
+msgstr "%(name)s() 需要 %(n)s 個參數。"
+
+msgid "Unbekannter Ausdruck."
+msgstr "未知運算式。"
+
+#, python-format
+msgid "%(name)s() rechnet nur mit Zahlen."
+msgstr "%(name)s() 只能用於數字。"
+
+#, python-format
+msgid "%(name)s() braucht eine Verknüpfung, etwa %(example)s."
+msgstr "%(name)s() 需要一個關聯，例如 %(example)s。"
+
+#, python-format
+msgid "%(name)s(): Diese Angabe passt nicht."
+msgstr "%(name)s()：此參數不合適。"
+
+msgid "Hier wird eine Zahl erwartet."
+msgstr "此處應為數字。"
+
+#, python-format
+msgid "%(name)s(): Die Angaben sind verschiedener Art."
+msgstr "%(name)s()：參數類型不一致。"
+
+msgid "Die Berechnung braucht zu viele Schritte."
+msgstr "計算步驟過多。"
+
+msgid "Zu viele verknüpfte Datensätze."
+msgstr "關聯記錄過多。"
+
+#, python-format
+msgid "{%(name)s} enthält einen ungültigen Wert."
+msgstr "{%(name)s} 包含無效值。"
+
+msgid "Diese Werte lassen sich nicht so berechnen."
+msgstr "這些值無法這樣計算。"
+
+msgid "Teilen durch null."
+msgstr "除以零。"
+
+msgid "nicht sichtbar"
+msgstr "不可見"
+
+#, python-format
+msgid "Anzahl verknüpfter Datensätze: %(field)s"
+msgstr "關聯記錄數：%(field)s"
+
+#, python-format
+msgid "Summe: %(link)s → %(field)s"
+msgstr "合計：%(link)s → %(field)s"
+
+msgid "Tage zwischen zwei Daten"
+msgstr "兩個日期之間的天數"
+
+msgid "Tage bis heute"
+msgstr "距今天數"
+
+msgid "Alter aus Geburtsdatum"
+msgstr "根據出生日期計算年齡"
+
+msgid "Text zusammensetzen"
+msgstr "組合文字"
+
 msgid "Bitte angeben, worauf die Verknüpfung zeigt."
 msgstr "請選擇關聯指向的對象。"
 
@@ -1457,9 +1581,6 @@ msgstr "未知表格"
 #, python-format
 msgid "%(field)s ist archiviert und kann nicht geändert werden."
 msgstr "%(field)s 已封存，無法變更。"
-
-msgid "nicht sichtbar"
-msgstr "不可見"
 
 msgid "(ohne Titel)"
 msgstr "（無標題）"
@@ -1493,11 +1614,21 @@ msgstr "未知欄位 %(key)s。"
 msgid "Bitte einen Namen für die Tabelle eingeben."
 msgstr "請輸入表格名稱。"
 
+msgid "Unbekannte Tabelle."
+msgstr "未知表格。"
+
+#, python-format
+msgid "Formel: %(problem)s"
+msgstr "公式：%(problem)s"
+
 msgid "Bitte die Zahl der Nachkommastellen angeben (0 bis 6)."
 msgstr "請輸入小數位數（0 到 6）。"
 
 msgid "Bitte als Grenze eine Zahl eingeben."
 msgstr "請輸入數字作為限制。"
+
+msgid "Bitte eine Formel eingeben."
+msgstr "請輸入公式。"
 
 msgid ""
 "Dieser Typ passt nicht zu den eingetragenen Werten. Legen Sie besser ein "
@@ -1547,6 +1678,12 @@ msgstr "%(field)s 已封存，值會保留。"
 
 msgid "Der Typ wurde geändert."
 msgstr "類型已變更。"
+
+msgid "leer"
+msgstr "空白"
+
+msgid "Liste"
+msgstr "清單"
 
 msgid ""
 "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
@@ -2639,9 +2776,6 @@ msgstr "封存不會刪除任何資料。"
 msgid "Herkunft"
 msgstr "來源"
 
-msgid "Liste"
-msgstr "清單"
-
 msgid "Duplizieren"
 msgstr "複製"
 
@@ -3131,6 +3265,43 @@ msgstr "刪除 %(name)s？"
 msgid "Datei entfernen"
 msgstr "刪除檔案"
 
+#, python-format
+msgid "Ergebnis: %(kind)s"
+msgstr "結果：%(kind)s"
+
+msgid "Noch keine Datensätze für eine Vorschau."
+msgstr "還沒有可供預覽的記錄。"
+
+#, python-format
+msgid "z. B. %(example)s"
+msgstr "例如 %(example)s"
+
+msgid "Vorlage"
+msgstr "範本"
+
+msgid "Fertige Berechnung wählen …"
+msgstr "選擇現成的計算…"
+
+msgid "Formel"
+msgstr "公式"
+
+msgid "Was eine Formel kann"
+msgstr "公式的功能"
+
+#, python-format
+msgid ""
+"Felder in geschweiften Klammern, etwa %(example)s. Rechnen mit + − * /, Text"
+" verbinden mit &, vergleichen mit = != < > <= >=, dazu and, or, not."
+msgstr ""
+"欄位寫在大括號中，例如 %(example)s。可用 + − * / 計算，用 & 連接文字，用 = != < > <= >= 比較，另有 "
+"and、or、not。"
+
+#, python-format
+msgid ""
+"Felder verknüpfter Datensätze: %(example)s. Datensätze anderer Tabellen, die"
+" hierher verknüpfen, unter dem Namen auf der Gegenseite."
+msgstr "關聯記錄的欄位：%(example)s。其他表格中關聯到此處的記錄，使用對方顯示的名稱。"
+
 msgid "Nichts gefunden."
 msgstr "未找到結果。"
 
@@ -3164,6 +3335,12 @@ msgstr "對方顯示的名稱"
 
 msgid "Mehrere erlaubt"
 msgstr "允許多個"
+
+msgid "Nachkommastellen (bei Zahlen)"
+msgstr "小數位數（數字）"
+
+msgid "automatisch"
+msgstr "自動"
 
 msgid "Nachkommastellen"
 msgstr "小數位數"
@@ -3542,9 +3719,6 @@ msgstr "缺少名字"
 msgid "Nachname fehlt"
 msgstr "缺少姓氏"
 
-msgid "leer"
-msgstr "空白"
-
 #, python-format
 msgid "E-Mail außerhalb von %(domain)s: %(email)s"
 msgstr "電子郵件不屬於 %(domain)s：%(email)s"
@@ -3617,3 +3791,7 @@ msgstr "識別碼"
 
 msgid "Muss geändert werden"
 msgstr "必須修改"
+
+#, python-brace-format
+#~ msgid "z. B. {Preis} * {Menge}"
+#~ msgstr "例如 {價格} * {數量}"

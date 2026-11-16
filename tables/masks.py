@@ -84,7 +84,12 @@ def _field_entry(item, record, field, user, editable):
         "help": item.get("help") or field.help_text,
         "choices": field.option_choices if field.type in ("choice", "multichoice") else None, "step": step,
     }
-    if field.type == "link":
+    if field.type == "formula":
+        from . import formula
+
+        text, problem = formula.display(record, field, formula.Context(user))
+        entry.update(value=text, display=text, problem=problem, editable=False)
+    elif field.type == "link":
         entry.update(targets=links.shown_targets(record, field, user), multiple=bool(ft.config(field).get("multiple")),
                      picker_url=f"{base}verknuepfung/{field.key}/suche/", link_url=f"{base}verknuepfung/{field.key}/")
     elif field.type in ("file", "image"):

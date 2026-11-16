@@ -19,7 +19,7 @@ from core import audit, fieldtypes as ft
 from core.models import ChangeLog, SavedView
 from vault.services import rate_limited
 
-from . import links, masks as table_masks, services
+from . import formula, links, masks as table_masks, services
 from .models import Attachment, Record, Table
 
 GRID_EDITABLE = {"text", "textarea", "number", "bool", "choice", "date", "email", "phone", "url"}
@@ -47,10 +47,11 @@ def _columns(table, user):
     columns = []
     for field in services.fields_of(table):
         kind = ft.TYPES.get(field.type)
-        if kind is None or kind.storage == "computed" or field.type == "secret":
+        if kind is None or field.type == "secret":
             continue
+        grid = services.RESULTS.get((field.config or {}).get("result"), "text") if field.type == "formula" else kind.grid
         columns.append({
-            "key": field.key, "title": str(field.display_label), "type": kind.grid, "visible": field.in_grid,
+            "key": field.key, "title": str(field.display_label), "type": grid, "visible": field.in_grid,
             "editable": editable and field.type in GRID_EDITABLE, "options": field.option_values,
             "optionLabels": {v: str(label) for v, label in field.option_choices}, "decimals": ft.decimals(field),
             "unit": ft.config(field).get("unit", ""),
@@ -83,17 +84,35 @@ def _related_texts(table, records, fields, user):
     return {key: ", ".join(values) for key, values in texts.items()}
 
 
+def _formula_cell(record, field, context):
+    try:
+        return formula.grid_value(field, formula.compute(record, field, context))
+    except formula.Hidden:
+        return _("nicht sichtbar")
+    except formula.FormulaError:
+        return "#Fehler"
+
+
 def rows(table, user, ids=None):
-    fields = [f for f in services.fields_of(table) if f.type != "secret" and ft.TYPES.get(f.type) and ft.TYPES[f.type].storage != "computed"]
+    fields = [f for f in services.fields_of(table) if f.type != "secret" and ft.TYPES.get(f.type)]
     records = Record.objects.filter(table=table)
     if ids is not None:
         records = records.filter(pk__in=ids)
     records = list(records.order_by("title"))
-    related = _related_texts(table, records, [f for f in fields if not services.holds_value(f)], user)
+    for record in records:  # the list knows its table: no query per record when formulas ask for it
+        record.table = table
+    related = _related_texts(table, records, [f for f in fields if f.type in ("link", "file", "image")], user)
+    formulas = [f for f in fields if f.type == "formula"]
+    context = formula.Context(user)
+    if formulas:
+        context.prefetch(records)
     out = []
     for record in records:
         row = {"id": str(record.pk), "name": record.title or _("(ohne Titel)")}
         for field in fields:
+            if field.type == "formula":
+                row[field.key] = _formula_cell(record, field, context)
+                continue
             if not services.holds_value(field):
                 row[field.key] = related.get((record.pk, field.key))
                 continue
@@ -215,7 +234,8 @@ def record_field(request, key, pk, field_key):
         return response
     tree = table_masks.tree_for(table, request.user)
     named = services.title_field(table, services.fields_of(table))
-    reload_form = field_key in table_masks.condition_fields(tree) or bool(named and field_key == named.key)
+    has_formulas = any(f.type == "formula" for f in services.fields_of(table))  # computed values follow every change
+    reload_form = has_formulas or field_key in table_masks.condition_fields(tree) or bool(named and field_key == named.key)
     undoable = field.type not in ("secret", "multichoice") and str(previous) != str(saved)
     response["HX-Trigger"] = json.dumps({"fieldSaved": {
         "key": field_key, "label": str(field.display_label), "undoable": undoable, "old": str(previous),

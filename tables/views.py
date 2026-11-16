@@ -13,7 +13,7 @@ from core import audit, fieldtypes as ft
 from core.permissions import require
 from masks import i18n
 
-from . import links, masks as table_masks, services
+from . import formula, links, masks as table_masks, services
 from .models import EDIT, NONE, READ, Field, Record, Table
 
 ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench"]
@@ -41,7 +41,8 @@ def _settings_context(table, tab, **extra):
     return {
         "table": table, "tab": tab, "fields": fields, "types": services.CREATE_TYPES, "icons": ICONS,
         "link_targets": links.target_choices(),
-        "title_choices": [f for f in fields if not f.archived and f.type in services.TITLE_TYPES],
+        "title_choices": [f for f in fields if not f.archived and services.may_name(f)],
+        "presets": formula.presets(table), "expression_json": json.dumps(""),
         "roles": [{"value": value, "label": label, "right": (table.rights or {}).get(value, NONE)} for value, label in services.roles()],
         "rights": [(NONE, _("Kein Zugriff")), (READ, _("Lesen")), (EDIT, _("Bearbeiten"))],
         "has_records": Record.everything.filter(table=table).exists(),
@@ -77,7 +78,8 @@ def table_settings(request, key):
                 table.icon = request.POST.get("icon") if request.POST.get("icon") in ICONS else table.icon
                 table.in_nav = bool(request.POST.get("in_nav"))
                 chosen = request.POST.get("title_field", "")
-                if chosen and not Field.objects.filter(table=table, key=chosen, archived=False).exists():
+                named = Field.objects.filter(table=table, key=chosen, archived=False).first() if chosen else None
+                if chosen and (named is None or not services.may_name(named)):
                     raise ValidationError(_("Unbekanntes Feld."))
                 title_changed = chosen != table.title_field
                 table.title_field = chosen
@@ -127,7 +129,7 @@ def table_field_new(request, key):
         try:
             field = services.create_field(table, payload.get("label"), payload.get("type", "text"), payload.get("options"),
                                           payload.get("required"), payload.get("help_text"), payload.get("in_grid", True),
-                                          config=services.clean_config(payload.get("type", "text"), payload), request=request)
+                                          config=services.clean_config(payload.get("type", "text"), payload, table), request=request)
         except ValidationError as exc:
             return JsonResponse({"error": " ".join(exc.messages)}, status=422)
         return JsonResponse(table_masks.field_json(field))
@@ -136,7 +138,7 @@ def table_field_new(request, key):
         field = services.create_field(
             table, request.POST.get("label"), type_, request.POST.get("options"), request.POST.get("required"),
             request.POST.get("help_text"), request.POST.get("in_grid"),
-            config=services.clean_config(type_, request.POST), request=request,
+            config=services.clean_config(type_, request.POST, table), request=request,
         )
         messages.success(request, _("%(field)s wurde angelegt.") % {"field": field.display_label})
     except ValidationError as exc:
@@ -176,6 +178,8 @@ def table_field(request, key, pk):
     compatible = [(k, ft.TYPES[k].label) for k in sorted(services.COMPATIBLE.get(field.type, set()))]
     return render(request, "tables/field.html", {"table": table, "field": field, "options": options, "compatible": compatible,
                                                  "target_label": links.target_label(field) if field.type == "link" else "",
+                                                 "expression_json": json.dumps(formula.to_names(field.config.get("expression", ""), formula.Schema(table)) if field.type == "formula" else ""),
+                                                 "presets": formula.presets(table) if field.type == "formula" else [],
                                                  "filled": _filled(table, field),
                                                  "active_nav": "settings_home"})
 
@@ -200,3 +204,24 @@ def table_field_order(request, key):
         return JsonResponse({"error": _("Ungültige Anfrage.")}, status=400)
     services.set_order(table, [str(k) for k in keys][:500])
     return JsonResponse({"ok": True})
+
+
+@require("tables.design")
+@require_POST
+def table_formula_check(request, key):
+    """The field dialog's check: the result type and the first records' values, or what is wrong and where."""
+    table = get_object_or_404(Table, key=key)
+    typed = request.POST.get("expression", "")
+    field_key = request.POST.get("field", "") or None
+    schema = formula.Schema(table)
+    try:
+        stored = formula.to_keys(typed, schema)
+        result = formula.check(stored, schema, field_key)
+    except formula.FormulaError as exc:
+        marker = typed[: exc.position] if exc.position is not None else None
+        return render(request, "tables/_formula_check.html", {"problem": exc.message, "before": marker, "typed": typed})
+    labels = {"number": _("Zahl"), "text": _("Text"), "date": _("Datum"), "datetime": _("Datum und Uhrzeit"), "bool": _("Ja/Nein"), "null": _("leer")}
+    return render(request, "tables/_formula_check.html", {
+        "result": labels.get(result, _("Liste") if result.startswith("list") else _("Text")),
+        "rows": formula.preview(table, stored, user=request.user),
+    })

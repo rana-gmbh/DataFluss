@@ -45,7 +45,9 @@ class DesignTests(TableCase):
             services.create_table(" ")
         with self.assertRaisesMessage(ValidationError, "Option"):
             services.create_field(self.table, "Farbe", "choice", "")
-        for later in ("formula", "class", "erfunden"):
+        with self.assertRaisesMessage(ValidationError, "Formel"):
+            services.create_field(self.table, "Summe", "formula")
+        for later in ("class", "erfunden"):
             with self.subTest(type=later), self.assertRaisesMessage(ValidationError, "Feldtyp"):
                 services.create_field(self.table, "X", later)
         with self.assertRaisesMessage(ValidationError, "worauf"):

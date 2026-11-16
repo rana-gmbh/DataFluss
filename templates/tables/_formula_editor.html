@@ -1,0 +1,14 @@
+{% load i18n ui %}{% blocktranslate asvar formula_placeholder with example="{Preis} * {Menge}" %}z. B. {{ example }}{% endblocktranslate %}<div class="space-y-2" x-data="{ text: {{ expression_json }} }">
+  {% if presets %}<div><label class="label" for="f-preset">{% translate "Vorlage" %}</label>
+    <select id="f-preset" class="input" @change="if ($event.target.value) { text = $event.target.value; $nextTick(() => $refs.formula.dispatchEvent(new Event('input', { bubbles: true }))) } $event.target.value = ''">
+      <option value="">{% translate "Fertige Berechnung wählen …" %}</option>{% for label, expression in presets %}<option value="{{ expression }}">{{ label }}</option>{% endfor %}</select></div>{% endif %}
+  <div><label class="label" for="f-expression">{% translate "Formel" %}</label>
+    <textarea id="f-expression" class="input mono text-[13px]" rows="3" name="expression" x-ref="formula" x-model="text" spellcheck="false" maxlength="2000"
+      hx-post="{% url 'table_formula_check' table.key %}" hx-trigger="input changed delay:500ms, load" hx-target="next [data-formula-check]" hx-include="closest form"
+      placeholder="{{ formula_placeholder }}"></textarea></div>
+  <div data-formula-check aria-live="polite"></div>
+  <details class="text-[12px] muted"><summary class="cursor-pointer">{% translate "Was eine Formel kann" %}</summary>
+    <p class="mt-1">{% blocktranslate trimmed with example="{Preis}" %}Felder in geschweiften Klammern, etwa {{ example }}. Rechnen mit + − * /, Text verbinden mit &, vergleichen mit = != < > <= >=, dazu and, or, not.{% endblocktranslate %}</p>
+    <p class="mt-1">{% blocktranslate trimmed with example="{Buch}.{Preis}" %}Felder verknüpfter Datensätze: {{ example }}. Datensätze anderer Tabellen, die hierher verknüpfen, unter dem Namen auf der Gegenseite.{% endblocktranslate %}</p>
+    <p class="mt-1 mono">if isempty coalesce round floor ceil abs min max len upper lower trim concat contains today now year month day days age format count sum avg first join</p></details>
+</div>

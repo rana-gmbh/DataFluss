@@ -15,8 +15,9 @@ from .models import EDIT, NONE, READ, RIGHTS, Field, Record, Table
 MAX_TEXT = 10_000
 # Types whose value lives in Record.values; links and files have rows of their own (tables/links.py).
 VALUE_TYPES = [(key, label) for key, label in ft.choices() if ft.TYPES[key].storage == "value"]
-# Types a person can choose now; formulas follow with their own step of the plan.
-CREATE_TYPES = [(key, label) for key, label in ft.choices() if ft.TYPES[key].storage in ("value", "links", "files")]
+# Every type a field of a table may have.
+CREATE_TYPES = ft.choices()
+RESULTS = {"number": "number", "date": "date", "datetime": "datetime", "bool": "bool"}  # formula result -> list column type
 SEARCHABLE = {"text", "textarea", "email", "phone", "url", "choice", "multichoice", "number", "date", "datetime"}
 TITLE_TYPES = ("text", "email", "phone", "url", "choice", "number", "date")
 # A field may change to these types; values are converted to the new type's text.
@@ -117,19 +118,37 @@ def reveal(record, field):
     return crypto.decrypt(raw["secret"], secret_context(record, field.key)) if isinstance(raw, dict) and "secret" in raw else ""
 
 
+def may_name(field):
+    """Fields that may give a record its title: plain values, and formulas of the record's own fields."""
+    if field.type == "formula":
+        from . import formula
+
+        return not formula.uses_links(field)
+    return field.type in TITLE_TYPES
+
+
 def title_field(table, fields):
     by_key = {f.key: f for f in fields}
     chosen = by_key.get(table.title_field)
-    if chosen is not None and chosen.type != "secret":
+    if chosen is not None and chosen.type != "secret" and (chosen.type != "formula" or may_name(chosen)):
         return chosen
     return next((f for f in fields if f.type in TITLE_TYPES), None)
+
+
+def _title_text(record, field):
+    if field.type == "formula":
+        from . import formula
+
+        text, problem = formula.display(record, field)
+        return "" if problem else text
+    return str(display(record, field, localized=False))
 
 
 def refresh(record, fields=None):
     """The cached title and search text, from the record's current values."""
     fields = fields if fields is not None else fields_of(record.table)
     named = title_field(record.table, fields)
-    record.title = str(display(record, named, localized=False))[:300] if named else ""
+    record.title = _title_text(record, named)[:300] if named else ""
     words = [str(display(record, f, localized=False)) for f in fields if f.type in SEARCHABLE and stored(record, f) not in (None, "", [])]
     record.search_text = " ".join(words).lower()[:5000]
 
@@ -234,12 +253,40 @@ def create_table(name, request=None):
     return table
 
 
-def clean_config(type_, data):
+def formula_config(table, data, field_key=None):
+    """The stored formula (field keys), its result type and decimals, from the dialog; refuses what cannot work."""
+    from . import formula
+
+    if table is None:
+        raise ValidationError(_("Unbekannte Tabelle."))
+    typed = (data.get("expression") or "").strip()
+    schema = formula.Schema(table)
+    try:
+        stored = formula.to_keys(typed, schema)
+        result = formula.check(stored, schema, field_key)
+    except formula.FormulaError as exc:
+        raise ValidationError(_("Formel: %(problem)s") % {"problem": exc.message})
+    config = {"expression": stored, "result": result if result in formula.FIELD_TYPES.values() or result in ("datetime",) else "text"}
+    places = (data.get("decimals") or "").strip() if isinstance(data.get("decimals"), str) else data.get("decimals")
+    if places not in (None, ""):
+        try:
+            places = int(places)
+        except ValueError:
+            raise ValidationError(_("Bitte die Zahl der Nachkommastellen angeben (0 bis 6)."))
+        if not 0 <= places <= 6:
+            raise ValidationError(_("Bitte die Zahl der Nachkommastellen angeben (0 bis 6)."))
+        config["decimals"] = places
+    return config
+
+
+def clean_config(type_, data, table=None):
     """The type's settings from a form (number: decimals, unit, min, max; links and files: tables/links.py)."""
     if type_ in ("link", "file", "image"):
         from . import links
 
         return links.clean_config(type_, data)
+    if type_ == "formula":
+        return formula_config(table, data)
     if type_ != "number":
         return {}
     config = {}
@@ -272,6 +319,8 @@ def create_field(table, label, type_, options_text="", required=False, help_text
         raise ValidationError(_("Unbekannter Feldtyp."))
     if type_ == "link" and not (config or {}).get("target"):
         raise ValidationError(_("Bitte angeben, worauf die Verknüpfung zeigt."))
+    if type_ == "formula" and not (config or {}).get("expression"):
+        raise ValidationError(_("Bitte eine Formel eingeben."))
     options = [{"value": line.strip()[:100], "color": ""} for line in (options_text or "").splitlines() if line.strip()]
     if ft.TYPES[type_].options and not options:
         raise ValidationError(_("Bitte mindestens eine Option angeben."))
@@ -330,6 +379,8 @@ def edit_field(field, data, scope, request=None):
         field.config = clean_config("number", data)
     elif field.type in ("link", "file", "image"):
         field.config = _changed_link_config(field, data)
+    elif field.type == "formula":
+        field.config = formula_config(field.table, data, field.key)
     field.save()
 
 
