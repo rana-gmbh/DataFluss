@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 12:48+0100\n"
+"POT-Creation-Date: 2026-11-16 13:01+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1572,6 +1572,54 @@ msgstr "根據出生日期計算年齡"
 msgid "Text zusammensetzen"
 msgstr "組合文字"
 
+msgid "Nicht importieren"
+msgstr "不匯入"
+
+#, python-format
+msgid "%(field)s (Verknüpfung über den Namen)"
+msgstr "%(field)s（依名稱關聯）"
+
+msgid "Immer neue Datensätze anlegen"
+msgstr "一律新增記錄"
+
+msgid "Bestehende Datensätze erkennen über"
+msgstr "透過以下欄位識別既有記錄"
+
+#, python-format
+msgid "%(field)s: „%(value)s“ passt nicht."
+msgstr "%(field)s：「%(value)s」不合適。"
+
+#, python-format
+msgid "%(field)s: „%(value)s“ nicht gefunden"
+msgstr "%(field)s：找不到「%(value)s」"
+
+msgid "leer"
+msgstr "空白"
+
+msgid "Kommt in der Datei mehrfach vor"
+msgstr "在檔案中出現多次"
+
+#, python-format
+msgid "%(field)s fehlt"
+msgstr "缺少 %(field)s"
+
+msgid "Dieser Import wurde bereits bearbeitet."
+msgstr "此次匯入已處理過。"
+
+#, python-format
+msgid "%(field)s: Diesen Wert hat schon ein anderer Datensatz."
+msgstr "%(field)s：已有其他記錄使用此值。"
+
+msgid "Nur innerhalb von 24 Stunden möglich."
+msgstr "僅限 24 小時內操作。"
+
+msgid "Datensätze aus diesem Import wurden seither geändert."
+msgstr "此次匯入的記錄此後已被修改。"
+
+#, python-format
+msgid "Der Import wurde nicht zurückgenommen. %(reason)s"
+msgstr "匯入未撤銷。%(reason)s"
+
 msgid "Bitte angeben, worauf die Verknüpfung zeigt."
 msgstr "請選擇關聯指向的對象。"
 
@@ -1602,10 +1650,6 @@ msgstr "%(field)s 無法在此輸入。"
 #, python-format
 msgid "%(field)s: höchstens %(n)s Zeichen."
 msgstr "%(field)s：最多 %(n)s 個字元。"
-
-#, python-format
-msgid "%(field)s: Diesen Wert hat schon ein anderer Datensatz."
-msgstr "%(field)s：已有其他記錄使用此值。"
 
 #, python-format
 msgid "Unbekanntes Feld %(key)s."
@@ -1678,9 +1722,6 @@ msgstr "%(field)s 已封存，值會保留。"
 
 msgid "Der Typ wurde geändert."
 msgstr "類型已變更。"
-
-msgid "leer"
-msgstr "空白"
 
 msgid "Liste"
 msgstr "清單"
@@ -3404,6 +3445,9 @@ msgstr "設計表格"
 msgid "Neuer Datensatz"
 msgstr "新增記錄"
 
+msgid "Importieren"
+msgstr "匯入"
+
 msgid "Löschen …"
 msgstr "刪除…"
 
@@ -3483,9 +3527,6 @@ msgstr "永久刪除此表格及其所有欄位？"
 msgid "Eine Tabelle mit Datensätzen lässt sich nur archivieren."
 msgstr "包含記錄的表格只能封存。"
 
-msgid "Importieren"
-msgstr "匯入"
-
 msgid ""
 "CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
 "etwas gespeichert wird."
@@ -3564,15 +3605,6 @@ msgstr "目標欄位"
 #, python-format
 msgid "Ziel für %(header)s"
 msgstr "%(header)s 的目標欄位"
-
-msgid "Bestehende Personen erkennen über"
-msgstr "辨識現有人員的依據"
-
-msgid "Ninox-ID (aus dem Bildpfad)"
-msgstr "Ninox ID（取自圖片路徑）"
-
-msgid "Name und Geburtsdatum"
-msgstr "姓名和出生日期"
 
 msgid "Verwerfen"
 msgstr "捨棄"
@@ -3699,9 +3731,6 @@ msgstr "欄位，每行一個（* = 保密）"
 msgid "Daten"
 msgstr "資料"
 
-msgid "Nicht importieren"
-msgstr "不匯入"
-
 msgid "Bildpfad (Ninox)"
 msgstr "圖片路徑（Ninox）"
 
@@ -3730,15 +3759,6 @@ msgstr "電子郵件將轉為小寫"
 msgid "Seriennummer %(serial)s: führende Nullen fehlen möglicherweise"
 msgstr "序號 %(serial)s：可能缺少前導零"
 
-msgid "Kommt in der Datei mehrfach vor"
-msgstr "在檔案中出現多次"
-
-msgid "Dieser Import wurde bereits bearbeitet."
-msgstr "此次匯入已處理過。"
-
-msgid "Nur innerhalb von 24 Stunden möglich."
-msgstr "僅限 24 小時內操作。"
-
 msgid "Personen aus diesem Import wurden seither geändert."
 msgstr "此次匯入的人員此後已被修改。"
 
@@ -3749,15 +3769,27 @@ msgid "Zu diesem Import gibt es inzwischen weitere Einträge."
 msgstr "此次匯入現已有其他相關條目。"
 
 #, python-format
-msgid "Der Import wurde nicht zurückgenommen. %(reason)s"
-msgstr "匯入未撤銷。%(reason)s"
-
-#, python-format
 msgid "Datum nicht lesbar: %(value)s"
 msgstr "無法辨識日期：%(value)s"
 
+msgid "Ninox-ID (aus dem Bildpfad)"
+msgstr "Ninox ID（取自圖片路徑）"
+
+msgid "Name und Geburtsdatum"
+msgstr "姓名和出生日期"
+
+msgid "Bestehende Personen erkennen über"
+msgstr "辨識現有人員的依據"
+
+#, python-format
+msgid "Tabelle: %(name)s"
+msgstr "表格：%(name)s"
+
 msgid "Über die Sicherung zurückzunehmen."
 msgstr "可透過備份復原。"
+
+msgid "Die Tabelle gibt es nicht mehr."
+msgstr "該表格已不存在。"
 
 msgid "Bitte eine Datei wählen."
 msgstr "請選擇檔案。"

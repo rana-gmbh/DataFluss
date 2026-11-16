@@ -436,3 +436,38 @@ def backlinks(request, kind, pk):
     if not groups:
         return HttpResponse("")
     return render(request, "tables/_backlinks.html", {"groups": groups})
+
+
+def export_rows(table, user, ids, keys):
+    """Rows for CSV or Excel: each cell as shown on screen, in the order of `ids` (what the list shows)."""
+    fields = {f.key: f for f in services.fields_of(table) if f.type != "secret"}
+    wanted = [k for k in keys]
+    try:
+        chosen = [uuid.UUID(str(i)) for i in ids][:50000]
+    except ValueError:
+        chosen = []
+    records = {r.pk: r for r in Record.objects.filter(table=table, pk__in=chosen)}
+    for record in records.values():
+        record.table = table
+    listed = [records[i] for i in chosen if i in records]
+    related = _related_texts(table, listed, [f for f in fields.values() if f.type in ("link", "file", "image")], user)
+    context = formula.Context(user)
+    if any(f.type == "formula" for f in fields.values()):
+        context.prefetch(listed)
+    out = []
+    for record in listed:
+        row = []
+        for key in wanted:
+            field = fields.get(key)
+            if key == "name":
+                row.append(record.title)
+            elif field is None:
+                row.append("")
+            elif field.type == "formula":
+                row.append(formula.display(record, field, context)[0])
+            elif field.type in ("link", "file", "image"):
+                row.append(related.get((record.pk, key), ""))
+            else:
+                row.append(services.display(record, field, localized=True))
+        out.append(row)
+    return out

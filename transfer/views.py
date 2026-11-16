@@ -17,7 +17,7 @@ from people.views import person_rows
 from sync import journal
 from vault.models import Platform
 
-from . import exporters, importer
+from . import exporters, importer, targets
 from .models import ImportPreset, ImportSession
 from .parsers import read_table
 
@@ -41,11 +41,16 @@ def home(request):
     can_import = request.user.can("data.import")
     sessions = list(ImportSession.objects.select_related("user")[:10])
     for session in sessions:
+        target = targets.target_for(session.entity)
         if session.entity == NINOX:
             session.undo_blocker = _("Über die Sicherung zurückzunehmen.")
+        elif target is None:
+            session.undo_blocker = _("Die Tabelle gibt es nicht mehr.")
         else:
-            session.undo_blocker = importer.undo_blocker(session) if can_import and session.status == ImportSession.DONE else ""
-    return render(request, "transfer/home.html", {"sessions": sessions, "can_import": can_import})
+            session.target_label = target.label
+            session.undo_blocker = target.undo_blocker(session) if target.may_import(request.user) and session.status == ImportSession.DONE else ""
+    return render(request, "transfer/home.html", {"sessions": sessions, "can_import": can_import, "entities": targets.choices(request.user),
+                                                  "chosen": request.GET.get("bereich", "")})
 
 
 @require("data.import")
@@ -53,7 +58,10 @@ def home(request):
 def upload(request):
     file = request.FILES.get("file")
     entity = request.POST.get("entity", "pupil")
-    if not file or entity not in ("pupil", "staff"):
+    target = targets.target_for(entity)
+    if target is None or not target.may_import(request.user):
+        raise PermissionDenied
+    if not file:
         messages.error(request, _("Bitte eine Datei wählen."))
         return redirect("transfer")
     if file.size > MAX_BYTES:
@@ -69,7 +77,7 @@ def upload(request):
         return redirect("transfer")
     session = ImportSession.objects.create(
         filename=file.name[:200], entity=entity, headers=headers, rows=rows, user=request.user,
-        mapping=importer.auto_mapping(headers, entity),
+        mapping=target.auto_mapping(headers), match_key=target.default_match(),
     )
     return redirect("transfer_mapping", pk=session.pk)
 
@@ -78,10 +86,13 @@ def upload(request):
 @require_http_methods(["GET", "POST"])
 def mapping(request, pk):
     session = get_object_or_404(ImportSession, pk=pk, status__in=[ImportSession.UPLOADED, ImportSession.PREVIEWED])
+    target = _target(request, session)
     if request.method == "POST":
-        session.mapping = {h: request.POST.get(f"map_{i}", "") for i, h in enumerate(session.headers)}
-        session.match_key = request.POST.get("match_key", session.match_key)
-        session.report = importer.analyse(session)
+        known = {key for key, _label in target.targets()}
+        session.mapping = {h: value if (value := request.POST.get(f"map_{i}", "")) in known else "" for i, h in enumerate(session.headers)}
+        chosen = request.POST.get("match_key", session.match_key)
+        session.match_key = chosen if chosen in dict(target.match_keys()) else target.default_match()
+        session.report = target.analyse(session)
         session.status = ImportSession.PREVIEWED
         session.save()
         return redirect("transfer_preview", pk=pk)
@@ -90,13 +101,22 @@ def mapping(request, pk):
         samples = [row[index] for row in session.rows[:40] if index < len(row) and row[index]][:3]
         columns.append({"index": index, "header": header, "target": session.mapping.get(header, ""), "samples": samples})
     return render(request, "transfer/mapping.html", {
-        "session": session, "columns": columns, "targets": importer.targets(session.entity), "active_nav": "transfer",
+        "session": session, "columns": columns, "targets": target.targets(), "match_keys": target.match_keys(),
+        "match_label": target.match_label(), "target_label": target.label, "active_nav": "transfer",
     })
+
+
+def _target(request, session):
+    target = targets.target_for(session.entity)
+    if target is None or not target.may_import(request.user):
+        raise PermissionDenied
+    return target
 
 
 @require("data.import")
 def preview(request, pk):
     session = get_object_or_404(ImportSession, pk=pk, status=ImportSession.PREVIEWED)
+    _target(request, session)
     return render(request, "transfer/preview.html", {"session": session, "report": session.report, "rows": session.report.get("rows", [])[:300], "total": len(session.rows), "active_nav": "transfer"})
 
 
@@ -104,8 +124,9 @@ def preview(request, pk):
 @require_POST
 def run_commit(request, pk):
     session = get_object_or_404(ImportSession, pk=pk)
+    target = _target(request, session)
     try:
-        result = importer.commit(session)
+        result = target.commit(session, request.user)
     except importer.ImportClosed as exc:
         messages.error(request, str(exc))
         return redirect("transfer")
@@ -120,8 +141,9 @@ def undo(request, pk):
     session = get_object_or_404(ImportSession, pk=pk)
     if session.entity == NINOX:
         return HttpResponseBadRequest()
+    target = _target(request, session)
     try:
-        importer.rollback(session)
+        target.rollback(session)
     except importer.ImportClosed as exc:
         messages.error(request, str(exc))
         return redirect("transfer")
@@ -145,7 +167,11 @@ def export_rows(request):
     fmt = payload.get("format", "csv")
     columns = [c for c in payload.get("columns", []) if isinstance(c, dict) and c.get("key")]
     ids = payload.get("ids") or []
-    if entity not in ("pupil", "staff") or fmt not in ("csv", "xlsx") or not columns:
+    if fmt not in ("csv", "xlsx") or not columns:
+        return HttpResponseBadRequest()
+    if (entity or "").startswith("table:"):
+        return _export_table(request, entity.removeprefix("table:"), fmt, columns, ids)
+    if entity not in ("pupil", "staff"):
         return HttpResponseBadRequest()
     by_id = {r["id"]: r for r in person_rows(entity, ids=ids)}
     rows = [[by_id[i].get(c["key"], "") for c in columns] for i in ids if i in by_id]
@@ -153,6 +179,21 @@ def export_rows(request):
     content = exporters.to_csv(titles, rows) if fmt == "csv" else exporters.to_xlsx(titles, rows)
     audit.log("export", f"Export {entity}: {len(rows)} Zeilen als {fmt}", request=request)
     return _download(content, f"export-{entity}-{timezone.localdate().isoformat()}", fmt)
+
+
+def _export_table(request, key, fmt, columns, ids):
+    from tables import services as table_services
+    from tables.models import Table
+    from tables.views_records import export_rows as table_rows
+
+    table = Table.objects.filter(key=key).first()
+    if table is None or not table_services.may_read(request.user, table):
+        raise PermissionDenied
+    rows = table_rows(table, request.user, ids, [c["key"] for c in columns])
+    titles = [c.get("title") or c["key"] for c in columns]
+    content = exporters.to_csv(titles, rows) if fmt == "csv" else exporters.to_xlsx(titles, rows, sheet=table.display_name)
+    audit.log("export", f"Export Tabelle {table.name}: {len(rows)} Zeilen als {fmt}", request=request, target=table.pk)
+    return _download(content, f"export-{table.key}-{timezone.localdate().isoformat()}", fmt)
 
 
 @require("data.export")

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 12:48+0100\n"
+"POT-Creation-Date: 2026-11-16 13:01+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1645,6 +1645,54 @@ msgstr "Age from date of birth"
 msgid "Text zusammensetzen"
 msgstr "Join text"
 
+msgid "Nicht importieren"
+msgstr "Do not import"
+
+#, python-format
+msgid "%(field)s (Verknüpfung über den Namen)"
+msgstr "%(field)s (link by name)"
+
+msgid "Immer neue Datensätze anlegen"
+msgstr "Always create new records"
+
+msgid "Bestehende Datensätze erkennen über"
+msgstr "Recognise existing records by"
+
+#, python-format
+msgid "%(field)s: „%(value)s“ passt nicht."
+msgstr "%(field)s: “%(value)s” does not fit."
+
+#, python-format
+msgid "%(field)s: „%(value)s“ nicht gefunden"
+msgstr "%(field)s: “%(value)s” not found"
+
+msgid "leer"
+msgstr "empty"
+
+msgid "Kommt in der Datei mehrfach vor"
+msgstr "Appears more than once in the file"
+
+#, python-format
+msgid "%(field)s fehlt"
+msgstr "%(field)s is missing"
+
+msgid "Dieser Import wurde bereits bearbeitet."
+msgstr "This import has already been processed."
+
+#, python-format
+msgid "%(field)s: Diesen Wert hat schon ein anderer Datensatz."
+msgstr "%(field)s: Another record already has this value."
+
+msgid "Nur innerhalb von 24 Stunden möglich."
+msgstr "Only possible within 24 hours."
+
+msgid "Datensätze aus diesem Import wurden seither geändert."
+msgstr "Records from this import have been changed since."
+
+#, python-format
+msgid "Der Import wurde nicht zurückgenommen. %(reason)s"
+msgstr "The import was not undone. %(reason)s"
+
 msgid "Bitte angeben, worauf die Verknüpfung zeigt."
 msgstr "Please choose what the link points to."
 
@@ -1675,10 +1723,6 @@ msgstr "%(field)s cannot be entered here."
 #, python-format
 msgid "%(field)s: höchstens %(n)s Zeichen."
 msgstr "%(field)s: at most %(n)s characters."
-
-#, python-format
-msgid "%(field)s: Diesen Wert hat schon ein anderer Datensatz."
-msgstr "%(field)s: Another record already has this value."
 
 #, python-format
 msgid "Unbekanntes Feld %(key)s."
@@ -1751,9 +1795,6 @@ msgstr "%(field)s has been archived. The values are kept."
 
 msgid "Der Typ wurde geändert."
 msgstr "The type has been changed."
-
-msgid "leer"
-msgstr "empty"
 
 msgid "Liste"
 msgstr "List"
@@ -3576,6 +3617,9 @@ msgstr "Design table"
 msgid "Neuer Datensatz"
 msgstr "New record"
 
+msgid "Importieren"
+msgstr "Import"
+
 msgid "Löschen …"
 msgstr "Delete …"
 
@@ -3663,9 +3707,6 @@ msgstr "Delete the table with all its fields for good?"
 msgid "Eine Tabelle mit Datensätzen lässt sich nur archivieren."
 msgstr "A table with records can only be archived."
 
-msgid "Importieren"
-msgstr "Import"
-
 msgid ""
 "CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
 "etwas gespeichert wird."
@@ -3748,15 +3789,6 @@ msgstr "Target"
 #, python-format
 msgid "Ziel für %(header)s"
 msgstr "Target for %(header)s"
-
-msgid "Bestehende Personen erkennen über"
-msgstr "Match existing people by"
-
-msgid "Ninox-ID (aus dem Bildpfad)"
-msgstr "Ninox ID (from the image path)"
-
-msgid "Name und Geburtsdatum"
-msgstr "Name and date of birth"
 
 msgid "Verwerfen"
 msgstr "Discard"
@@ -3890,9 +3922,6 @@ msgstr "Fields, one per line (* = secret)"
 msgid "Daten"
 msgstr "Data"
 
-msgid "Nicht importieren"
-msgstr "Do not import"
-
 msgid "Bildpfad (Ninox)"
 msgstr "Image path (Ninox)"
 
@@ -3921,15 +3950,6 @@ msgstr "Email will be lowercased"
 msgid "Seriennummer %(serial)s: führende Nullen fehlen möglicherweise"
 msgstr "Serial number %(serial)s: leading zeros may be missing"
 
-msgid "Kommt in der Datei mehrfach vor"
-msgstr "Appears more than once in the file"
-
-msgid "Dieser Import wurde bereits bearbeitet."
-msgstr "This import has already been processed."
-
-msgid "Nur innerhalb von 24 Stunden möglich."
-msgstr "Only possible within 24 hours."
-
 msgid "Personen aus diesem Import wurden seither geändert."
 msgstr "People from this import have been changed since."
 
@@ -3940,15 +3960,27 @@ msgid "Zu diesem Import gibt es inzwischen weitere Einträge."
 msgstr "There are now further entries for this import."
 
 #, python-format
-msgid "Der Import wurde nicht zurückgenommen. %(reason)s"
-msgstr "The import was not undone. %(reason)s"
-
-#, python-format
 msgid "Datum nicht lesbar: %(value)s"
 msgstr "Unreadable date: %(value)s"
 
+msgid "Ninox-ID (aus dem Bildpfad)"
+msgstr "Ninox ID (from the image path)"
+
+msgid "Name und Geburtsdatum"
+msgstr "Name and date of birth"
+
+msgid "Bestehende Personen erkennen über"
+msgstr "Match existing people by"
+
+#, python-format
+msgid "Tabelle: %(name)s"
+msgstr "Table: %(name)s"
+
 msgid "Über die Sicherung zurückzunehmen."
 msgstr "Can be undone through the backup."
+
+msgid "Die Tabelle gibt es nicht mehr."
+msgstr "The table no longer exists."
 
 msgid "Bitte eine Datei wählen."
 msgstr "Please choose a file."

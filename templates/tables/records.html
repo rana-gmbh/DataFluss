@@ -27,6 +27,12 @@
       <button class="btn" @click="open = !open">{% icon 'columns' %}{% translate "Spalten" %}</button>
       <div class="absolute z-30 mt-1 w-56 max-h-80 overflow-y-auto surface p-2 shadow-lg" x-show="open" x-cloak id="grid-columns"></div>
     </div>
+    <div class="flex-1"></div>
+    {% if can_edit and request.user|can:'data.import' %}<a class="btn" href="{% url 'transfer' %}?bereich=table:{{ table.key }}">{% icon 'upload' %}{% translate "Importieren" %}</a>{% endif %}
+    {% if request.user|can:'data.export' %}
+    <button class="btn" id="grid-export-xlsx">{% icon 'download' %}Excel</button>
+    <button class="btn" id="grid-export-csv">{% icon 'download' %}CSV</button>
+    {% endif %}
   </div>
   <div id="grid-chips" class="hidden flex-wrap items-center gap-1.5 px-2 py-1.5 border-b" style="border-color: var(--line)"></div>
   <div id="grid-bulk" class="hidden flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line); background: var(--accent-soft)">
@@ -38,5 +44,6 @@
 </div>
 {% include "core/_record_panel.html" %}
 </div>
+<form id="export-form" method="post" action="{% url 'export_rows' %}" class="hidden">{% csrf_token %}<input type="hidden" name="payload"></form>
 <form id="print-form" method="post" action="{% url 'report_run' %}" target="_blank" class="hidden">{% csrf_token %}<input type="hidden" name="template"><input type="hidden" name="ids"></form>
 {% endblock %}
