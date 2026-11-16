@@ -36,6 +36,16 @@ class TourTests(AppTestCase):
             if step["anchor"] not in ("database", "sync"):  # only in the desktop client
                 self.assertIn(f'data-tour="{step["anchor"]}"', html, step["anchor"])
 
+    def test_own_tables_get_their_step_once_there_are_some(self):
+        from tables import services
+
+        self.login(self.it)
+        self.assertNotIn("nav-tables", [s["anchor"] for s in self.steps(self.client.get(reverse("dashboard")))])
+        services.create_table("Termine")
+        page = self.client.get(reverse("dashboard"))
+        self.assertIn("nav-tables", [s["anchor"] for s in self.steps(page)])
+        self.assertContains(page, 'data-tour="nav-tables"')
+
     def test_only_known_tours_are_stored(self):
         self.login(self.it)
         self.client.post(reverse("tour_seen"), {"tour": "irgendwas"})

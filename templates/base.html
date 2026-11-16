@@ -72,7 +72,7 @@
       <div>
         <div class="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wide muted">{{ title }}</div>
         {% for label, url_name, icon_name, cap in items %}
-        <a href="{% if url_name|slice:':1' == '/' %}{{ url_name }}{% else %}{% url url_name %}{% endif %}" data-tour="nav-{{ url_name }}" class="nav-link {% if request.resolver_match.url_name == url_name or active_nav == url_name %}active{% endif %}" {% if request.resolver_match.url_name == url_name or active_nav == url_name %}aria-current="page"{% endif %}>
+        <a href="{% if url_name|slice:':1' == '/' %}{{ url_name }}{% else %}{% url url_name %}{% endif %}" data-tour="{% if url_name|slice:':10' == '/tabellen/' %}{% if forloop.first %}nav-tables{% endif %}{% else %}nav-{{ url_name }}{% endif %}" class="nav-link {% if request.resolver_match.url_name == url_name or active_nav == url_name %}active{% endif %}" {% if request.resolver_match.url_name == url_name or active_nav == url_name %}aria-current="page"{% endif %}>
           {% icon icon_name 'text-[16px]' %}<span>{{ label }}</span>
         </a>
         {% endfor %}

@@ -18,6 +18,8 @@ DataFluss keeps structured data — people, classes, devices, logins — in data
   after days without a connection.
 - **Starts from a module.** Begin with *Schulverwaltung* (school administration) and shape it with your
   own fields, forms and print templates.
+- **Your own tables.** Design tables with links, computed fields, record pages and printouts, or start
+  from a template such as the library. No code needed.
 - **Prints well.** Design ID cards, lists and letters, and print them as PDF.
 - **Open source** under the AGPL-3.0.
 
@@ -52,10 +54,12 @@ A module brings ready-made sections, forms, print templates and sample data.
 | Module | Contains | |
 |---|---|---|
 | **Schulverwaltung** | Overview, people (pupils, staff, parents, classes), IT (devices, repairs, logins), printing and data exchange, administration | Included |
-| Further basic modules | Planned, on a table builder for your own databases | Included |
+| **Own tables** | Your own tables with links, formulas, record pages, printouts, import and export; templates such as *Bibliothek* | Included |
+| Further basic modules | Templates on own tables, as signed files without code | Included |
 | Private modules | Built for one organisation, delivered as signed add-ons by its server | On request |
 
 How modules plug in, and how a signed module reaches the computers of an organisation: [docs/modules.md](docs/modules.md).
+Own tables, formulas and templates: [docs/tables.md](docs/tables.md).
 
 ## Run a server
 

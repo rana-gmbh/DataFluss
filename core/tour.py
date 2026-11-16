@@ -15,10 +15,12 @@ STEPS = [
      "text": _("Personen, Klassen, Geräte und mehr finden: hier klicken oder ⌘K (unter Windows Strg+K) drücken.")},
     {"anchor": "nav-pupils", "capability": "person.view", "title": _("Listen"),
      "text": _("In den Listen ändert ein Doppelklick eine Zelle. Spalten, Filter und Sortierung lassen sich als eigene Ansicht speichern.")},
+    {"anchor": "nav-tables", "title": _("Eigene Tabellen"),
+     "text": _("Tabellen, die Ihre Schule selbst gestaltet: mit eigenen Feldern, Verknüpfungen und Berechnungen. Listen und Datensätze funktionieren wie bei den Personen.")},
     {"anchor": "nav-reports", "capability": "print.run", "title": _("Drucken"),
      "text": _("Druckvorlagen für Ausweise, Listen und Briefe, mit einem Designer zum Anpassen.")},
     {"anchor": "nav-settings_home", "capability": "admin.audit", "title": _("Einstellungen"),
-     "text": _("Masken und eigene Felder, Benutzer, Sicherung und Synchronisation.")},
+     "text": _("Masken, eigene Felder und Tabellen, Benutzer, Sicherung und Synchronisation.")},
     {"anchor": "database", "title": _("Datenbanken"),
      "text": _("Hier wechseln Sie zwischen den Datenbanken auf diesem Computer.")},
     {"anchor": "sync", "title": _("Abgleich"),
@@ -37,5 +39,14 @@ def steps_for(user):
         for step in extra:
             after = next((i for i, s in enumerate(steps) if s["anchor"] == step.get("after")), len(steps) - 1)
             steps.insert(after + 1, step)
+    if not _has_tables(user):
+        steps = [s for s in steps if s["anchor"] != "nav-tables"]
     return [{"anchor": s["anchor"], "title": str(s["title"]), "text": str(s["text"])}
             for s in steps if not s.get("capability") or user.can(s["capability"])]
+
+
+def _has_tables(user):
+    """Own tables in this user's sidebar (tables/services.py nav_items): only then is there something to show."""
+    from tables.services import nav_items
+
+    return bool(nav_items(user))

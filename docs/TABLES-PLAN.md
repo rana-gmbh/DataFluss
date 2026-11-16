@@ -326,3 +326,23 @@ slip and a list of overdue loans.
 - Should a later version get server-assigned running numbers?
 - Server-side paging for lists, if the performance test asks for it.
 - Whether roles other than IT may design tables (the capability allows granting it later).
+
+## Status (2026-11-16)
+
+All nine steps are built and committed, for release as 1.2.0 (servers first: new migrations in `tables`,
+`masks`, `prints`, `transfer` and `core`).
+
+Measured with 20,000 records, 33 fields and 3 formula fields on PostgreSQL: the list's data in 1.24 s,
+a record page in 33 ms, a print of 500 records in 2.5 s (125 pages). Paging on the server is not needed
+for now; the time the browser takes to draw such a list was not measured.
+
+Where the build differs from the plan:
+
+- Records that link to a record, a person or a device show in a fixed section "Verknüpft in eigenen
+  Tabellen" below the page, not as a block placed in the mask designer, so they are never hidden.
+- The checklist item "Erste eigene Tabelle anlegen" appears only in databases without Schulverwaltung;
+  in existing school databases it would reopen a finished checklist.
+- Prints leave secret fields out.
+- A module template's formulas are written with field keys, not names.
+- Not done: screenshots for the README, and a click-through of the new start-screen cards in the built
+  desktop app.
