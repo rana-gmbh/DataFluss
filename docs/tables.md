@@ -137,7 +137,9 @@ back within 24 hours, unless its records were changed since.
 
 ## Printing
 
-Every table is a print source: **Druckvorlagen → Neue Vorlage → Tabelle: …**. Fields print as shown on
+Every table is a print source: **Druckvorlagen → Neue Vorlage → Tabelle: …**. A new printout of a table
+does not start empty: the title, the first image as photo, the logo, then every field as name and value
+in two columns and long texts below; remove or rearrange what is not wanted. Fields print as shown on
 screen, the first image field as the photo. The list element ("Liste über Verknüpfung") prints the
 records of a link field or of a table linking here, with the columns you choose. Print from the table's
 list (selected or all records), from a record page or from the side panel.

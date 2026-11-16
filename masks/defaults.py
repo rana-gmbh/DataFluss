@@ -1,4 +1,4 @@
-"""Idempotent starting configuration, modelled on the current Ninox database."""
+"""Idempotent starting configuration of the Schulverwaltung: fields, masks, printouts, platforms, views."""
 from core.models import SavedView, SchoolSettings
 from devices.models import AssetCategory
 from prints.models import PrintTemplate
@@ -53,7 +53,7 @@ def _kv(*keys):
 
 
 TEMPLATES = [
-    ("Zugangsdaten Schüler", "Ersetzt das Ninox-Layout Passwörter", "pupil", {"page": {"preset": "a4"}, "rows": [
+    ("Zugangsdaten Schüler", "Die Zugänge eines Schülers zum Aushändigen", "pupil", {"page": {"preset": "a4"}, "rows": [
         _header(), row((12, [el("logins", hide_empty=True)])),
         row((2, [el("qr", value="https://www.office.com", size_mm=16)]), (10, [el("text", text="Anmeldung: QR-Code scannen. Bitte das Passwort beim ersten Login ändern.", size=8)]), valign="center"),
     ]}),
@@ -62,14 +62,14 @@ TEMPLATES = [
         row((12, [el("logins", platforms=["m365"], hide_empty=False)])),
         row((12, [el("text", text="{{schule}}", size=7, color="#667788")])),
     ]}),
-    ("Stammblatt Schüler", "Ersetzt das Ninox-Layout Schüler", "pupil", {"page": {"preset": "a4", "footer_text": ""}, "rows": [
+    ("Stammblatt Schüler", "Alle Angaben eines Schülers auf einer Seite", "pupil", {"page": {"preset": "a4", "footer_text": ""}, "rows": [
         _header(), row((12, [el("heading", text="Allgemeine Daten")])),
         row((6, _kv("first_name", "last_name", "klasse", "birth_date", "birth_place", "gender")), (6, _kv("entry_date", "exit_date", "grade_level", "school_type", "bus", "dyslexia"))),
         row((12, [el("heading", text="IT Informationen")])), row((12, _kv("email", "geraet", "seriennummer"))),
         row((12, [el("devices")])), row((12, [el("heading", text="Schäden und Support")])), row((12, [el("cases")])),
     ]}),
-    ("SuS", "Ninox-Layout SuS: Kopfbereich", "pupil", {"page": {"preset": "a4", "footer_text": ""}, "rows": [_header()]}),
-    ("Stammblatt Personal", "Ersetzt das Ninox-Layout Personal", "staff", {"page": {"preset": "a4", "footer_text": ""}, "rows": [
+    ("SuS", "Nur der Kopfbereich, als Grundlage für eigene Vorlagen", "pupil", {"page": {"preset": "a4", "footer_text": ""}, "rows": [_header()]}),
+    ("Stammblatt Personal", "Alle Angaben einer Lehrkraft auf einer Seite", "staff", {"page": {"preset": "a4", "footer_text": ""}, "rows": [
         row((2, [el("photo", w_mm=24, h_mm=33.6)]), (8, [el("name", size=17), el("text", text="{{category}}", color="#556677")]), (2, [el("logo", w_mm=22)]), valign="center"),
         row((12, [el("heading", text="Grunddaten")])),
         row((6, _kv("salutation", "abbreviation", "birth_date", "entry_date", "exit_date")), (6, _kv("mobile", "phone_private", "phone_office", "phone_emergency", "private_email"))),

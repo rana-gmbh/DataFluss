@@ -359,3 +359,18 @@ class NewOptionImportTests(TableCase):
         services.set_rights(self.table, {Role.SEKRETARIAT: EDIT})
         session = self.session(self.sek)
         self.assertEqual((session.report["new_options"], session.report["error"]), ([], 1))
+
+
+class StarterPrintTests(TableCase):
+    def test_a_new_printout_of_a_table_starts_with_its_fields(self):
+        from prints.models import PrintTemplate
+
+        services.create_field(self.table, "Notiz", "textarea")
+        momo = services.create_record(self.table, {"f_name": "Momo", "f_preis": "12,5", "f_notiz": "Lieblingsbuch"})
+        self.login(self.it)
+        self.client.post(reverse("template_new"), {"name": "Buchblatt", "source": "table:buecher"})
+        template = PrintTemplate.objects.get(name="Buchblatt")
+        keys = [item.get("key") for row in template.tree["rows"] for col in row["cols"] for item in col["items"]]
+        self.assertEqual([k for k in keys if k], ["f_preis", "f_genre", "f_isbn", "f_notiz"])
+        pdf = self.client.post(reverse("report_run"), {"template": template.pk, "ids": str(momo.pk)})
+        self.assertEqual((pdf.status_code, pdf["Content-Type"]), (200, "application/pdf"))

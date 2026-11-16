@@ -110,7 +110,14 @@ def template_new(request):
         if source not in dict(available_sources(request.user)):
             raise Http404
         name = request.POST.get("name", "").strip() or _("Neue Vorlage")
-        template = PrintTemplate.objects.create(name=name, source=source, tree={"page": {"preset": "a4"}, "rows": []})
+        tree = {"page": {"preset": "a4"}, "rows": []}
+        if source.startswith("table:"):  # an own table starts with its fields laid out, not an empty page
+            from tables import prints as table_prints
+            from tables.models import Table
+
+            table = Table.objects.filter(key=source.removeprefix("table:")).first()
+            tree = table_prints.starter_tree(table) if table else tree
+        template = PrintTemplate.objects.create(name=name, source=source, tree=tree)
         return redirect("template_designer", pk=template.pk)
     return redirect("reports")
 

@@ -22,6 +22,27 @@ SAMPLES = {"text": "Beispieltext", "textarea": "Ein längerer Beispieltext\nübe
            "file": "Dokument.pdf", "image": "", "formula": "42"}
 
 
+def starter_tree(table):
+    """What a new printout of a table starts with, instead of an empty page: the title (and the first image
+    as photo) in the head, then every field as name and value in two columns, long texts below."""
+    fields = [f for f in services.fields_of(table) if f.type != "secret"]
+    named = services.title_field(table, fields)
+    photo = next((f for f in fields if f.type == "image"), None)
+    short = [f for f in fields if f.type not in ("textarea", "file", "image") and not (named and f.key == named.key)]
+    long = [f for f in fields if f.type == "textarea"]
+    head = ([{"w": 2, "items": [{"type": "photo", "w_mm": 24, "h_mm": 33.6}]}] if photo else []) + [
+        {"w": 8 if photo else 10, "items": [{"type": "name", "size": 17}], "valign": "center"},
+        {"w": 2, "items": [{"type": "logo", "w_mm": 22}], "valign": "center"}]
+    half = (len(short) + 1) // 2
+    rows = [{"cols": head}]
+    if short:
+        rows.append({"cols": [{"w": 6, "items": [{"type": "field", "key": f.key, "hide_empty": True} for f in short[:half]]},
+                              {"w": 6, "items": [{"type": "field", "key": f.key, "hide_empty": True} for f in short[half:]]}]})
+    for field in long:
+        rows.append({"cols": [{"w": 12, "items": [{"type": "field", "key": field.key, "hide_empty": True}]}]})
+    return {"page": {"preset": "a4"}, "rows": rows}
+
+
 def source_for(source):
     table = Table.objects.filter(key=source.removeprefix("table:")).first()
     return TableSource(table) if table else None

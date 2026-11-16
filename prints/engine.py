@@ -123,9 +123,10 @@ def render_element(el, record, school):
             return ""
         label = esc(el.get("label") or record["labels"].get(el.get("key"), el.get("key", "")))
         value_class = "value mono" if el.get("mono") else "value"
+        shown = esc(value).replace(chr(10), "<br>")  # a multi-line text keeps its lines
         if el.get("show_label") is False:
-            return f'<div class="{value_class}" style="{_style(el)}">{esc(value)}</div>'
-        return f'<div class="kv" style="{_style(el)}"><span class="key">{label}</span><span class="{value_class}">{esc(value)}</span></div>'
+            return f'<div class="{value_class}" style="{_style(el)}">{shown}</div>'
+        return f'<div class="kv" style="{_style(el)}"><span class="key">{label}</span><span class="{value_class}">{shown}</span></div>'
     if kind == "photo":
         width, height = float(el.get("w_mm") or 24), float(el.get("h_mm") or 33.6)
         if record.get("photo"):
