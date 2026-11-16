@@ -22,13 +22,18 @@ class Role(models.TextChoices):
 
 
 def role_choices():
-    """The platform's roles and those of the loaded modules. A callable, so migrations do not depend on the modules."""
+    """IT and the roles of this database (UserRole), or, before those exist, the platform's and the loaded
+    modules' roles. A callable, so migrations do not depend on the modules."""
     from .modules import ROLES, active
 
     try:
+        rows = [(r.key, r.display_name) for r in UserRole.objects.all()]
         using = active()
     except Exception:  # noqa: BLE001 - while models load (makemigrations) there is no database to ask
-        using = {module for _value, _label, module in ROLES}
+        rows, using = [], {module for _value, _label, module in ROLES}
+    if rows:
+        modules_roles = {value: module for value, _label, module in ROLES}
+        return [(Role.IT, Role.IT.label), *[(key, name) for key, name in rows if modules_roles.get(key, "platform") in using | {"platform"}]]
     return [*Role.choices, *[(value, label) for value, label, module in ROLES if module in using]]
 
 
@@ -309,3 +314,38 @@ class SavedView(TrackedModel):
 
     class Meta:
         ordering = ["order", "name"]
+
+
+ROLE_NAMESPACE = uuid.UUID("5b0f9a3e-2c1d-4e8b-9a7f-3d6c2e1b0a94")
+
+
+class UserRole(TrackedModel):
+    """A role and its rights (core/rights.py): per area none/read/edit, extra switches, and per field
+    "read" or "hidden". IT is not a row: it always has every right. The roles that existed before
+    are created with the same rights (core/permissions.py ensure_roles); their ids follow from the key,
+    so a server and its computers make the same rows."""
+
+    key = models.CharField(max_length=20, unique=True)  # what User.role stores
+    name = models.CharField("Name", max_length=80)
+    names = models.JSONField(default=dict, blank=True)  # {language: own name}, masks/i18n.py
+    description = models.CharField("Beschreibung", max_length=300, blank=True, default="")
+    areas = models.JSONField(default=dict, blank=True)
+    extras = models.JSONField(default=list, blank=True)
+    fields = models.JSONField(default=dict, blank=True)  # {entity: {field key: "read" | "hidden"}}
+    order = models.PositiveIntegerField(default=100)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.display_name
+
+    @property
+    def display_name(self):
+        from masks import i18n
+
+        return i18n.pick(self.name, self.names)
+
+    @staticmethod
+    def id_for(key):
+        return uuid.uuid5(ROLE_NAMESPACE, key)

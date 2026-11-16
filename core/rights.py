@@ -1,0 +1,140 @@
+"""Roles in the words of the people who set them up: areas and switches instead of capabilities.
+
+A role (core.models.UserRole) stores, per area, "none", "read" or "edit", and a list of switched-on extras.
+This module turns that into the capabilities the code checks (core/permissions.py has_capability), and
+back: the roles that exist today were written as capability sets, and `from_capabilities` finds the areas
+and extras that give exactly those sets, so a seeded role behaves as before.
+
+Modules add their areas with core/modules.py add_area; a module capability no area names still gets a
+switch of its own (`areas()` adds them), so every capability can be granted.
+"""
+from dataclasses import dataclass, field
+
+from django.utils.translation import gettext_lazy as _
+
+NONE, READ, EDIT = "none", "read", "edit"
+LEVELS = (NONE, READ, EDIT)
+
+
+@dataclass
+class Extra:
+    key: str
+    title: str
+    hint: str = ""
+    capabilities: tuple = ()
+    needs: str = READ  # the area level it needs ("" for areas without levels)
+
+
+@dataclass
+class Area:
+    key: str
+    title: str
+    section: str
+    hint: str = ""
+    read: tuple = ()  # capabilities for "read"; "edit" adds `edit`
+    edit: tuple = ()
+    extras: list = field(default_factory=list)
+    module: str = "platform"
+
+    @property
+    def has_levels(self):
+        return bool(self.read or self.edit)
+
+
+PEOPLE, IT, PRINT, ADMIN, TABLES = _("Personen"), _("IT"), _("Drucken und Daten"), _("Verwaltung"), _("Tabellen")
+
+PLATFORM_AREAS = [
+    Area("home", _("Startseite"), _("Übersicht"), _("Die Startseite mit Zahlen, Aufgaben und der Suche."), read=("home.view",)),
+    Area("people", _("Schüler, Personal und Eltern"), PEOPLE, _("Listen, Datenblätter und Suche; Bearbeiten heißt anlegen und ändern."),
+         read=("person.view",), edit=("person.edit",), extras=[
+             Extra("people.archive", _("Archivieren und löschen"), _("Personen archivieren, in den Papierkorb legen und zurückholen."),
+                   ("person.archive",)),
+             Extra("people.classes", _("Klassen und Schuljahreswechsel"), _("Klassen anlegen und ändern, das Schuljahr wechseln."),
+                   ("class.manage",)),
+         ], module="schulverwaltung"),
+    Area("devices", _("Geräte und Schäden"), IT, _("Geräte, Ausgaben, Rücknahmen und Schadensfälle."),
+         read=("device.view",), edit=("device.edit",), module="schulverwaltung"),
+    Area("vault", _("Zugänge"), IT, _("Benutzernamen und Passwörter der Plattformen."),
+         read=("vault.view",), edit=("vault.edit",), extras=[
+             Extra("vault.reveal", _("Passwörter anzeigen"), _("Ein verborgenes Passwort im Klartext zeigen."), ("vault.reveal",)),
+             Extra("vault.export", _("Mit Passwörtern exportieren"), _("Zugänge samt Passwörtern als Datei."), ("vault.export",)),
+             Extra("vault.platforms", _("Plattformen verwalten"), _("Plattformen anlegen und ändern."), ("admin.platforms",)),
+         ], module="schulverwaltung"),
+    Area("print", _("Drucken"), PRINT, _("Berichte, Etiketten und Briefe als PDF."), read=("print.run",), extras=[
+        Extra("print.secrets", _("Zugangsblätter drucken"), _("Vorlagen, die Passwörter enthalten."), ("print.secrets",)),
+        Extra("print.design", _("Vorlagen gestalten"), _("Druckvorlagen anlegen und ändern."), ("print.design",)),
+        Extra("print.code", _("Code-Modus"), _("Vorlagen als Code bearbeiten."), ("print.code",)),
+    ]),
+    Area("data", _("Import und Export"), PRINT, _("Lesen heißt exportieren, Bearbeiten auch importieren."),
+         read=("data.export",), edit=("data.import",)),
+    Area("tables", _("Eigene Tabellen"), TABLES, _("Welche Tabelle eine Rolle sieht, steht bei jeder Tabelle."), extras=[
+        Extra("tables.design", _("Tabellen gestalten"), _("Tabellen, Felder, Datensatzseiten und Rechte der Tabellen."),
+              ("tables.design",), needs=""),
+    ]),
+    Area("admin", _("Verwaltung"), ADMIN, extras=[
+        Extra("admin.fields", _("Felder anlegen und ändern"), _("Eigene Felder für Schüler und Personal."), ("admin.fields",), needs=""),
+        Extra("admin.masks", _("Datenblätter gestalten"), _("Masken für Schüler und Personal."), ("admin.masks",), needs=""),
+        Extra("admin.users", _("Benutzer und Rollen"), _("Konten anlegen und Rollen festlegen."), ("admin.users",), needs=""),
+        Extra("admin.school", _("Schule und Sprachen"), _("Name, Logo und Sprachen der Schule."), ("admin.school",), needs=""),
+        Extra("admin.update", _("Aktualisierung"), _("Neue Versionen einspielen."), ("admin.update",), needs=""),
+        Extra("admin.backup", _("Sicherung"), _("Sicherungen anlegen und zurückspielen."), ("admin.backup",), needs=""),
+        Extra("admin.audit", _("Protokoll"), _("Wer wann was getan hat."), ("admin.audit",), needs=""),
+    ]),
+]
+
+AREAS = list(PLATFORM_AREAS)  # modules append theirs (core/modules.py add_area)
+
+
+def areas():
+    """Every area, and a switch for each module capability no area names, under the module's own area."""
+    from . import modules
+    from .permissions import CAPABILITIES
+
+    found = list(AREAS)
+    named = {cap for area in found for cap in capabilities_of(area)}
+    loose = {}
+    for capability in CAPABILITIES:
+        module = modules.CAPABILITY_MODULES.get(capability)
+        if capability in named or module in (None, "platform", "schulverwaltung"):
+            continue
+        loose.setdefault(module, []).append(Extra(f"cap:{capability}", capability, "", (capability,), needs=""))
+    for module, extras in loose.items():
+        found.append(Area(f"module:{module}", str(module), _("Module"), extras=extras, module=module))
+    return found
+
+
+def capabilities_of(area):
+    return {*area.read, *area.edit, *(cap for extra in area.extras for cap in extra.capabilities)}
+
+
+def capabilities(levels, extras):
+    """The capabilities granted by {area: level} and a list of extra keys."""
+    granted = set()
+    switched = set(extras or [])
+    for area in areas():
+        level = (levels or {}).get(area.key, NONE)
+        if level in (READ, EDIT):
+            granted.update(area.read)
+        if level == EDIT:
+            granted.update(area.edit)
+        for extra in area.extras:
+            if extra.key in switched and (not extra.needs or level in (READ, EDIT)):
+                granted.update(extra.capabilities)
+    return granted
+
+
+def from_capabilities(granted):
+    """({area: level}, [extras]) that give exactly `granted` (for capabilities areas know)."""
+    levels, extras = {}, []
+    for area in areas():
+        if area.has_levels:
+            if set(area.read) <= granted and set(area.edit) <= granted and area.edit:
+                levels[area.key] = EDIT
+            elif set(area.read) <= granted:
+                levels[area.key] = READ
+            else:
+                levels[area.key] = NONE
+        for extra in area.extras:
+            if set(extra.capabilities) <= granted:
+                extras.append(extra.key)
+    return levels, extras

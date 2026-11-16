@@ -11,7 +11,7 @@ from . import codec
 
 
 def _models():
-    from core.models import SavedView
+    from core.models import SavedView, UserRole
     from devices import models as devices
     from masks import models as masks
     from people import models as people
@@ -21,7 +21,7 @@ def _models():
 
     return {
         "config": [masks.FieldDefinition, masks.Mask, masks.MaskVersion, people.SchoolYear, people.ClassGroup,
-                   prints.PrintTemplate, prints.PrintTemplateVersion, vault.Platform],
+                   prints.PrintTemplate, prints.PrintTemplateVersion, vault.Platform, UserRole],
         "saved_view": SavedView,
         "import": [transfer.ImportPreset],
         "people": [people.Person, people.Enrollment, people.Guardian, people.Guardianship, people.Card, people.Comment, people.Attachment],
@@ -220,6 +220,8 @@ class Scope:
 
             owner = SavedView._base_manager.filter(pk=pk).values_list("owner_id", flat=True).first()
             return owner in (None, self.user.pk)
+        if label == "core.userrole":
+            return can("admin.users")
         if label == "people.person":
             return can("person.edit") or self.edits_people
         if label in ("people.schoolyear", "people.classgroup"):

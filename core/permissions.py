@@ -1,4 +1,9 @@
-"""One place for what each role may do. Masks never grant or remove access."""
+"""One place for what each role may do. Masks never grant or remove access.
+
+CAPABILITIES is what each built-in role could do before roles became editable: the defaults its row
+(core.models.UserRole) is created with. Once a role has a row, its rights come from there (core/rights.py);
+IT has no row and keeps every right.
+"""
 from functools import wraps
 
 from django.core.exceptions import PermissionDenied
@@ -69,16 +74,63 @@ def offered_roles():
     return role_choices()
 
 
+def default_capabilities(role):
+    """What a built-in role could do before it had a row: the defaults its row starts with."""
+    return {capability for capability, roles in CAPABILITIES.items() if role in roles}
+
+
+def role_capabilities(user):
+    """The capabilities of the user's role, worked out once per request (kept on the user object)."""
+    cached = getattr(user, "_role_capabilities", None)
+    if cached is not None and cached[0] == user.role:
+        return cached[1]
+    from . import rights
+    from .models import UserRole
+
+    row = UserRole.objects.filter(key=user.role).values("areas", "extras").first() if user.role != IT else None
+    granted = rights.capabilities(row["areas"], row["extras"]) if row else default_capabilities(user.role)
+    user._role_capabilities = (user.role, granted)
+    return granted
+
+
 def has_capability(user, capability):
     if not user or not user.is_authenticated or not user.is_active:
         return False
     module = CAPABILITY_MODULES.get(capability)
     if module and module not in active():
         return False  # a module this database does not use
-    if user.role in CAPABILITIES.get(capability, set()):
+    if capability in role_capabilities(user):
         return True
     check = CAPABILITY_CHECKS.get(capability)
     return bool(check and check(user))
+
+
+def ensure_roles(using="default"):
+    """A row for every built-in role that has none yet, with the rights it had before (after migrate).
+    Not tracked: a computer makes the same rows (the ids follow from the key) and then takes the server's."""
+    from django.db.utils import DatabaseError
+
+    from . import rights
+    from .models import UserRole, role_choices
+    from .modules import ROLES
+
+    try:
+        existing = set(UserRole.objects.using(using).values_list("key", flat=True))
+    except DatabaseError:
+        return []
+    builtin = [(value, label) for value, label in Role.choices if value != IT]
+    builtin += [(value, label) for value, label, _module in ROLES]
+    summaries = dict(ROLE_SUMMARY) | {value: summary for value, summary, _module in ROLE_SUMMARIES}
+    made = []
+    for order, (value, label) in enumerate(builtin, start=1):
+        if value in existing:
+            continue
+        levels, extras = rights.from_capabilities(default_capabilities(value))
+        made.append(UserRole(id=UserRole.id_for(value), key=value, name=str(label), description=str(summaries.get(value, ""))[:300],
+                             areas=levels, extras=extras, order=order * 10))
+    if made:
+        UserRole.objects.using(using).bulk_create(made, ignore_conflicts=True)
+    return made
 
 
 def require(capability):

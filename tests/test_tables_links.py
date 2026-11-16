@@ -6,7 +6,6 @@ import tempfile
 import uuid
 from datetime import timedelta
 from pathlib import Path
-from unittest import mock
 
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -16,8 +15,7 @@ from django.utils import timezone
 from PIL import Image
 
 from archive import nightly
-from core import permissions
-from core.models import Role
+from core.models import Role, User, UserRole
 from devices.models import Asset
 from sync.scope import Scope
 from tables import links, services
@@ -93,9 +91,10 @@ class LinkServiceTests(LinkCase):
         self.assertEqual(links.display(self.loan, note, self.it), "Nur IT")
         self.assertEqual(links.display(self.loan, note, self.sl), "nicht sichtbar")
         self.assertEqual(links.display(self.loan, self.device, self.sl), "NB-1")
-        with mock.patch.dict(permissions.CAPABILITIES, {"device.view": {Role.IT}}):
-            self.assertEqual(links.display(self.loan, self.device, self.sl), "nicht sichtbar")
-            self.assertEqual(links.candidates(self.sl, self.device, "NB"), [])
+        UserRole.objects.filter(key=Role.SCHULLEITUNG).update(areas={**UserRole.objects.get(key=Role.SCHULLEITUNG).areas, "devices": "none"})
+        leader = User.objects.get(pk=self.sl.pk)  # a fresh account object: rights are worked out once per request
+        self.assertEqual(links.display(self.loan, self.device, leader), "nicht sichtbar")
+        self.assertEqual(links.candidates(leader, self.device, "NB"), [])
         self.assertEqual(links.candidates(self.sl, note, ""), [])
         self.assertEqual([c["title"] for c in links.candidates(self.sek, self.book, "mom")], ["Momo"])
 
