@@ -18,6 +18,8 @@ One version for the server image, the macOS and Windows apps and the modules.
    server on the same migrations.
 4. Run the workflow **Promote** with the version. It copies the release's update feeds to
    `macos/appcast.xml` and `windows/appcast.xml`, which the installed apps read; only then do they update.
+   GitHub serves these files with a five-minute cache, so an app checking right after Promote may still
+   see the previous version for a few minutes.
 
 Version numbers only go up: the updaters compare them.
 
