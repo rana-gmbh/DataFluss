@@ -146,7 +146,7 @@ installed apps can no longer be updated.
 To release:
 
 1. Raise `version` in `client/shell/src-tauri/tauri.conf.json` (and in `Cargo.toml`), optionally add
-   release notes as `client/release-notes/<version>.html`, commit.
+   release notes in English as `client/release-notes/<version>.html` (shown in the update dialog), commit.
 2. Push a tag `v<version>`. The workflow `.github/workflows/release-macos.yml` builds, signs,
    notarizes, uploads the DMG and ZIP to the release `v<version>` of rana-gmbh/DataFluss and then
    updates the feed. Started by hand it only builds, unless "publish" is ticked.

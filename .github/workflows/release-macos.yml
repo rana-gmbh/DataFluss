@@ -103,7 +103,7 @@ jobs:
           # The Windows workflow may have made the release already; both add their files to it.
           if ! gh release view "$tag" --repo "$RELEASE_REPO" > /dev/null 2>&1; then
             gh release create "$tag" --repo "$RELEASE_REPO" --title "DataFluss $VERSION" \
-              --notes "macOS: DataFluss-$VERSION.dmg öffnen und DataFluss in den Ordner Programme ziehen. Windows: DataFluss-$VERSION-setup.exe ausführen. Installierte Apps aktualisieren sich selbst." \
+              --notes "macOS: open DataFluss-$VERSION.dmg and drag DataFluss into the Applications folder. Windows: run DataFluss-$VERSION-setup.exe. Installed apps update themselves." \
               || gh release view "$tag" --repo "$RELEASE_REPO" > /dev/null
           fi
           gh release upload "$tag" --repo "$RELEASE_REPO" --clobber "$dir/DataFluss-$VERSION.dmg" "$dir/DataFluss-$VERSION.zip"

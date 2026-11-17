@@ -4,7 +4,10 @@ One version for the server image, the macOS and Windows apps and the modules.
 
 ## Making a release
 
-1. `scripts/set-version.sh X.Y.Z`, commit, and push a tag `vX.Y.Z`.
+1. `scripts/set-version.sh X.Y.Z`, write the release notes in English: `client/release-notes/X.Y.Z.html`
+   (short, shown in the apps' update dialog) and, for the release page, a Markdown file. Commit, push a
+   tag `vX.Y.Z` and create the release with `gh release create vX.Y.Z --verify-tag --title "DataFluss X.Y.Z"
+   --notes-file <notes.md>`; the workflows then only add their files to it.
 2. The tag starts three workflows, each waiting for an approval of the environment `release`:
    - `release-macos.yml`: builds, signs and notarises the app; attaches `DataFluss-X.Y.Z.dmg`, the update
      archive `DataFluss-X.Y.Z.zip` and `appcast-macos.xml` to the release `vX.Y.Z`.
