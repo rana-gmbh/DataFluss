@@ -8,6 +8,7 @@
   {% if request.user|edits_kind:'staff' %}<a class="btn" href="{% url 'person_new' 'staff' %}">{% icon 'user-plus' %}{% translate "Neuer Mitarbeiter" %}</a>{% endif %}
 </div>
 {% if update_available %}<a href="{% url 'updates' %}" class="surface flex items-center gap-2 px-4 py-2.5 mb-4 text-[13px] hover:border-[var(--line-strong)]">{% icon 'refresh' 'text-[var(--accent)]' %}{% translate "Eine neue Version ist verfügbar." %}<span class="underline">{% translate "Ansehen" %}</span></a>{% endif %}
+{% include "tables/_template_news.html" %}
 {% for w in warnings %}<a href="{{ w.url }}" class="rounded-lg badge-{{ w.level }} flex items-center gap-2 px-4 py-2.5 mb-4 text-[13px]" {% if w.level == 'bad' %}role="alert"{% endif %}>{% icon 'alert' %}{{ w.text }}</a>{% endfor %}
 {% if checklist %}<section class="surface p-4 mb-4" data-tour="checklist" x-data="{ open: true }" x-show="open">
   <div class="flex items-center gap-3 mb-2"><h2 class="font-semibold flex-1">{% translate "Erste Schritte" %}</h2>

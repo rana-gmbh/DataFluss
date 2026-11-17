@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 18:40+0100\n"
+"POT-Creation-Date: 2026-11-17 18:58+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -4082,6 +4082,19 @@ msgstr "搜索并替换…"
 
 msgid "Bewertung entfernen"
 msgstr "删除评分"
+
+#, python-format
+msgid "Für die Vorlage „%(name)s“ gibt es Version %(n)s."
+msgstr "模板“%(name)s”有新版本 %(n)s。"
+
+#, python-format
+msgid ""
+"„%(name)s“ auf Version %(n)s ergänzen? Neue Tabellen und Felder kommen dazu;"
+" was hier geändert wurde, bleibt."
+msgstr "将“%(name)s”补充到版本 %(n)s？将添加新的表格和字段；此处已做的修改保持不变。"
+
+msgid "Ergänzen"
+msgstr "补充"
 
 msgid "Daten und Bilder von TMDB."
 msgstr "数据和图片来自 TMDB。"

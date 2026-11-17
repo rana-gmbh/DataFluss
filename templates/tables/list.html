@@ -3,6 +3,7 @@
 {% block content %}
 <h1 class="page-title mb-1">{% translate "Tabellen" %}</h1>
 <p class="muted text-[13px] mb-4">{% translate "Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder Termine." %}</p>
+{% include "tables/_template_news.html" %}
 <div class="grid lg:grid-cols-3 gap-4 items-start">
 <div class="lg:col-span-2 space-y-4">{% if rows %}{% for section, section_rows in groups %}<div class="surface overflow-x-auto">
 {% if several %}<div class="px-4 pt-3 pb-1 flex flex-wrap items-center gap-2" x-data="{ renaming: false }">

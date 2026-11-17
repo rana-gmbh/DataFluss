@@ -17,6 +17,14 @@
  "requires": [],
  "database": true,
  "order": 10,
+ "changes": {
+  "2": {
+   "de": "Neu: eigene Tabellen für Darsteller und Regie, gefüllt beim Übernehmen aus TMDB.",
+   "en": "New: tables of their own for actors and directors, filled when taking titles over from TMDB.",
+   "zh-hans": "新增：演员和导演的独立表格，从 TMDB 导入时自动填充。",
+   "zh-hant": "新增：演員和導演的獨立表格，從 TMDB 匯入時自動填入。"
+  }
+ },
  "tables": [
   {
    "key": "fs_titel",

@@ -260,6 +260,7 @@ def totp_verify(request):
 def dashboard(request):
     from devices.models import Assignment, SupportCase
     from people.models import Person
+    from tables import blueprints
 
     if updates.is_running():
         updates.refresh_deployment()  # In case the worker that followed the update is gone.
@@ -282,6 +283,7 @@ def dashboard(request):
         "open_cases": SupportCase.objects.exclude(status="Erledigt").count(),
         "update_available": request.user.can("admin.update") and updates.update_available(background_check=True),
         "warnings": health.warnings_for(request.user),
+        "template_news": blueprints.newer_versions(request.user),
         "new_pupils": pupils.exclude(entry_date=None).select_related("current_class").order_by("-entry_date", "last_name")[:7],
         "new_staff": staff.exclude(entry_date=None).order_by("-entry_date", "last_name")[:7],
         "todo": [
@@ -314,6 +316,7 @@ def _tables_home(request, areas=False):
         "update_available": request.user.can("admin.update") and updates.update_available(background_check=True),
         "warnings": health.warnings_for(request.user),
         "templates_offered": request.user.can("tables.design") and blueprints.any_offered(),
+        "template_news": blueprints.newer_versions(request.user),
     }
     context.update(_checklist(request, 0))
     return render(request, "core/tables_home.html", context)

@@ -26,7 +26,8 @@ Two kinds of template:
   template yet, so a school database and a film database never get mixed.
 - Any other template adds tables to the modules it "requires" (an add-on, e.g. of a premium module).
 "listed": false retires a template: it is no longer offered, but where it is applied it can still be
-updated.
+updated. "changes": {"2": {"de": "…", "en": "…"}} says what a version brings; where an older one is applied,
+the start page and the list of tables say so, with a button that adds it (newer_versions).
 """
 import json
 import re
@@ -143,6 +144,30 @@ def title(template):
 
 def description(template):
     return i18n.pick(template.get("description", ""), template.get("descriptions"))
+
+
+def newer_versions(user):
+    """Templates applied here that have a newer version, for a notice with a button to add what it brings:
+    [{"id", "title", "version", "installed", "news"}]. Empty for people who may not design tables."""
+    if not user.can("tables.design"):
+        return []
+    applied = {}
+    for table in Table.objects.all():
+        tid, version = (table.template or {}).get("id"), (table.template or {}).get("version", 0)
+        if tid:
+            applied[tid] = max(version, applied.get(tid, 0))
+    if not applied:
+        return []
+    rows, found = [], available()
+    for tid, installed in sorted(applied.items()):
+        template = found.get(tid)
+        if template is None or template["version"] <= installed or not usable(template):
+            continue
+        changes = template.get("changes") or {}
+        news = [i18n.pick(changes[v].get("de", ""), changes[v]) for v in sorted(changes, key=int)
+                if v.isdigit() and int(v) > installed and isinstance(changes[v], dict)]
+        rows.append({"id": tid, "title": title(template), "version": template["version"], "installed": installed, "news": " ".join(news)})
+    return rows
 
 
 def installed_version(template_id):

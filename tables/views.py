@@ -46,7 +46,7 @@ def table_list(request):
     groups = services.by_section(rows, section=lambda row: row["table"].section)
     tmdb_ready = bool(SchoolSettings.load().tmdb_key)
     return render(request, "tables/list.html", {"rows": rows, "groups": groups, "several": len(groups) > 1 or bool(groups and groups[0][0]), "error": error, "can_import": request.user.can("data.import"),
-                                                "tmdb_ready": tmdb_ready, "templates_offered": blueprints.any_offered(),
+                                                "tmdb_ready": tmdb_ready, "templates_offered": blueprints.any_offered(), "template_news": blueprints.newer_versions(request.user),
                                                 "tmdb_card": tmdb_ready or any(tmdb.supports(row["table"]) for row in rows),
                                                 "access": services.access_choices(), "active_nav": "settings_home"})
 

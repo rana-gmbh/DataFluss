@@ -1,0 +1,5 @@
+{% load i18n ui %}{# A template applied here has a newer version (tables/blueprints.py newer_versions): say what it brings, and add it. #}
+{% for t in template_news %}<form method="post" action="{% url 'table_blueprints' %}" class="surface flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 mb-4 text-[13px]">{% csrf_token %}<input type="hidden" name="template" value="{{ t.id }}">
+  {% icon 'layout' 'text-[var(--accent)]' %}<span class="flex-1 min-w-[200px]">{% blocktranslate trimmed with name=t.title n=t.version %}Für die Vorlage „{{ name }}“ gibt es Version {{ n }}.{% endblocktranslate %}{% if t.news %} <span class="muted">{{ t.news }}</span>{% endif %}</span>
+  {% blocktranslate trimmed with name=t.title n=t.version asvar question %}„{{ name }}“ auf Version {{ n }} ergänzen? Neue Tabellen und Felder kommen dazu; was hier geändert wurde, bleibt.{% endblocktranslate %}
+  <button class="btn btn-sm btn-primary" data-confirm="{{ question }}">{% icon 'plus' %}{% translate "Ergänzen" %}</button></form>{% endfor %}

@@ -194,7 +194,9 @@ computers whose role has no password rights.
 
 A template creates tables, fields, record pages, printouts, saved views and, if wanted, sample records in
 one step. Applying a template again, or a newer version of it, only adds what is missing; nothing is
-deleted, and what you changed is kept and named.
+deleted, and what you changed is kept and named. When an update of DataFluss brings a newer version of a
+template applied here, the start page and the list of tables say so, with what it brings, and
+**Ergänzen** adds it (for those who may design tables).
 
 DataFluss comes with four **database templates**, each a database of its own:
 
@@ -310,7 +312,8 @@ a bundle like any other module.
   records of another table linking here).
 - In demo records, a link names its target record by title.
 - A newer version raises `version`; it may add tables, fields and the rest, never remove them. Settings of
-  a table's `look` that are new in it are added; those already there stay.
+  a table's `look` that are new in it are added; those already there stay. `"changes": {"2": {"de": "…",
+  "en": "…"}}` says what a version brings, for the notice.
 - Table keys of a template should start with a short prefix of its own (`inv_raeume`), so they never meet
   a table someone made by hand. A formula may use formulas of other tables of the template, in any order.
 - A table may set `"section"` (its heading in the sidebar), `"in_nav": false` and `"look"` (see *Look*):

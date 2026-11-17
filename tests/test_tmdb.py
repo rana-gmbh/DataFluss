@@ -37,6 +37,21 @@ def picture():
     return out.getvalue()
 
 
+def version_one():
+    """The film template as it was before version 2 brought the tables of actors and directors."""
+    first = copy.deepcopy(TEMPLATE)
+    first["version"] = 1
+    first["tables"] = [t for t in first["tables"] if t["key"] not in ("fs_darsteller", "fs_regie")]
+    first["tables"][0]["fields"] = [f for f in first["tables"][0]["fields"] if f["key"] not in ("f_darsteller", "f_regisseure")]
+    del first["tables"][0]["look"]["tmdb"]["people"]
+    first["masks"] = [m for m in first["masks"] if m["table"] in ("fs_titel", "fs_sichtungen")]
+    first["views"] = [v for v in first["views"] if v["table"] in ("fs_titel", "fs_sichtungen")]
+    for tab in first["masks"][0]["tree"]["tabs"]:
+        for section in tab["sections"]:
+            section["items"] = [i for i in section["items"] if i.get("field") not in ("f_darsteller", "f_regisseure")]
+    return first
+
+
 class FakeTmdb:
     """Stands in for tables/tmdb.py _open: answers from the fixtures, records what was asked."""
 
@@ -162,18 +177,8 @@ class TemplateTests(FilmTemplateMixin, AppTestCase):
         self.assertEqual(again["created"], [])
 
     def test_version_2_adds_the_people_to_a_database_with_version_1(self):
-        first = copy.deepcopy(TEMPLATE)
-        first["version"] = 1
-        first["tables"] = [t for t in first["tables"] if t["key"] not in ("fs_darsteller", "fs_regie")]
-        first["tables"][0]["fields"] = [f for f in first["tables"][0]["fields"] if f["key"] not in ("f_darsteller", "f_regisseure")]
-        del first["tables"][0]["look"]["tmdb"]["people"]
-        first["masks"] = [m for m in first["masks"] if m["table"] in ("fs_titel", "fs_sichtungen")]
-        first["views"] = [v for v in first["views"] if v["table"] in ("fs_titel", "fs_sichtungen")]
-        for tab in first["masks"][0]["tree"]["tabs"]:
-            for section in tab["sections"]:
-                section["items"] = [i for i in section["items"] if i.get("field") not in ("f_darsteller", "f_regisseure")]
         set_current_user(self.it)
-        blueprints.apply(first, self.it)
+        blueprints.apply(version_one(), self.it)
         films = Table.objects.get(key="fs_titel")
         films.look = {**films.look, "cover": "", "tmdb": {**films.look["tmdb"], "language": "en-US"}}
         films.save()
@@ -183,6 +188,19 @@ class TemplateTests(FilmTemplateMixin, AppTestCase):
         self.assertEqual(films.look["tmdb"]["people"]["cast"], {"table": "fs_darsteller", "link": "f_darsteller"})
         self.assertEqual((films.look["cover"], films.look["tmdb"]["language"]), ("", "en-US"))  # what was set here stays
         self.assertEqual(blueprints.installed_version("filme"), 2)
+
+    def test_a_newer_version_is_announced_and_added_with_one_button(self):
+        set_current_user(self.it)
+        blueprints.apply(version_one(), self.it)
+        self.login(self.it)
+        for page in (reverse("dashboard"), reverse("table_list")):
+            response = self.client.get(page)
+            self.assertContains(response, "Für die Vorlage „Filme &amp; Serien“ gibt es Version 2.")
+            self.assertContains(response, "Darsteller und Regie")
+        self.client.post(reverse("table_blueprints"), {"template": "filme"})
+        self.assertTrue(Table.objects.filter(key="fs_darsteller").exists())
+        self.assertNotContains(self.client.get(reverse("dashboard")), "gibt es Version 2")
+        self.assertEqual(blueprints.newer_versions(self.sek), [])  # only for who may design tables
 
     def test_it_works_without_schulverwaltung(self):
         SchoolSettings.load()
