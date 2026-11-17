@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 19:00+0100\n"
+"POT-Creation-Date: 2026-11-17 16:11+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -47,6 +47,9 @@ msgstr "正在生成 PDF …"
 
 msgid "Strg K"
 msgstr "Ctrl K"
+
+msgid "%(n)s von %(top)s Sternen"
+msgstr "%(n)s / %(top)s 星"
 
 msgid "Kopiert"
 msgstr "已复制"
@@ -588,6 +591,12 @@ msgstr[0] "%(n)s 个值"
 msgid "Keine Werte"
 msgstr "无值"
 
+msgid "Titel"
+msgstr "标题"
+
+msgid "Sortieren"
+msgstr "排序"
+
 msgid "(eigene)"
 msgstr "（个人）"
 
@@ -706,6 +715,9 @@ msgstr "新名称"
 
 msgid "Datensatz konnte nicht geladen werden"
 msgstr "无法加载记录"
+
+msgid "Die Suche hat nicht geklappt."
+msgstr "搜索失败。"
 
 msgid "Kein Zugriff"
 msgstr "无权访问"

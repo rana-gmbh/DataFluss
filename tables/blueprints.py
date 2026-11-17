@@ -8,7 +8,8 @@ never overwrites what the school has changed; what differs is reported as kept.
 
     {"format": 1, "id": "bibliothek", "version": 1, "title": "Bibliothek", "titles": {"en": "Library"},
      "description": "…", "requires": ["schulverwaltung"],
-     "tables": [{"key": "buecher", "name": "Bücher", "icon": "book", "title_field": "f_titel",
+     "tables": [{"key": "buecher", "name": "Bücher", "icon": "book", "title_field": "f_titel", "section": "Bibliothek",
+                 "look": {"cover": "f_cover"},  # tables/look.py
                  "rights": {"sekretariat": "edit"}, "fields": [{"key": "f_titel", "label": "Titel", "type": "text"}]}],
      "masks": [{"table": "buecher", "name": "Buch", "tree": {…}}],
      "prints": [{"table": "ausleihen", "name": "Ausleihschein", "tree": {…}}],
@@ -150,6 +151,8 @@ def check(data):
                     problems.append(_("Feld %(field)s: Die verknüpfte Tabelle fehlt in der Vorlage.") % {"field": fkey})
             if field.get("type") == "formula" and not config.get("expression"):
                 problems.append(_("Feld %(field)s: Formel fehlt.") % {"field": fkey})
+        if table.get("look") is not None and not isinstance(table.get("look"), dict):
+            problems.append(_("Tabelle %(key)s: ungültige Darstellung.") % {"key": key})
         if table.get("title_field") and table["title_field"] not in field_keys:
             problems.append(_("Tabelle %(key)s: Das Titelfeld fehlt.") % {"key": key})
     for group in ("masks", "prints", "views"):
@@ -192,12 +195,15 @@ def apply(data, user=None, demo=False, request=None):
                     pk=pk, key=spec["key"], name=spec["name"], names=i18n.clean_names(spec.get("names"), 100),
                     description=(spec.get("description") or "")[:300], icon=spec.get("icon") or "table", order=(order + 1) * 10,
                     in_nav=spec.get("in_nav", True), rights={k: v for k, v in (spec.get("rights") or {}).items() if v in RIGHTS},
-                    template={"id": tid, "version": data["version"]},
+                    template={"id": tid, "version": data["version"]}, section=" ".join(str(spec.get("section") or "").split())[:60],
+                    look=spec.get("look") if isinstance(spec.get("look"), dict) else {},
                 )
                 report["created"].append(table.name)
             else:
                 report["kept"].append(table.name)
                 table.template = {"id": tid, "version": max(data["version"], (table.template or {}).get("version", 0))}
+                if not table.look and isinstance(spec.get("look"), dict):  # a newer version may bring a look; one set here stays
+                    table.look = spec["look"]
                 table.save()
             tables[spec["key"]] = table
         fields_later = []

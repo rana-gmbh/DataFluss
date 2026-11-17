@@ -349,7 +349,7 @@ def to_names(text, schema):
 # ---------------------------------------------------------------- types
 
 NUMBER, TEXT, DATE, DATETIME, BOOL, NULL, ANY, LIST = "number", "text", "date", "datetime", "bool", "null", "any", "list"
-FIELD_TYPES = {"number": NUMBER, "text": TEXT, "textarea": TEXT, "email": TEXT, "phone": TEXT, "url": TEXT, "choice": TEXT,
+FIELD_TYPES = {"number": NUMBER, "rating": NUMBER, "text": TEXT, "textarea": TEXT, "email": TEXT, "phone": TEXT, "url": TEXT, "choice": TEXT,
                "multichoice": TEXT, "date": DATE, "datetime": DATETIME, "bool": BOOL}
 
 
@@ -794,7 +794,7 @@ def _value_of(record, field, context):
     value = services.value(record, field)
     if isinstance(value, int) and not isinstance(value, bool):
         return Decimal(value)
-    if isinstance(value, str) and field.type in ("date", "datetime", "number"):
+    if isinstance(value, str) and field.type in ("date", "datetime", "number", "rating"):
         raise FormulaError(_("{%(name)s} enthält einen ungültigen Wert.") % {"name": field.display_label})
     return value
 

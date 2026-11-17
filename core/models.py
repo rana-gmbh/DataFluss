@@ -271,6 +271,8 @@ class SchoolSettings(models.Model):
     # Always-loaded modules this database does not use: ["schulverwaltung"] for a database of own tables only
     # (the start screen's card "Leer"). Empty in every database made before.
     modules_off = models.JSONField(default=list, blank=True)
+    # The database's own key for themoviedb.org (tables/tmdb.py), encrypted like a secret field. Empty: none.
+    tmdb_key = models.TextField(blank=True, default="", db_default="")
 
     class Meta:
         verbose_name = "Schuleinstellungen"

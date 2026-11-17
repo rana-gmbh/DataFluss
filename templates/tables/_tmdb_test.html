@@ -1,0 +1,1 @@
+{% load ui %}<p class="text-[13px] rounded-lg px-3 py-2 {% if ok %}badge-ok{% else %}badge-bad{% endif %}" role="status">{% if ok %}{% icon 'check' %}{% else %}{% icon 'alert' %}{% endif %} {{ message }}</p>

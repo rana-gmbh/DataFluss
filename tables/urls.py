@@ -1,10 +1,12 @@
 from django.urls import path
 
-from . import views, views_records as records
+from . import views, views_records as records, views_tmdb as tmdb
 
 urlpatterns = [
     path("einstellungen/tabellen/", views.table_list, name="table_list"),
     path("einstellungen/tabellen/vorlagen/", views.table_blueprints, name="table_blueprints"),
+    path("einstellungen/tabellen/tmdb/", tmdb.tmdb_settings, name="tables_tmdb"),
+    path("einstellungen/tabellen/tmdb/testen/", tmdb.tmdb_test, name="tables_tmdb_test"),
     path("einstellungen/tabellen/aus-datei/", views.table_from_file, name="table_from_file"),
     path("einstellungen/tabellen/aus-datei/<uuid:pk>/", views.table_from_file_columns, name="table_from_file_columns"),
     path("einstellungen/tabellen/<slug:key>/", views.table_settings, name="table_settings"),
@@ -18,6 +20,11 @@ urlpatterns = [
     path("tabellen/<slug:key>/neu/", records.record_new, name="record_new"),
     path("tabellen/<slug:key>/aktion/", records.records_action, name="records_action"),
     path("tabellen/<slug:key>/papierkorb/", records.records_bin, name="records_bin"),
+    path("tabellen/<slug:key>/tmdb/suche/", tmdb.tmdb_search, name="tmdb_search"),
+    path("tabellen/<slug:key>/tmdb/bild/<str:size>/<str:path>", tmdb.tmdb_thumb, name="tmdb_thumb"),
+    path("tabellen/<slug:key>/tmdb/import/", tmdb.tmdb_import, name="tmdb_import"),
+    path("tabellen/<slug:key>/<uuid:pk>/tmdb/", tmdb.tmdb_refresh, name="tmdb_refresh"),
+    path("tabellen/<slug:key>/<uuid:pk>/gesehen/", tmdb.record_watched, name="record_watched"),
     path("tabellen/<slug:key>/<uuid:pk>/", records.record_detail, name="record_detail"),
     path("tabellen/<slug:key>/<uuid:pk>/loeschen/", records.record_delete, name="record_delete"),
     path("tabellen/<slug:key>/<uuid:pk>/panel/", records.record_panel, name="record_panel"),

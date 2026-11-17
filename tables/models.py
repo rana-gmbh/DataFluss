@@ -27,6 +27,9 @@ class Table(TrackedModel):
     title_field = models.CharField(max_length=60, blank=True, default="")  # names a record; empty: the first text field
     rights = models.JSONField(default=dict, blank=True)  # {role: none|read|edit}; IT always edits
     template = models.JSONField(null=True, blank=True)  # {"id", "version"} when a module template made it
+    # How records look (tables/look.py): cover and backdrop image fields, subtitle fields, list or gallery,
+    # and a service such as TMDB that fills records ({"tmdb": {"fields": {…}}}).
+    look = models.JSONField(default=dict, blank=True, db_default={})
 
     class Meta:
         ordering = ["order", "name"]

@@ -16,7 +16,7 @@ from core.context_user import get_current_user
 from . import formula, links, services
 from .models import Attachment, Record, Table
 
-SAMPLES = {"text": "Beispieltext", "textarea": "Ein längerer Beispieltext\nüber zwei Zeilen.", "number": "12,50", "bool": "Ja",
+SAMPLES = {"text": "Beispieltext", "textarea": "Ein längerer Beispieltext\nüber zwei Zeilen.", "number": "12,50", "rating": "★★★★½", "bool": "Ja",
            "date": "24.12.2026", "datetime": "24.12.2026 18:30", "email": "name@schule.example", "phone": "+49 30 1234567",
            "url": "https://schule.example", "choice": "Auswahl", "multichoice": "Erste, Zweite", "link": "Verknüpfter Datensatz",
            "file": "Dokument.pdf", "image": "", "formula": "42"}

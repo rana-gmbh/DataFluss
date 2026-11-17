@@ -1,0 +1,155 @@
+{
+ "id": 4711,
+ "title": "Der Leuchtturm am Ende der Welt",
+ "original_title": "The Lighthouse at World's End",
+ "release_date": "2021-03-14",
+ "runtime": 118,
+ "tagline": "Manche Lichter gehen nie aus.",
+ "overview": "Eine Leuchtturmwärterin entdeckt in einer Sturmnacht ein Geheimnis.",
+ "genres": [
+  {
+   "id": 18,
+   "name": "Drama"
+  },
+  {
+   "id": 9648,
+   "name": "Mystery"
+  },
+  {
+   "id": 99999,
+   "name": "Seefahrt"
+  }
+ ],
+ "poster_path": "/poster4711.jpg",
+ "backdrop_path": "/backdrop4711.jpg",
+ "credits": {
+  "cast": [
+   {
+    "name": "Person 12",
+    "character": "Rolle 12",
+    "order": 12,
+    "profile_path": null
+   },
+   {
+    "name": "Person 11",
+    "character": "Rolle 11",
+    "order": 11,
+    "profile_path": "/p11.jpg"
+   },
+   {
+    "name": "Person 10",
+    "character": "Rolle 10",
+    "order": 10,
+    "profile_path": "/p10.jpg"
+   },
+   {
+    "name": "Person 9",
+    "character": "Rolle 9",
+    "order": 9,
+    "profile_path": null
+   },
+   {
+    "name": "Person 8",
+    "character": "Rolle 8",
+    "order": 8,
+    "profile_path": "/p8.jpg"
+   },
+   {
+    "name": "Person 7",
+    "character": "Rolle 7",
+    "order": 7,
+    "profile_path": "/p7.jpg"
+   },
+   {
+    "name": "Person 6",
+    "character": "Rolle 6",
+    "order": 6,
+    "profile_path": null
+   },
+   {
+    "name": "Person 5",
+    "character": "Rolle 5",
+    "order": 5,
+    "profile_path": "/p5.jpg"
+   },
+   {
+    "name": "Person 4",
+    "character": "Rolle 4",
+    "order": 4,
+    "profile_path": "/p4.jpg"
+   },
+   {
+    "name": "Person 3",
+    "character": "Rolle 3",
+    "order": 3,
+    "profile_path": null
+   },
+   {
+    "name": "Person 2",
+    "character": "Rolle 2",
+    "order": 2,
+    "profile_path": "/p2.jpg"
+   },
+   {
+    "name": "Person 1",
+    "character": "Rolle 1",
+    "order": 1,
+    "profile_path": "/p1.jpg"
+   }
+  ],
+  "crew": [
+   {
+    "name": "Ada Regie",
+    "job": "Director"
+   },
+   {
+    "name": "Ada Regie",
+    "job": "Director"
+   },
+   {
+    "name": "Bert Kamera",
+    "job": "Director of Photography"
+   }
+  ]
+ },
+ "images": {
+  "backdrops": [
+   {
+    "file_path": "/backdrop4711.jpg",
+    "iso_639_1": null,
+    "vote_average": 9
+   },
+   {
+    "file_path": "/text1.jpg",
+    "iso_639_1": "de",
+    "vote_average": 8
+   },
+   {
+    "file_path": "/still1.jpg",
+    "iso_639_1": null,
+    "vote_average": 5
+   },
+   {
+    "file_path": "/still2.jpg",
+    "iso_639_1": null,
+    "vote_average": 7
+   },
+   {
+    "file_path": "/still3.jpg",
+    "iso_639_1": null,
+    "vote_average": 6
+   },
+   {
+    "file_path": "/still4.jpg",
+    "iso_639_1": null,
+    "vote_average": 1
+   },
+   {
+    "file_path": "/still5.jpg",
+    "iso_639_1": null,
+    "vote_average": 3
+   }
+  ],
+  "posters": []
+ }
+}

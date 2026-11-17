@@ -40,11 +40,50 @@
   const BOOL_LABELS = { Ja: gettext("Ja"), Nein: gettext("Nein") };
   // Choices are stored by value; optionLabels has their names in the language on screen.
   const optionLabel = (c, v) => (c && c.optionLabels && c.optionLabels[v]) || v;
-  const label = (c, v) => (v === "" ? EMPTY : c && c.type === "bool" ? BOOL_LABELS[v] || v : optionLabel(c, v));
+  const ratingText = (v, top = 5) => { const n = Number(v); const whole = Math.floor(n); const half = n - whole >= 0.5; return "★".repeat(whole) + (half ? "½" : "") + "☆".repeat(Math.max(0, top - whole - (half ? 1 : 0))); };
+  const label = (c, v) => (v === "" ? EMPTY : c && c.type === "bool" ? BOOL_LABELS[v] || v : c && c.type === "rating" ? ratingText(v, c.stars) : optionLabel(c, v));
 
   // "Artikel 2" before "Artikel 10", umlauts where the language puts them.
   const collator = new Intl.Collator(document.documentElement.lang || "de", { numeric: true, sensitivity: "base" });
   const natural = (a, b) => collator.compare(String(a ?? ""), String(b ?? ""));
+
+  // Stars in a cell: a click picks, arrows step, Enter keeps, Escape leaves it as it was.
+  function ratingEditor(c) {
+    const top = c.stars || 5;
+    const step = c.half === false ? 1 : 0.5;
+    return (cell, onRendered, success, cancel) => {
+      let value = Number(cell.getValue()) || 0;
+      const box = document.createElement("div");
+      box.className = "rating-input px-1";
+      box.tabIndex = 0;
+      box.setAttribute("role", "slider");
+      box.setAttribute("aria-valuemin", "0");
+      box.setAttribute("aria-valuemax", String(top));
+      const paint = (v) => { box.innerHTML = App.stars(v, top, "stars-sm"); box.setAttribute("aria-valuenow", String(v)); };
+      const at = (event) => {
+        const rect = box.firstElementChild.getBoundingClientRect();
+        const units = (Math.min(Math.max(event.clientX - rect.left, 0), rect.width) / rect.width) * (26 * top - 2);
+        const index = Math.min(Math.floor(units / 26), top - 1);
+        return step === 0.5 && units - index * 26 <= 12 ? index + 0.5 : index + 1;
+      };
+      paint(value);
+      box.addEventListener("pointermove", (e) => paint(at(e)));
+      box.addEventListener("pointerleave", () => paint(value));
+      box.addEventListener("click", (e) => { const v = at(e); success(v === value ? "" : v); });
+      box.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === "ArrowUp") value = Math.min(top, value + step);
+        else if (e.key === "ArrowLeft" || e.key === "ArrowDown") value = Math.max(0, value - step);
+        else if (e.key === "Enter") { success(value || ""); return; }
+        else if (e.key === "Escape") { cancel(); return; }
+        else return;
+        e.preventDefault();
+        paint(value);
+      });
+      box.addEventListener("blur", () => success(value || ""));
+      onRendered(() => box.focus());
+      return box;
+    };
+  }
 
   function column(c) {
     const col = { title: c.title, field: c.key, visible: c.visible, minWidth: 80, resizable: true, headerClick: (e, column) => openMenu(e, column, c) };
@@ -75,6 +114,10 @@
     } else if (c.type === "number") {
       col.editor = c.editable ? "number" : false; col.editorParams = { selectContents: true }; col.width = 100; col.sorter = "number";
       col.formatter = (cell) => App.esc(number(c, cell.getValue())); col.hozAlign = "right";
+    } else if (c.type === "rating") {
+      col.width = 26 + 16 * (c.stars || 5); col.sorter = "number";
+      col.formatter = (cell) => (cell.getValue() ? App.stars(cell.getValue(), c.stars || 5, "stars-sm") : "");
+      if (c.editable) col.editor = ratingEditor(c);
     } else if (c.type === "datetime") { col.formatter = (cell) => App.esc(deTime(cell.getValue())); col.width = 150; }
     else if (c.editable) { col.editor = "input"; col.editorParams = { selectContents: true }; }
     if (!col.sorter && !["date", "bool", "number", "datetime", "photo"].includes(c.type)) col.sorter = natural;
@@ -101,7 +144,11 @@
     selectableRows: "highlight",
     editTriggerEvent: "dblclick",
     placeholder: gettext("Keine Einträge"),
-    rowFormatter: (row) => row.getElement().classList.toggle("row-active", row.getData().id === RecordPanel.activeId),
+    rowFormatter: (row) => {
+      const id = row.getData().id;
+      row.getElement().classList.toggle("row-active", id === RecordPanel.activeId);
+      document.querySelector(`#gallery [data-card="${id}"]`)?.classList.toggle("is-active", id === RecordPanel.activeId);
+    },
     locale: "de",
     langs: { de: { data: { loading: gettext("Lädt"), error: gettext("Fehler") } } },
   });
@@ -170,7 +217,7 @@
     }
     const q = search.value.trim().toLowerCase();
     const text = (k, v) => `${v} ${columnByKey[k]?.optionLabels ? [].concat(v ?? []).map((x) => optionLabel(columnByKey[k], x)).join(" ") : ""}`.toLowerCase();
-    return !q || q.split(/\s+/).every((t) => Object.entries(row).some(([k, v]) => text(k, v).includes(t)));
+    return !q || q.split(/\s+/).every((t) => Object.entries(row).some(([k, v]) => k !== "id" && !k.startsWith("_") && text(k, v).includes(t)));
   }
 
   function applyFilters() {
@@ -336,6 +383,82 @@
     });
   }
 
+
+  // Gallery (tables/look.py): the rows of the list, with its search, filters, saved views and order, as
+  // cards with their cover. The list stays underneath and keeps doing the filtering and sorting.
+  const look = cfg.look;
+  const gallery = $("gallery");
+  let layout = "list";
+  const cellText = (c, v) => {
+    if (!c || v === null || v === undefined || v === "" || (Array.isArray(v) && !v.length)) return "";
+    if (c.type === "bool") return v ? c.title : "";
+    if (c.type === "date") return de(v);
+    if (c.type === "datetime") return deTime(v);
+    if (c.type === "number") return number(c, v);
+    if (c.type === "rating") return "";
+    if (c.type === "choice" || c.type === "multichoice") return [].concat(v).map((x) => optionLabel(c, x)).join(", ");
+    return String(v);
+  };
+  function card(row) {
+    const sub = (look.subtitle || []).map((k) => cellText(columnByKey[k], row[k])).filter(Boolean).join(" · ");
+    const flag = look.flag && row[look.flag] ? optionLabel(columnByKey[look.flag], row[look.flag]) : "";
+    const rating = look.rating && Number(row[look.rating]) ? App.stars(row[look.rating], columnByKey[look.rating]?.stars || 5, "stars-sm") : "";
+    const cover = row._cover ? `<img src="${App.esc(row._cover)}" alt="" loading="lazy" decoding="async">` : `<div class="gallery-empty">${App.esc(row.name)}</div>`;
+    return `<button type="button" class="gallery-card${row.id === RecordPanel.activeId ? " is-active" : ""}" data-card="${App.esc(row.id)}">`
+      + `<div class="gallery-cover">${cover}${flag ? `<span class="gallery-flag">${App.esc(flag)}</span>` : ""}</div>`
+      + `<div class="gallery-title">${App.esc(row.name)}</div>${sub ? `<div class="gallery-sub">${App.esc(sub)}</div>` : ""}${rating}</button>`;
+  }
+  function renderGallery() {
+    if (layout !== "gallery") return;
+    const rows = table.getData("active");
+    gallery.innerHTML = rows.length ? rows.map(card).join("") : `<p class="muted text-[13px] p-2">${App.esc(gettext("Keine Einträge"))}</p>`;
+  }
+  const renderGallerySoon = App.debounce(renderGallery, 30);
+  function fitGallery() {
+    if (layout !== "gallery") return;
+    gallery.style.height = `${Math.max(280, window.innerHeight - gallery.getBoundingClientRect().top - 24)}px`;
+  }
+  const gallerySort = $("gallery-sort");
+  function renderSortChoices() {
+    const sorted = table.getSorters()[0];
+    const current = sorted ? `${sorted.field}:${sorted.dir}` : "";
+    const keys = ["name", ...cfg.columns.filter((c) => ["number", "rating", "date", "datetime", "choice", "text"].includes(c.type)).map((c) => c.key)];
+    const title = (k) => (k === "name" ? gettext("Titel") : columnByKey[k]?.title || k);
+    gallerySort.innerHTML = keys.flatMap((k) => [["asc", "↑"], ["desc", "↓"]].map(([dir, arrow]) =>
+      `<option value="${App.esc(k)}:${dir}" ${current === `${k}:${dir}` ? "selected" : ""}>${App.esc(title(k))} ${arrow}</option>`)).join("");
+    if (!current) gallerySort.insertAdjacentHTML("afterbegin", `<option value="" selected>${App.esc(gettext("Sortieren"))}</option>`);
+  }
+  function setLayout(next, remember = true) {
+    if (!look || !gallery) return;
+    layout = next === "gallery" ? "gallery" : "list";
+    document.querySelectorAll("[data-layout]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.layout === layout)));
+    $("grid").classList.toggle("hidden", layout === "gallery");
+    gallery.classList.toggle("hidden", layout !== "gallery");
+    gallerySort.classList.toggle("hidden", layout !== "gallery");
+    if (remember) try { sessionStorage.setItem(`${LS}:layout`, layout); } catch (e) {}
+    if (layout === "gallery") { renderSortChoices(); renderGallery(); fitGallery(); } else { table.redraw(true); fitHeight(); }
+  }
+  if (look && gallery) {
+    let saved = null;
+    try { saved = sessionStorage.getItem(`${LS}:layout`); } catch (e) {}
+    document.querySelectorAll("[data-layout]").forEach((b) => b.addEventListener("click", () => setLayout(b.dataset.layout)));
+    ["dataFiltered", "dataSorted", "dataProcessed", "rowUpdated", "rowDeleted"].forEach((name) => table.on(name, renderGallerySoon));
+    table.on("dataSorted", () => { if (layout === "gallery") renderSortChoices(); });
+    gallerySort.addEventListener("change", () => {
+      const [field, dir] = gallerySort.value.split(":");
+      if (field) table.setSort(field, dir);
+    });
+    gallery.addEventListener("click", (e) => {
+      const item = e.target.closest("[data-card]");
+      if (!item) return;
+      if (e.metaKey || e.ctrlKey) { window.open(`${recordBase}${item.dataset.card}/`, "_blank"); return; }
+      RecordPanel.open(item.dataset.card);
+      gallery.querySelectorAll(".gallery-card").forEach((c) => c.classList.toggle("is-active", c.dataset.card === RecordPanel.activeId));
+    });
+    window.addEventListener("resize", App.debounce(fitGallery, 150));
+    table.on("tableBuilt", () => setLayout(saved || look.layout || "list", false));
+  }
+
   // Saved views
   const viewSelect = $("grid-views");
   const deleteBtn = $("grid-delete-view");
@@ -356,6 +479,7 @@
     activePreset = conf.preset || "";
     filters = { ...(conf.filters || {}) };
     if (conf.sort && conf.sort.length) table.setSort(conf.sort);
+    if (conf.layout) setLayout(conf.layout);
     table.setData().then(() => { applyFilters(); renderColumns(); });
   }
   viewSelect.addEventListener("change", () => {
@@ -369,7 +493,7 @@
     if (!name) return;
     const columns = table.getColumns().filter((c) => c.isVisible() && c.getField()).map((c) => c.getField());
     const sort = table.getSorters().map((s) => ({ column: s.field, dir: s.dir }));
-    const res = await App.postJSON(viewsUrl, { entity: cfg.entity, name, config: { columns, sort, scope: state.scope, preset: activePreset, filters } });
+    const res = await App.postJSON(viewsUrl, { entity: cfg.entity, name, config: { columns, sort, scope: state.scope, preset: activePreset, filters, ...(look ? { layout } : {}) } });
     if (res.ok) {
       const view = await res.json();
       cfg.views = cfg.views.filter((v) => v.id !== view.id).concat(view);

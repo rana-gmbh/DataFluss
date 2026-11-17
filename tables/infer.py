@@ -22,6 +22,7 @@ LABEL_RULES = [
     ("url", r"\burl\b|\blink\b|webseite|website|homepage|internet|网址|網址|链接|連結"),
     ("image", r"\bfoto|\bbild\b|\bphoto|\bimage|\bpicture|照片|图片|圖片"),
     ("file", r"\bdatei|\banhang|\bdokument|\bfile\b|\battachment|\bdocument|\bscan\b|\bpdf\b|文件|附件"),
+    ("rating", r"bewertung|sterne\b|\brating\b|\bstars\b|评分|評分"),
     ("datetime", r"uhrzeit|zeitpunkt|\btermin\b|date and time|\bdatetime|时间|時間"),
     ("date", r"datum|geburtstag|geboren|\bdate\b|birthday|\bab\b|\bbis\b|\bseit\b|\bvom\b|\bam$|frist|deadline|日期|生日"),
     ("number", r"anzahl|zahl\b|menge|preis|betrag|kosten|summe|wert\b|gewicht|\bnummer\b|\bnr\b|stück|\balter\b|"
@@ -124,7 +125,7 @@ def column(header, values):
     seen = [v.strip() for v in values if v and v.strip()]
     hint = from_label(header)
     if not seen:
-        return {"type": hint if hint in ("text", "textarea", "number", "date", "datetime", "bool", "email", "phone", "url") else "text",
+        return {"type": hint if hint in ("text", "textarea", "number", "rating", "date", "datetime", "bool", "email", "phone", "url") else "text",
                 "config": {}, "options": []}
     lowered = {v.lower() for v in seen}
     if lowered <= BOOL_WORDS and not lowered <= {"1", "0"}:

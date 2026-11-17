@@ -1,0 +1,25 @@
+{% load i18n ui %}<dialog class="tmdb-dialog" x-data="tmdbSearch('{% url 'tmdb_search' table.key %}')" x-ref="dialog" @tmdb-open.window="show($event.detail)" @close="reset()" aria-labelledby="tmdb-title">
+<form method="post" x-ref="form" :action="action" class="flex flex-col max-h-[calc(100vh-3rem-2px)]" @submit="busy = true">{% csrf_token %}
+  <input type="hidden" name="kind" x-ref="kind"><input type="hidden" name="id" x-ref="id">
+  <div class="p-4 pb-3 border-b space-y-3" style="border-color: var(--line)">
+    <div class="flex items-center gap-2"><h2 id="tmdb-title" class="font-semibold text-[15px] flex-1 inline-flex items-center gap-2">{% icon 'film' 'text-[var(--accent)]' %}<span x-text="title"></span></h2>
+      <button type="button" class="btn btn-ghost btn-icon" @click="$refs.dialog.close()" aria-label="{% translate 'Schließen' %}">{% icon 'x' %}</button></div>
+    {% translate "Titel eines Films oder einer Serie" as search_label %}
+    <div class="relative"><span class="absolute left-2.5 top-2.5 muted">{% icon 'search' %}</span>
+      <input class="input pl-8" x-ref="q" x-model="q" @input.debounce.350ms="find()" @keydown.down.prevent="move(1)" @keydown.up.prevent="move(-1)" @keydown.enter.prevent="choose()"
+        placeholder="{{ search_label }}" aria-label="{{ search_label }}" autocomplete="off" spellcheck="false" role="combobox" aria-controls="tmdb-results" aria-autocomplete="list"></div>
+    <div class="flex flex-wrap items-center gap-3 text-[13px]">
+      <div class="layout-switch" role="group" aria-label="{% translate 'Art' %}">
+        <button type="button" @click="setKind('')" :aria-pressed="kind === ''">{% translate "Alle" %}</button><button type="button" @click="setKind('movie')" :aria-pressed="kind === 'movie'">{% icon 'film' %}{% translate "Filme" %}</button><button type="button" @click="setKind('tv')" :aria-pressed="kind === 'tv'">{% icon 'tv' %}{% translate "Serien" %}</button></div>
+      {% if tmdb.watch %}<div class="flex flex-wrap items-center gap-3" x-show="mode === 'add'">
+        <label class="inline-flex items-center gap-1.5"><input type="radio" name="status" value="watched" x-model="status" class="accent-[var(--accent)]">{% translate "Gesehen" %}</label>
+        <label class="inline-flex items-center gap-1.5"><input type="radio" name="status" value="watchlist" x-model="status" class="accent-[var(--accent)]">{% translate "Auf die Merkliste" %}</label>
+        {% if tmdb.how %}<span x-show="status === 'watched'" class="inline-flex items-center gap-1.5"><input type="hidden" name="viewing" value="1" :disabled="status !== 'watched'">
+          <select class="input h-8 w-auto text-[13px]" name="how" x-model="how" :disabled="status !== 'watched'" aria-label="{% translate 'Wie gesehen' %}"><option value="">{% translate "Wie gesehen?" %}</option>{% for value, label in tmdb.how %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></span>{% endif %}
+      </div>{% endif %}
+    </div>
+  </div>
+  <div id="tmdb-results" x-ref="results" class="flex-1 overflow-y-auto p-2 min-h-[14rem]" role="listbox" aria-label="{% translate 'Treffer' %}" @click="pick($event)" x-show="!busy"></div>
+  <div class="flex-1 grid place-items-center min-h-[14rem] text-[13px] soft" x-show="busy" x-cloak role="status">{% translate "Wird von TMDB übernommen, mit Poster und Bildern …" %}</div>
+  {% include "tables/_tmdb_credit.html" with credit_class="px-4 py-2 border-t" %}
+</form></dialog>

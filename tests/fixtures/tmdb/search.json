@@ -1,0 +1,28 @@
+{
+ "page": 1,
+ "results": [
+  {
+   "media_type": "movie",
+   "id": 4711,
+   "title": "Der Leuchtturm am Ende der Welt",
+   "original_title": "The Lighthouse at World's End",
+   "release_date": "2021-03-14",
+   "poster_path": "/poster4711.jpg",
+   "overview": "Eine Leuchtturmwärterin …"
+  },
+  {
+   "media_type": "person",
+   "id": 1,
+   "name": "Jemand"
+  },
+  {
+   "media_type": "tv",
+   "id": 815,
+   "name": "Die Küstenwache",
+   "original_name": "Die Küstenwache",
+   "first_air_date": "2019-09-02",
+   "poster_path": null,
+   "overview": ""
+  }
+ ]
+}

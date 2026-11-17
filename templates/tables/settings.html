@@ -23,6 +23,9 @@
   <div x-show="type === 'number'" x-cloak class="space-y-3">
     <div><label class="label" for="f-decimals">{% translate "Nachkommastellen" %}</label><input id="f-decimals" class="input" name="decimals" type="number" min="0" max="6" value="0" :disabled="type !== 'number'"></div>
     <div><label class="label" for="f-unit">{% translate "Einheit" %}</label><input id="f-unit" class="input" name="unit" maxlength="10" placeholder="€"></div></div>
+  <div x-show="type === 'rating'" x-cloak class="grid grid-cols-2 gap-2">
+    <div><label class="label" for="f-stars">{% translate "Sterne" %}</label><input id="f-stars" class="input" name="max" type="number" min="3" max="10" value="5" :disabled="type !== 'rating'"></div>
+    <div><label class="label" for="f-half">{% translate "Schritte" %}</label><select id="f-half" class="input" name="half" :disabled="type !== 'rating'"><option value="1">{% translate "Halbe Sterne" %}</option><option value="0">{% translate "Ganze Sterne" %}</option></select></div></div>
   <div x-show="type === 'link'" x-cloak class="space-y-3">
     <div><label class="label" for="f-target">{% translate "Zeigt auf" %}</label><select id="f-target" class="input" name="target" x-ref="target" x-model="linkTarget" @change="touched = true">{% for v, l in link_targets %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
     <div><label class="label" for="f-reverse">{% translate "Name auf der Gegenseite" %}</label><input id="f-reverse" class="input" name="reverse" maxlength="100" placeholder="{% translate 'z. B. Ausleihen' %}"></div>
@@ -67,9 +70,30 @@
     <p class="muted text-[12px] mt-1">{% translate "Tabellen mit demselben Bereich stehen in der Seitenleiste zusammen, etwa unter „Bibliothek“ oder „Verein“. Leer: unter „Tabellen“." %}</p></div>
   <label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="in_nav" {% if table.in_nav %}checked{% endif %} class="accent-[var(--accent)]">{% translate "In der Seitenleiste zeigen" %}</label>
   <button class="btn btn-primary">{% translate "Speichern" %}</button></form>
-<div class="surface p-4 space-y-2"><h2 class="font-semibold">{% translate "Tabelle" %}</h2>
+<div class="surface p-4 space-y-2 lg:row-span-2"><h2 class="font-semibold">{% translate "Tabelle" %}</h2>
   <form method="post">{% csrf_token %}{% if table.archived %}<button class="btn w-full" name="action" value="restore">{% translate "Wiederherstellen" %}</button>{% else %}<button class="btn w-full" name="action" value="archive" data-confirm="{% translate 'Tabelle archivieren? Sie verschwindet aus der Seitenleiste, die Datensätze bleiben erhalten.' %}">{% translate "Archivieren" %}</button>{% endif %}</form>
   {% if not has_records %}<form method="post">{% csrf_token %}<button class="btn btn-danger w-full" name="action" value="delete" data-confirm="{% translate 'Tabelle mit allen Feldern endgültig löschen?' %}">{% translate "Löschen" %}</button></form>
-  {% else %}<p class="muted text-[12px]">{% translate "Eine Tabelle mit Datensätzen lässt sich nur archivieren." %}</p>{% endif %}</div></div>
+  {% else %}<p class="muted text-[12px]">{% translate "Eine Tabelle mit Datensätzen lässt sich nur archivieren." %}</p>{% endif %}</div>
+<form method="post" class="lg:col-span-2 surface p-5 space-y-3">{% csrf_token %}<input type="hidden" name="action" value="look">
+  <div><h2 class="font-semibold">{% translate "Darstellung" %}</h2>
+    <p class="muted text-[12px] mt-0.5">{% translate "Mit einem Titelbild zeigt die Liste die Datensätze auch als Galerie, und die Datensatzseite bekommt einen Kopf mit Bild, Untertitel und Bewertung." %}</p></div>
+  {% if look_choices.images %}
+  <div class="grid sm:grid-cols-2 gap-3">
+    <div><label class="label" for="l-cover">{% translate "Titelbild" %}</label><select id="l-cover" class="input" name="cover"><option value="">{% translate "Keins" %}</option>{% for f in look_choices.images %}<option value="{{ f.key }}" {% if f.key == look.cover %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select></div>
+    <div><label class="label" for="l-backdrop">{% translate "Hintergrundbild im Kopf" %}</label><select id="l-backdrop" class="input" name="backdrop"><option value="">{% translate "Titelbild unscharf" %}</option>{% for f in look_choices.images %}<option value="{{ f.key }}" {% if f.key == look.backdrop %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select></div>
+    <div><label class="label" for="l-shape">{% translate "Form des Titelbilds" %}</label><select id="l-shape" class="input" name="shape">
+      <option value="poster">{% translate "Hochformat (Poster, Buch)" %}</option><option value="square" {% if look.shape == 'square' %}selected{% endif %}>{% translate "Quadratisch" %}</option><option value="wide" {% if look.shape == 'wide' %}selected{% endif %}>{% translate "Querformat (Foto)" %}</option></select></div>
+    <div><label class="label" for="l-layout">{% translate "Liste öffnet als" %}</label><select id="l-layout" class="input" name="layout"><option value="list">{% translate "Liste" %}</option><option value="gallery" {% if look.layout == 'gallery' %}selected{% endif %}>{% translate "Galerie" %}</option></select></div>
+  </div>
+  <fieldset><legend class="label">{% translate "Untertitel (bis zu drei Felder)" %}</legend><div class="grid sm:grid-cols-3 gap-2">
+    {% for chosen in look_subtitles|slice:":3" %}<select class="input" name="subtitle" aria-label="{% blocktranslate trimmed with n=forloop.counter %}Untertitel {{ n }}{% endblocktranslate %}"><option value="">–</option>{% for f in look_choices.subtitle %}<option value="{{ f.key }}" {% if f.key == chosen %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select>{% endfor %}</div></fieldset>
+  <div class="grid sm:grid-cols-3 gap-3">
+    <div><label class="label" for="l-flag">{% translate "Markierung auf der Karte" %}</label><select id="l-flag" class="input" name="flag"><option value="">{% translate "Keine" %}</option>{% for f in look_choices.flags %}<option value="{{ f.key }}" {% if f.key == look.flag %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select></div>
+    <div><label class="label" for="l-rating">{% translate "Bewertung" %}</label><select id="l-rating" class="input" name="rating"><option value="">{% translate "Keine" %}</option>{% for f in look_choices.ratings %}<option value="{{ f.key }}" {% if f.key == look.rating %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select></div>
+    <div><label class="label" for="l-text">{% translate "Text im Kopf" %}</label><select id="l-text" class="input" name="text"><option value="">{% translate "Keiner" %}</option>{% for f in look_choices.texts %}<option value="{{ f.key }}" {% if f.key == look.text %}selected{% endif %}>{{ f.display_label }}</option>{% endfor %}</select></div>
+  </div>
+  <button class="btn btn-primary">{% translate "Speichern" %}</button>
+  {% else %}<p class="text-[13px] soft">{% translate "Legen Sie zuerst ein Feld vom Typ Bild an, etwa „Foto“ oder „Cover“." %}</p>{% endif %}
+</form></div>
 {% endif %}
 {% endblock %}

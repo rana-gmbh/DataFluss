@@ -19,10 +19,10 @@ from core import audit, fieldrules, fieldtypes as ft
 from core.models import ChangeLog, SavedView
 from vault.services import rate_limited
 
-from . import formula, links, masks as table_masks, services
+from . import formula, links, look as table_look, masks as table_masks, services
 from .models import Attachment, Record, Table
 
-GRID_EDITABLE = {"text", "textarea", "number", "bool", "choice", "date", "email", "phone", "url"}
+GRID_EDITABLE = {"text", "textarea", "number", "rating", "bool", "choice", "date", "email", "phone", "url"}
 
 
 def _table(request, key, edit=False):
@@ -58,7 +58,7 @@ def _columns(table, user):
             "editable": editable and field.type in GRID_EDITABLE and field.key not in fixed, "options": field.option_values,
             "optionLabels": {v: str(label) for v, label in field.option_choices},
             "decimals": None if field.type == "formula" and "decimals" not in (field.config or {}) else ft.decimals(field),
-            "unit": ft.config(field).get("unit", ""), "wide": bool(named and field.key == named.key) or field.type == "textarea",
+            "unit": ft.config(field).get("unit", ""), "stars": ft.stars(field), "half": ft.half_stars(field), "wide": bool(named and field.key == named.key) or field.type == "textarea",
         })
     return columns
 
@@ -115,12 +115,16 @@ def rows(table, user, ids=None):
         record.table = table
     related = _related_texts(table, records, [f for f in fields if f.type in ("link", "file", "image", "backlink")], user)
     formulas = [f for f in fields if f.type == "formula"]
+    cover = table_look.resolve(table, user, fields)["cover"]
+    covers = table_look.first_files(table, [r.pk for r in records], cover) if cover is not None else {}
     context = formula.Context(user)
     if formulas:
         context.prefetch(records)
     out = []
     for record in records:
         row = {"id": str(record.pk), "name": record.title or _("(ohne Titel)")}
+        if cover is not None:
+            row["_cover"] = covers.get(record.pk)
         for field in fields:
             if field.type == "formula":
                 row[field.key] = _formula_cell(record, field, context)
@@ -160,8 +164,12 @@ def records_page(request, key):
         "viewsUrl": reverse("table_views", args=[table.key]), "viewDeleteUrl": f"/api/tabellen/{table.key}/ansichten/{{id}}/loeschen/",
         "initialSort": named.key if named else "name", "views": _views(table, request.user), "classes": [], "platforms": [],
         "templates": [{"id": str(t.pk), "name": t.name} for t in _print_templates(table, request.user)], "canEdit": can_edit, "canArchive": False, "canDelete": can_edit, "preset": "",
+        "look": table_look.grid_config(table, request.user),
     }
-    return render(request, "tables/records.html", {"config": config, "table": table, "can_edit": can_edit, "active_nav": f"/tabellen/{table.key}/"})
+    from . import tmdb
+
+    return render(request, "tables/records.html", {"config": config, "table": table, "can_edit": can_edit, "tmdb": tmdb.page_context(table, request.user),
+                                                   "active_nav": f"/tabellen/{table.key}/"})
 
 
 @require_GET
@@ -232,8 +240,12 @@ def record_delete(request, key, pk):
 def _context(request, table, record):
     tabs = table_masks.build_view(table_masks.tree_for(table, request.user), record, request.user)
     _fill_first_tab(request, record, tabs)
-    return {"table": table, "record": record, "tabs": tabs, "form_url": reverse("record_form", args=[table.key, record.pk]),
-            "form_kind": f"table-{table.key}", "can_edit": services.may_edit(request.user, table),
+    can_edit = services.may_edit(request.user, table)
+    from . import tmdb
+
+    film = tmdb.page_context(table, request.user, record)
+    return {"tmdb": film, "head_actions": "tables/_tmdb_head.html" if film else "", "cast": tmdb.cast_context(record, request.user) if film else [],"table": table, "record": record, "tabs": tabs, "form_url": reverse("record_form", args=[table.key, record.pk]),
+            "form_kind": f"table-{table.key}", "can_edit": can_edit, "head": table_look.head(record, request.user, can_edit),
             "print_templates": _print_templates(table, request.user), "active_nav": f"/tabellen/{table.key}/"}
 
 

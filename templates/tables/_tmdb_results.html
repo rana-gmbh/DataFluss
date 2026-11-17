@@ -1,0 +1,12 @@
+{% load i18n ui %}{% if not has_key %}<div class="p-4 text-[13px] space-y-2"><p class="font-medium">{% translate "Für diese Datenbank ist noch kein TMDB-Schlüssel eingetragen." %}</p>
+  {% if may_set_key %}<p class="soft">{% translate "Er ist kostenlos und in zwei Minuten eingerichtet." %}</p><a class="btn btn-primary btn-sm" href="{% url 'tables_tmdb' %}">{% icon 'key' %}{% translate "Schlüssel einrichten" %}</a>
+  {% else %}<p class="soft">{% translate "Bitte die IT oder jemanden, der Tabellen gestalten darf, ihn unter Einstellungen → Tabellen → TMDB einzutragen." %}</p>{% endif %}</div>
+{% elif problem %}<p class="p-4 text-[13px] text-[var(--bad)]" role="alert">{{ problem }}</p>
+{% elif q and not results %}<p class="p-4 muted text-[13px]">{% blocktranslate trimmed %}Nichts gefunden für „{{ q }}“.{% endblocktranslate %}</p>
+{% else %}{% for r in results %}<div class="tmdb-result cursor-pointer" role="option" aria-selected="false" data-kind="{{ r.kind }}" data-id="{{ r.id }}" {% if r.record_url %}data-url="{{ r.record_url }}"{% endif %}>
+  {% if r.thumb %}<img class="tmdb-thumb" src="{{ r.thumb }}" alt="" loading="lazy">{% else %}<span class="tmdb-thumb grid place-items-center muted">{% icon 'film' %}</span>{% endif %}
+  <span class="min-w-0 flex-1"><span class="flex flex-wrap items-baseline gap-x-2"><span class="font-semibold text-[13.5px]">{{ r.title }}</span>{% if r.year %}<span class="muted text-[12px]">{{ r.year }}</span>{% endif %}
+    <span class="badge">{% if r.kind == 'tv' %}{% translate "Serie" %}{% else %}{% translate "Film" %}{% endif %}</span>{% if r.record_url %}<span class="badge badge-ok">{% icon 'check' %}{% translate "schon in der Tabelle" %}</span>{% endif %}</span>
+    {% if r.original_title and r.original_title != r.title %}<span class="block muted text-[12px]">{{ r.original_title }}</span>{% endif %}
+    {% if r.overview %}<span class="block soft text-[12px] mt-0.5 line-clamp-2">{{ r.overview }}</span>{% endif %}</span>
+</div>{% endfor %}{% endif %}

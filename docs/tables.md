@@ -44,6 +44,7 @@ imports every row; the import can be taken back under Import & Export within 24 
 |---|---|
 | Text, Text (mehrzeilig) | |
 | Zahl | Decimal places (0–6), a unit such as € or kg, minimum and maximum |
+| Bewertung | Stars: 3–10 (default 5), in half or whole steps. Set by click (left half of a star = half), by keyboard (arrows, 1–9, Home/End, Delete) or typed as "3,5"; clicking the same value again clears it. Counts as a number in formulas, sorting and filters; prints as ★★★½☆ |
 | Ja/Nein | |
 | Auswahl, Mehrfachauswahl | Options can be renamed and translated without changing stored records |
 | Datum, Datum und Uhrzeit | |
@@ -56,7 +57,8 @@ imports every row; the import can be taken back under Import & Export within 24 
 Fields can be required or unique. A field can change to a compatible type (text ↔ multi-line text,
 choice → text, number → text, …). Values are converted. Text, for instance from an imported file, can
 also become a choice (its values become the options), a number or a date, when every value fits; the
-values that do not are named. For anything else, create a new field.
+values that do not are named. A number can become a rating and back. For anything else, create a new
+field.
 Archiving a field hides it and keeps its values.
 
 ## Sections in the sidebar
@@ -78,6 +80,22 @@ Without any design, a record page shows all fields. **Datensatzseite → Im Mask
 opens the same designer as for pupils: tabs, sections, widths, notes, conditions ("show if") and the
 history block. Fields a page does not place still appear at the bottom under "Weitere Felder", so a new
 field is never invisible.
+
+### Look: gallery and header
+
+**Tabelle gestalten → Allgemein → Darstellung** gives a table pictures:
+
+- **Titelbild**: an image field. The list then also shows the records as a **gallery** (switch **Liste |
+  Galerie**; search, filters, sorting and saved views work the same, and a saved view remembers the
+  layout), and the record page gets a header with the picture, title, subtitles, stars (editable there)
+  and a short text. **Form des Titelbilds**: Hochformat (poster, book), Quadratisch or Querformat (photo).
+- **Hintergrundbild im Kopf**: another image field shown darkened behind the header; without one, the
+  title picture is shown blurred.
+- **Liste öffnet als**: list or gallery.
+- **Untertitel** (up to three fields), **Markierung auf der Karte** (a choice such as a status, shown as
+  a badge), **Bewertung** (a rating field) and **Text im Kopf** fill cards and header.
+
+Without a title picture, lists and record pages look as before.
 
 ## Links
 
@@ -180,8 +198,62 @@ template again, or a newer version of it, only adds what is missing; nothing is 
 changed is kept and named.
 
 DataFluss comes with **Bibliothek** (books and loans to pupils; needs Schulverwaltung), **Inventar** (rooms
-and the items in them, with value, condition, labels and room lists) and **Termine** (events with place,
-kind and a notice to print). Modules can bring further templates.
+and the items in them, with value, condition, labels and room lists), **Termine** (events with place,
+kind and a notice to print) and **Filme & Serien** (see below). Modules can bring further templates.
+
+### Filme & Serien
+
+Watched films and series and a watchlist, filled from [TMDB](https://www.themoviedb.org/). It works in
+every database, with or without Schulverwaltung, and creates the section "Filme & Serien" with:
+
+- **Filme & Serien**: title, original title, kind, status (Merkliste, Gesehen, Abgebrochen), rating, year,
+  runtime, seasons and episodes, genres, direction or creators, cast, plot, tagline, poster, background,
+  pictures, cast photos, own notes, TMDB id and link, and computed from the viewings: last watched, how
+  often, where. The list opens as a poster gallery; saved views **Merkliste**, **Gesehen** and **Beste
+  zuerst**.
+- **Sichtungen** (not in the sidebar, shown on the title): date, **Wie gesehen** (cinema, TV, Blu-ray/DVD,
+  Netflix, Disney+, … – more options under the field's settings), with whom, note. A title can be watched
+  any number of times.
+
+On a title's page, **Gesehen** (or **Nochmal gesehen**) adds a viewing for a day and a way and sets the
+status to Gesehen: this is how a title leaves the watchlist.
+
+#### TMDB
+
+**Einstellungen → Tabellen → TMDB** explains in four steps how to get a free key from
+[themoviedb.org/settings/api](https://www.themoviedb.org/settings/api). Both the **API key** (v3, 32
+characters) and the **API read access token** (v4, starts with `eyJ`) work. **Schlüssel testen** asks TMDB
+before saving; a key TMDB refuses is not saved. The key belongs to the database, is stored encrypted and
+reaches connected computers with the sync. Users with **Tabellen gestalten** may set it.
+
+- **Aus TMDB hinzufügen** (list of a table with TMDB): search films, series or both (arrow keys and
+  Enter work), choose **Gesehen** (with how) or **Auf die Merkliste**. Titles already in the table are
+  marked and open instead of being added twice. The server talks to TMDB, never the browser.
+- What comes over: all the fields above in the language of the interface (English text when TMDB has
+  none), up to 10 cast members (for series across all seasons), the poster (500 px), the background (1280
+  px), up to 4 more pictures (780 px) and photos of the first 8 cast members. Pictures are stored as files
+  of the record: they work offline and on connected computers. About 0.5–0.8 MB per title.
+- **Mit TMDB aktualisieren** fetches everything again; rating, status, viewings and notes stay. A record
+  typed in by hand gets **Bei TMDB suchen** instead, to match it.
+- Fields set read-only for a role are not changed by an import of that user.
+
+TMDB's terms ask for their logo and the sentence "This application uses TMDB and the TMDB APIs but is not
+endorsed, certified, or otherwise approved by TMDB."; both appear in the search, below lists and record
+pages of TMDB tables and on the settings page.
+
+The terms also forbid keeping TMDB data longer than six months. So every title notes the day of its last
+fetch (**Mit TMDB abgeglichen am**, tab TMDB), and **after five months DataFluss fetches it again by
+itself**, with its pictures, in the language of the last import or update. Like **Mit TMDB aktualisieren**
+this keeps rating, status, viewings and notes, but replaces what came from TMDB, including changes made
+there by hand. It is part of the nightly work: on a server every hour (`nightly_backup --if-due` in
+`deploy/start.sh`), on a computer with a database of its own once a day while it is open; a computer
+connected to a server leaves it to the server. Up to 40 titles per round, the oldest first; a refused key or
+no connection ends the round, and the next one goes on. A title TMDB no longer knows keeps its values and
+is asked for again five months later. Each round with updates leaves an entry in the log.
+
+Which fields TMDB fills is set in the template, under `look.tmdb` (see below), so another template can use
+TMDB with its own fields.
+
 
 ### Writing a template
 
@@ -218,9 +290,19 @@ a bundle like any other module.
 - A newer version raises `version`; it may add tables, fields and the rest, never remove them.
 - Table keys of a template should start with a short prefix of its own (`inv_raeume`), so they never meet
   a table someone made by hand. A formula may use formulas of other tables of the template, in any order.
+- A table may set `"section"` (its heading in the sidebar), `"in_nav": false` and `"look"` (see *Look*):
+  `{"cover": "f_poster", "backdrop": "f_hintergrund", "subtitle": ["f_jahr", "f_art"], "rating":
+  "f_bewertung", "flag": "f_status", "text": "f_handlung", "layout": "gallery", "shape": "poster"}`.
+  `look.tmdb` connects TMDB: `fields` maps TMDB data (`title`, `original_title`, `kind`, `year`,
+  `runtime`, `seasons`, `episodes`, `genres`, `director`, `creators`, `cast`, `overview`, `tagline`,
+  `poster`, `backdrop`, `images`, `cast_photos`, `tmdb_id`, `tmdb_url`, and `synced`, a date field for the
+  automatic update) to field keys, `kinds` names the
+  options for film and series, `genres` maps TMDB genre ids to options, and `watch` names the status
+  field, its values and the viewings table. `tables/library/filme.json` is the full example.
 
 ## Databases without Schulverwaltung
 
 When creating a database in the app, the card **Leer** starts without pupils, staff and devices: own
 tables only. Its start page lists the tables, and printing, import and links offer tables only. Templates
-that need Schulverwaltung, like the library, are not offered there; Inventar and Termine are.
+that need Schulverwaltung, like the library, are not offered there; Inventar, Termine and Filme & Serien
+are.

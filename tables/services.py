@@ -23,8 +23,8 @@ TITLE_TYPES = ("text", "email", "phone", "url", "choice", "number", "date")
 # A field may change to these types; values are converted to the new type's text.
 COMPATIBLE = {
     "text": {"textarea", "email", "phone", "url", "choice", "number", "date"}, "textarea": {"text"}, "email": {"text"}, "phone": {"text"},
-    "url": {"text"}, "choice": {"text", "multichoice"}, "number": {"text"}, "date": {"text"}, "datetime": {"text"},
-    "bool": {"text"},
+    "url": {"text"}, "choice": {"text", "multichoice"}, "number": {"text", "rating"}, "date": {"text"}, "datetime": {"text"},
+    "bool": {"text"}, "rating": {"number", "text"},
 }
 
 
@@ -264,7 +264,8 @@ def create_table(name, request=None):
     name = (name or "").strip()[:100]
     if not name:
         raise ValidationError(_("Bitte einen Namen für die Tabelle eingeben."))
-    key = _unique_key(_slug(name, 20) or "tabelle", set(Table.objects.values_list("key", flat=True)), 20)
+    # Keys that are pages of their own under /einstellungen/tabellen/ are never given to a table.
+    key = _unique_key(_slug(name, 20) or "tabelle", set(Table.objects.values_list("key", flat=True)) | {"vorlagen", "tmdb"}, 20)
     with transaction.atomic():
         table = Table.objects.create(key=key, name=name, order=Table.objects.count() * 10 + 10)
         first = Field.objects.create(table=table, key="f_name", label=_("Name"), type="text", order=10)
@@ -308,6 +309,8 @@ def clean_config(type_, data, table=None):
         return links.clean_config(type_, data)
     if type_ == "formula":
         return formula_config(table, data)
+    if type_ == "rating":
+        return rating_config(data)
     if type_ != "number":
         return {}
     config = {}
@@ -329,6 +332,20 @@ def clean_config(type_, data, table=None):
             except ValueError:
                 raise ValidationError(_("Bitte als Grenze eine Zahl eingeben."))
             config[bound] = text
+    return config
+
+
+def rating_config(data):
+    """Stars (3 to 10) and whether half stars may be given."""
+    try:
+        top = int(data.get("max") or 5)
+    except (TypeError, ValueError):
+        top = 0
+    if not 3 <= top <= 10:
+        raise ValidationError(_("Bitte 3 bis 10 Sterne angeben."))
+    config = {"max": top}
+    if data.get("half", True) in (False, "0", "false"):
+        config["half"] = False
     return config
 
 
@@ -365,7 +382,21 @@ def change_type(field, new_type, request=None):
     old = Field(type=field.type, options=field.options, config=field.config, label=field.label, labels=field.labels)
     records = [r for r in Record.everything.filter(table_id=field.table_id) if (r.values or {}).get(field.key) not in (None, "", [])]
     options, config, stored = field.options, {}, {}
-    if field.type == "text" and new_type in ("choice", "number", "date"):
+    if new_type == "rating" or field.type == "rating" and new_type == "number":
+        # Numbers or text that are ratings; a rating becomes a number with one decimal place, as stored.
+        config = {"decimals": 1} if new_type == "number" else {}
+        spec = Field(type=new_type, options=[], config=config, label=field.label, labels=field.labels)
+        unfit = []
+        for record in records:
+            raw = str(record.values[field.key]).strip()
+            try:
+                stored[record.pk] = ft.to_store(spec, ft.clean(spec, raw, check_required=False))
+            except (ValidationError, ValueError, TypeError):
+                unfit.append(raw)
+        if unfit:
+            raise ValidationError(_("%(n)s Werte passen nicht zum neuen Typ, etwa „%(examples)s“. Bitte zuerst korrigieren.")
+                                  % {"n": len(unfit), "examples": "“, „".join(unfit[:3])})
+    elif field.type == "text" and new_type in ("choice", "number", "date"):
         # Text from an import that turns out to be a choice, a number or a date: every value must fit.
         from transfer.parsers import parse_date
 
@@ -417,14 +448,14 @@ def edit_field(field, data, scope, request=None):
     field.label, field.labels = i18n.rename(field.label, field.labels, (data.get("label") or "")[:100], scope)
     field.help_text = (data.get("help_text") or "").strip()[:200]
     field.required = bool(data.get("required"))
-    field.unique = bool(data.get("unique")) and holds_value(field) and field.type not in ("bool", "secret", "multichoice", "textarea")
+    field.unique = bool(data.get("unique")) and holds_value(field) and field.type not in ("bool", "secret", "multichoice", "textarea", "rating")
     field.in_grid = bool(data.get("in_grid"))
     if ft.TYPES.get(field.type) and ft.TYPES[field.type].options:
         field.options = _edited_options(field, request, scope)
         if not field.options:
             raise ValidationError(_("Bitte mindestens eine Option angeben."))
-    if field.type == "number":
-        field.config = clean_config("number", data)
+    if field.type in ("number", "rating"):
+        field.config = clean_config(field.type, data)
     elif field.type in ("link", "file", "image"):
         field.config = _changed_link_config(field, data)
     elif field.type == "formula":

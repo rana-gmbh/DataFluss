@@ -11,13 +11,15 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from core import audit, fieldtypes as ft
+from core.models import SchoolSettings
 from core.permissions import require
 from masks import i18n
 
-from . import blueprints, formula, infer, links, masks as table_masks, services
+from . import blueprints, formula, infer, links, look as table_look, masks as table_masks, services
 from .models import EDIT, NONE, READ, Field, Record, Table
 
-ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench"]
+ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench",
+         "film", "tv", "clapper", "popcorn", "star", "bookmark"]
 TABS = ("felder", "seite", "rechte", "allgemein")
 
 
@@ -43,6 +45,7 @@ def table_list(request):
     rows = [{"table": t, "records": counts.get(t.pk, 0), "fields": t.fields.filter(archived=False).count()} for t in tables]
     groups = services.by_section(rows, section=lambda row: row["table"].section)
     return render(request, "tables/list.html", {"rows": rows, "groups": groups, "several": len(groups) > 1 or bool(groups and groups[0][0]), "error": error, "can_import": request.user.can("data.import"),
+                                                "tmdb_ready": bool(SchoolSettings.load().tmdb_key),
                                                 "access": services.access_choices(), "active_nav": "settings_home"})
 
 
@@ -57,7 +60,8 @@ def _settings_context(table, tab, **extra):
         "roles": [{"value": value, "label": label, "right": (table.rights or {}).get(value, NONE)} for value, label in services.roles()],
         "rights": [(NONE, _("Kein Zugriff")), (READ, _("Lesen")), (EDIT, _("Bearbeiten"))],
         "has_records": Record.everything.filter(table=table).exists(),
-        "masks": table.masks.prefetch_related("versions"),
+        "masks": table.masks.prefetch_related("versions"), "look": table.look or {}, "look_choices": table_look.choices(table),
+        "look_subtitles": ((table.look or {}).get("subtitle") or []) + ["", "", ""],
         "active_nav": "settings_home", **extra,
     }
 
@@ -78,6 +82,11 @@ def table_settings(request, key):
                 table.archived = False
                 table.save()
                 audit.log("table", f"Tabelle wiederhergestellt: {table.name}", request=request, target=table.pk)
+            elif action == "look":
+                table.look = table_look.clean(table, request.POST)
+                table.save()
+                audit.log("table", f"Darstellung von {table.name} geändert", request=request, target=table.pk)
+                messages.success(request, _("Gespeichert."))
             elif action == "delete":
                 services.delete_table(table, request=request)
                 messages.success(request, _("Die Tabelle wurde gelöscht."))

@@ -1,0 +1,20 @@
+{% load i18n ui %}<div class="flex flex-wrap items-center gap-2 {% if not compact %}pt-1{% endif %}">
+  {% if tmdb.watch and tmdb.can_edit %}<div x-data>
+    <button type="button" class="btn {% if not tmdb.watch.watched %}btn-primary{% endif %} {% if compact %}btn-sm{% endif %}" @click="$refs.watched.showModal(); $nextTick(() => $refs.watched.querySelector('select, input[type=date]')?.focus())">
+      {% icon 'circle-check' %}{% if tmdb.watch.watched %}{% translate "Nochmal gesehen" %}{% else %}{% translate "Gesehen" %}{% endif %}</button>
+    <dialog x-ref="watched" class="confirm-dialog" aria-labelledby="watched-title-{{ record.pk }}">
+      <form method="post" action="{{ tmdb.watch.url }}" class="space-y-3">{% csrf_token %}<input type="hidden" name="next" value="{% if compact %}{% url 'table_records' table.key %}?offen={{ record.pk }}{% else %}{{ request.path }}{% endif %}">
+        <h2 id="watched-title-{{ record.pk }}" class="font-semibold">{% if tmdb.watch.watched %}{% translate "Nochmal gesehen" %}{% else %}{% translate "Gesehen" %}{% endif %}</h2>
+        <p class="soft text-[13px]">{% translate "Trägt eine Sichtung ein und setzt den Status auf „Gesehen“." %}</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="label" for="w-date-{{ record.pk }}">{% translate "Wann" %}</label><input id="w-date-{{ record.pk }}" class="input" type="date" name="date" value="{{ tmdb.watch.today }}"></div>
+          {% if tmdb.how %}<div><label class="label" for="w-how-{{ record.pk }}">{% translate "Wie" %}</label><select id="w-how-{{ record.pk }}" class="input" name="how"><option value="">–</option>{% for value, label in tmdb.how %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>{% endif %}
+        </div>
+        <div class="flex justify-end gap-2"><button type="button" class="btn" @click="$refs.watched.close()">{% translate "Abbrechen" %}</button><button class="btn btn-primary">{% translate "Eintragen" %}</button></div>
+      </form></dialog></div>{% endif %}
+  {% if tmdb.search and tmdb.can_edit %}{% if tmdb.refresh_url %}
+    <form method="post" action="{{ tmdb.refresh_url }}">{% csrf_token %}<button class="btn {% if compact %}btn-sm{% endif %}" data-confirm="{% translate 'Handlung, Besetzung, Bilder und die anderen Angaben von TMDB neu holen? Bewertung, Status, Sichtungen und Notizen bleiben.' %}">{% icon 'refresh' %}{% translate "Mit TMDB aktualisieren" %}</button></form>
+  {% else %}<button type="button" class="btn {% if compact %}btn-sm{% endif %}" x-data @click="$dispatch('tmdb-open', { mode: 'match', action: '{{ tmdb.match_url }}', title: '{{ tmdb.match_title|escapejs }}', q: '{{ record.title|escapejs }}' })">{% icon 'search' %}{% translate "Bei TMDB suchen" %}</button>{% endif %}{% endif %}
+  {% if tmdb.page_url %}<a class="btn {% if compact %}btn-sm{% endif %}" href="{{ tmdb.page_url }}" target="_blank" rel="noopener">{% icon 'external' %}TMDB</a>{% endif %}
+</div>
+{% if tmdb.search and tmdb.can_edit and not tmdb.refresh_url and not compact %}{% include "tables/_tmdb_dialog.html" %}{% endif %}

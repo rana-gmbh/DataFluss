@@ -42,6 +42,8 @@ TYPES = {t.key: t for t in (
     FieldType("text", gettext_lazy("Text")),
     FieldType("textarea", gettext_lazy("Text (mehrzeilig)")),
     FieldType("number", gettext_lazy("Zahl"), grid="number"),
+    # Stars, 1 to config "max" (5), in half steps unless config "half" is false. Stored as decimal text ("3.5").
+    FieldType("rating", gettext_lazy("Bewertung"), grid="rating", people=False),
     FieldType("bool", gettext_lazy("Ja/Nein"), grid="bool"),
     FieldType("choice", gettext_lazy("Auswahl"), grid="choice", options=True),
     FieldType("multichoice", gettext_lazy("Mehrfachauswahl"), grid="multichoice", options=True),
@@ -76,6 +78,54 @@ def decimals(spec):
         return max(0, min(int(config(spec).get("decimals") or 0), 6))
     except (TypeError, ValueError):
         return 0
+
+
+STAR, HALF_STAR, NO_STAR = "★", "½", "☆"
+
+
+def stars(spec):
+    """How many stars a rating field has (3 to 10, default 5)."""
+    try:
+        return max(3, min(int(config(spec).get("max") or 5), 10))
+    except (TypeError, ValueError):
+        return 5
+
+
+def half_stars(spec):
+    return config(spec).get("half", True) is not False
+
+
+def _rating(spec, raw):
+    """A rating from a click (3.5), a typed or imported number ("3,5") or stars ("★★★½")."""
+    text = str(raw).strip()
+    message = _("%(field)s: Bitte eine Bewertung von %(low)s bis %(high)s Sternen eingeben.") % {
+        "field": spec.display_label, "low": "0,5" if half_stars(spec) else "1", "high": stars(spec)}
+    if text and set(text) <= {STAR, HALF_STAR, NO_STAR, " "}:
+        value = Decimal(text.count(STAR)) + (Decimal("0.5") if HALF_STAR in text else 0)
+    else:
+        try:
+            value = Decimal(normalize_number(text))
+        except InvalidOperation:
+            raise ValidationError(message)
+    if not value.is_finite() or value < 0 or value > stars(spec):
+        raise ValidationError(message)
+    if value == 0:
+        return None
+    step = Decimal("0.5") if half_stars(spec) else Decimal(1)
+    if value % step:
+        raise ValidationError(message)
+    return value.quantize(Decimal("0.1"))
+
+
+def rating_text(spec, value):
+    """★★★½☆ for prints, exports and the history."""
+    try:
+        value = Decimal(str(value))
+    except InvalidOperation:
+        return str(value)
+    whole = int(value)
+    half = value - whole >= Decimal("0.5")
+    return STAR * whole + (HALF_STAR if half else "") + NO_STAR * (stars(spec) - whole - (1 if half else 0))
 
 
 def parse_date(text):
@@ -181,13 +231,15 @@ def clean(spec, raw, check_required=True):
     if kind == "bool":
         return str(raw).lower() in ("1", "true", "on", "ja", "yes")
     if empty:
-        return [] if kind in ("multichoice", "link") else None if kind in ("date", "datetime", "number") else ""
+        return [] if kind in ("multichoice", "link") else None if kind in ("date", "datetime", "number", "rating") else ""
     if kind == "date":
         return parse_date(raw)
     if kind == "datetime":
         return parse_datetime(raw)
     if kind == "number":
         return _number(spec, raw)
+    if kind == "rating":
+        return _rating(spec, raw)
     if kind == "email":
         value = str(raw).lower()
         try:
@@ -233,6 +285,10 @@ def check_stored(spec, raw):
         if not isinstance(raw, bool):
             raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
         return
+    if spec.type == "rating":
+        if not isinstance(raw, str) or to_store(spec, clean(spec, raw, check_required=False)) != raw:
+            raise ValidationError(_("%(field)s: Ungültiger Wert.") % {"field": spec.display_label})
+        return
     if spec.type in ("date", "datetime", "number"):
         value = from_store(spec, raw)
         if value is raw and isinstance(raw, str):  # did not parse
@@ -265,7 +321,7 @@ def from_store(spec, raw):
     """The stored JSON value as the Python value. Anything that no longer fits the field (it changed type,
     or a computer sent an old value) comes back unchanged, so nothing is lost and display still shows it."""
     if raw in (None, ""):
-        return None if spec.type in ("date", "datetime", "number") else raw
+        return None if spec.type in ("date", "datetime", "number", "rating") else raw
     try:
         if spec.type == "date" and isinstance(raw, str):
             return date.fromisoformat(raw)
@@ -273,6 +329,8 @@ def from_store(spec, raw):
             return datetime.fromisoformat(raw)
         if spec.type == "number" and isinstance(raw, (str, int, float)) and not isinstance(raw, bool):
             return Decimal(str(raw)) if decimals(spec) else int(raw)
+        if spec.type == "rating" and isinstance(raw, (str, int, float)) and not isinstance(raw, bool):
+            return Decimal(str(raw))
     except (ValueError, InvalidOperation):
         return raw
     return raw
@@ -305,6 +363,8 @@ def display(spec, value, localized=False):
         return MASKED if value else ""
     if value is None:
         return ""
+    if spec.type == "rating" and isinstance(value, (Decimal, int, float)) and not isinstance(value, bool):
+        return rating_text(spec, value)
     if isinstance(value, bool):
         if localized:
             return _("Ja") if value else _("Nein")

@@ -1,3 +1,5 @@
+import logging
+
 from django.apps import AppConfig
 
 
@@ -26,6 +28,12 @@ class TablesConfig(AppConfig):
                 links.remove_file(attachment)
             Record.empty_old()
             links.cleanup()
+            try:  # TMDB's terms: no title's data older than six months (tables/tmdb.py refresh_due)
+                from . import tmdb
+
+                tmdb.refresh_due()
+            except Exception:  # noqa: BLE001 - never stands in the way of the bins and the backup
+                logging.getLogger(__name__).exception("TMDB refresh failed")
 
         # Files of records are served by their own view, which checks the table's right (views_records.record_file).
         modules.contribute(sync=TablesScope(), nightly=nightly, search=services.search, private_media=("tables/",))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 21:28+0100\n"
+"POT-Creation-Date: 2026-11-17 17:33+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -503,6 +503,9 @@ msgstr "文字（多行）"
 msgid "Zahl"
 msgstr "數字"
 
+msgid "Bewertung"
+msgstr "評分"
+
 msgid "Ja/Nein"
 msgstr "是/否"
 
@@ -547,6 +550,11 @@ msgstr "計算"
 
 msgid "Gegenseite einer Verknüpfung"
 msgstr "連結的另一端"
+
+#, python-format
+msgid ""
+"%(field)s: Bitte eine Bewertung von %(low)s bis %(high)s Sternen eingeben."
+msgstr "%(field)s：請輸入 %(low)s 到 %(high)s 星的評分。"
 
 msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
 msgstr "請輸入有效日期，例如 24.12.2015。"
@@ -810,6 +818,10 @@ msgstr "檔案已損毀，或使用了其他金鑰加密。"
 
 msgid "Foto vergrößern"
 msgstr "放大照片"
+
+#, python-format
+msgid "%(n)s von %(top)s Sternen"
+msgstr "%(n)s / %(top)s 星"
 
 msgid "Bereiche"
 msgstr "功能區"
@@ -1730,6 +1742,10 @@ msgid "Feld %(field)s: Formel fehlt."
 msgstr "欄位 %(field)s：缺少公式。"
 
 #, python-format
+msgid "Tabelle %(key)s: ungültige Darstellung."
+msgstr "表格 %(key)s：顯示設定無效。"
+
+#, python-format
 msgid "Tabelle %(key)s: Das Titelfeld fehlt."
 msgstr "表格 %(key)s：缺少標題欄位。"
 
@@ -1944,6 +1960,9 @@ msgstr "%(field)s：請上傳圖片（JPEG、PNG、GIF 或 WebP）。"
 msgid "Unbekannter Datensatz."
 msgstr "未知記錄。"
 
+msgid "Unbekanntes Feld."
+msgstr "未知欄位。"
+
 msgid "Datensatz"
 msgstr "記錄"
 
@@ -1997,6 +2016,9 @@ msgstr "請輸入小數位數（0 到 6）。"
 msgid "Bitte als Grenze eine Zahl eingeben."
 msgstr "請輸入數字作為限制。"
 
+msgid "Bitte 3 bis 10 Sterne angeben."
+msgstr "請設定 3 到 10 顆星。"
+
 msgid "Bitte eine Formel eingeben."
 msgstr "請輸入公式。"
 
@@ -2006,14 +2028,14 @@ msgid ""
 msgstr "此類型與已填寫的值不符，建議新增欄位。"
 
 #, python-format
-msgid "Eine Auswahl braucht 1 bis 50 verschiedene Werte; hier sind es %(n)s."
-msgstr "選項欄位需要 1 到 50 個不同的值；這裡有 %(n)s 個。"
-
-#, python-format
 msgid ""
 "%(n)s Werte passen nicht zum neuen Typ, etwa „%(examples)s“. Bitte zuerst "
 "korrigieren."
 msgstr "有 %(n)s 個值不符合新類型，例如「%(examples)s」。請先修改。"
+
+#, python-format
+msgid "Eine Auswahl braucht 1 bis 50 verschiedene Werte; hier sind es %(n)s."
+msgstr "選項欄位需要 1 到 50 個不同的值；這裡有 %(n)s 個。"
 
 msgid ""
 "Einige Datensätze haben hier mehrere Einträge. Entfernen Sie diese zuerst."
@@ -2021,6 +2043,55 @@ msgstr "部分記錄在此有多個項目，請先刪除。"
 
 msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "該表格包含記錄，請改為封存。"
+
+msgid ""
+"Das sieht weder wie ein API-Schlüssel (32 Zeichen) noch wie ein "
+"Lesezugriffs-Token (beginnt mit „eyJ“) aus."
+msgstr "這既不像 API 金鑰（32 個字元），也不像讀取存取權杖（以「eyJ」開頭）。"
+
+msgid "TMDB hat ein zu großes Bild geschickt."
+msgstr "TMDB 傳送的圖片太大。"
+
+msgid ""
+"TMDB lehnt den Schlüssel ab. Bitte unter Einstellungen → Tabellen → TMDB "
+"prüfen."
+msgstr "TMDB 拒絕了該金鑰。請在 設定 → 表格 → TMDB 中檢查。"
+
+msgid "Diesen Titel gibt es bei TMDB nicht (mehr)."
+msgstr "TMDB 上沒有（或已不再有）這個作品。"
+
+msgid "TMDB bittet um eine kurze Pause. Bitte gleich noch einmal versuchen."
+msgstr "TMDB 請求稍作等待，請稍後再試。"
+
+#, python-format
+msgid ""
+"TMDB antwortet mit einem Fehler (%(code)s). Bitte später noch einmal "
+"versuchen."
+msgstr "TMDB 回傳錯誤（%(code)s）。請稍後再試。"
+
+msgid "TMDB ist nicht erreichbar. Besteht eine Internetverbindung?"
+msgstr "無法連線 TMDB。是否已連上網際網路？"
+
+msgid "Für diese Datenbank ist noch kein TMDB-Schlüssel eingetragen."
+msgstr "此資料庫尚未填寫 TMDB 金鑰。"
+
+msgid "TMDB hat unerwartet geantwortet. Bitte später noch einmal versuchen."
+msgstr "TMDB 回傳了意外的結果。請稍後再試。"
+
+msgid "TMDB lehnt den Schlüssel ab."
+msgstr "TMDB 拒絕了該金鑰。"
+
+msgid "Unbekannte Art."
+msgstr "未知類型。"
+
+msgid "Ungültiger Bildpfad."
+msgstr "圖片路徑無效。"
+
+msgid "TMDB hat kein Bild geschickt."
+msgstr "TMDB 沒有傳送圖片。"
+
+msgid "Bei TMDB suchen und übernehmen"
+msgstr "在 TMDB 搜尋並匯入"
 
 #, python-format
 msgid "Der Bereich heißt jetzt „%(name)s“."
@@ -2045,9 +2116,6 @@ msgstr "%(table)s 已封存，記錄會保留。"
 
 msgid "Die Tabelle wurde gelöscht."
 msgstr "表格已刪除。"
-
-msgid "Unbekanntes Feld."
-msgstr "未知欄位。"
 
 msgid "Die Rechte wurden gespeichert."
 msgstr "權限已儲存。"
@@ -2119,6 +2187,51 @@ msgstr "%(name)s 已移至資源回收筒。"
 msgid "%(count)d Datensatz ist wieder da."
 msgid_plural "%(count)d Datensätze sind wieder da."
 msgstr[0] "%(count)d 筆記錄已還原。"
+
+msgid "Der TMDB-Schlüssel wurde entfernt."
+msgstr "TMDB 金鑰已移除。"
+
+#, python-format
+msgid "Gespeichert, aber noch nicht geprüft: %(problem)s"
+msgstr "已儲存，但尚未驗證：%(problem)s"
+
+msgid "Der Schlüssel funktioniert und ist gespeichert."
+msgstr "金鑰有效，已儲存。"
+
+msgid "Bitte zuerst einen Schlüssel einfügen."
+msgstr "請先貼上金鑰。"
+
+msgid "Der Lesezugriffs-Token funktioniert."
+msgstr "讀取存取權杖有效。"
+
+msgid "Der API-Schlüssel funktioniert."
+msgstr "API 金鑰有效。"
+
+#, python-format
+msgid "Nicht alles kam von TMDB an: %(problems)s"
+msgstr "部分內容未能從 TMDB 取得：%(problems)s"
+
+#, python-format
+msgid "%(title)s wurde aus TMDB übernommen."
+msgstr "已從 TMDB 匯入 %(title)s。"
+
+#, python-format
+msgid "%(title)s ist schon in der Tabelle."
+msgstr "%(title)s 已在表格中。"
+
+#, python-format
+msgid "Dieser Titel ist schon als %(title)s in der Tabelle."
+msgstr "該作品已以 %(title)s 存在於表格中。"
+
+#, python-format
+msgid "%(title)s wurde mit TMDB abgeglichen."
+msgstr "%(title)s 已與 TMDB 同步。"
+
+msgid "Als gesehen eingetragen."
+msgstr "已登記為已看。"
+
+msgid "Als gesehen markiert."
+msgstr "已標記為已看。"
 
 msgid ""
 "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
@@ -3948,6 +4061,89 @@ msgstr "搜尋並新增…"
 msgid "Suchen und ersetzen …"
 msgstr "搜尋並取代…"
 
+msgid "Bewertung entfernen"
+msgstr "刪除評分"
+
+msgid "Daten und Bilder von TMDB."
+msgstr "資料和圖片來自 TMDB。"
+
+msgid "Titel eines Films oder einer Serie"
+msgstr "電影或劇集名稱"
+
+msgid "Filme"
+msgstr "電影"
+
+msgid "Serien"
+msgstr "劇集"
+
+msgid "Gesehen"
+msgstr "已看"
+
+msgid "Auf die Merkliste"
+msgstr "加入想看清單"
+
+msgid "Wie gesehen"
+msgstr "觀看方式"
+
+msgid "Wie gesehen?"
+msgstr "觀看方式？"
+
+msgid "Treffer"
+msgstr "搜尋結果"
+
+msgid "Wird von TMDB übernommen, mit Poster und Bildern …"
+msgstr "正在從 TMDB 匯入，包括海報和圖片……"
+
+msgid "Nochmal gesehen"
+msgstr "再看一次"
+
+msgid "Trägt eine Sichtung ein und setzt den Status auf „Gesehen“."
+msgstr "登記一次觀看，並把狀態設為「已看」。"
+
+msgid "Wann"
+msgstr "時間"
+
+msgid "Wie"
+msgstr "方式"
+
+msgid "Eintragen"
+msgstr "登記"
+
+msgid ""
+"Handlung, Besetzung, Bilder und die anderen Angaben von TMDB neu holen? "
+"Bewertung, Status, Sichtungen und Notizen bleiben."
+msgstr "要從 TMDB 重新取得劇情、演員、圖片等資訊嗎？評分、狀態、觀看記錄和筆記會保留。"
+
+msgid "Mit TMDB aktualisieren"
+msgstr "從 TMDB 更新"
+
+msgid "Bei TMDB suchen"
+msgstr "在 TMDB 搜尋"
+
+msgid "Er ist kostenlos und in zwei Minuten eingerichtet."
+msgstr "金鑰免費，兩分鐘即可設定好。"
+
+msgid "Schlüssel einrichten"
+msgstr "設定金鑰"
+
+msgid ""
+"Bitte die IT oder jemanden, der Tabellen gestalten darf, ihn unter "
+"Einstellungen → Tabellen → TMDB einzutragen."
+msgstr "請讓 IT 或有權設計表格的人在 設定 → 表格 → TMDB 中填寫。"
+
+#, python-format
+msgid "Nichts gefunden für „%(q)s“."
+msgstr "找不到「%(q)s」。"
+
+msgid "Serie"
+msgstr "劇集"
+
+msgid "Film"
+msgstr "電影"
+
+msgid "schon in der Tabelle"
+msgstr "已在表格中"
+
 msgid "Alle wiederherstellen"
 msgstr "全部還原"
 
@@ -4012,6 +4208,18 @@ msgstr "小數位數（數字）"
 
 msgid "automatisch"
 msgstr "自動"
+
+msgid "Sterne"
+msgstr "星數"
+
+msgid "Schritte"
+msgstr "步長"
+
+msgid "Halbe Sterne"
+msgstr "半星"
+
+msgid "Ganze Sterne"
+msgstr "整星"
 
 msgid "Nachkommastellen"
 msgstr "小數位數"
@@ -4132,11 +4340,23 @@ msgstr "從 Excel 或 CSV 檔案"
 msgid "Jede Spalte wird ein Feld mit passendem Typ, jede Zeile ein Datensatz."
 msgstr "每一欄成為一個合適類型的欄位，每一列成為一筆記錄。"
 
+msgid "TMDB: Filme und Serien"
+msgstr "TMDB：電影和劇集"
+
+msgid "Schlüssel eingerichtet"
+msgstr "已設定金鑰"
+
+msgid "Eigenen Schlüssel einrichten, um Filme und Serien zu übernehmen"
+msgstr "設定自己的金鑰以匯入電影和劇集"
+
 msgid "In den Papierkorb"
 msgstr "移至資源回收筒"
 
 msgid "Diesen Datensatz in den Papierkorb legen?"
 msgstr "將此記錄移至資源回收筒？"
+
+msgid "Besetzung"
+msgstr "演員"
 
 msgid "Neuer Datensatz. Alles wird beim Verlassen eines Feldes gespeichert."
 msgstr "新記錄。離開欄位時會自動儲存。"
@@ -4155,6 +4375,21 @@ msgstr "設計表格"
 
 msgid "Neuer Datensatz"
 msgstr "新增記錄"
+
+msgid "Film oder Serie aus TMDB hinzufügen"
+msgstr "從 TMDB 新增電影或劇集"
+
+msgid "Aus TMDB hinzufügen"
+msgstr "從 TMDB 新增"
+
+msgid "Darstellung"
+msgstr "顯示方式"
+
+msgid "Galerie"
+msgstr "圖庫"
+
+msgid "Sortieren"
+msgstr "排序"
 
 msgid "Importieren"
 msgstr "匯入"
@@ -4241,6 +4476,143 @@ msgstr "永久刪除此表格及其所有欄位？"
 
 msgid "Eine Tabelle mit Datensätzen lässt sich nur archivieren."
 msgstr "包含記錄的表格只能封存。"
+
+msgid ""
+"Mit einem Titelbild zeigt die Liste die Datensätze auch als Galerie, und die"
+" Datensatzseite bekommt einen Kopf mit Bild, Untertitel und Bewertung."
+msgstr "設定封面圖後，清單也可以以圖庫形式顯示記錄，記錄頁面會有帶圖片、副標題和評分的頁首。"
+
+msgid "Titelbild"
+msgstr "封面圖"
+
+msgid "Keins"
+msgstr "無"
+
+msgid "Hintergrundbild im Kopf"
+msgstr "頁首背景圖"
+
+msgid "Titelbild unscharf"
+msgstr "模糊的封面圖"
+
+msgid "Form des Titelbilds"
+msgstr "封面圖形狀"
+
+msgid "Hochformat (Poster, Buch)"
+msgstr "直式（海報、書籍）"
+
+msgid "Quadratisch"
+msgstr "方形"
+
+msgid "Querformat (Foto)"
+msgstr "橫式（照片）"
+
+msgid "Liste öffnet als"
+msgstr "清單預設顯示為"
+
+msgid "Untertitel (bis zu drei Felder)"
+msgstr "副標題（最多三個欄位）"
+
+#, python-format
+msgid "Untertitel %(n)s"
+msgstr "副標題 %(n)s"
+
+msgid "Markierung auf der Karte"
+msgstr "卡片上的標記"
+
+msgid "Keine"
+msgstr "無"
+
+msgid "Text im Kopf"
+msgstr "頁首文字"
+
+msgid "Keiner"
+msgstr "無"
+
+msgid "Legen Sie zuerst ein Feld vom Typ Bild an, etwa „Foto“ oder „Cover“."
+msgstr "請先建立一個圖片類型的欄位，例如「照片」或「封面」。"
+
+msgid "Zurück zu den Tabellen"
+msgstr "返回表格"
+
+msgid ""
+"Mit einem eigenen, kostenlosen Schlüssel von themoviedb.org lassen sich "
+"Filme und Serien in Tabellen wie „Filme & Serien“ suchen und mit Handlung, "
+"Genres, Besetzung, Poster und Bildern übernehmen. Die Bilder werden im "
+"Datensatz gespeichert und sind danach auch ohne Internet da."
+msgstr ""
+"使用您自己的 themoviedb.org "
+"免費金鑰，可以在「電影與劇集」等表格中搜尋電影和劇集，並匯入劇情、類別、演員、海報和圖片。圖片儲存在記錄中，之後無需連網也能查看。"
+
+msgid "So kommen Sie zu einem Schlüssel"
+msgstr "如何取得金鑰"
+
+msgid ""
+"Bei themoviedb.org ein kostenloses Konto anlegen und die E-Mail-Adresse "
+"bestätigen."
+msgstr "在 themoviedb.org 註冊免費帳戶並確認電子郵件地址。"
+
+msgid "Konto anlegen"
+msgstr "註冊帳戶"
+
+msgid ""
+"Angemeldet die API-Einstellungen öffnen und einen Schlüssel beantragen. Als "
+"Nutzung „Persönlich“ wählen; die Angaben zur Anwendung dürfen knapp sein (z."
+" B. „DataFluss, private Filmliste“)."
+msgstr "登入後開啟 API 設定並申請金鑰。用途選擇「個人」；應用說明可以簡短（例如「DataFluss，個人片單」）。"
+
+msgid "API-Einstellungen öffnen"
+msgstr "開啟 API 設定"
+
+msgid ""
+"Dort den „API-Schlüssel“ (32 Zeichen) oder den „API-Lesezugriffs-Token“ "
+"(sehr lang, beginnt mit „eyJ“) kopieren. Beides funktioniert."
+msgstr "在那裡複製「API 金鑰」（32 個字元）或「API 讀取存取權杖」（很長，以「eyJ」開頭）。兩者都可以。"
+
+msgid "Hier einfügen, testen und speichern."
+msgstr "貼到這裡，測試並儲存。"
+
+msgid "Schlüssel"
+msgstr "金鑰"
+
+msgid "Neuer Schlüssel"
+msgstr "新金鑰"
+
+msgid "API-Schlüssel oder Lesezugriffs-Token"
+msgstr "API 金鑰或讀取存取權杖"
+
+msgid "Leer lassen, um den gespeicherten zu behalten"
+msgstr "留空則保留已儲存的金鑰"
+
+msgid "Schlüssel testen"
+msgstr "測試金鑰"
+
+msgid ""
+"Der Schlüssel gilt für die ganze Datenbank und wird verschlüsselt "
+"gespeichert. Verbundene Computer erhalten ihn mit dem Abgleich. Er wird nie "
+"angezeigt."
+msgstr "該金鑰適用於整個資料庫，並加密儲存。已連線的電腦會在同步時取得它。它永遠不會被顯示。"
+
+msgid "Eingerichtet"
+msgstr "已設定"
+
+msgid "Lesezugriffs-Token"
+msgstr "讀取存取權杖"
+
+msgid "API-Schlüssel"
+msgstr "API 金鑰"
+
+msgid ""
+"Den TMDB-Schlüssel entfernen? Suchen und Übernehmen gehen danach nicht mehr."
+msgstr "移除 TMDB 金鑰嗎？之後將無法搜尋和匯入。"
+
+msgid "Noch kein Schlüssel"
+msgstr "尚無金鑰"
+
+msgid "Tabellen mit TMDB"
+msgstr "使用 TMDB 的表格"
+
+msgid "Noch keine. Die Vorlage „Filme & Serien“ legt eine an."
+msgstr "還沒有。「電影與劇集」範本會建立一個。"
 
 msgid ""
 "CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "

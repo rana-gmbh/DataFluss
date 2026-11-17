@@ -406,7 +406,28 @@ window.App = (function () {
   const hint = document.getElementById("search-key");
   if (hint && !/Mac|iPhone|iPad/.test(navigator.platform)) hint.textContent = gettext("Strg K");
 
-  return { ask, csrf, esc, toast, post, postJSON, debounce, openModal, closeModal };
+  // A rating as a row of stars (core/templatetags/ui.py stars): 24 wide with a gap of 2, so half a star
+  // ends in the middle of its star.
+  const STAR = "M12 1.8l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.56l-6.18 3.25L7 13.93 2 9.06l6.91-1z";
+  function starShare(value, top) {
+    const v = Math.max(0, Math.min(Number(value) || 0, top));
+    const whole = Math.floor(v);
+    const covered = v - whole ? whole * 26 + (v - whole) * 24 : Math.max(whole * 26 - 2, 0);
+    return Math.round((covered / (26 * top - 2)) * 10000) / 100;
+  }
+  function starRow(top) {
+    let paths = "";
+    for (let i = 0; i < top; i++) paths += `<path transform="translate(${i * 26} 0)" d="${STAR}"/>`;
+    return `<svg viewBox="0 0 ${26 * top - 2} 24" fill="currentColor" aria-hidden="true">${paths}</svg>`;
+  }
+  function stars(value, top = 5, size = "") {
+    const row = starRow(top);
+    const n = String(Number(value) || 0).replace(".", ",");
+    const label = interpolate(gettext("%(n)s von %(top)s Sternen"), { n, top }, true);
+    return `<span class="stars ${size}" style="--pct:${starShare(value, top)}%" role="img" aria-label="${esc(label)}"><span class="stars-off">${row}</span><span class="stars-on">${row}</span></span>`;
+  }
+
+  return { ask, csrf, esc, toast, post, postJSON, debounce, openModal, closeModal, stars, starShare };
 })();
 
 // Hidden secret values vanish again by themselves.

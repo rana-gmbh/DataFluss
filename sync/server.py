@@ -89,7 +89,7 @@ def _school_payload():
     return {"name": school.name, "short_name": school.short_name, "logo": school.logo.name or "",
             "confidential_footer": school.confidential_footer, "email_domain": school.email_domain,
             "require_2fa": school.require_2fa, "key_check": school.key_check,
-            "languages": school.languages, "modules": school.modules}
+            "languages": school.languages, "modules": school.modules, "tmdb_key": school.tmdb_key}
 
 
 def _files(model, data):

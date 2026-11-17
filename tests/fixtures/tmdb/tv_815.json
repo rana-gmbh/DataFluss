@@ -1,0 +1,79 @@
+{
+ "id": 815,
+ "name": "Die Küstenwache",
+ "original_name": "Die Küstenwache",
+ "first_air_date": "2019-09-02",
+ "episode_run_time": [
+  45,
+  50
+ ],
+ "number_of_seasons": 3,
+ "number_of_episodes": 30,
+ "tagline": "",
+ "overview": "",
+ "created_by": [
+  {
+   "name": "Clara Idee"
+  },
+  {
+   "name": "Dora Buch"
+  }
+ ],
+ "genres": [
+  {
+   "id": 10759,
+   "name": "Action & Adventure"
+  },
+  {
+   "id": 80,
+   "name": "Krimi"
+  }
+ ],
+ "poster_path": "/poster815.jpg",
+ "backdrop_path": null,
+ "credits": {
+  "cast": [
+   {
+    "name": "Nur Letztestaffel",
+    "character": "Gast",
+    "order": 0,
+    "profile_path": null
+   }
+  ],
+  "crew": []
+ },
+ "images": {
+  "backdrops": []
+ },
+ "aggregate_credits": {
+  "cast": [
+   {
+    "name": "Emil Wache",
+    "order": 0,
+    "profile_path": "/emil.jpg",
+    "roles": [
+     {
+      "character": "Matrose",
+      "episode_count": 2
+     },
+     {
+      "character": "Kapitän",
+      "episode_count": 28
+     }
+    ]
+   },
+   {
+    "name": "Fritzi Fern",
+    "order": 1,
+    "profile_path": null,
+    "roles": [
+     {
+      "character": "Lotsin",
+      "episode_count": 10
+     }
+    ]
+   }
+  ],
+  "crew": []
+ }
+}

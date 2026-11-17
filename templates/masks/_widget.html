@@ -5,8 +5,10 @@
   {% if type == 'link' or type == 'backlink' %}{% include "tables/_link_widget.html" %}
   {% elif type == 'file' or type == 'image' %}{% include "tables/_file_widget.html" %}
   {% elif type == 'formula' %}<div class="input flex items-center truncate {% if item.problem %}text-[var(--bad)]{% endif %}" style="background: var(--surface-2)" id="f-{{ key }}" {% if item.problem %}title="{{ item.problem }}"{% endif %}>{{ item.value|default:"–" }}</div>{% if item.problem %}<p class="text-[12px] mt-1 text-[var(--bad)]">{{ item.problem }}</p>{% endif %}
+  {% elif type == 'rating' and item.editable %}{% include "tables/_rating.html" %}
   {% elif not item.editable and type != 'secret' %}
-    {% if type == 'bool' %}<div class="label">{{ item.label }}</div><div class="text-[13px]">{% if item.value %}{% translate "Ja" %}{% else %}{% translate "Nein" %}{% endif %}</div>
+    {% if type == 'rating' %}<div class="rating-input" aria-readonly="true" id="f-{{ key }}">{% stars item.value item.stars %}<span class="rating-value">{{ item.display|default:"–" }}</span></div>
+    {% elif type == 'bool' %}<div class="label">{{ item.label }}</div><div class="text-[13px]">{% if item.value %}{% translate "Ja" %}{% else %}{% translate "Nein" %}{% endif %}</div>
     {% elif type == 'class' %}<div class="input flex items-center" style="background: var(--surface-2)">{{ item.display|default:"–" }}</div>
     {% elif type == 'textarea' %}<div class="input whitespace-pre-wrap py-2 h-auto min-h-9" style="background: var(--surface-2)">{{ item.value|default:"–" }}</div>
     {% else %}<div class="input flex items-center truncate" style="background: var(--surface-2)" id="f-{{ key }}">{% if item.value and type == 'date' or item.value and type == 'choice' or item.value and type == 'multichoice' or item.value and type == 'number' or item.value and type == 'datetime' %}{{ item.display }}{% else %}{{ item.value|default:"–" }}{% endif %}</div>{% endif %}

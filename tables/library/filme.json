@@ -1,0 +1,1346 @@
+{
+ "format": 1,
+ "id": "filme",
+ "version": 1,
+ "title": "Filme & Serien",
+ "titles": {
+  "en": "Films & series",
+  "zh-hans": "电影与剧集",
+  "zh-hant": "電影與劇集"
+ },
+ "description": "Gesehene Filme und Serien mit Sternen, Sichtungen und Merkliste; Titel, Handlung, Besetzung und Poster kommen auf Wunsch von TMDB.",
+ "descriptions": {
+  "en": "Films and series you have watched, with stars, viewings and a watchlist; title, story, cast and poster can come from TMDB.",
+  "zh-hans": "看过的电影和剧集，带星级评分、观看记录和想看清单；标题、剧情、演员和海报可从 TMDB 获取。",
+  "zh-hant": "看過的電影和劇集，帶星級評分、觀看記錄和想看清單；標題、劇情、演員和海報可從 TMDB 取得。"
+ },
+ "requires": [],
+ "tables": [
+  {
+   "key": "fs_titel",
+   "name": "Filme & Serien",
+   "names": {
+    "en": "Films & series",
+    "zh-hans": "电影与剧集",
+    "zh-hant": "電影與劇集"
+   },
+   "icon": "film",
+   "section": "Filme & Serien",
+   "description": "Was ich gesehen habe und noch sehen will.",
+   "title_field": "f_titel",
+   "rights": {
+    "sekretariat": "edit",
+    "schulleitung": "edit",
+    "team": "edit",
+    "gast": "read"
+   },
+   "look": {
+    "cover": "f_poster",
+    "backdrop": "f_hintergrund",
+    "subtitle": [
+     "f_jahr",
+     "f_art",
+     "f_genres"
+    ],
+    "flag": "f_status",
+    "rating": "f_bewertung",
+    "text": "f_handlung",
+    "layout": "gallery",
+    "shape": "poster",
+    "tmdb": {
+     "fields": {
+      "title": "f_titel",
+      "original_title": "f_originaltitel",
+      "kind": "f_art",
+      "year": "f_jahr",
+      "runtime": "f_laufzeit",
+      "seasons": "f_staffeln",
+      "episodes": "f_episoden",
+      "genres": "f_genres",
+      "director": "f_regie",
+      "creators": "f_erschaffen",
+      "cast": "f_besetzung",
+      "overview": "f_handlung",
+      "tagline": "f_tagline",
+      "tmdb_id": "f_tmdb_id",
+      "tmdb_url": "f_tmdb_link",
+      "poster": "f_poster",
+      "backdrop": "f_hintergrund",
+      "images": "f_bilder",
+      "cast_photos": "f_besetzungsfotos",
+      "synced": "f_tmdb_abgleich"
+     },
+     "kinds": {
+      "movie": "Film",
+      "tv": "Serie"
+     },
+     "genres": {
+      "28": "Action",
+      "12": "Abenteuer",
+      "16": "Animation",
+      "35": "Komödie",
+      "80": "Krimi",
+      "99": "Dokumentarfilm",
+      "18": "Drama",
+      "10751": "Familie",
+      "14": "Fantasy",
+      "36": "Historie",
+      "27": "Horror",
+      "10402": "Musik",
+      "9648": "Mystery",
+      "10749": "Liebesfilm",
+      "878": "Science-Fiction",
+      "10770": "TV-Film",
+      "53": "Thriller",
+      "10752": "Kriegsfilm",
+      "37": "Western",
+      "10759": [
+       "Action",
+       "Abenteuer"
+      ],
+      "10762": "Kinder",
+      "10763": "Nachrichten",
+      "10764": "Reality",
+      "10765": [
+       "Science-Fiction",
+       "Fantasy"
+      ],
+      "10766": "Soap",
+      "10767": "Talkshow",
+      "10768": [
+       "Kriegsfilm",
+       "Politik"
+      ]
+     },
+     "watch": {
+      "status": "f_status",
+      "watchlist": "Merkliste",
+      "watched": "Gesehen",
+      "viewings": {
+       "table": "fs_sichtungen",
+       "link": "f_titel",
+       "date": "f_datum",
+       "how": "f_wie"
+      }
+     }
+    }
+   },
+   "fields": [
+    {
+     "key": "f_titel",
+     "label": "Titel",
+     "labels": {
+      "en": "Title",
+      "zh-hans": "标题",
+      "zh-hant": "標題"
+     },
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "f_originaltitel",
+     "label": "Originaltitel",
+     "labels": {
+      "en": "Original title",
+      "zh-hans": "原标题",
+      "zh-hant": "原標題"
+     },
+     "type": "text",
+     "in_grid": false
+    },
+    {
+     "key": "f_art",
+     "label": "Art",
+     "labels": {
+      "en": "Kind",
+      "zh-hans": "类型",
+      "zh-hant": "類型"
+     },
+     "type": "choice",
+     "options": [
+      {
+       "value": "Film",
+       "labels": {
+        "en": "Film",
+        "zh-hans": "电影",
+        "zh-hant": "電影"
+       }
+      },
+      {
+       "value": "Serie",
+       "labels": {
+        "en": "Series",
+        "zh-hans": "剧集",
+        "zh-hant": "劇集"
+       }
+      }
+     ]
+    },
+    {
+     "key": "f_status",
+     "label": "Status",
+     "labels": {
+      "en": "Status",
+      "zh-hans": "状态",
+      "zh-hant": "狀態"
+     },
+     "type": "choice",
+     "options": [
+      {
+       "value": "Merkliste",
+       "labels": {
+        "en": "Watchlist",
+        "zh-hans": "想看",
+        "zh-hant": "想看"
+       }
+      },
+      {
+       "value": "Gesehen",
+       "labels": {
+        "en": "Watched",
+        "zh-hans": "已看",
+        "zh-hant": "已看"
+       }
+      },
+      {
+       "value": "Abgebrochen",
+       "labels": {
+        "en": "Stopped",
+        "zh-hans": "弃看",
+        "zh-hant": "棄看"
+       }
+      }
+     ]
+    },
+    {
+     "key": "f_bewertung",
+     "label": "Bewertung",
+     "labels": {
+      "en": "Rating",
+      "zh-hans": "评分",
+      "zh-hant": "評分"
+     },
+     "type": "rating",
+     "config": {
+      "max": 5
+     }
+    },
+    {
+     "key": "f_jahr",
+     "label": "Jahr",
+     "labels": {
+      "en": "Year",
+      "zh-hans": "年份",
+      "zh-hant": "年份"
+     },
+     "type": "number"
+    },
+    {
+     "key": "f_laufzeit",
+     "label": "Laufzeit",
+     "labels": {
+      "en": "Runtime",
+      "zh-hans": "片长",
+      "zh-hant": "片長"
+     },
+     "type": "number",
+     "config": {
+      "unit": "min"
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_staffeln",
+     "label": "Staffeln",
+     "labels": {
+      "en": "Seasons",
+      "zh-hans": "季数",
+      "zh-hant": "季數"
+     },
+     "type": "number",
+     "in_grid": false
+    },
+    {
+     "key": "f_episoden",
+     "label": "Episoden",
+     "labels": {
+      "en": "Episodes",
+      "zh-hans": "集数",
+      "zh-hant": "集數"
+     },
+     "type": "number",
+     "in_grid": false
+    },
+    {
+     "key": "f_genres",
+     "label": "Genres",
+     "labels": {
+      "en": "Genres",
+      "zh-hans": "类别",
+      "zh-hant": "類別"
+     },
+     "type": "multichoice",
+     "options": [
+      {
+       "value": "Action",
+       "labels": {
+        "en": "Action",
+        "zh-hans": "动作",
+        "zh-hant": "動作"
+       }
+      },
+      {
+       "value": "Abenteuer",
+       "labels": {
+        "en": "Adventure",
+        "zh-hans": "冒险",
+        "zh-hant": "冒險"
+       }
+      },
+      {
+       "value": "Animation",
+       "labels": {
+        "en": "Animation",
+        "zh-hans": "动画",
+        "zh-hant": "動畫"
+       }
+      },
+      {
+       "value": "Komödie",
+       "labels": {
+        "en": "Comedy",
+        "zh-hans": "喜剧",
+        "zh-hant": "喜劇"
+       }
+      },
+      {
+       "value": "Krimi",
+       "labels": {
+        "en": "Crime",
+        "zh-hans": "犯罪",
+        "zh-hant": "犯罪"
+       }
+      },
+      {
+       "value": "Dokumentarfilm",
+       "labels": {
+        "en": "Documentary",
+        "zh-hans": "纪录片",
+        "zh-hant": "紀錄片"
+       }
+      },
+      {
+       "value": "Drama",
+       "labels": {
+        "en": "Drama",
+        "zh-hans": "剧情",
+        "zh-hant": "劇情"
+       }
+      },
+      {
+       "value": "Familie",
+       "labels": {
+        "en": "Family",
+        "zh-hans": "家庭",
+        "zh-hant": "家庭"
+       }
+      },
+      {
+       "value": "Fantasy",
+       "labels": {
+        "en": "Fantasy",
+        "zh-hans": "奇幻",
+        "zh-hant": "奇幻"
+       }
+      },
+      {
+       "value": "Historie",
+       "labels": {
+        "en": "History",
+        "zh-hans": "历史",
+        "zh-hant": "歷史"
+       }
+      },
+      {
+       "value": "Horror",
+       "labels": {
+        "en": "Horror",
+        "zh-hans": "恐怖",
+        "zh-hant": "恐怖"
+       }
+      },
+      {
+       "value": "Musik",
+       "labels": {
+        "en": "Music",
+        "zh-hans": "音乐",
+        "zh-hant": "音樂"
+       }
+      },
+      {
+       "value": "Mystery",
+       "labels": {
+        "en": "Mystery",
+        "zh-hans": "悬疑",
+        "zh-hant": "懸疑"
+       }
+      },
+      {
+       "value": "Liebesfilm",
+       "labels": {
+        "en": "Romance",
+        "zh-hans": "爱情",
+        "zh-hant": "愛情"
+       }
+      },
+      {
+       "value": "Science-Fiction",
+       "labels": {
+        "en": "Science fiction",
+        "zh-hans": "科幻",
+        "zh-hant": "科幻"
+       }
+      },
+      {
+       "value": "TV-Film",
+       "labels": {
+        "en": "TV movie",
+        "zh-hans": "电视电影",
+        "zh-hant": "電視電影"
+       }
+      },
+      {
+       "value": "Thriller",
+       "labels": {
+        "en": "Thriller",
+        "zh-hans": "惊悚",
+        "zh-hant": "驚悚"
+       }
+      },
+      {
+       "value": "Kriegsfilm",
+       "labels": {
+        "en": "War",
+        "zh-hans": "战争",
+        "zh-hant": "戰爭"
+       }
+      },
+      {
+       "value": "Western",
+       "labels": {
+        "en": "Western",
+        "zh-hans": "西部",
+        "zh-hant": "西部"
+       }
+      },
+      {
+       "value": "Kinder",
+       "labels": {
+        "en": "Kids",
+        "zh-hans": "儿童",
+        "zh-hant": "兒童"
+       }
+      },
+      {
+       "value": "Politik",
+       "labels": {
+        "en": "Politics",
+        "zh-hans": "政治",
+        "zh-hant": "政治"
+       }
+      },
+      {
+       "value": "Reality",
+       "labels": {
+        "en": "Reality",
+        "zh-hans": "真人秀",
+        "zh-hant": "真人秀"
+       }
+      },
+      {
+       "value": "Talkshow",
+       "labels": {
+        "en": "Talk show",
+        "zh-hans": "脱口秀",
+        "zh-hant": "脫口秀"
+       }
+      },
+      {
+       "value": "Soap",
+       "labels": {
+        "en": "Soap",
+        "zh-hans": "肥皂剧",
+        "zh-hant": "肥皂劇"
+       }
+      },
+      {
+       "value": "Nachrichten",
+       "labels": {
+        "en": "News",
+        "zh-hans": "新闻",
+        "zh-hant": "新聞"
+       }
+      }
+     ]
+    },
+    {
+     "key": "f_regie",
+     "label": "Regie",
+     "labels": {
+      "en": "Director",
+      "zh-hans": "导演",
+      "zh-hant": "導演"
+     },
+     "type": "text"
+    },
+    {
+     "key": "f_erschaffen",
+     "label": "Erschaffen von",
+     "labels": {
+      "en": "Created by",
+      "zh-hans": "创作者",
+      "zh-hant": "創作者"
+     },
+     "type": "text",
+     "in_grid": false
+    },
+    {
+     "key": "f_besetzung",
+     "label": "Besetzung",
+     "labels": {
+      "en": "Cast",
+      "zh-hans": "演员",
+      "zh-hant": "演員"
+     },
+     "type": "textarea",
+     "in_grid": false,
+     "help_text": "Eine Zeile je Person: Name – Rolle"
+    },
+    {
+     "key": "f_handlung",
+     "label": "Handlung",
+     "labels": {
+      "en": "Story",
+      "zh-hans": "剧情简介",
+      "zh-hant": "劇情簡介"
+     },
+     "type": "textarea",
+     "in_grid": false
+    },
+    {
+     "key": "f_tagline",
+     "label": "Tagline",
+     "labels": {
+      "en": "Tagline",
+      "zh-hans": "宣传语",
+      "zh-hant": "宣傳語"
+     },
+     "type": "text",
+     "in_grid": false
+    },
+    {
+     "key": "f_poster",
+     "label": "Poster",
+     "labels": {
+      "en": "Poster",
+      "zh-hans": "海报",
+      "zh-hant": "海報"
+     },
+     "type": "image",
+     "in_grid": false
+    },
+    {
+     "key": "f_hintergrund",
+     "label": "Hintergrundbild",
+     "labels": {
+      "en": "Backdrop",
+      "zh-hans": "背景图",
+      "zh-hant": "背景圖"
+     },
+     "type": "image",
+     "in_grid": false
+    },
+    {
+     "key": "f_bilder",
+     "label": "Bilder",
+     "labels": {
+      "en": "Pictures",
+      "zh-hans": "剧照",
+      "zh-hant": "劇照"
+     },
+     "type": "image",
+     "config": {
+      "multiple": true
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_besetzungsfotos",
+     "label": "Fotos der Besetzung",
+     "labels": {
+      "en": "Cast photos",
+      "zh-hans": "演员照片",
+      "zh-hant": "演員照片"
+     },
+     "type": "image",
+     "config": {
+      "multiple": true
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_sichtungen",
+     "label": "Sichtungen",
+     "labels": {
+      "en": "Viewings",
+      "zh-hans": "观看记录",
+      "zh-hant": "觀看記錄"
+     },
+     "type": "backlink",
+     "config": {
+      "link": "fs_sichtungen.f_titel"
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_zuletzt",
+     "label": "Zuletzt gesehen",
+     "labels": {
+      "en": "Last watched",
+      "zh-hans": "最近观看",
+      "zh-hant": "最近觀看"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "max({@fs_sichtungen.f_titel}.{f_datum})"
+     }
+    },
+    {
+     "key": "f_anzahl",
+     "label": "Wie oft gesehen",
+     "labels": {
+      "en": "Times watched",
+      "zh-hans": "观看次数",
+      "zh-hant": "觀看次數"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "count({@fs_sichtungen.f_titel})",
+      "decimals": 0
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_gesehen_auf",
+     "label": "Gesehen auf",
+     "labels": {
+      "en": "Watched on",
+      "zh-hans": "观看方式",
+      "zh-hant": "觀看方式"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "join({@fs_sichtungen.f_titel}.{f_wie}, \", \")"
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_notizen",
+     "label": "Eigene Notizen",
+     "labels": {
+      "en": "Own notes",
+      "zh-hans": "个人笔记",
+      "zh-hant": "個人筆記"
+     },
+     "type": "textarea",
+     "in_grid": false
+    },
+    {
+     "key": "f_tmdb_id",
+     "label": "TMDB-Kennung",
+     "labels": {
+      "en": "TMDB id",
+      "zh-hans": "TMDB 编号",
+      "zh-hant": "TMDB 編號"
+     },
+     "type": "text",
+     "unique": true,
+     "in_grid": false
+    },
+    {
+     "key": "f_tmdb_link",
+     "label": "TMDB-Seite",
+     "labels": {
+      "en": "TMDB page",
+      "zh-hans": "TMDB 页面",
+      "zh-hant": "TMDB 頁面"
+     },
+     "type": "url",
+     "in_grid": false
+    },
+    {
+     "key": "f_tmdb_abgleich",
+     "label": "Mit TMDB abgeglichen am",
+     "labels": {
+      "en": "Updated from TMDB on",
+      "zh-hans": "与 TMDB 同步于",
+      "zh-hant": "與 TMDB 同步於"
+     },
+     "type": "date",
+     "in_grid": false,
+     "help_text": "Wird beim Übernehmen und Aktualisieren gesetzt. Nach fünf Monaten holt DataFluss den Titel von selbst neu von TMDB."
+    }
+   ]
+  },
+  {
+   "key": "fs_sichtungen",
+   "name": "Sichtungen",
+   "names": {
+    "en": "Viewings",
+    "zh-hans": "观看记录",
+    "zh-hant": "觀看記錄"
+   },
+   "icon": "calendar",
+   "section": "Filme & Serien",
+   "in_nav": false,
+   "description": "Wann und wie ein Film oder eine Serie gesehen wurde.",
+   "title_field": "f_bezeichnung",
+   "rights": {
+    "sekretariat": "edit",
+    "schulleitung": "edit",
+    "team": "edit",
+    "gast": "read"
+   },
+   "fields": [
+    {
+     "key": "f_bezeichnung",
+     "label": "Bezeichnung",
+     "labels": {
+      "en": "Name",
+      "zh-hans": "名称",
+      "zh-hant": "名稱"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "if(isempty({f_wie}), format({f_datum}), format({f_datum}) & \" · \" & {f_wie})"
+     }
+    },
+    {
+     "key": "f_titel",
+     "label": "Film oder Serie",
+     "labels": {
+      "en": "Film or series",
+      "zh-hans": "电影或剧集",
+      "zh-hant": "電影或劇集"
+     },
+     "type": "link",
+     "required": true,
+     "config": {
+      "target": "record",
+      "table": "fs_titel",
+      "reverse": "Sichtungen"
+     }
+    },
+    {
+     "key": "f_datum",
+     "label": "Datum",
+     "labels": {
+      "en": "Date",
+      "zh-hans": "日期",
+      "zh-hant": "日期"
+     },
+     "type": "date",
+     "required": true
+    },
+    {
+     "key": "f_wie",
+     "label": "Wie gesehen",
+     "labels": {
+      "en": "Watched how",
+      "zh-hans": "观看方式",
+      "zh-hant": "觀看方式"
+     },
+     "type": "choice",
+     "options": [
+      {
+       "value": "Kino",
+       "labels": {
+        "en": "Cinema",
+        "zh-hans": "电影院",
+        "zh-hant": "電影院"
+       }
+      },
+      {
+       "value": "Fernsehen",
+       "labels": {
+        "en": "TV",
+        "zh-hans": "电视",
+        "zh-hant": "電視"
+       }
+      },
+      {
+       "value": "Blu-ray/DVD",
+       "labels": {
+        "en": "Blu-ray/DVD",
+        "zh-hans": "蓝光/DVD",
+        "zh-hant": "藍光/DVD"
+       }
+      },
+      {
+       "value": "Netflix",
+       "labels": {
+        "en": "Netflix",
+        "zh-hans": "Netflix",
+        "zh-hant": "Netflix"
+       }
+      },
+      {
+       "value": "Disney+",
+       "labels": {
+        "en": "Disney+",
+        "zh-hans": "Disney+",
+        "zh-hant": "Disney+"
+       }
+      },
+      {
+       "value": "Prime Video",
+       "labels": {
+        "en": "Prime Video",
+        "zh-hans": "Prime Video",
+        "zh-hant": "Prime Video"
+       }
+      },
+      {
+       "value": "Apple TV+",
+       "labels": {
+        "en": "Apple TV+",
+        "zh-hans": "Apple TV+",
+        "zh-hant": "Apple TV+"
+       }
+      },
+      {
+       "value": "WOW/Sky",
+       "labels": {
+        "en": "WOW/Sky",
+        "zh-hans": "WOW/Sky",
+        "zh-hant": "WOW/Sky"
+       }
+      },
+      {
+       "value": "Paramount+",
+       "labels": {
+        "en": "Paramount+",
+        "zh-hans": "Paramount+",
+        "zh-hant": "Paramount+"
+       }
+      },
+      {
+       "value": "RTL+",
+       "labels": {
+        "en": "RTL+",
+        "zh-hans": "RTL+",
+        "zh-hant": "RTL+"
+       }
+      },
+      {
+       "value": "Joyn",
+       "labels": {
+        "en": "Joyn",
+        "zh-hans": "Joyn",
+        "zh-hant": "Joyn"
+       }
+      },
+      {
+       "value": "ARD/ZDF-Mediathek",
+       "labels": {
+        "en": "ARD/ZDF media library",
+        "zh-hans": "ARD/ZDF 媒体库",
+        "zh-hant": "ARD/ZDF 媒體庫"
+       }
+      },
+      {
+       "value": "MagentaTV",
+       "labels": {
+        "en": "MagentaTV",
+        "zh-hans": "MagentaTV",
+        "zh-hant": "MagentaTV"
+       }
+      },
+      {
+       "value": "Crunchyroll",
+       "labels": {
+        "en": "Crunchyroll",
+        "zh-hans": "Crunchyroll",
+        "zh-hant": "Crunchyroll"
+       }
+      },
+      {
+       "value": "Leihen/Kaufen online",
+       "labels": {
+        "en": "Rent/buy online",
+        "zh-hans": "在线租买",
+        "zh-hant": "線上租買"
+       }
+      },
+      {
+       "value": "Sonstiges",
+       "labels": {
+        "en": "Other",
+        "zh-hans": "其他",
+        "zh-hant": "其他"
+       }
+      }
+     ]
+    },
+    {
+     "key": "f_mit",
+     "label": "Mit wem",
+     "labels": {
+      "en": "With whom",
+      "zh-hans": "和谁",
+      "zh-hant": "和誰"
+     },
+     "type": "text"
+    },
+    {
+     "key": "f_notiz",
+     "label": "Notiz",
+     "labels": {
+      "en": "Note",
+      "zh-hans": "备注",
+      "zh-hant": "備註"
+     },
+     "type": "textarea",
+     "in_grid": false
+    }
+   ]
+  }
+ ],
+ "masks": [
+  {
+   "table": "fs_titel",
+   "name": "Film oder Serie",
+   "names": {
+    "en": "Film or series",
+    "zh-hans": "电影或剧集",
+    "zh-hant": "電影或劇集"
+   },
+   "tree": {
+    "tabs": [
+     {
+      "id": "t1",
+      "title": "Überblick",
+      "titles": {
+       "en": "Overview",
+       "zh-hans": "概览",
+       "zh-hant": "概覽"
+      },
+      "sections": [
+       {
+        "id": "s1",
+        "title": "Gesehen",
+        "titles": {
+         "en": "Watched",
+         "zh-hans": "观看",
+         "zh-hant": "觀看"
+        },
+        "items": [
+         {
+          "type": "field",
+          "field": "f_status",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_bewertung",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_zuletzt",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_sichtungen",
+          "w": 8
+         },
+         {
+          "type": "field",
+          "field": "f_anzahl",
+          "w": 4
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "title": "Über den Titel",
+        "titles": {
+         "en": "About the title",
+         "zh-hans": "关于作品",
+         "zh-hant": "關於作品"
+        },
+        "items": [
+         {
+          "type": "field",
+          "field": "f_titel",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_originaltitel",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_art",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_jahr",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_laufzeit",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_gesehen_auf",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_staffeln",
+          "w": 3,
+          "show_if": {
+           "field": "f_art",
+           "op": "eq",
+           "value": "Serie"
+          }
+         },
+         {
+          "type": "field",
+          "field": "f_episoden",
+          "w": 3,
+          "show_if": {
+           "field": "f_art",
+           "op": "eq",
+           "value": "Serie"
+          }
+         },
+         {
+          "type": "field",
+          "field": "f_genres",
+          "w": 12
+         },
+         {
+          "type": "field",
+          "field": "f_tagline",
+          "w": 12
+         },
+         {
+          "type": "field",
+          "field": "f_handlung",
+          "w": 12
+         }
+        ]
+       },
+       {
+        "id": "s3",
+        "title": "Eigene Notizen",
+        "titles": {
+         "en": "Own notes",
+         "zh-hans": "个人笔记",
+         "zh-hant": "個人筆記"
+        },
+        "items": [
+         {
+          "type": "field",
+          "field": "f_notizen",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "t2",
+      "title": "Besetzung & Stab",
+      "titles": {
+       "en": "Cast & crew",
+       "zh-hans": "演职人员",
+       "zh-hant": "演職人員"
+      },
+      "sections": [
+       {
+        "id": "s4",
+        "title": "",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_regie",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_erschaffen",
+          "w": 6,
+          "show_if": {
+           "field": "f_art",
+           "op": "eq",
+           "value": "Serie"
+          }
+         },
+         {
+          "type": "field",
+          "field": "f_besetzung",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "t3",
+      "title": "Bilder",
+      "titles": {
+       "en": "Pictures",
+       "zh-hans": "图片",
+       "zh-hant": "圖片"
+      },
+      "sections": [
+       {
+        "id": "s5",
+        "title": "",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_poster",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_hintergrund",
+          "w": 8
+         },
+         {
+          "type": "field",
+          "field": "f_bilder",
+          "w": 12
+         },
+         {
+          "type": "field",
+          "field": "f_besetzungsfotos",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "t4",
+      "title": "TMDB",
+      "sections": [
+       {
+        "id": "s6",
+        "title": "",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_tmdb_id",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_tmdb_link",
+          "w": 6
+         },
+         {
+          "type": "field",
+          "field": "f_tmdb_abgleich",
+          "w": 6
+         },
+         {
+          "type": "block",
+          "block": "history",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "table": "fs_sichtungen",
+   "name": "Sichtung",
+   "names": {
+    "en": "Viewing",
+    "zh-hans": "观看记录",
+    "zh-hant": "觀看記錄"
+   },
+   "tree": {
+    "tabs": [
+     {
+      "id": "t1",
+      "title": "Sichtung",
+      "titles": {
+       "en": "Viewing",
+       "zh-hans": "观看记录",
+       "zh-hant": "觀看記錄"
+      },
+      "sections": [
+       {
+        "id": "s1",
+        "title": "",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_titel",
+          "w": 12
+         },
+         {
+          "type": "field",
+          "field": "f_datum",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_wie",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_mit",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_notiz",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "prints": [
+  {
+   "table": "fs_titel",
+   "name": "Filmkarte",
+   "description": "Poster, Titel und das Wichtigste auf einer Seite.",
+   "tree": {
+    "page": {
+     "preset": "a4"
+    },
+    "rows": [
+     {
+      "cols": [
+       {
+        "w": 4,
+        "items": [
+         {
+          "type": "photo",
+          "w_mm": 55,
+          "h_mm": 82
+         }
+        ]
+       },
+       {
+        "w": 8,
+        "items": [
+         {
+          "type": "heading",
+          "text": "{{f_titel}}"
+         },
+         {
+          "type": "text",
+          "text": "{{f_jahr}} · {{f_art}} · {{f_genres}}\nRegie: {{f_regie}}\nBewertung: {{f_bewertung}}"
+         },
+         {
+          "type": "text",
+          "text": "{{f_handlung}}"
+         },
+         {
+          "type": "text",
+          "text": "Besetzung:\n{{f_besetzung}}"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "views": [
+  {
+   "table": "fs_titel",
+   "name": "Merkliste",
+   "config": {
+    "filters": {
+     "f_status": [
+      "Merkliste"
+     ]
+    },
+    "sort": [
+     {
+      "column": "f_titel",
+      "dir": "asc"
+     }
+    ],
+    "layout": "gallery"
+   }
+  },
+  {
+   "table": "fs_titel",
+   "name": "Gesehen",
+   "config": {
+    "filters": {
+     "f_status": [
+      "Gesehen"
+     ]
+    },
+    "sort": [
+     {
+      "column": "f_zuletzt",
+      "dir": "desc"
+     }
+    ],
+    "layout": "gallery"
+   }
+  },
+  {
+   "table": "fs_titel",
+   "name": "Beste zuerst",
+   "config": {
+    "sort": [
+     {
+      "column": "f_bewertung",
+      "dir": "desc"
+     }
+    ],
+    "layout": "gallery"
+   }
+  },
+  {
+   "table": "fs_sichtungen",
+   "name": "Neueste zuerst",
+   "config": {
+    "sort": [
+     {
+      "column": "f_datum",
+      "dir": "desc"
+     }
+    ]
+   }
+  }
+ ]
+}

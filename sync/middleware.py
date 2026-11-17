@@ -8,7 +8,7 @@ from django.urls import resolve
 # The update page stays open: on a computer it is about the app (core/views.py updates_page).
 # The backup page stays open: it fetches the server's full backup (archive/transfer.py) and lists the
 # files here, but a copy neither makes nor restores backups of its own.
-SERVER_ONLY = {"password_change", "totp_setup", "users", "user_update", "two_factor_switch", "school_settings", "school_languages",
+SERVER_ONLY = {"password_change", "totp_setup", "users", "user_update", "two_factor_switch", "school_settings", "school_languages", "tables_tmdb",
                "update_status", "update_request", "backup_create", "backup_upload", "backup_check", "backup_restore",
                "backup_plan", "backup_plan_run", "backup_plan_off", "backup_transfer_check", "backup_transfer_run"}
 

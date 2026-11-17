@@ -1,0 +1,7 @@
+{% load ui i18n %}<div class="rating-input" data-field="{{ item.fd.key }}" x-data="ratingInput({{ item.value|default:0 }}, {{ item.stars }}, {% if item.half %}true{% else %}false{% endif %}, '{{ item.fd.key }}')" :class="preview !== null && 'is-preview'">
+  <span x-ref="stars" id="{{ id_prefix|default:'f' }}-{{ item.fd.key }}" role="slider" tabindex="0" aria-label="{{ item.label }}" aria-valuemin="0" aria-valuemax="{{ item.stars }}" :aria-valuenow="value" :aria-valuetext="text()"
+    @pointermove="hover($event)" @pointerleave="leave()" @click="pick($event)" @keydown="key($event)">{% stars item.value item.stars %}</span>
+  <span class="rating-value" x-text="text()">{{ item.display|default:"–" }}</span>
+  <button type="button" class="btn btn-ghost btn-sm btn-icon" x-show="value" x-cloak @click="set(0)" title="{% translate 'Bewertung entfernen' %}" aria-label="{% translate 'Bewertung entfernen' %}">{% icon 'x' %}</button>
+  <input type="hidden" x-ref="input" name="value" value="{{ item.value }}" hx-post="{{ item.url }}" hx-trigger="change delay:300ms" hx-swap="none">
+</div>

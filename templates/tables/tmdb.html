@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}TMDB{% endblock %}
+{% block content %}
+<div class="flex items-center gap-2 mb-1"><a class="btn btn-ghost btn-icon" href="{% url 'table_list' %}" aria-label="{% translate 'Zurück zu den Tabellen' %}"><svg class="icon rotate-180"><use href="/static/img/icons.svg#chevron"></use></svg></a>
+  <h1 class="page-title inline-flex items-center gap-2">{% icon 'film' 'text-[20px] text-[var(--accent)]' %}{% translate "TMDB: Filme und Serien" %}</h1></div>
+<p class="muted text-[13px] mb-4 max-w-3xl">{% translate "Mit einem eigenen, kostenlosen Schlüssel von themoviedb.org lassen sich Filme und Serien in Tabellen wie „Filme & Serien“ suchen und mit Handlung, Genres, Besetzung, Poster und Bildern übernehmen. Die Bilder werden im Datensatz gespeichert und sind danach auch ohne Internet da." %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 space-y-4">
+  <section class="surface p-5 space-y-4" aria-labelledby="tmdb-steps">
+    <h2 id="tmdb-steps" class="font-semibold">{% translate "So kommen Sie zu einem Schlüssel" %}</h2>
+    <ol class="space-y-3 text-[13.5px]">
+      <li class="flex gap-3"><span class="badge badge-accent shrink-0">1</span><span>{% translate "Bei themoviedb.org ein kostenloses Konto anlegen und die E-Mail-Adresse bestätigen." %} <a class="text-[var(--accent)] hover:underline" href="https://www.themoviedb.org/signup" target="_blank" rel="noopener">{% translate "Konto anlegen" %} {% icon 'external' %}</a></span></li>
+      <li class="flex gap-3"><span class="badge badge-accent shrink-0">2</span><span>{% translate "Angemeldet die API-Einstellungen öffnen und einen Schlüssel beantragen. Als Nutzung „Persönlich“ wählen; die Angaben zur Anwendung dürfen knapp sein (z. B. „DataFluss, private Filmliste“)." %} <a class="text-[var(--accent)] hover:underline font-medium" href="{{ settings_url }}" target="_blank" rel="noopener">{% translate "API-Einstellungen öffnen" %} {% icon 'external' %}</a></span></li>
+      <li class="flex gap-3"><span class="badge badge-accent shrink-0">3</span><span>{% translate "Dort den „API-Schlüssel“ (32 Zeichen) oder den „API-Lesezugriffs-Token“ (sehr lang, beginnt mit „eyJ“) kopieren. Beides funktioniert." %}</span></li>
+      <li class="flex gap-3"><span class="badge badge-accent shrink-0">4</span><span>{% translate "Hier einfügen, testen und speichern." %}</span></li>
+    </ol>
+  </section>
+  <form method="post" class="surface p-5 space-y-3">{% csrf_token %}
+    <h2 class="font-semibold">{% translate "Schlüssel" %}</h2>
+    <div><label class="label" for="tmdb-key">{% if has_key %}{% translate "Neuer Schlüssel" %}{% else %}{% translate "API-Schlüssel oder Lesezugriffs-Token" %}{% endif %}</label>
+      <input id="tmdb-key" class="input mono" name="key" type="password" autocomplete="off" spellcheck="false" {% if not has_key %}required{% endif %} placeholder="{% if has_key %}{% translate 'Leer lassen, um den gespeicherten zu behalten' %}{% endif %}"></div>
+    <div id="tmdb-test" aria-live="polite"></div>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" class="btn" hx-post="{% url 'tables_tmdb_test' %}" hx-include="#tmdb-key" hx-target="#tmdb-test">{% icon 'check' %}{% translate "Schlüssel testen" %}</button>
+      <button class="btn btn-primary">{% icon 'save' %}{% translate "Speichern" %}</button>
+    </div>
+    <p class="muted text-[12px]">{% translate "Der Schlüssel gilt für die ganze Datenbank und wird verschlüsselt gespeichert. Verbundene Computer erhalten ihn mit dem Abgleich. Er wird nie angezeigt." %}</p>
+  </form>
+</div>
+<div class="space-y-4">
+  <div class="surface p-4 space-y-2"><h2 class="font-semibold">{% translate "Stand" %}</h2>
+    {% if has_key %}<p class="text-[13px]"><span class="badge badge-ok">{% icon 'check' %}{% translate "Eingerichtet" %}</span>
+      {% if key_kind == 'token' %}{% translate "Lesezugriffs-Token" %}{% else %}{% translate "API-Schlüssel" %}{% endif %} <span class="mono muted">…{{ key_end }}</span></p>
+    <form method="post">{% csrf_token %}<button class="btn btn-sm btn-danger" name="action" value="remove" data-confirm="{% translate 'Den TMDB-Schlüssel entfernen? Suchen und Übernehmen gehen danach nicht mehr.' %}">{% icon 'trash' %}{% translate "Entfernen" %}</button></form>
+    {% else %}<p class="text-[13px]"><span class="badge badge-warn">{% translate "Noch kein Schlüssel" %}</span></p>{% endif %}
+  </div>
+  <div class="surface p-4 space-y-2"><h2 class="font-semibold">{% translate "Tabellen mit TMDB" %}</h2>
+    {% for t in tables %}<a class="flex items-center gap-2 text-[13px] hover:underline" href="{% url 'table_records' t.key %}">{% icon t.icon 'text-[var(--accent)]' %}{{ t.display_name }}</a>
+    {% empty %}<p class="muted text-[13px]">{% translate "Noch keine. Die Vorlage „Filme & Serien“ legt eine an." %}</p><a class="btn btn-sm" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlagen" %}</a>{% endfor %}
+  </div>
+  {% include "tables/_tmdb_credit.html" with credit_class="px-1" %}
+</div></div>
+{% endblock %}

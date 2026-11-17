@@ -11,7 +11,9 @@
   <div class="flex-1"></div>
   {% if request.user|can:'tables.design' %}<a class="btn" href="{% url 'table_settings' table.key %}">{% icon 'settings' %}{% translate "Tabelle gestalten" %}</a>{% endif %}
   {% if can_edit %}<a class="btn" href="{% url 'records_bin' table.key %}">{% icon 'trash' %}{% translate "Papierkorb" %}</a>
-  <form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn btn-primary">{% icon 'plus' %}{% translate "Neuer Datensatz" %}</button></form>{% endif %}
+  {% if tmdb.search %}<form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn">{% icon 'plus' %}{% translate "Neuer Datensatz" %}</button></form>
+  <button type="button" class="btn btn-primary" x-data @click="$dispatch('tmdb-open', { mode: 'add', action: '{{ tmdb.import_url }}', title: '{{ _("Film oder Serie aus TMDB hinzufügen")|escapejs }}' })">{% icon 'film' %}{% translate "Aus TMDB hinzufügen" %}</button>
+  {% else %}<form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn btn-primary">{% icon 'plus' %}{% translate "Neuer Datensatz" %}</button></form>{% endif %}{% endif %}
 </div>
 {% if table.description %}<p class="muted text-[13px] mb-2">{{ table.description }}</p>{% endif %}
 <p class="muted text-[12px] mb-2 hidden lg:block">{% translate "Klick öffnet den Datensatz, Doppelklick ändert die Zelle, ein Klick auf den Spaltentitel filtert." %}</p>
@@ -20,6 +22,9 @@
   <div class="flex flex-wrap items-center gap-2 p-2 border-b" style="border-color: var(--line)">
     {% translate "In der Liste filtern" as filter_label %}{% translate "Ansicht löschen" as delete_view_label %}
     <div class="relative w-56"><span class="absolute left-2.5 top-2.5 muted">{% icon 'search' %}</span><input id="grid-search" class="input pl-8 h-[2.125rem]" placeholder="{{ filter_label }}" aria-label="{{ filter_label }}"></div>
+    {% if config.look %}<div class="layout-switch" role="group" aria-label="{% translate 'Darstellung' %}">
+      <button type="button" data-layout="list" aria-pressed="true">{% icon 'list' %}{% translate "Liste" %}</button><button type="button" data-layout="gallery" aria-pressed="false">{% icon 'gallery' %}{% translate "Galerie" %}</button></div>
+    <select id="gallery-sort" class="input w-auto h-[2.125rem] hidden" aria-label="{% translate 'Sortieren' %}"></select>{% endif %}
     <select id="grid-views" class="input w-auto h-[2.125rem]" aria-label="{% translate 'Gespeicherte Ansicht' %}"></select>
     <button class="btn" id="grid-save-view">{% icon 'save' %}{% translate "Ansicht speichern" %}</button>
     <button class="btn btn-icon hidden" id="grid-delete-view" title="{{ delete_view_label }}" aria-label="{{ delete_view_label }}">{% icon 'trash' %}</button>
@@ -41,9 +46,12 @@
     <select id="bulk-print" class="input w-auto h-[1.9rem] text-[13px]" aria-label="{% translate 'Bericht drucken' %}"></select>
   </div>
   <div id="grid"></div>
+  {% if config.look %}<div id="gallery" class="gallery hidden shape-{{ config.look.shape }}" aria-label="{% translate 'Galerie' %}"></div>{% endif %}
 </div>
 {% include "core/_record_panel.html" %}
 </div>
+{% if tmdb.search %}{% include "tables/_tmdb_credit.html" with credit_class="mt-3" %}{% endif %}
+{% if tmdb.search and can_edit %}{% include "tables/_tmdb_dialog.html" %}{% endif %}
 <form id="export-form" method="post" action="{% url 'export_rows' %}" class="hidden">{% csrf_token %}<input type="hidden" name="payload"></form>
 <form id="print-form" method="post" action="{% url 'report_run' %}" target="_blank" class="hidden">{% csrf_token %}<input type="hidden" name="template"><input type="hidden" name="ids"></form>
 {% endblock %}

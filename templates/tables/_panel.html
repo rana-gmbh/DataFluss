@@ -1,7 +1,7 @@
 {% extends "core/_panel.html" %}{% load i18n ui %}
-{% block lead %}<span class="avatar" style="width:40px;height:40px">{% icon table.icon 'text-[18px]' %}</span>{% endblock %}
+{% block lead %}{% if head.cover %}<img src="{{ head.cover }}" alt="" class="flex-none w-10 rounded-md object-cover shadow-sm {% if head.shape == 'poster' %}aspect-[2/3]{% else %}aspect-square{% endif %}">{% else %}<span class="avatar" style="width:40px;height:40px">{% icon table.icon 'text-[18px]' %}</span>{% endif %}{% endblock %}
 {% block heading %}<span data-record-title>{{ record.title|default:_("(ohne Titel)") }}</span>{% endblock %}
 {% block badges %}<span class="badge badge-accent">{{ table.display_name }}</span>{% endblock %}
 {% block record_id %}{{ record.pk }}{% endblock %}
 {% block page_url %}{% url 'record_detail' table.key record.pk %}{% endblock %}
-{% block body %}{% include "masks/_form.html" %}<div hx-get="{% url 'table_backlinks' 'record' record.pk %}" hx-trigger="load" hx-swap="outerHTML"></div>{% endblock %}
+{% block body %}{% if head_actions %}<div class="mb-3">{% include head_actions with compact=True %}</div>{% endif %}{% include "masks/_form.html" %}<div hx-get="{% url 'table_backlinks' 'record' record.pk %}" hx-trigger="load" hx-swap="outerHTML"></div>{% endblock %}

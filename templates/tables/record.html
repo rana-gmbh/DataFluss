@@ -2,6 +2,41 @@
 {% block title %}{{ record.title|default:_("(ohne Titel)") }}{% endblock %}
 {% block scripts %}<script src="{% static 'js/record.js' %}" defer></script>{% endblock %}
 {% block content %}
+{% if head %}
+<div class="flex flex-wrap items-center gap-2 mb-3">
+  <a class="btn btn-ghost btn-icon" href="{% url 'table_records' table.key %}" aria-label="{% translate 'Zurück zur Liste' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
+  <a class="badge badge-accent" href="{% url 'table_records' table.key %}">{{ table.display_name }}</a>
+  <div class="flex-1"></div>
+  {% if print_templates %}
+  <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+    <button class="btn" @click="open = !open">{% icon 'printer' %}{% translate "Drucken" %}{% icon 'chevron-down' %}</button>
+    <div class="absolute right-0 z-30 mt-1 w-64 surface p-1 shadow-lg" x-show="open" x-cloak>
+      {% for t in print_templates %}<form method="post" action="{% url 'report_run' %}" target="_blank">{% csrf_token %}<input type="hidden" name="template" value="{{ t.pk }}"><input type="hidden" name="ids" value="{{ record.pk }}">
+        <button class="w-full text-left px-2.5 py-1.5 rounded-md hover:bg-[var(--surface-2)] text-[13px]">{{ t.name }}</button></form>{% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% if can_edit and not is_new %}<form method="post" action="{% url 'record_delete' table.key record.pk %}">{% csrf_token %}
+    <button class="btn btn-ghost btn-icon" title="{% translate 'In den Papierkorb' %}" aria-label="{% translate 'In den Papierkorb' %}" data-confirm="{% translate 'Diesen Datensatz in den Papierkorb legen?' %}">{% icon 'trash' %}</button></form>{% endif %}
+</div>
+<section class="record-hero" aria-labelledby="record-hero-title">
+  <div class="record-hero-backdrop{% if head.blurred %} is-blurred{% endif %}" style="background-image: url('{{ head.backdrop }}')"></div>
+  <div class="record-hero-body">
+    {% if head.cover %}<a href="{{ head.cover }}" target="_blank" rel="noopener" class="flex-none"><img class="record-hero-cover shape-{{ head.shape }}" src="{{ head.cover }}" alt=""></a>{% endif %}
+    <div class="min-w-0 flex-1 space-y-2.5">
+      {% if head.flag %}<span class="badge">{{ head.flag }}</span>{% endif %}
+      <h1 id="record-hero-title" data-record-title>{{ record.title|default:_("(ohne Titel)") }}</h1>
+      {% if head.subtitle %}<div class="record-hero-meta">{% for text in head.subtitle %}<span>{{ text }}</span>{% endfor %}</div>{% endif %}
+      {% if head.rating %}{% with item=head.rating id_prefix="h" %}{% if item.editable %}{% include "tables/_rating.html" %}{% elif item.value %}<div class="rating-input" aria-readonly="true">{% stars item.value item.stars %}<span class="rating-value">{{ item.display }}</span></div>{% endif %}{% endwith %}{% endif %}
+      {% if head.text %}<p class="record-hero-text">{{ head.text }}</p>{% endif %}
+      {% block head_actions %}{% if head_actions %}{% include head_actions %}{% endif %}{% endblock %}
+    </div>
+  </div>
+</section>
+{% if cast %}<section class="surface p-4 mb-4" aria-labelledby="cast-title"><h2 id="cast-title" class="section-title mb-3">{% translate "Besetzung" %}</h2>
+  <div class="cast-strip">{% for person in cast %}<div class="cast-card">{% if person.photo %}<img class="cast-photo" src="{{ person.photo }}" alt="" loading="lazy">{% else %}<div class="cast-photo" aria-hidden="true">{{ person.initials }}</div>{% endif %}
+    <div class="cast-name">{{ person.name }}</div>{% if person.role %}<div class="cast-role">{{ person.role }}</div>{% endif %}</div>{% endfor %}</div></section>{% endif %}
+{% else %}
 <div class="flex flex-wrap items-center gap-3 mb-4">
   <a class="btn btn-ghost btn-icon" href="{% url 'table_records' table.key %}" aria-label="{% translate 'Zurück zur Liste' %}"><svg class="icon rotate-180"><use href="{% static 'img/icons.svg' %}#chevron"></use></svg></a>
   <span class="avatar" style="width:44px;height:44px">{% icon table.icon 'text-[20px]' %}</span>
@@ -21,6 +56,7 @@
   {% if can_edit and not is_new %}<form method="post" action="{% url 'record_delete' table.key record.pk %}">{% csrf_token %}
     <button class="btn btn-ghost btn-icon" title="{% translate 'In den Papierkorb' %}" aria-label="{% translate 'In den Papierkorb' %}" data-confirm="{% translate 'Diesen Datensatz in den Papierkorb legen?' %}">{% icon 'trash' %}</button></form>{% endif %}
 </div>
+{% endif %}
 {% if is_new %}<div class="surface flex flex-wrap items-center gap-2 px-4 py-2.5 mb-4 text-[13px]" data-focus-first>
   <span class="flex-1 muted">{% translate "Neuer Datensatz. Alles wird beim Verlassen eines Feldes gespeichert." %}</span>
   <form method="post" action="{% url 'record_delete' table.key record.pk %}">{% csrf_token %}<input type="hidden" name="discard" value="1"><button class="btn btn-sm">{% translate "Verwerfen" %}</button></form>
@@ -29,4 +65,5 @@
 </div>{% endif %}
 {% include "masks/_form.html" %}
 <div hx-get="{% url 'table_backlinks' 'record' record.pk %}" hx-trigger="load" hx-swap="outerHTML"></div>
+{% if tmdb.page_url %}{% include "tables/_tmdb_credit.html" with credit_class="mt-4" %}{% endif %}
 {% endblock %}

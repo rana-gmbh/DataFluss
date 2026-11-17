@@ -84,6 +84,10 @@ def _field_entry(item, record, field, user, editable):
         "help": item.get("help") or field.help_text,
         "choices": field.option_choices if field.type in ("choice", "multichoice") else None, "step": step,
     }
+    if field.type == "rating":
+        value = services.value(record, field)
+        entry.update(stars=ft.stars(field), half=ft.half_stars(field),
+                     display=format(value, "f").rstrip("0").rstrip(".").replace(".", ",") if value is not None and not isinstance(value, str) else "")
     if field.type == "formula":
         from . import formula
 

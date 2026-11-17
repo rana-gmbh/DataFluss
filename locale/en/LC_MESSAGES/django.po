@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-16 21:28+0100\n"
+"POT-Creation-Date: 2026-11-17 17:33+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -528,6 +528,9 @@ msgstr "Text (multi-line)"
 msgid "Zahl"
 msgstr "Number"
 
+msgid "Bewertung"
+msgstr "Rating"
+
 msgid "Ja/Nein"
 msgstr "Yes/No"
 
@@ -572,6 +575,11 @@ msgstr "Calculation"
 
 msgid "Gegenseite einer Verknüpfung"
 msgstr "Other side of a link"
+
+#, python-format
+msgid ""
+"%(field)s: Bitte eine Bewertung von %(low)s bis %(high)s Sternen eingeben."
+msgstr "%(field)s: please give a rating from %(low)s to %(high)s stars."
 
 msgid "Bitte ein gültiges Datum eingeben, z. B. 24.12.2015."
 msgstr "Please enter a valid date, e.g. 24.12.2015."
@@ -837,6 +845,10 @@ msgstr "The file is damaged or encrypted with a different key."
 
 msgid "Foto vergrößern"
 msgstr "Enlarge photo"
+
+#, python-format
+msgid "%(n)s von %(top)s Sternen"
+msgstr "%(n)s of %(top)s stars"
 
 msgid "Bereiche"
 msgstr "Sections"
@@ -1807,6 +1819,10 @@ msgid "Feld %(field)s: Formel fehlt."
 msgstr "Field %(field)s: formula missing."
 
 #, python-format
+msgid "Tabelle %(key)s: ungültige Darstellung."
+msgstr "Table %(key)s: invalid look."
+
+#, python-format
 msgid "Tabelle %(key)s: Das Titelfeld fehlt."
 msgstr "Table %(key)s: the title field is missing."
 
@@ -2021,6 +2037,9 @@ msgstr "%(field)s: Please upload a picture (JPEG, PNG, GIF or WebP)."
 msgid "Unbekannter Datensatz."
 msgstr "Unknown record."
 
+msgid "Unbekanntes Feld."
+msgstr "Unknown field."
+
 msgid "Datensatz"
 msgstr "Record"
 
@@ -2074,6 +2093,9 @@ msgstr "Please enter the number of decimal places (0 to 6)."
 msgid "Bitte als Grenze eine Zahl eingeben."
 msgstr "Please enter a number as the limit."
 
+msgid "Bitte 3 bis 10 Sterne angeben."
+msgstr "Please choose 3 to 10 stars."
+
 msgid "Bitte eine Formel eingeben."
 msgstr "Please enter a formula."
 
@@ -2083,10 +2105,6 @@ msgid ""
 msgstr "This type does not fit the values entered. Better create a new field."
 
 #, python-format
-msgid "Eine Auswahl braucht 1 bis 50 verschiedene Werte; hier sind es %(n)s."
-msgstr "A choice needs 1 to 50 different values; here there are %(n)s."
-
-#, python-format
 msgid ""
 "%(n)s Werte passen nicht zum neuen Typ, etwa „%(examples)s“. Bitte zuerst "
 "korrigieren."
@@ -2094,12 +2112,67 @@ msgstr ""
 "%(n)s values do not fit the new type, such as “%(examples)s”. Please correct"
 " them first."
 
+#, python-format
+msgid "Eine Auswahl braucht 1 bis 50 verschiedene Werte; hier sind es %(n)s."
+msgstr "A choice needs 1 to 50 different values; here there are %(n)s."
+
 msgid ""
 "Einige Datensätze haben hier mehrere Einträge. Entfernen Sie diese zuerst."
 msgstr "Some records have several entries here. Remove them first."
 
 msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "The table contains records. Archive it instead."
+
+msgid ""
+"Das sieht weder wie ein API-Schlüssel (32 Zeichen) noch wie ein "
+"Lesezugriffs-Token (beginnt mit „eyJ“) aus."
+msgstr ""
+"This looks neither like an API key (32 characters) nor like a read access "
+"token (starts with “eyJ”)."
+
+msgid "TMDB hat ein zu großes Bild geschickt."
+msgstr "TMDB sent a picture that is too large."
+
+msgid ""
+"TMDB lehnt den Schlüssel ab. Bitte unter Einstellungen → Tabellen → TMDB "
+"prüfen."
+msgstr "TMDB refuses the key. Please check it under Settings → Tables → TMDB."
+
+msgid "Diesen Titel gibt es bei TMDB nicht (mehr)."
+msgstr "TMDB does not have this title (any more)."
+
+msgid "TMDB bittet um eine kurze Pause. Bitte gleich noch einmal versuchen."
+msgstr "TMDB asks for a short break. Please try again in a moment."
+
+#, python-format
+msgid ""
+"TMDB antwortet mit einem Fehler (%(code)s). Bitte später noch einmal "
+"versuchen."
+msgstr "TMDB answers with an error (%(code)s). Please try again later."
+
+msgid "TMDB ist nicht erreichbar. Besteht eine Internetverbindung?"
+msgstr "TMDB cannot be reached. Is there an internet connection?"
+
+msgid "Für diese Datenbank ist noch kein TMDB-Schlüssel eingetragen."
+msgstr "No TMDB key has been entered for this database yet."
+
+msgid "TMDB hat unerwartet geantwortet. Bitte später noch einmal versuchen."
+msgstr "TMDB answered unexpectedly. Please try again later."
+
+msgid "TMDB lehnt den Schlüssel ab."
+msgstr "TMDB refuses the key."
+
+msgid "Unbekannte Art."
+msgstr "Unknown kind."
+
+msgid "Ungültiger Bildpfad."
+msgstr "Invalid picture path."
+
+msgid "TMDB hat kein Bild geschickt."
+msgstr "TMDB did not send a picture."
+
+msgid "Bei TMDB suchen und übernehmen"
+msgstr "Search TMDB and take over"
 
 #, python-format
 msgid "Der Bereich heißt jetzt „%(name)s“."
@@ -2124,9 +2197,6 @@ msgstr "%(table)s has been archived. The records are kept."
 
 msgid "Die Tabelle wurde gelöscht."
 msgstr "The table has been deleted."
-
-msgid "Unbekanntes Feld."
-msgstr "Unknown field."
 
 msgid "Die Rechte wurden gespeichert."
 msgstr "The permissions have been saved."
@@ -2200,6 +2270,51 @@ msgid "%(count)d Datensatz ist wieder da."
 msgid_plural "%(count)d Datensätze sind wieder da."
 msgstr[0] "%(count)d record is back."
 msgstr[1] "%(count)d records are back."
+
+msgid "Der TMDB-Schlüssel wurde entfernt."
+msgstr "The TMDB key was removed."
+
+#, python-format
+msgid "Gespeichert, aber noch nicht geprüft: %(problem)s"
+msgstr "Saved, but not checked yet: %(problem)s"
+
+msgid "Der Schlüssel funktioniert und ist gespeichert."
+msgstr "The key works and has been saved."
+
+msgid "Bitte zuerst einen Schlüssel einfügen."
+msgstr "Please paste a key first."
+
+msgid "Der Lesezugriffs-Token funktioniert."
+msgstr "The read access token works."
+
+msgid "Der API-Schlüssel funktioniert."
+msgstr "The API key works."
+
+#, python-format
+msgid "Nicht alles kam von TMDB an: %(problems)s"
+msgstr "Not everything arrived from TMDB: %(problems)s"
+
+#, python-format
+msgid "%(title)s wurde aus TMDB übernommen."
+msgstr "%(title)s was taken over from TMDB."
+
+#, python-format
+msgid "%(title)s ist schon in der Tabelle."
+msgstr "%(title)s is in the table already."
+
+#, python-format
+msgid "Dieser Titel ist schon als %(title)s in der Tabelle."
+msgstr "This title is in the table already, as %(title)s."
+
+#, python-format
+msgid "%(title)s wurde mit TMDB abgeglichen."
+msgstr "%(title)s was updated from TMDB."
+
+msgid "Als gesehen eingetragen."
+msgstr "Entered as watched."
+
+msgid "Als gesehen markiert."
+msgstr "Marked as watched."
 
 msgid ""
 "Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
@@ -4139,6 +4254,93 @@ msgstr "Search and add …"
 msgid "Suchen und ersetzen …"
 msgstr "Search and replace …"
 
+msgid "Bewertung entfernen"
+msgstr "Remove rating"
+
+msgid "Daten und Bilder von TMDB."
+msgstr "Data and images from TMDB."
+
+msgid "Titel eines Films oder einer Serie"
+msgstr "Title of a film or series"
+
+msgid "Filme"
+msgstr "Films"
+
+msgid "Serien"
+msgstr "Series"
+
+msgid "Gesehen"
+msgstr "Watched"
+
+msgid "Auf die Merkliste"
+msgstr "To the watchlist"
+
+msgid "Wie gesehen"
+msgstr "Watched how"
+
+msgid "Wie gesehen?"
+msgstr "Watched how?"
+
+msgid "Treffer"
+msgstr "Results"
+
+msgid "Wird von TMDB übernommen, mit Poster und Bildern …"
+msgstr "Taking it over from TMDB, with poster and pictures …"
+
+msgid "Nochmal gesehen"
+msgstr "Watched again"
+
+msgid "Trägt eine Sichtung ein und setzt den Status auf „Gesehen“."
+msgstr "Enters a viewing and sets the status to “Watched”."
+
+msgid "Wann"
+msgstr "When"
+
+msgid "Wie"
+msgstr "How"
+
+msgid "Eintragen"
+msgstr "Enter"
+
+msgid ""
+"Handlung, Besetzung, Bilder und die anderen Angaben von TMDB neu holen? "
+"Bewertung, Status, Sichtungen und Notizen bleiben."
+msgstr ""
+"Fetch story, cast, pictures and the other details from TMDB again? Rating, "
+"status, viewings and notes stay."
+
+msgid "Mit TMDB aktualisieren"
+msgstr "Update from TMDB"
+
+msgid "Bei TMDB suchen"
+msgstr "Search TMDB"
+
+msgid "Er ist kostenlos und in zwei Minuten eingerichtet."
+msgstr "It is free and set up in two minutes."
+
+msgid "Schlüssel einrichten"
+msgstr "Set up a key"
+
+msgid ""
+"Bitte die IT oder jemanden, der Tabellen gestalten darf, ihn unter "
+"Einstellungen → Tabellen → TMDB einzutragen."
+msgstr ""
+"Please ask IT or someone who may design tables to enter it under Settings → "
+"Tables → TMDB."
+
+#, python-format
+msgid "Nichts gefunden für „%(q)s“."
+msgstr "Nothing found for “%(q)s”."
+
+msgid "Serie"
+msgstr "Series"
+
+msgid "Film"
+msgstr "Film"
+
+msgid "schon in der Tabelle"
+msgstr "in the table already"
+
 msgid "Alle wiederherstellen"
 msgstr "Restore all"
 
@@ -4211,6 +4413,18 @@ msgstr "Decimal places (for numbers)"
 
 msgid "automatisch"
 msgstr "automatic"
+
+msgid "Sterne"
+msgstr "Stars"
+
+msgid "Schritte"
+msgstr "Steps"
+
+msgid "Halbe Sterne"
+msgstr "Half stars"
+
+msgid "Ganze Sterne"
+msgstr "Whole stars"
 
 msgid "Nachkommastellen"
 msgstr "Decimal places"
@@ -4346,11 +4560,23 @@ msgstr "From an Excel or CSV file"
 msgid "Jede Spalte wird ein Feld mit passendem Typ, jede Zeile ein Datensatz."
 msgstr "Each column becomes a field of a fitting type, each row a record."
 
+msgid "TMDB: Filme und Serien"
+msgstr "TMDB: films and series"
+
+msgid "Schlüssel eingerichtet"
+msgstr "Key set up"
+
+msgid "Eigenen Schlüssel einrichten, um Filme und Serien zu übernehmen"
+msgstr "Set up your own key to take over films and series"
+
 msgid "In den Papierkorb"
 msgstr "Move to the bin"
 
 msgid "Diesen Datensatz in den Papierkorb legen?"
 msgstr "Move this record to the bin?"
+
+msgid "Besetzung"
+msgstr "Cast"
 
 msgid "Neuer Datensatz. Alles wird beim Verlassen eines Feldes gespeichert."
 msgstr "New record. Everything is saved when you leave a field."
@@ -4369,6 +4595,21 @@ msgstr "Design table"
 
 msgid "Neuer Datensatz"
 msgstr "New record"
+
+msgid "Film oder Serie aus TMDB hinzufügen"
+msgstr "Add a film or series from TMDB"
+
+msgid "Aus TMDB hinzufügen"
+msgstr "Add from TMDB"
+
+msgid "Darstellung"
+msgstr "Look"
+
+msgid "Galerie"
+msgstr "Gallery"
+
+msgid "Sortieren"
+msgstr "Sort"
 
 msgid "Importieren"
 msgstr "Import"
@@ -4467,6 +4708,155 @@ msgstr "Delete the table with all its fields for good?"
 
 msgid "Eine Tabelle mit Datensätzen lässt sich nur archivieren."
 msgstr "A table with records can only be archived."
+
+msgid ""
+"Mit einem Titelbild zeigt die Liste die Datensätze auch als Galerie, und die"
+" Datensatzseite bekommt einen Kopf mit Bild, Untertitel und Bewertung."
+msgstr ""
+"With a cover picture, the list can also show the records as a gallery, and "
+"the record page gets a head with picture, subtitle and rating."
+
+msgid "Titelbild"
+msgstr "Cover picture"
+
+msgid "Keins"
+msgstr "None"
+
+msgid "Hintergrundbild im Kopf"
+msgstr "Backdrop in the head"
+
+msgid "Titelbild unscharf"
+msgstr "Cover picture, blurred"
+
+msgid "Form des Titelbilds"
+msgstr "Shape of the cover picture"
+
+msgid "Hochformat (Poster, Buch)"
+msgstr "Portrait (poster, book)"
+
+msgid "Quadratisch"
+msgstr "Square"
+
+msgid "Querformat (Foto)"
+msgstr "Landscape (photo)"
+
+msgid "Liste öffnet als"
+msgstr "List opens as"
+
+msgid "Untertitel (bis zu drei Felder)"
+msgstr "Subtitle (up to three fields)"
+
+#, python-format
+msgid "Untertitel %(n)s"
+msgstr "Subtitle %(n)s"
+
+msgid "Markierung auf der Karte"
+msgstr "Label on the card"
+
+msgid "Keine"
+msgstr "None"
+
+msgid "Text im Kopf"
+msgstr "Text in the head"
+
+msgid "Keiner"
+msgstr "None"
+
+msgid "Legen Sie zuerst ein Feld vom Typ Bild an, etwa „Foto“ oder „Cover“."
+msgstr "First create a field of type picture, such as “Photo” or “Cover”."
+
+msgid "Zurück zu den Tabellen"
+msgstr "Back to the tables"
+
+msgid ""
+"Mit einem eigenen, kostenlosen Schlüssel von themoviedb.org lassen sich "
+"Filme und Serien in Tabellen wie „Filme & Serien“ suchen und mit Handlung, "
+"Genres, Besetzung, Poster und Bildern übernehmen. Die Bilder werden im "
+"Datensatz gespeichert und sind danach auch ohne Internet da."
+msgstr ""
+"With your own free key from themoviedb.org, films and series can be searched"
+" in tables such as “Films & series” and taken over with story, genres, cast,"
+" poster and pictures. The pictures are stored in the record and are there "
+"afterwards even without internet."
+
+msgid "So kommen Sie zu einem Schlüssel"
+msgstr "How to get a key"
+
+msgid ""
+"Bei themoviedb.org ein kostenloses Konto anlegen und die E-Mail-Adresse "
+"bestätigen."
+msgstr ""
+"Create a free account at themoviedb.org and confirm the e-mail address."
+
+msgid "Konto anlegen"
+msgstr "Create an account"
+
+msgid ""
+"Angemeldet die API-Einstellungen öffnen und einen Schlüssel beantragen. Als "
+"Nutzung „Persönlich“ wählen; die Angaben zur Anwendung dürfen knapp sein (z."
+" B. „DataFluss, private Filmliste“)."
+msgstr ""
+"Signed in, open the API settings and request a key. Choose “Personal” as the"
+" use; the details about the application may be short (e.g. “DataFluss, "
+"private film list”)."
+
+msgid "API-Einstellungen öffnen"
+msgstr "Open the API settings"
+
+msgid ""
+"Dort den „API-Schlüssel“ (32 Zeichen) oder den „API-Lesezugriffs-Token“ "
+"(sehr lang, beginnt mit „eyJ“) kopieren. Beides funktioniert."
+msgstr ""
+"Copy the “API Key” (32 characters) or the “API Read Access Token” (very "
+"long, starts with “eyJ”) there. Both work."
+
+msgid "Hier einfügen, testen und speichern."
+msgstr "Paste it here, test it and save."
+
+msgid "Schlüssel"
+msgstr "Key"
+
+msgid "Neuer Schlüssel"
+msgstr "New key"
+
+msgid "API-Schlüssel oder Lesezugriffs-Token"
+msgstr "API key or read access token"
+
+msgid "Leer lassen, um den gespeicherten zu behalten"
+msgstr "Leave empty to keep the saved one"
+
+msgid "Schlüssel testen"
+msgstr "Test key"
+
+msgid ""
+"Der Schlüssel gilt für die ganze Datenbank und wird verschlüsselt "
+"gespeichert. Verbundene Computer erhalten ihn mit dem Abgleich. Er wird nie "
+"angezeigt."
+msgstr ""
+"The key applies to the whole database and is stored encrypted. Connected "
+"computers receive it with the sync. It is never shown."
+
+msgid "Eingerichtet"
+msgstr "Set up"
+
+msgid "Lesezugriffs-Token"
+msgstr "Read access token"
+
+msgid "API-Schlüssel"
+msgstr "API key"
+
+msgid ""
+"Den TMDB-Schlüssel entfernen? Suchen und Übernehmen gehen danach nicht mehr."
+msgstr "Remove the TMDB key? Searching and taking over will no longer work."
+
+msgid "Noch kein Schlüssel"
+msgstr "No key yet"
+
+msgid "Tabellen mit TMDB"
+msgstr "Tables with TMDB"
+
+msgid "Noch keine. Die Vorlage „Filme & Serien“ legt eine an."
+msgstr "None yet. The template “Films & series” creates one."
 
 msgid ""
 "CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
