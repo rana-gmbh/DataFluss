@@ -13,9 +13,12 @@
  "overview": "",
  "created_by": [
   {
-   "name": "Clara Idee"
+   "id": 3001,
+   "name": "Clara Idee",
+   "profile_path": "/clara.jpg"
   },
   {
+   "id": 3002,
    "name": "Dora Buch"
   }
  ],
@@ -37,7 +40,8 @@
     "name": "Nur Letztestaffel",
     "character": "Gast",
     "order": 0,
-    "profile_path": null
+    "profile_path": null,
+    "id": 3199
    }
   ],
   "crew": []
@@ -60,7 +64,8 @@
       "character": "Kapitän",
       "episode_count": 28
      }
-    ]
+    ],
+    "id": 3101
    },
    {
     "name": "Fritzi Fern",
@@ -71,7 +76,8 @@
       "character": "Lotsin",
       "episode_count": 10
      }
-    ]
+    ],
+    "id": 3102
    }
   ],
   "crew": []

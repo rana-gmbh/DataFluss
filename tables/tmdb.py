@@ -10,10 +10,16 @@ Which fields a found title fills is the table's business, in Table.look["tmdb"] 
                 "episodes": …, "genres": …, "director": …, "creators": …, "cast": …, "overview": …,
                 "tagline": …, "tmdb_id": …, "tmdb_url": …, "poster": …, "backdrop": …, "images": …,
                 "cast_photos": …, "synced": …},           # synced: a date field, the day of the last fetch
+     "people": {"cast": {"table": "fs_darsteller", "link": "f_darsteller"},   # tables of people the title links
+                "directors": {"table": "fs_regie", "link": "f_regisseure"}},  # to: actors; directors or creators
      "kinds": {"movie": "Film", "tv": "Serie"},            # option values of the "kind" choice
      "genres": {"28": "Action", "10759": ["Action", "Abenteuer"], …},  # TMDB genre id -> option value(s)
      "watch": {"status": "f_status", "watchlist": "Merkliste", "watched": "Gesehen",
                "viewings": {"table": "fs_sichtungen", "link": "f_titel", "date": "f_datum", "how": "f_wie"}}}
+
+A table of people says so in its own look: {"tmdb": {"person": {"name": …, "photo": …, "tmdb_id": …,
+"tmdb_url": …, "synced": …}}}. Taking over a title finds or makes a record for each of its people (by TMDB id,
+"person/287") and links them, so a person's record lists the titles they are in.
 
 Pictures are fetched once and kept as attachments of the record's image fields, so they work offline and on
 connected computers. map_details is a plain function of TMDB's answer, so it can be tested without network.
@@ -53,6 +59,7 @@ STILLS = 4          # further pictures besides the backdrop
 LANGUAGES = {"de": "de-DE", "en": "en-US", "zh-hans": "zh-CN", "zh-hant": "zh-TW"}
 REFRESH_AFTER = 150  # days; well inside TMDB's six months, even when a computer is rarely open
 REFRESH_BATCH = 40   # titles per round, so one round never keeps TMDB (or the nightly work) busy for long
+PERSON_FRESH = 30    # days; a person fetched since keeps name and photo when another title of theirs comes
 
 
 class TmdbError(Exception):
@@ -300,7 +307,19 @@ def map_details(kind, data, config):
     if fields.get("cast_photos"):
         images[fields["cast_photos"]] = [("w185", c["profile_path"], f"{n + 1:02d} {c['name']}")
                                          for n, c in enumerate(cast[:CAST_PHOTOS]) if c.get("profile_path")]
-    return {"values": values, "images": {k: v for k, v in images.items() if v}}
+    directors = [c for c in credits.get("crew") or [] if c.get("job") == "Director"] if movie else data.get("created_by") or []
+    people = {"cast": _people(cast), "directors": _people(directors)}
+    return {"values": values, "images": {k: v for k, v in images.items() if v}, "people": people}
+
+
+def _people(rows):
+    """[{"id", "name", "profile_path"}] once per TMDB person, in TMDB's order."""
+    seen, found = set(), []
+    for row in rows:
+        if isinstance(row.get("id"), int) and row.get("name") and row["id"] not in seen:
+            seen.add(row["id"])
+            found.append({"id": row["id"], "name": row["name"], "profile_path": row.get("profile_path") or ""})
+    return found
 
 
 def cast_list(text, photos):
@@ -357,6 +376,7 @@ def fill(record, kind, data, user=None, pictures=True, lang=None):
         mapped["values"][synced.key] = timezone.localdate().isoformat()
         fixed.discard(synced.key)
     problems = []
+    cache = {} if pictures else None  # a cast member's photo serves the title and the person's record
     with transaction.atomic():
         if user is not None and lang and config.get("language") != lang:  # the next automatic fetch keeps it
             table.look = {**table.look, "tmdb": {**config, "language": lang}}
@@ -373,8 +393,9 @@ def fill(record, kind, data, user=None, pictures=True, lang=None):
                 problems.extend(exc.messages)
         services.refresh(record, list(fields.values()))
         record.save()
+    problems.extend(_link_people(record, mapped["people"], config, fields, fixed, user, cache))
     if not pictures:
-        return problems
+        return list(dict.fromkeys(problems))
     from .models import Attachment
 
     for key, wanted in mapped["images"].items():
@@ -384,7 +405,7 @@ def fill(record, kind, data, user=None, pictures=True, lang=None):
         got = []
         for size, path, name in wanted[: (99 if (field.config or {}).get("multiple") else 1)]:
             try:
-                body, extension = image(size, path)
+                body, extension = _picture(cache, size, path)
             except TmdbError as exc:
                 problems.append(str(exc))
                 continue
@@ -398,6 +419,105 @@ def fill(record, kind, data, user=None, pictures=True, lang=None):
                 upload.content_type = f"image/{'jpeg' if upload.name.endswith('jpg') else upload.name.rsplit('.', 1)[1]}"
                 links.add_file(record, field, upload, user)
     return list(dict.fromkeys(problems))
+
+
+def _picture(cache, size, path):
+    if cache is None:
+        return image(size, path)
+    if (size, path) not in cache:
+        cache[(size, path)] = image(size, path)
+    return cache[(size, path)]
+
+
+# ---------------------------------------------------------------- people
+
+def person_config(table):
+    return config_of(table).get("person") or {}
+
+
+def person_ref(tmdb_id):
+    return f"person/{int(tmdb_id)}"
+
+
+def _link_people(record, people, config, fields, fixed, user, cache):
+    """Link the title to a record per person in the people tables the template names (made when missing)."""
+    from . import links, services
+    from .models import Table
+
+    problems = []
+    for group, plan in (config.get("people") or {}).items():
+        field = fields.get((plan or {}).get("link") or "")
+        target = Table.objects.filter(key=(plan or {}).get("table") or "", archived=False).first()
+        if field is None or field.type != "link" or field.key in fixed or target is None or not person_config(target).get("tmdb_id"):
+            continue
+        if user is not None and not services.may_edit(user, target):
+            continue
+        ids = []
+        for person in people.get(group) or []:
+            try:
+                record_of_person, trouble = _person_record(target, person, user, cache)
+            except ValidationError as exc:
+                problems.extend(exc.messages)
+                continue
+            ids.append(str(record_of_person.pk))
+            problems.extend(trouble)
+        try:
+            links.set_targets(record, field, ids)
+        except ValidationError as exc:
+            problems.extend(exc.messages)
+    return problems
+
+
+def _person_record(table, person, user, cache):
+    """(record, problems): the person's record, made when missing. One not fetched for PERSON_FRESH days gets the
+    name and photo of this answer, so people stay as fresh as the titles they are in (TMDB's six months).
+    Without a cache (a title taken over without pictures) no photo is fetched."""
+    from . import services
+    from .models import Record
+
+    plan = person_config(table)
+    record = Record.objects.filter(table=table, **{f"values__{plan['tmdb_id']}": person_ref(person["id"])}).first()
+    if record is None:
+        values = {plan.get("name"): person["name"], plan["tmdb_id"]: person_ref(person["id"]),
+                  plan.get("tmdb_url"): f"{SITE}/person/{int(person['id'])}"}
+        record = services.create_record(table, {key: value for key, value in values.items() if key})
+    elif ((record.values or {}).get(plan.get("synced") or "") or "") > (timezone.localdate() - timedelta(days=PERSON_FRESH)).isoformat():
+        return record, []
+    return record, fill_person(record, person, user, cache, photo=cache is not None)
+
+
+def fill_person(record, person, user=None, cache=None, photo=True):
+    """Name and photo of a TMDB person ({"name", "profile_path"}) into its record, and today as the day of the
+    fetch. Returns the problem with the photo, if any."""
+    from . import links, services
+    from .models import Attachment
+
+    plan = person_config(record.table)
+    fields = {f.key: f for f in services.fields_of(record.table)}
+    with transaction.atomic():
+        for key, raw in ((plan.get("name"), person.get("name") or ""), (plan.get("synced"), timezone.localdate().isoformat())):
+            if key in fields and raw:
+                services._assign(record, fields[key], raw)
+        services.refresh(record, list(fields.values()))
+        record.save()
+    field = fields.get(plan.get("photo") or "")
+    if not photo or field is None or field.type != "image" or not person.get("profile_path"):
+        return []
+    try:
+        body, extension = _picture(cache, "w185", person["profile_path"])
+    except TmdbError as exc:
+        return [str(exc)]
+    upload = ContentFile(body, name=f"{slugify(person.get('name') or 'person')[:60] or 'person'}.{extension}")
+    upload.content_type = f"image/{'jpeg' if extension == 'jpg' else extension}"
+    with transaction.atomic():
+        for old in Attachment.objects.filter(record=record, field=field.key):
+            links.remove_file(old)
+        links.add_file(record, field, upload, user)
+    return []
+
+
+def person_details(tmdb_id, lang=None):
+    return call(f"/person/{int(tmdb_id)}", language=lang if lang in LANGUAGES.values() else language())
 
 
 def create(table, kind, tmdb_id, user=None, status=""):
@@ -477,16 +597,30 @@ def page_context(table, user, record=None):
 
 
 def cast_context(record, user):
-    """The cast strip of a record page: [{"name", "role", "photo", "initials"}], or []."""
-    from . import links, look, services
+    """The cast strip of a record page: [{"name", "role", "photo", "initials", "url"}], or []. `url` leads to the
+    person's record when the title links to one the user may read."""
+    from django.urls import reverse
 
-    fields = (config_of(record.table).get("fields") or {})
+    from . import links, look, services
+    from .models import Record
+
+    config = config_of(record.table)
+    fields = config.get("fields") or {}
     visible = {f.key: f for f in services.fields_of(record.table, user=user)}
     text_field, photo_field = visible.get(fields.get("cast") or ""), visible.get(fields.get("cast_photos") or "")
     if text_field is None:
         return []
     photos = [{"name": a.name, "url": look.file_url(record.table, record.pk, a.pk)} for a in links.files(record, photo_field)] if photo_field else []
-    return cast_list(str(services.display(record, text_field)), photos)
+    people = cast_list(str(services.display(record, text_field)), photos)
+    link = visible.get(((config.get("people") or {}).get("cast") or {}).get("link") or "")
+    pages = {}
+    if link is not None and link.type == "link":
+        readable = {t.pk for t in services.readable(user)}
+        for person in Record.objects.filter(pk__in=links.targets(record, link), table_id__in=readable).select_related("table"):
+            pages.setdefault(person.title.casefold(), reverse("record_detail", args=[person.table.key, person.pk]))
+    for person in people:
+        person["url"] = pages.get(person["name"].casefold(), "")
+    return people
 
 
 def how_choices(table):
@@ -505,25 +639,31 @@ def how_choices(table):
 # ---------------------------------------------------------------- six months at most
 
 def _due(table, before):
-    """[(day of the last fetch, record pk, record, (kind, id))] of the table's titles fetched before `before`
-    (a title without a day counts as oldest)."""
+    """[(day of the last fetch, record pk, record, (kind, id))] of the table's titles or people fetched before
+    `before` (one without a day counts as oldest). A person's kind is "person"."""
     from .models import Record
 
-    fields = config_of(table).get("fields") or {}
+    person = person_config(table)
+    fields = person or config_of(table).get("fields") or {}
     id_key, synced_key = fields.get("tmdb_id"), fields.get("synced")
     if not id_key or not synced_key:
         return []
     due = []
     for record in Record.objects.filter(table=table).only("pk", "values", "table"):
-        ref = parse_ref((record.values or {}).get(id_key) or "")
+        ref = _parse_person((record.values or {}).get(id_key) or "") if person else parse_ref((record.values or {}).get(id_key) or "")
         day = (record.values or {}).get(synced_key) or ""
         if ref is not None and day < before:
             due.append((day, str(record.pk), record, ref))
     return due
 
 
+def _parse_person(text):
+    match = re.fullmatch(r"person/(\d{1,10})", (text or "").strip())
+    return ("person", int(match.group(1))) if match else None
+
+
 def refresh_due(limit=REFRESH_BATCH, today=None):
-    """Fetch the titles again whose TMDB data is REFRESH_AFTER days old: (refreshed, problems). Stops at the
+    """Fetch the titles and people again whose TMDB data is REFRESH_AFTER days old: (refreshed, problems). Stops at the
     first problem with the key or the connection; the next round goes on. A title TMDB no longer knows keeps
     its values and is asked for again after REFRESH_AFTER days."""
     from core import audit
@@ -535,14 +675,22 @@ def refresh_due(limit=REFRESH_BATCH, today=None):
     before = ((today or timezone.localdate()) - timedelta(days=REFRESH_AFTER)).isoformat()
     work = []
     for table in Table.objects.filter(archived=False):
-        if supports(table):
+        if supports(table) or person_config(table):
             lang = config_of(table).get("language")
             work.extend((day, pk, record, ref, lang) for day, pk, record, ref in _due(table, before))
-    work.sort(key=lambda item: item[:2])  # oldest first, everywhere
+    work.sort(key=lambda item: (item[0], item[3][0] == "person", item[1]))  # oldest first; titles before people
     refreshed, problems = 0, []
-    for _day, _pk, record, (kind, tmdb_id), lang in work[:limit]:
+    for _day, _pk, record, (kind, tmdb_id), lang in work:
+        if refreshed >= limit:
+            break
         try:
-            fill(record, kind, details(kind, tmdb_id, lang=lang))
+            if kind == "person":  # people come along with their titles; this is for those no title brought
+                record.refresh_from_db()
+                if ((record.values or {}).get(person_config(record.table).get("synced") or "") or "") >= before:
+                    continue
+                fill_person(record, person_details(tmdb_id, lang), cache={})
+            else:
+                fill(record, kind, details(kind, tmdb_id, lang=lang))
         except TmdbError as exc:
             if not exc.missing:  # the key, the connection or TMDB itself: the next round tries again
                 problems.append(str(exc))
@@ -552,15 +700,15 @@ def refresh_due(limit=REFRESH_BATCH, today=None):
             continue
         refreshed += 1
     if refreshed:
-        audit.log("table", f"TMDB: {refreshed} Titel automatisch neu abgeglichen")
+        audit.log("table", f"TMDB: {refreshed} Einträge automatisch neu abgeglichen")
     return refreshed, problems
 
 
 def _mark_synced(record):
-    """A title TMDB no longer has: wait REFRESH_AFTER days before asking again."""
+    """A title or person TMDB no longer has: wait REFRESH_AFTER days before asking again."""
     from . import services
 
-    key = (config_of(record.table).get("fields") or {}).get("synced")
+    key = (person_config(record.table) or config_of(record.table).get("fields") or {}).get("synced")
     field = next((f for f in services.fields_of(record.table) if f.key == key), None)
     if field is not None:
         services.set_value(record, field, timezone.localdate().isoformat())

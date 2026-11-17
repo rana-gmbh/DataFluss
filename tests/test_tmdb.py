@@ -16,6 +16,7 @@ from core.context_user import set_current_user
 from core.models import Role, SchoolSettings, User
 from tables import blueprints, formula, look, services, tmdb
 from tables.models import Attachment, Field, Record, Table
+from tables.views_records import rows
 
 from .base import AppTestCase
 
@@ -50,6 +51,9 @@ class FakeTmdb:
         if url.startswith(tmdb.IMAGES):
             return picture(), "image/jpeg"
         path = url[len(tmdb.API):].split("?")[0]
+        if path.startswith("/person/"):
+            number = int(path.rsplit("/", 1)[1])
+            return json.dumps({"id": number, "name": f"Neu {number}", "profile_path": "/neu.jpg"}).encode(), "application/json"
         answer = {"/authentication": {"success": True}, "/search/multi": fixture("search"), "/movie/4711": fixture("movie_4711"),
                   "/tv/815": fixture("tv_815")}.get(path)
         if answer is None:
@@ -156,6 +160,29 @@ class TemplateTests(FilmTemplateMixin, AppTestCase):
         self.assertEqual(Field.objects.get(table=self.films, key="f_zuletzt").config["result"], "date")
         again = blueprints.apply(TEMPLATE, self.it)
         self.assertEqual(again["created"], [])
+
+    def test_version_2_adds_the_people_to_a_database_with_version_1(self):
+        first = copy.deepcopy(TEMPLATE)
+        first["version"] = 1
+        first["tables"] = [t for t in first["tables"] if t["key"] not in ("fs_darsteller", "fs_regie")]
+        first["tables"][0]["fields"] = [f for f in first["tables"][0]["fields"] if f["key"] not in ("f_darsteller", "f_regisseure")]
+        del first["tables"][0]["look"]["tmdb"]["people"]
+        first["masks"] = [m for m in first["masks"] if m["table"] in ("fs_titel", "fs_sichtungen")]
+        first["views"] = [v for v in first["views"] if v["table"] in ("fs_titel", "fs_sichtungen")]
+        for tab in first["masks"][0]["tree"]["tabs"]:
+            for section in tab["sections"]:
+                section["items"] = [i for i in section["items"] if i.get("field") not in ("f_darsteller", "f_regisseure")]
+        set_current_user(self.it)
+        blueprints.apply(first, self.it)
+        films = Table.objects.get(key="fs_titel")
+        films.look = {**films.look, "cover": "", "tmdb": {**films.look["tmdb"], "language": "en-US"}}
+        films.save()
+        report = blueprints.apply(TEMPLATE, self.it)
+        self.assertIn("Darsteller", report["created"])
+        films.refresh_from_db()
+        self.assertEqual(films.look["tmdb"]["people"]["cast"], {"table": "fs_darsteller", "link": "f_darsteller"})
+        self.assertEqual((films.look["cover"], films.look["tmdb"]["language"]), ("", "en-US"))  # what was set here stays
+        self.assertEqual(blueprints.installed_version("filme"), 2)
 
     def test_it_works_without_schulverwaltung(self):
         SchoolSettings.load()
@@ -272,6 +299,46 @@ class ImportTests(FilmTemplateMixin, AppTestCase):
         self.assertEqual(self.client.get(reverse("tmdb_search", args=["fs_titel"]), {"q": "x"}).status_code, 403)
         self.assertFalse(Record.objects.filter(table=self.films).exists())
 
+    def test_the_people_of_a_film_get_records_of_their_own(self):
+        self.take_over(status="watched", viewing="1")
+        film = Record.objects.get(table=self.films)
+        actors, directors = Table.objects.get(key="fs_darsteller"), Table.objects.get(key="fs_regie")
+        self.assertEqual(Record.objects.filter(table=actors).count(), 10)  # CAST, the first ten in TMDB's order
+        ada = Record.objects.get(table=directors)
+        self.assertEqual((ada.title, ada.values["f_tmdb_id"], ada.values["f_tmdb_abgleich"]), ("Ada Regie", "person/2001", date.today().isoformat()))
+        self.assertEqual(Attachment.objects.filter(record=ada, field="f_foto").count(), 1)
+        first = Record.objects.get(table=actors, values__f_tmdb_id="person/1001")
+        self.assertEqual(Attachment.objects.filter(record=first, field="f_foto").count(), 1)
+        third = Record.objects.get(table=actors, values__f_tmdb_id="person/1003")
+        self.assertEqual(Attachment.objects.filter(record=third, field="f_foto").count(), 0)  # no photo at TMDB
+        values = {r["name"]: r for r in rows(actors, self.it)}["Person 1"]
+        self.assertEqual((values["f_titel_anzahl"], values["f_gesehen"]), (1.0, 1.0))
+        page = self.client.get(reverse("record_detail", args=["fs_regie", ada.pk]))
+        self.assertContains(page, film.title)  # the films of the person, from the other side
+        film_page = self.client.get(reverse("record_detail", args=["fs_titel", film.pk]))
+        self.assertContains(film_page, reverse("record_detail", args=["fs_darsteller", first.pk]))  # the cast strip links
+        # Again from TMDB: the same people, no second record of anyone
+        self.client.post(reverse("tmdb_refresh", args=["fs_titel", film.pk]))
+        self.assertEqual(Record.objects.filter(table=actors).count(), 10)
+        self.assertEqual(Record.objects.filter(table=directors).count(), 1)
+
+    def test_people_of_a_series_and_photos_fetched_once(self):
+        self.client.post(reverse("tmdb_import", args=["fs_titel"]), {"kind": "tv", "id": "815"})
+        self.assertEqual(sorted(r.title for r in Record.objects.filter(table__key="fs_regie")), ["Clara Idee", "Dora Buch"])
+        self.assertEqual(sorted(r.title for r in Record.objects.filter(table__key="fs_darsteller")), ["Emil Wache", "Fritzi Fern"])
+        emil = [url for url, _h in self.fake.calls if url.endswith("/emil.jpg")]
+        self.assertEqual(len(emil), 1)  # for the title's cast photos and Emil's own record
+
+    def test_who_may_not_edit_the_people_gets_the_film_without_them(self):
+        actors = Table.objects.get(key="fs_darsteller")
+        actors.rights = {**actors.rights, "it": "read"}
+        actors.save()
+        with mock.patch.object(services, "may_edit", side_effect=lambda user, table: table.key != "fs_darsteller"):
+            self.take_over()
+        self.assertTrue(Record.objects.filter(table=self.films).exists())
+        self.assertFalse(Record.objects.filter(table=actors).exists())
+        self.assertTrue(Record.objects.filter(table__key="fs_regie").exists())
+
     def test_other_tables_have_no_tmdb(self):
         other = services.create_table("Bücher")
         self.assertEqual(self.client.get(reverse("tmdb_search", args=[other.key]), {"q": "x"}).status_code, 404)
@@ -316,7 +383,8 @@ class RefreshTests(FilmTemplateMixin, AppTestCase):
         self.fake.calls.clear()
         self.assertEqual(tmdb.refresh_due(), (0, []))
         self.assertEqual(self.fake.calls, [])
-        self.assertEqual(tmdb.refresh_due(today=self.later), (2, []))
+        refreshed, problems = tmdb.refresh_due(today=self.later)
+        self.assertEqual((refreshed, problems), (2 + 11 + 4, []))  # two titles, their people (10 + 1, 2 + 2)
         film.refresh_from_db()
         self.assertTrue(film.values["f_handlung"].startswith("Eine Leuchtturmwärterin"))
         self.assertEqual(film.values["f_tmdb_abgleich"], date.today().isoformat())

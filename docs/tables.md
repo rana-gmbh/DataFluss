@@ -227,6 +227,12 @@ every database, with or without Schulverwaltung, and creates the section "Filme 
 - **Sichtungen** (not in the sidebar, shown on the title): date, **Wie gesehen** (cinema, TV, Blu-ray/DVD,
   Netflix, Disney+, … – more options under the field's settings), with whom, note. A title can be watched
   any number of times.
+- **Darsteller** and **Regie**: a record per person with photo, the films and series they are in (from the
+  other side of the link), how many titles there are, how many of them you have watched, when you last
+  watched one and their average rating; saved view **Am häufigsten gesehen**. Taking a title over from
+  TMDB fills them: its first ten actors, and the directors of a film or the creators of a series. A person
+  already there (by TMDB id) gets linked, never a second time. In the cast strip of a title, a name leads
+  to the person's record.
 
 On a title's page, **Gesehen** (or **Nochmal gesehen**) adds a viewing for a day and a way and sets the
 status to Gesehen: this is how a title leaves the watchlist.
@@ -258,7 +264,8 @@ The terms also forbid keeping TMDB data longer than six months. So every title n
 fetch (**Mit TMDB abgeglichen am**, tab TMDB), and **after five months DataFluss fetches it again by
 itself**, with its pictures, in the language of the last import or update. Like **Mit TMDB aktualisieren**
 this keeps rating, status, viewings and notes, but replaces what came from TMDB, including changes made
-there by hand. It is part of the nightly work: on a server every hour (`nightly_backup --if-due` in
+there by hand. The people of a title come along: their name and photo are fetched again when the title is
+and they were not fetched in the last 30 days; people no title brings any more are fetched on their own. It is part of the nightly work: on a server every hour (`nightly_backup --if-due` in
 `deploy/start.sh`), on a computer with a database of its own once a day while it is open; a computer
 connected to a server leaves it to the server. Up to 40 titles per round, the oldest first; a refused key or
 no connection ends the round, and the next one goes on. A title TMDB no longer knows keeps its values and
@@ -302,13 +309,16 @@ a bundle like any other module.
 - Formulas are written with field keys (`{f_wert}`, `{f_raum}.{f_name}`, `{@geraete.f_raum}` for the
   records of another table linking here).
 - In demo records, a link names its target record by title.
-- A newer version raises `version`; it may add tables, fields and the rest, never remove them.
+- A newer version raises `version`; it may add tables, fields and the rest, never remove them. Settings of
+  a table's `look` that are new in it are added; those already there stay.
 - Table keys of a template should start with a short prefix of its own (`inv_raeume`), so they never meet
   a table someone made by hand. A formula may use formulas of other tables of the template, in any order.
 - A table may set `"section"` (its heading in the sidebar), `"in_nav": false` and `"look"` (see *Look*):
   `{"cover": "f_poster", "backdrop": "f_hintergrund", "subtitle": ["f_jahr", "f_art"], "rating":
   "f_bewertung", "flag": "f_status", "text": "f_handlung", "layout": "gallery", "shape": "poster"}`.
-  `look.tmdb` connects TMDB: `fields` maps TMDB data (`title`, `original_title`, `kind`, `year`,
+  `look.tmdb` connects TMDB: `people` names the tables of people a title links to (`{"cast": {"table":
+  "fs_darsteller", "link": "f_darsteller"}, "directors": {…}}`), each with `look.tmdb.person` (`name`,
+  `photo`, `tmdb_id`, `tmdb_url`, `synced`); `fields` maps TMDB data (`title`, `original_title`, `kind`, `year`,
   `runtime`, `seasons`, `episodes`, `genres`, `director`, `creators`, `cast`, `overview`, `tagline`,
   `poster`, `backdrop`, `images`, `cast_photos`, `tmdb_id`, `tmdb_url`, and `synced`, a date field for the
   automatic update) to field keys, `kinds` names the

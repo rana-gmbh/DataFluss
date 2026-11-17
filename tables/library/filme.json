@@ -1,7 +1,7 @@
 {
  "format": 1,
  "id": "filme",
- "version": 1,
+ "version": 2,
  "title": "Filme & Serien",
  "titles": {
   "en": "Films & series",
@@ -123,6 +123,16 @@
        "link": "f_titel",
        "date": "f_datum",
        "how": "f_wie"
+      }
+     },
+     "people": {
+      "cast": {
+       "table": "fs_darsteller",
+       "link": "f_darsteller"
+      },
+      "directors": {
+       "table": "fs_regie",
+       "link": "f_regisseure"
       }
      }
     }
@@ -507,16 +517,50 @@
      "in_grid": false
     },
     {
+     "key": "f_regisseure",
+     "label": "Regie und Idee",
+     "labels": {
+      "en": "Directors and creators",
+      "zh-hans": "导演与创作者",
+      "zh-hant": "導演與創作者"
+     },
+     "type": "link",
+     "config": {
+      "target": "record",
+      "table": "fs_regie",
+      "multiple": true,
+      "reverse": "Filme & Serien"
+     },
+     "in_grid": false
+    },
+    {
      "key": "f_besetzung",
      "label": "Besetzung",
      "labels": {
       "en": "Cast",
-      "zh-hans": "演员",
-      "zh-hant": "演員"
+      "zh-hans": "演员阵容",
+      "zh-hant": "演員陣容"
      },
      "type": "textarea",
      "in_grid": false,
      "help_text": "Eine Zeile je Person: Name – Rolle"
+    },
+    {
+     "key": "f_darsteller",
+     "label": "Darsteller",
+     "labels": {
+      "en": "Actors",
+      "zh-hans": "演员",
+      "zh-hant": "演員"
+     },
+     "type": "link",
+     "config": {
+      "target": "record",
+      "table": "fs_darsteller",
+      "multiple": true,
+      "reverse": "Filme & Serien"
+     },
+     "in_grid": false
     },
     {
      "key": "f_handlung",
@@ -916,6 +960,340 @@
      "in_grid": false
     }
    ]
+  },
+  {
+   "key": "fs_darsteller",
+   "name": "Darsteller",
+   "names": {
+    "en": "Actors",
+    "zh-hans": "演员",
+    "zh-hant": "演員"
+   },
+   "icon": "users",
+   "description": "Die Darstellerinnen und Darsteller der übernommenen Titel, mit den Filmen und Serien, in denen sie spielen.",
+   "descriptions": {
+    "en": "The actors of the titles taken over, with the films and series they appear in.",
+    "zh-hans": "已导入作品的演员，以及他们出演的电影与剧集。",
+    "zh-hant": "已匯入作品的演員，以及他們演出的電影與劇集。"
+   },
+   "title_field": "f_name",
+   "section": "Filme & Serien",
+   "rights": {
+    "sekretariat": "edit",
+    "schulleitung": "edit",
+    "team": "edit",
+    "gast": "read"
+   },
+   "look": {
+    "cover": "f_foto",
+    "layout": "gallery",
+    "shape": "poster",
+    "subtitle": [],
+    "tmdb": {
+     "person": {
+      "name": "f_name",
+      "photo": "f_foto",
+      "tmdb_id": "f_tmdb_id",
+      "tmdb_url": "f_tmdb_link",
+      "synced": "f_tmdb_abgleich"
+     }
+    }
+   },
+   "fields": [
+    {
+     "key": "f_name",
+     "label": "Name",
+     "labels": {
+      "en": "Name",
+      "zh-hans": "姓名",
+      "zh-hant": "姓名"
+     },
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "f_foto",
+     "label": "Foto",
+     "labels": {
+      "en": "Photo",
+      "zh-hans": "照片",
+      "zh-hant": "照片"
+     },
+     "type": "image",
+     "in_grid": false
+    },
+    {
+     "key": "f_titel",
+     "label": "Filme & Serien",
+     "labels": {
+      "en": "Films & series",
+      "zh-hans": "电影与剧集",
+      "zh-hant": "電影與劇集"
+     },
+     "type": "backlink",
+     "config": {
+      "link": "fs_titel.f_darsteller"
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_titel_anzahl",
+     "label": "Titel",
+     "labels": {
+      "en": "Titles",
+      "zh-hans": "作品数",
+      "zh-hant": "作品數"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "count({@fs_titel.f_darsteller})",
+      "decimals": 0
+     }
+    },
+    {
+     "key": "f_gesehen",
+     "label": "Davon gesehen",
+     "labels": {
+      "en": "Watched",
+      "zh-hans": "已看",
+      "zh-hant": "已看"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "count({@fs_titel.f_darsteller}.{f_zuletzt})",
+      "decimals": 0
+     }
+    },
+    {
+     "key": "f_zuletzt",
+     "label": "Zuletzt gesehen",
+     "labels": {
+      "en": "Last watched",
+      "zh-hans": "最近观看",
+      "zh-hant": "最近觀看"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "max({@fs_titel.f_darsteller}.{f_zuletzt})"
+     }
+    },
+    {
+     "key": "f_bewertung",
+     "label": "Ø Bewertung",
+     "labels": {
+      "en": "Average rating",
+      "zh-hans": "平均评分",
+      "zh-hant": "平均評分"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "avg({@fs_titel.f_darsteller}.{f_bewertung})",
+      "decimals": 1
+     }
+    },
+    {
+     "key": "f_tmdb_id",
+     "label": "TMDB-Kennung",
+     "labels": {
+      "en": "TMDB id",
+      "zh-hans": "TMDB 编号",
+      "zh-hant": "TMDB 編號"
+     },
+     "type": "text",
+     "unique": true,
+     "in_grid": false
+    },
+    {
+     "key": "f_tmdb_link",
+     "label": "TMDB-Seite",
+     "labels": {
+      "en": "TMDB page",
+      "zh-hans": "TMDB 页面",
+      "zh-hant": "TMDB 頁面"
+     },
+     "type": "url",
+     "in_grid": false
+    },
+    {
+     "key": "f_tmdb_abgleich",
+     "label": "Mit TMDB abgeglichen am",
+     "labels": {
+      "en": "Updated from TMDB on",
+      "zh-hans": "与 TMDB 同步于",
+      "zh-hant": "與 TMDB 同步於"
+     },
+     "type": "date",
+     "in_grid": false,
+     "help_text": "Wird beim Übernehmen gesetzt. Nach fünf Monaten holt DataFluss Name und Foto von selbst neu von TMDB."
+    }
+   ]
+  },
+  {
+   "key": "fs_regie",
+   "name": "Regie",
+   "names": {
+    "en": "Directors",
+    "zh-hans": "导演",
+    "zh-hant": "導演"
+   },
+   "icon": "clapper",
+   "description": "Wer bei den übernommenen Filmen Regie geführt oder eine Serie erdacht hat.",
+   "descriptions": {
+    "en": "Who directed the films or created the series taken over.",
+    "zh-hans": "执导已导入电影或创作剧集的人。",
+    "zh-hant": "執導已匯入電影或創作劇集的人。"
+   },
+   "title_field": "f_name",
+   "section": "Filme & Serien",
+   "rights": {
+    "sekretariat": "edit",
+    "schulleitung": "edit",
+    "team": "edit",
+    "gast": "read"
+   },
+   "look": {
+    "cover": "f_foto",
+    "layout": "gallery",
+    "shape": "poster",
+    "subtitle": [],
+    "tmdb": {
+     "person": {
+      "name": "f_name",
+      "photo": "f_foto",
+      "tmdb_id": "f_tmdb_id",
+      "tmdb_url": "f_tmdb_link",
+      "synced": "f_tmdb_abgleich"
+     }
+    }
+   },
+   "fields": [
+    {
+     "key": "f_name",
+     "label": "Name",
+     "labels": {
+      "en": "Name",
+      "zh-hans": "姓名",
+      "zh-hant": "姓名"
+     },
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "f_foto",
+     "label": "Foto",
+     "labels": {
+      "en": "Photo",
+      "zh-hans": "照片",
+      "zh-hant": "照片"
+     },
+     "type": "image",
+     "in_grid": false
+    },
+    {
+     "key": "f_titel",
+     "label": "Filme & Serien",
+     "labels": {
+      "en": "Films & series",
+      "zh-hans": "电影与剧集",
+      "zh-hant": "電影與劇集"
+     },
+     "type": "backlink",
+     "config": {
+      "link": "fs_titel.f_regisseure"
+     },
+     "in_grid": false
+    },
+    {
+     "key": "f_titel_anzahl",
+     "label": "Titel",
+     "labels": {
+      "en": "Titles",
+      "zh-hans": "作品数",
+      "zh-hant": "作品數"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "count({@fs_titel.f_regisseure})",
+      "decimals": 0
+     }
+    },
+    {
+     "key": "f_gesehen",
+     "label": "Davon gesehen",
+     "labels": {
+      "en": "Watched",
+      "zh-hans": "已看",
+      "zh-hant": "已看"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "count({@fs_titel.f_regisseure}.{f_zuletzt})",
+      "decimals": 0
+     }
+    },
+    {
+     "key": "f_zuletzt",
+     "label": "Zuletzt gesehen",
+     "labels": {
+      "en": "Last watched",
+      "zh-hans": "最近观看",
+      "zh-hant": "最近觀看"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "max({@fs_titel.f_regisseure}.{f_zuletzt})"
+     }
+    },
+    {
+     "key": "f_bewertung",
+     "label": "Ø Bewertung",
+     "labels": {
+      "en": "Average rating",
+      "zh-hans": "平均评分",
+      "zh-hant": "平均評分"
+     },
+     "type": "formula",
+     "config": {
+      "expression": "avg({@fs_titel.f_regisseure}.{f_bewertung})",
+      "decimals": 1
+     }
+    },
+    {
+     "key": "f_tmdb_id",
+     "label": "TMDB-Kennung",
+     "labels": {
+      "en": "TMDB id",
+      "zh-hans": "TMDB 编号",
+      "zh-hant": "TMDB 編號"
+     },
+     "type": "text",
+     "unique": true,
+     "in_grid": false
+    },
+    {
+     "key": "f_tmdb_link",
+     "label": "TMDB-Seite",
+     "labels": {
+      "en": "TMDB page",
+      "zh-hans": "TMDB 页面",
+      "zh-hant": "TMDB 頁面"
+     },
+     "type": "url",
+     "in_grid": false
+    },
+    {
+     "key": "f_tmdb_abgleich",
+     "label": "Mit TMDB abgeglichen am",
+     "labels": {
+      "en": "Updated from TMDB on",
+      "zh-hans": "与 TMDB 同步于",
+      "zh-hant": "與 TMDB 同步於"
+     },
+     "type": "date",
+     "in_grid": false,
+     "help_text": "Wird beim Übernehmen gesetzt. Nach fünf Monaten holt DataFluss Name und Foto von selbst neu von TMDB."
+    }
+   ]
   }
  ],
  "masks": [
@@ -1100,6 +1478,16 @@
           "type": "field",
           "field": "f_besetzung",
           "w": 12
+         },
+         {
+          "type": "field",
+          "field": "f_regisseure",
+          "w": 12
+         },
+         {
+          "type": "field",
+          "field": "f_darsteller",
+          "w": 12
          }
         ]
        }
@@ -1231,6 +1619,188 @@
      }
     ]
    }
+  },
+  {
+   "table": "fs_darsteller",
+   "name": "Darsteller",
+   "names": {
+    "en": "Actor",
+    "zh-hans": "演员",
+    "zh-hant": "演員"
+   },
+   "tree": {
+    "tabs": [
+     {
+      "id": "t1",
+      "title": "Darsteller",
+      "titles": {
+       "en": "Actor",
+       "zh-hans": "演员",
+       "zh-hant": "演員"
+      },
+      "sections": [
+       {
+        "id": "s1",
+        "title": "",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_name",
+          "w": 8
+         },
+         {
+          "type": "field",
+          "field": "f_foto",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_titel_anzahl",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_gesehen",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_zuletzt",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_bewertung",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_titel",
+          "w": 12
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "title": "TMDB",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_tmdb_id",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_tmdb_link",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_tmdb_abgleich",
+          "w": 4
+         },
+         {
+          "type": "block",
+          "block": "history",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "table": "fs_regie",
+   "name": "Regie",
+   "names": {
+    "en": "Director",
+    "zh-hans": "导演",
+    "zh-hant": "導演"
+   },
+   "tree": {
+    "tabs": [
+     {
+      "id": "t1",
+      "title": "Regie",
+      "titles": {
+       "en": "Director",
+       "zh-hans": "导演",
+       "zh-hant": "導演"
+      },
+      "sections": [
+       {
+        "id": "s1",
+        "title": "",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_name",
+          "w": 8
+         },
+         {
+          "type": "field",
+          "field": "f_foto",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_titel_anzahl",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_gesehen",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_zuletzt",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_bewertung",
+          "w": 3
+         },
+         {
+          "type": "field",
+          "field": "f_titel",
+          "w": 12
+         }
+        ]
+       },
+       {
+        "id": "s2",
+        "title": "TMDB",
+        "items": [
+         {
+          "type": "field",
+          "field": "f_tmdb_id",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_tmdb_link",
+          "w": 4
+         },
+         {
+          "type": "field",
+          "field": "f_tmdb_abgleich",
+          "w": 4
+         },
+         {
+          "type": "block",
+          "block": "history",
+          "w": 12
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
   }
  ],
  "prints": [
@@ -1340,6 +1910,38 @@
      {
       "column": "f_datum",
       "dir": "desc"
+     }
+    ]
+   }
+  },
+  {
+   "table": "fs_darsteller",
+   "name": "Am häufigsten gesehen",
+   "config": {
+    "sort": [
+     {
+      "column": "f_gesehen",
+      "dir": "desc"
+     },
+     {
+      "column": "f_name",
+      "dir": "asc"
+     }
+    ]
+   }
+  },
+  {
+   "table": "fs_regie",
+   "name": "Am häufigsten gesehen",
+   "config": {
+    "sort": [
+     {
+      "column": "f_gesehen",
+      "dir": "desc"
+     },
+     {
+      "column": "f_name",
+      "dir": "asc"
      }
     ]
    }

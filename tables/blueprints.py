@@ -252,8 +252,8 @@ def apply(data, user=None, demo=False, request=None):
             else:
                 report["kept"].append(table.name)
                 table.template = {"id": tid, "version": max(data["version"], (table.template or {}).get("version", 0))}
-                if not table.look and isinstance(spec.get("look"), dict):  # a newer version may bring a look; one set here stays
-                    table.look = spec["look"]
+                if isinstance(spec.get("look"), dict):  # a newer version may bring more of the look; what is set here stays
+                    table.look = _add_missing(table.look or {}, spec["look"])
                 table.save()
             tables[spec["key"]] = table
         fields_later = []
@@ -326,6 +326,17 @@ def apply(data, user=None, demo=False, request=None):
                     record.save()
     audit.log("table", f"Vorlage {tid} (Version {data['version']}) angewendet: {len(report['created'])} neu", request=request, user=user)
     return report
+
+
+def _add_missing(have, wanted):
+    """`have` with the keys of `wanted` it lacks, also inside nested dictionaries; nothing in `have` changes."""
+    merged = dict(have)
+    for key, value in wanted.items():
+        if key not in merged:
+            merged[key] = value
+        elif isinstance(merged[key], dict) and isinstance(value, dict):
+            merged[key] = _add_missing(merged[key], value)
+    return merged
 
 
 def _create_field(table, pk, order, spec):

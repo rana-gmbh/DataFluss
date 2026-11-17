@@ -372,6 +372,9 @@ body { background: var(--bg); color: var(--ink); font-size: 14px; -webkit-font-s
 /* Cast of a film (tables/tmdb.py) */
 .cast-strip { display: grid; grid-auto-flow: column; grid-auto-columns: 108px; gap: 0.75rem; overflow-x: auto; padding-bottom: 0.5rem; scroll-snap-type: x proximity; }
 .cast-card { scroll-snap-align: start; font-size: 12px; min-width: 0; }
+a.cast-card { border-radius: 0.6rem; }
+a.cast-card:hover .cast-name, a.cast-card:focus-visible .cast-name { color: var(--accent); text-decoration: underline; }
+a.cast-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .cast-photo { display: grid; place-items: center; width: 100%; aspect-ratio: 2 / 3; border-radius: 0.5rem; object-fit: cover; background: var(--surface-2); color: var(--ink-3); font-weight: 650; font-size: 1.25rem; }
 .cast-name { margin-top: 0.35rem; font-weight: 600; line-height: 1.2; }
 .cast-role { line-height: 1.25; color: var(--ink-3); }
