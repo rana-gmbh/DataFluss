@@ -11,7 +11,7 @@ from unittest import mock
 from django.test import Client, override_settings
 from django.urls import reverse
 
-from core.models import AuditEvent, User
+from core.models import AuditEvent, SchoolSettings, User
 
 from .base import AppTestCase
 
@@ -106,6 +106,7 @@ class ShellSignInTests(AppTestCase):
         self.assertEqual(self.sign_in("sek", "the old one").headers["X-DataFluss-Login"], "failed")
 
     def test_the_second_factor_is_still_asked_for(self):
+        SchoolSettings.objects.filter(pk=SchoolSettings.load().pk).update(require_2fa=True)
         User.objects.filter(username="sek").update(totp_secret="x", totp_confirmed=True)
         self.assertEqual(self.sign_in("sek", PASSWORD).headers["X-DataFluss-Login"], "ok")
         start = self.client.get("/", secure=True)
