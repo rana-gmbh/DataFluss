@@ -193,13 +193,26 @@ computers whose role has no password rights.
 ## Templates
 
 A template creates tables, fields, record pages, printouts, saved views and, if wanted, sample records in
-one step: **Tabellen → Vorlage hinzufügen …**, or when creating a new database in the app. Applying a
-template again, or a newer version of it, only adds what is missing; nothing is deleted, and what you
-changed is kept and named.
+one step. Applying a template again, or a newer version of it, only adds what is missing; nothing is
+deleted, and what you changed is kept and named.
 
-DataFluss comes with **Bibliothek** (books and loans to pupils; needs Schulverwaltung), **Inventar** (rooms
-and the items in them, with value, condition, labels and room lists), **Termine** (events with place,
-kind and a notice to print) and **Filme & Serien** (see below). Modules can bring further templates.
+DataFluss comes with four **database templates**, each a database of its own:
+
+| Template | What it holds |
+|---|---|
+| **Filme & Serien** | Watched films and series and a watchlist, from TMDB (see below) |
+| **Bibliothek** | Books, readers and loans, with loan slip, book card and overdue list |
+| **Termine** | Events with place, kind and who is in charge, with a notice to print |
+| **Inventar** | Rooms and the items in them, with value, condition, labels and room lists |
+
+**Neue Datenbank** in the app offers, in this order: **Leer**, **Schulverwaltung** (with sample data if
+wanted), then the database templates. A database template is never mixed with the school's tables or with
+another template: **Tabellen → Vorlage hinzufügen …** offers one only in a database without Schulverwaltung
+that has no other one yet (and an applied one again, to bring it up to date). In a school database the
+button is gone. Modules can bring further templates that add tables to their own module.
+
+The earlier school library (loans to pupils, `bibliothek`) is no longer offered; where it is applied, it
+stays and can still be updated.
 
 ### Filme & Serien
 
@@ -284,6 +297,8 @@ a bundle like any other module.
 
 - Keys: tables `[a-z0-9_]{1,20}`, fields `f_…`; they never change once applied.
 - `requires: ["schulverwaltung"]` for templates that link to pupils, staff or devices.
+- `"database": true` makes it a database template, offered as a new database of its own in the place
+  `"order"` gives it; `"listed": false` retires a template (no longer offered, still updated where applied).
 - Formulas are written with field keys (`{f_wert}`, `{f_raum}.{f_name}`, `{@geraete.f_raum}` for the
   records of another table linking here).
 - In demo records, a link names its target record by title.
@@ -303,6 +318,5 @@ a bundle like any other module.
 ## Databases without Schulverwaltung
 
 When creating a database in the app, the card **Leer** starts without pupils, staff and devices: own
-tables only. Its start page lists the tables, and printing, import and links offer tables only. Templates
-that need Schulverwaltung, like the library, are not offered there; Inventar, Termine and Filme & Serien
-are.
+tables only, and so does every database template. Its start page lists the tables, and printing, import and
+links offer tables only. Instead of Sekretariat and Schulleitung there are the roles Team and Gast.

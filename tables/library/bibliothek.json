@@ -7,6 +7,7 @@
   "description": "Bücher und ihre Ausleihen an Schülerinnen und Schüler, mit Ausleihschein und einer Liste der überfälligen Bücher.",
   "descriptions": {"en": "Books and their loans to pupils, with a loan slip and a list of overdue books.", "zh-hans": "图书及其借给学生的记录，附借阅单和逾期图书列表。", "zh-hant": "圖書及其借給學生的記錄，附借閱單和逾期圖書清單。"},
   "requires": ["schulverwaltung"],
+  "listed": false,
   "tables": [
     {
       "key": "buecher", "name": "Bücher", "names": {"en": "Books", "zh-hans": "图书", "zh-hant": "圖書"}, "icon": "book",

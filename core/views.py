@@ -280,7 +280,7 @@ def dashboard(request):
 
 def _tables_home(request, areas=False):
     """The start page of a database without Schulverwaltung: its tables, warnings and first steps."""
-    from tables import services
+    from tables import blueprints, services
     from tables.models import Record
 
     readable = services.readable(request.user)
@@ -289,6 +289,7 @@ def _tables_home(request, areas=False):
         "tables": [{"table": t, "records": counts.get(t.pk, 0)} for t in readable], "areas": areas,
         "update_available": request.user.can("admin.update") and updates.update_available(background_check=True),
         "warnings": health.warnings_for(request.user),
+        "templates_offered": request.user.can("tables.design") and blueprints.any_offered(),
     }
     context.update(_checklist(request, 0))
     return render(request, "core/tables_home.html", context)

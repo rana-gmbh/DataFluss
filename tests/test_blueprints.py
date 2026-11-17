@@ -91,10 +91,18 @@ class ApplyTests(AppTestCase):
         self.assertFalse(Table.objects.filter(key="ausleihen").exists())  # all or nothing
 
     def test_the_page(self):
+        """A school database is offered no database template (Filme & Serien, Bibliothek, …): those are
+        databases of their own. The retired school library stays where it is applied, to be updated."""
         self.login(self.it)
-        self.assertContains(self.client.get(reverse("table_blueprints")), "Bibliothek")
+        page = self.client.get(reverse("table_blueprints"))
+        self.assertEqual(page.context["rows"], [])
+        self.assertNotContains(self.client.get(reverse("table_list")), "Vorlage hinzufügen")
+        self.client.post(reverse("table_blueprints"), {"template": "filme"})
+        self.client.post(reverse("table_blueprints"), {"template": "bibliothek"})
+        self.assertFalse(Table.objects.filter(key__in=["fs_titel", "buecher"]).exists())
+        blueprints.apply(LIBRARY, self.it)
+        self.assertEqual([row["id"] for row in self.client.get(reverse("table_blueprints")).context["rows"]], ["bibliothek"])
         self.client.post(reverse("table_blueprints"), {"template": "bibliothek", "demo": "on"})
-        self.assertEqual(Record.objects.filter(table__key="buecher").count(), 4)
         self.assertContains(self.client.get(reverse("table_blueprints")), "Version 1 angewendet")
         self.login(self.sek)
         self.assertEqual(self.client.get(reverse("table_blueprints")).status_code, 403)

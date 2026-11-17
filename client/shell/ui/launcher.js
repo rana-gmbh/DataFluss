@@ -257,18 +257,10 @@ const field = (name) => sheet.querySelector(`[name="${name}"]`);
 
 // ------------------------------------------------------------ new database (wizard)
 
-let offered = null; // optional modules this installation has: [{id, title}]
-
-async function offeredModules() {
-  if (offered === null) {
-    try { offered = await invoke("available_modules"); } catch { offered = []; }
-  }
-  return offered;
-}
-
-let chosenModules = null;
-let chosenStart = { without: [], templates: [] }; // the card "Leer" and the module templates picked
-let templates = null; // module templates this installation has (tables/blueprints.py): [{id, title, requires, …}]
+// The premium modules are not chosen here: a new database uses none of them (modules: []).
+let chosenStart = { without: [], templates: [] }; // "Leer" or a database template, and the template picked
+let chosenTemplate = null; // the database template picked, for the next step's wording
+let templates = null; // templates this installation has (tables/blueprints.py): [{id, title, database, order, has_demo, …}]
 
 async function offeredTemplates() {
   if (templates === null) {
@@ -281,27 +273,30 @@ async function offeredTemplates() {
 const language = () => window.I18N.language;
 const pick = (base, names) => (names && names[language()]) || base || "";
 
-function renderTemplates(box, start) {
-  box.querySelectorAll("label").forEach((label) => label.remove());
-  const usable = (templates || []).filter((t) => !(t.requires || []).includes("schulverwaltung") || start === "schulverwaltung");
-  for (const template of usable) {
+// A database template is what a whole database is for (Filme & Serien, Bibliothek, …): one card each, after
+// "Leer" and "Schulverwaltung", never mixed with the school's tables or with another template.
+const databaseTemplates = () => (templates || [])
+  .filter((t) => t.database && t.listed !== false && !(t.requires || []).length)
+  .sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
+
+function renderTemplates(box) {
+  const list = box.querySelector(".choices");
+  list.replaceChildren();
+  for (const template of databaseTemplates()) {
     const label = document.createElement("label");
-    label.className = "check";
-    const input = Object.assign(document.createElement("input"), { type: "checkbox", name: "template", value: template.id });
+    label.className = "choice";
+    const input = Object.assign(document.createElement("input"), { type: "radio", name: "start", value: `vorlage:${template.id}` });
     const text = document.createElement("span");
     text.append(Object.assign(document.createElement("strong"), { textContent: pick(template.title, template.titles) }));
     const description = pick(template.description, template.descriptions);
-    if (description) {
-      text.append(document.createElement("br"), Object.assign(document.createElement("span"), { className: "muted small", textContent: description }));
-    }
+    if (description) text.append(Object.assign(document.createElement("span"), { className: "muted small", textContent: description }));
     label.append(input, text);
-    box.append(label);
+    list.append(label);
   }
-  box.hidden = usable.length === 0;
+  box.hidden = list.children.length === 0;
 }
 
 async function startCreate() {
-  const modules = await offeredModules();
   await offeredTemplates();
   openSheet("Neue Datenbank", {
     template: "#t-start",
@@ -310,49 +305,41 @@ async function startCreate() {
       { label: "Weiter", kind: "primary", submit: true, run: afterStart },
     ],
   });
-  const box = $("#module-choices");
-  for (const { id, title } of modules) {
-    const label = document.createElement("label");
-    label.className = "check";
-    const input = Object.assign(document.createElement("input"), { type: "checkbox", name: "module", value: id, checked: false });
-    const text = document.createElement("span");
-    text.append(Object.assign(document.createElement("strong"), { textContent: title }));
-    label.append(input, text);
-    box.append(label);
-  }
-  box.hidden = modules.length === 0;
-  const templateBox = $("#template-choices");
+  renderTemplates($("#template-choices"));
   const start = () => sheet.querySelector('[name="start"]:checked').value;
-  renderTemplates(templateBox, start());
-  // Sample data comes from Schulverwaltung's invented people or from a template; "Leer" without one has none.
+  // Sample data: Schulverwaltung's invented people, or a template's sample records; "Leer" has none.
   const demo = field("demo");
   const showDemo = () => {
-    const none = start() === "leer" && templateBox.hidden;
+    const chosen = start();
+    const template = chosen.startsWith("vorlage:") ? databaseTemplates().find((t) => `vorlage:${t.id}` === chosen) : null;
+    const none = chosen === "leer" || (template && !template.has_demo);
     demo.closest("label").hidden = none;
     if (none) demo.checked = false;
   };
-  sheet.querySelectorAll('[name="start"]').forEach((radio) => radio.addEventListener("change", () => {
-    box.hidden = start() !== "schulverwaltung" || modules.length === 0; // optional modules build on Schulverwaltung
-    renderTemplates(templateBox, start());
-    showDemo();
-  }));
+  sheet.querySelectorAll('[name="start"]').forEach((radio) => radio.addEventListener("change", showDemo));
+  showDemo();
 }
 
 function afterStart() {
   const start = sheet.querySelector('[name="start"]:checked').value;
-  chosenModules = start === "schulverwaltung" ? [...sheet.querySelectorAll('[name="module"]:checked')].map((input) => input.value) : [];
+  const id = start.startsWith("vorlage:") ? start.slice("vorlage:".length) : "";
+  chosenTemplate = id ? databaseTemplates().find((t) => t.id === id) || null : null;
   chosenStart = {
-    without: start === "leer" ? ["schulverwaltung"] : [],
-    templates: [...sheet.querySelectorAll('[name="template"]:checked')].map((input) => input.value),
+    without: start === "schulverwaltung" ? [] : ["schulverwaltung"],
+    templates: id ? [id] : [],
   };
   if (field("demo").checked) {
     openSheet("Neue Datenbank mit Beispieldaten", {
       template: "#t-demo-name",
       actions: [
         { label: "Zurück", run: startCreate },
-        { label: "Anlegen", kind: "primary", submit: true, run: () => createDemo(field("name").value.trim(), chosenModules, chosenStart) },
+        { label: "Anlegen", kind: "primary", submit: true, run: () => createDemo(field("name").value.trim(), [], chosenStart) },
       ],
     });
+    if (chosenTemplate) {
+      field("name").value = pick(chosenTemplate.title, chosenTemplate.titles);
+      sheet.querySelector("p.muted").textContent = t("Eine Datenbank mit den Beispieldaten der Vorlage. Die Anmeldedaten erscheinen gleich danach.");
+    }
     return;
   }
   openSheet("Neue Datenbank", {
@@ -365,8 +352,10 @@ function afterStart() {
   if (chosenStart.without.length) { // not necessarily a school
     const school = field("school");
     school.parentElement.firstChild.textContent = t("Name (Schule, Verein, Firma …)");
-    school.placeholder = t("z. B. Bibliothek am Markt");
-    sheet.querySelector("p.muted").textContent = t("Noch ohne Tabellen, mit dem ersten IT-Konto. Beim ersten Anmelden wird die Zwei-Faktor-Anmeldung eingerichtet.");
+    school.placeholder = chosenTemplate ? pick(chosenTemplate.title, chosenTemplate.titles) : t("z. B. Bibliothek am Markt");
+    sheet.querySelector("p.muted").textContent = chosenTemplate
+      ? t("Mit den Tabellen der Vorlage und dem ersten IT-Konto. Beim ersten Anmelden wird die Zwei-Faktor-Anmeldung eingerichtet.")
+      : t("Noch ohne Tabellen, mit dem ersten IT-Konto. Beim ersten Anmelden wird die Zwei-Faktor-Anmeldung eingerichtet.");
   }
 }
 
@@ -379,7 +368,7 @@ async function create() {
   if (password.length < 12) return showError("Das Passwort braucht mindestens 12 Zeichen.");
   if (password !== field("password2").value) return showError("Die beiden Passwörter stimmen nicht überein.");
   try {
-    const id = await busy("Datenbank wird angelegt …", () => invoke("create_database", { name, school, username, password, modules: chosenModules, ...chosenStart }));
+    const id = await busy("Datenbank wird angelegt …", () => invoke("create_database", { name, school, username, password, modules: [], ...chosenStart }));
     sheet.close();
     await openDatabase(id);
   } catch (error) {

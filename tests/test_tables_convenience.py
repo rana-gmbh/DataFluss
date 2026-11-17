@@ -273,10 +273,28 @@ class LibraryTemplateTests(TableCase):
         self.assertEqual((room["f_anzahl"], room["f_wert"]), (2.0, 2991.0))  # 499 + 28 × 89 from the items in the room
         self.assertEqual(Record.objects.filter(table__key="ter_termine").count(), 3)
 
-    def test_usable_templates_come_first_on_the_page(self):
+    def test_an_empty_database_is_offered_one_database_template(self):
+        from tables import blueprints
+
         self.login(self.it)
         cards = self.client.get(reverse("table_blueprints")).context["rows"]
-        self.assertEqual([c["id"] for c in cards][-1], "bibliothek")
+        self.assertEqual([c["id"] for c in cards], ["filme", "buecherei", "termine", "inventar"])  # in their order
+        self.client.post(reverse("table_blueprints"), {"template": "inventar"})
+        self.assertEqual([c["id"] for c in self.client.get(reverse("table_blueprints")).context["rows"]], ["inventar"])
+        self.client.post(reverse("table_blueprints"), {"template": "termine"})  # never mixed with another
+        self.assertFalse(Table.objects.filter(key="ter_termine").exists())
+        self.assertTrue(blueprints.any_offered())  # inventar itself, to be updated
+
+    def test_the_library_of_its_own(self):
+        from tables import blueprints
+
+        template = self.found["buecherei"]
+        self.assertEqual((blueprints.check(template), template["requires"]), ([], []))
+        blueprints.apply(template, self.it, demo=True)
+        readers = {r["name"]: r for r in rows(Table.objects.get(key="bib_leser"), self.it)}
+        self.assertEqual((readers["Anna Berg"]["f_offen"], readers["Jonas Weber"]["f_offen"]), (1.0, 0.0))
+        books = {r["name"]: r for r in rows(Table.objects.get(key="bib_buecher"), self.it)}
+        self.assertEqual(books["Momo"]["f_ausleihen_gesamt"], 1.0)
 
 
 class ReversePathTests(TableCase):

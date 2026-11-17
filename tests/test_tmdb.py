@@ -167,8 +167,13 @@ class TemplateTests(FilmTemplateMixin, AppTestCase):
         self.assertContains(page, "Filme &amp; Serien")
         self.assertEqual(self.client.get(reverse("table_records", args=["fs_titel"])).status_code, 200)
 
-    def test_the_picker_offers_it(self):
+    def test_a_database_of_its_own(self):
+        """Offered in an empty database, never in a school database (tables/blueprints.py offered)."""
         self.login(self.it)
+        self.assertNotContains(self.client.get(reverse("table_blueprints")), "Filme &amp; Serien")
+        self.assertNotContains(self.client.get(reverse("table_list")), "TMDB: Filme und Serien")
+        SchoolSettings.load()
+        SchoolSettings.objects.filter(pk=1).update(modules_off=["schulverwaltung"])
         self.assertContains(self.client.get(reverse("table_blueprints")), "Filme &amp; Serien")
 
 

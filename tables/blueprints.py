@@ -18,6 +18,15 @@ never overwrites what the school has changed; what differs is reported as kept.
 
 A link field's config names its target as in tables/links.py ({"target": "record", "table": "buecher"});
 a formula field's config holds the stored form ({"expression": "count({@ausleihen.f_buch})"}).
+
+Two kinds of template:
+- A **database template** ("database": true, e.g. Filme & Serien, Bibliothek, Termine, Inventar) is what a
+  whole database is for. The app offers it when a new database is made, in the order of "order", and the
+  page "Vorlage hinzufügen" offers it only in a database without Schulverwaltung that has no other database
+  template yet, so a school database and a film database never get mixed.
+- Any other template adds tables to the modules it "requires" (an add-on, e.g. of a premium module).
+"listed": false retires a template: it is no longer offered, but where it is applied it can still be
+updated.
 """
 import json
 import re
@@ -78,6 +87,47 @@ def available():
             if data and not check(data):
                 found.setdefault(data["id"], {**data, "origin": module_id})
     return found
+
+
+def is_database(template):
+    return bool(template.get("database"))
+
+
+def listed(template):
+    return template.get("listed", True) is not False
+
+
+def applied_ids():
+    """The ids of the templates applied in this database."""
+    return {(t.template or {}).get("id") for t in Table.objects.all()} - {None}
+
+
+def offered(template, found=None):
+    """Whether "Vorlage hinzufügen" offers the template here: an applied one always (to update it), a retired one
+    never, a database template only in a database without Schulverwaltung and without another one."""
+    from core import modules
+
+    here = applied_ids()
+    if template["id"] in here:
+        return True
+    if not listed(template):
+        return False
+    if is_database(template):
+        found = found if found is not None else available()
+        others = {tid for tid in here if is_database(found.get(tid) or {})}
+        return "schulverwaltung" not in modules.active() and not others
+    return True
+
+
+def any_offered():
+    """Whether "Vorlage hinzufügen" has anything for this database (the buttons that lead there hide otherwise)."""
+    found = available()
+    return any(offered(t, found) for t in found.values())
+
+
+def ordered(templates):
+    """Database templates first, in their "order"; then the rest by title."""
+    return sorted(templates, key=lambda t: (not is_database(t), t.get("order") or 999, title(t)))
 
 
 def usable(template):

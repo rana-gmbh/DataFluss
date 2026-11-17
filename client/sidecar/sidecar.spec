@@ -54,7 +54,8 @@ def _template_list():
     found = []
     for path in [*sorted((ROOT / "tables" / "library").glob("*.json")), *(Path(p) for m in modules.selected() for p in modules.TEMPLATE_FILES.get(m, []))]:
         data = json.loads(path.read_text(encoding="utf-8"))
-        found.append({key: data.get(key) for key in ("id", "title", "titles", "description", "descriptions", "requires")})
+        found.append({**{key: data.get(key) for key in ("id", "title", "titles", "description", "descriptions", "requires", "database", "order", "listed")},
+                      "has_demo": bool(data.get("demo"))})
     return found
 
 

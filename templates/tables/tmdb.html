@@ -36,7 +36,8 @@
   </div>
   <div class="surface p-4 space-y-2"><h2 class="font-semibold">{% translate "Tabellen mit TMDB" %}</h2>
     {% for t in tables %}<a class="flex items-center gap-2 text-[13px] hover:underline" href="{% url 'table_records' t.key %}">{% icon t.icon 'text-[var(--accent)]' %}{{ t.display_name }}</a>
-    {% empty %}<p class="muted text-[13px]">{% translate "Noch keine. Die Vorlage „Filme & Serien“ legt eine an." %}</p><a class="btn btn-sm" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlagen" %}</a>{% endfor %}
+    {% empty %}{% if templates_offered %}<p class="muted text-[13px]">{% translate "Noch keine. Die Vorlage „Filme & Serien“ legt eine an." %}</p><a class="btn btn-sm" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlagen" %}</a>
+    {% else %}<p class="muted text-[13px]">{% translate "Noch keine. „Filme & Serien“ ist eine eigene Datenbank: in der App unter „Neue Datenbank“." %}</p>{% endif %}{% endfor %}
   </div>
   {% include "tables/_tmdb_credit.html" with credit_class="px-1" %}
 </div></div>

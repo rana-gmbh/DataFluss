@@ -281,31 +281,31 @@ def main():
         check("empty: no pupils", sidecar.request("GET", "/schueler/")[0], 403)
         sidecar.close()
 
-        # 4b. "Leer" with the platform's templates that need no module, as the wizard offers them
+        # 4b. A database template (tables/blueprints.py "database"), as the wizard offers it: a database of its own
         kept_dir = work / "empty-templates"
         kept_dir.mkdir()
         sidecar = Sidecar(command, kept_dir, new_keys(), task="demo")
         logins = {row["username"]: row["password"] for row in sidecar.run_task(
-            "demo", {"modules": [], "without": ["schulverwaltung"], "templates": ["inventar", "termine"]})["logins"]}
+            "demo", {"modules": [], "without": ["schulverwaltung"], "templates": ["inventar"]})["logins"]}
         sidecar.wait_ready()
-        check("empty with templates: IT signs in", sidecar.sign_in("it", logins["it"]), (302, "/"))
+        check("inventory: IT signs in", sidecar.sign_in("it", logins["it"]), (302, "/"))
         status, page, _ = sidecar.request("GET", "/api/tabellen/inv_raeume/")
-        check("empty with templates: rooms add up their items", (status, b"2991" in page), (200, True))
-        status, page, _ = sidecar.request("GET", "/api/tabellen/ter_termine/")
-        check("empty with templates: sample events", (status, b"Weihnachtsfeier" in page), (200, True))
+        check("inventory: rooms add up their items", (status, b"2991" in page), (200, True))
         sidecar.close()
 
-        # 5. A database with Schulverwaltung and the library template, with its sample records
+        # 5. The library of its own (readers instead of pupils), with its sample records
         library_dir = work / "library"
         library_dir.mkdir()
         sidecar = Sidecar(command, library_dir, new_keys(), task="demo")
-        logins = {row["username"]: row["password"] for row in sidecar.run_task("demo", {"modules": [], "templates": ["bibliothek"]})["logins"]}
+        logins = {row["username"]: row["password"] for row in sidecar.run_task(
+            "demo", {"modules": [], "without": ["schulverwaltung"], "templates": ["buecherei"]})["logins"]}
         sidecar.wait_ready()
         check("library: IT signs in", sidecar.sign_in("it", logins["it"]), (302, "/"))
-        status, page, _ = sidecar.request("GET", "/tabellen/buecher/")
+        status, page, _ = sidecar.request("GET", "/tabellen/bib_buecher/")
         check("library: the books' list", status, 200)
-        status, page, _ = sidecar.request("GET", "/api/tabellen/buecher/")
-        check("library: sample books", (status, b"Momo" in page), (200, True))
+        status, page, _ = sidecar.request("GET", "/api/tabellen/bib_leser/")
+        check("library: sample readers", (status, b"Anna Berg" in page), (200, True))
+        check("library: no pupils", sidecar.request("GET", "/schueler/")[0], 403)
         sidecar.close()
 
         # 6. A new database that leaves out the premium module (the start screen's wizard)

@@ -14,7 +14,7 @@ from core import audit
 from core.fieldtypes import parse_date
 from core.permissions import require
 
-from . import services, tmdb
+from . import blueprints, services, tmdb
 from .models import Record
 from .views_records import _record, _table
 
@@ -51,6 +51,7 @@ def tmdb_settings(request):
     return render(request, "tables/tmdb.html", {
         "has_key": bool(key), "key_kind": tmdb.kind_of_key(key) if key else "", "key_end": key[-4:] if key else "",
         "settings_url": tmdb.SETTINGS_URL, "tables": tables, "active_nav": "settings_home",
+        "templates_offered": blueprints.any_offered(),
     })
 
 

@@ -4,7 +4,7 @@
 <div class="flex flex-wrap items-center gap-3 mb-5">
   <div class="flex-1 min-w-[220px]"><h1 class="page-title">{% blocktranslate trimmed with name=request.user.first_name|default:request.user.username %}Guten Tag, {{ name }}{% endblocktranslate %}</h1>
     <p class="muted text-[13px]">{{ school.name }}</p></div>
-  {% if request.user|can:'tables.design' %}<a class="btn" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlage hinzufügen …" %}</a>
+  {% if request.user|can:'tables.design' %}{% if templates_offered %}<a class="btn" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlage hinzufügen …" %}</a>{% endif %}
   <a class="btn btn-primary" href="{% url 'table_list' %}">{% icon 'plus' %}{% translate "Neue Tabelle" %}</a>{% endif %}
 </div>
 {% if update_available %}<a href="{% url 'updates' %}" class="surface flex items-center gap-2 px-4 py-2.5 mb-4 text-[13px] hover:border-[var(--line-strong)]">{% icon 'refresh' 'text-[var(--accent)]' %}{% translate "Eine neue Version ist verfügbar." %}</a>{% endif %}

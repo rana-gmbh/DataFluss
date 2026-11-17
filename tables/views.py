@@ -15,7 +15,7 @@ from core.models import SchoolSettings
 from core.permissions import require
 from masks import i18n
 
-from . import blueprints, formula, infer, links, look as table_look, masks as table_masks, services
+from . import blueprints, formula, infer, links, look as table_look, masks as table_masks, services, tmdb
 from .models import EDIT, NONE, READ, Field, Record, Table
 
 ICONS = ["table", "book", "list", "calendar", "users", "tag", "archive", "laptop", "clipboard", "heart", "school", "file", "image", "key", "wrench",
@@ -44,8 +44,10 @@ def table_list(request):
     counts = {row["table_id"]: row["n"] for row in Record.objects.values("table_id").order_by().annotate(n=Count("id"))}
     rows = [{"table": t, "records": counts.get(t.pk, 0), "fields": t.fields.filter(archived=False).count()} for t in tables]
     groups = services.by_section(rows, section=lambda row: row["table"].section)
+    tmdb_ready = bool(SchoolSettings.load().tmdb_key)
     return render(request, "tables/list.html", {"rows": rows, "groups": groups, "several": len(groups) > 1 or bool(groups and groups[0][0]), "error": error, "can_import": request.user.can("data.import"),
-                                                "tmdb_ready": bool(SchoolSettings.load().tmdb_key),
+                                                "tmdb_ready": tmdb_ready, "templates_offered": blueprints.any_offered(),
+                                                "tmdb_card": tmdb_ready or any(tmdb.supports(row["table"]) for row in rows),
                                                 "access": services.access_choices(), "active_nav": "settings_home"})
 
 
@@ -268,7 +270,7 @@ def table_blueprints(request):
     found = blueprints.available()
     if request.method == "POST":
         template = found.get(request.POST.get("template", ""))
-        if template is None:
+        if template is None or not blueprints.offered(template, found):
             messages.error(request, _("Diese Vorlage gibt es nicht."))
             return redirect("table_blueprints")
         try:
@@ -282,7 +284,8 @@ def table_blueprints(request):
         messages.success(request, text)
         return redirect("table_list")
     rows = []
-    for template in sorted(found.values(), key=lambda t: (not blueprints.usable(t), blueprints.title(t))):  # usable ones first
+    shown = [t for t in found.values() if blueprints.offered(t, found)]
+    for template in sorted(blueprints.ordered(shown), key=lambda t: not blueprints.usable(t)):  # usable ones first
         installed = blueprints.installed_version(template["id"])
         rows.append({"id": template["id"], "title": blueprints.title(template), "description": blueprints.description(template),
                      "version": template["version"], "installed": installed, "usable": blueprints.usable(template),

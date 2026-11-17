@@ -127,8 +127,6 @@ input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-so
 .choice input { margin-top: 3px; }
 .choice strong { display: block; font-weight: 600; }
 .choice .small { display: block; }
-.module-choices { margin: 0 0 12px; }
-.module-choices .check { margin-top: 4px; }
 .welcome ul { margin: 6px 0 12px; padding-left: 18px; display: grid; gap: 6px; }
 .welcome p { margin: 0 0 10px; }
 

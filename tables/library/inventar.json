@@ -15,6 +15,8 @@
   "zh-hant": "房間及其中的物品，附價值、狀況和資產標籤。"
  },
  "requires": [],
+ "database": true,
+ "order": 40,
  "tables": [
   {
    "key": "inv_raeume",

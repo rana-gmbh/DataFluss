@@ -177,6 +177,9 @@ def _apply_templates(data, progress, user, demo):
     if not wanted:
         return
     found = blueprints.available()
+    databases = [t for t in wanted if blueprints.is_database(found.get(t) or {})]
+    if databases and (len(databases) > 1 or "schulverwaltung" not in (data.get("without") or [])):
+        raise TaskError("Eine Datenbank-Vorlage ist eine Datenbank für sich: ohne Schulverwaltung und ohne weitere Vorlage.")
     for template_id in wanted:
         template = found.get(template_id)
         if template is None:

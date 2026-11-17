@@ -683,7 +683,8 @@ fn available_modules(app: AppHandle, window: WebviewWindow) -> Result<Vec<Value>
 }
 
 /// The module templates a new database can start with (tables/blueprints.py): those of the build (modules.json,
-/// written by sidecar.spec) and those in the bundles of this version. The sidecar checks them again.
+/// written by sidecar.spec) and those in the bundles of this version. The wizard offers the database templates
+/// ("database": true) as starting points of their own; the sidecar checks them again.
 #[tauri::command]
 fn available_templates(app: AppHandle, window: WebviewWindow) -> Result<Vec<Value>, String> {
     from_launcher(&window)?;
@@ -691,8 +692,11 @@ fn available_templates(app: AppHandle, window: WebviewWindow) -> Result<Vec<Valu
     let mut add = |template: Value| {
         let id = template["id"].as_str().unwrap_or_default().to_string();
         if !id.is_empty() && !found.iter().any(|t| t["id"] == id.as_str()) {
+            // has_demo: written by sidecar.spec for the build's templates; a bundle's file has its "demo" itself.
+            let has_demo = template["has_demo"].as_bool().unwrap_or(false) || template["demo"].as_object().is_some_and(|demo| !demo.is_empty());
             found.push(json!({"id": id, "title": template["title"], "titles": template["titles"], "description": template["description"],
-                              "descriptions": template["descriptions"], "requires": template["requires"]}));
+                              "descriptions": template["descriptions"], "requires": template["requires"], "database": template["database"],
+                              "order": template["order"], "listed": template["listed"], "has_demo": has_demo}));
         }
     };
     if let Some(dir) = sidecar_program(&app)?.parent() {

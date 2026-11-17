@@ -75,23 +75,22 @@
 
 <template id="t-start">
   <p class="muted">Womit soll die neue Datenbank beginnen?</p>
-  <div class="choices" role="radiogroup" aria-label="Ausgangspunkt">
+  <div class="choices" role="radiogroup" aria-label="Ausgangspunkt" id="start-choices">
     <label class="choice">
-      <input type="radio" name="start" value="schulverwaltung" checked>
-      <span><strong>Schulverwaltung</strong>
-        <span class="muted small">Schüler, Personal, Eltern und Klassen, Geräte, Schäden und Zugänge, mit Druckvorlagen, Import und Export.</span></span>
-    </label>
-    <label class="choice">
-      <input type="radio" name="start" value="leer">
+      <input type="radio" name="start" value="leer" checked>
       <span><strong>Leer</strong>
         <span class="muted small">Nur eigene Tabellen, ohne Personen und Geräte. Felder, Seiten und Druckvorlagen gestalten Sie selbst oder beginnen mit einer Vorlage.</span></span>
     </label>
+    <label class="choice">
+      <input type="radio" name="start" value="schulverwaltung">
+      <span><strong>Schulverwaltung</strong>
+        <span class="muted small">Schüler, Personal, Eltern und Klassen, Geräte, Schäden und Zugänge, mit Druckvorlagen, Import und Export.</span></span>
+    </label>
   </div>
-  <div class="module-choices" id="module-choices" hidden>
-    <p class="small"><strong>Dazu</strong></p>
-  </div>
-  <div class="module-choices" id="template-choices" hidden>
+  <!-- The database templates (tables/blueprints.py "database": true), each a database of its own (launcher.js). -->
+  <div id="template-choices" hidden>
     <p class="small"><strong>Vorlagen</strong> <span class="muted">(fertige Tabellen, später anpassbar)</span></p>
+    <div class="choices" role="radiogroup" aria-label="Vorlagen"></div>
   </div>
   <label class="check">
     <input type="checkbox" name="demo">
