@@ -342,4 +342,19 @@ impl Sidecar {
         let _ = child.kill();
         let _ = child.wait();
     }
+
+    /// The exit code of a sidecar that ended by itself, waiting up to five seconds for it to end.
+    pub fn exit_code(&self) -> Option<i32> {
+        for _ in 0..50 {
+            if let Ok(Some(status)) = self.child.lock().unwrap().try_wait() {
+                return status.code();
+            }
+            std::thread::sleep(Duration::from_millis(100));
+        }
+        None
+    }
 }
+
+/// The sidecar ends with this code after fetching a module this version lacked from the database's server
+/// (client/sidecar/sidecar.py). A new start loads it, so the shell starts it once more by itself.
+pub const MODULE_FETCHED: i32 = 4;

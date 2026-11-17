@@ -381,17 +381,20 @@ def _handle(app, writer, header, body):
 
 
 def _fetch_missing(missing):
-    """A connected database whose module this version lacks gets it from its server (schule/bundles.py)."""
+    """A connected database whose module this version lacks gets it from its server (schule/bundles.py).
+    Returns "" when every module was fetched, else why not, in words for the start screen."""
     from sync import client
 
     state = client.ClientState.load()
     if state is None or state.revoked:
-        return False
+        return "Diese Datenbank ist nicht mehr mit ihrem Server verbunden."
     try:
-        return all([client.fetch_module(state.server_url, module_id, token=os.environ["SYNC_TOKEN"]) for module_id in sorted(missing)])
+        if all([client.fetch_module(state.server_url, module_id, token=os.environ["SYNC_TOKEN"]) for module_id in sorted(missing)]):
+            return ""
+        return "Dieser Computer hat keinen Ordner für Module."
     except client.SyncError as exc:
         print(f"sidecar: module not fetched: {exc}", file=sys.stderr)
-        return False
+        return str(exc)
 
 
 def main():
@@ -417,9 +420,14 @@ def main():
     missing = modules.missing_with_data()
     if missing:
         # Before the migrations, so the database stays as it is. The shell shows the end of this log.
-        if os.environ.get("SYNC_TOKEN") and _fetch_missing(missing):
+        # A connected database gets the module from its server; the shell then starts it once more (exit 4).
+        reason = _fetch_missing(missing) if os.environ.get("SYNC_TOKEN") else None
+        if reason == "":
             print(f"{modules.missing_message(missing)}\n\nDas Modul wurde vom Server geladen. Bitte die Datenbank noch einmal öffnen.", file=sys.stderr)
             sys.exit(4)
+        if reason:
+            print(f"{modules.missing_message(missing)}\n\nVom Server ließ es sich nicht laden: {reason}", file=sys.stderr)
+            sys.exit(3)
         print(modules.missing_message(missing), file=sys.stderr)
         sys.exit(3)
     call_command("migrate", interactive=False, verbosity=0)

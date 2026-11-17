@@ -314,19 +314,29 @@ fn unique_path(path: PathBuf) -> PathBuf {
 async fn open_database(app: &AppHandle, id: &str) -> Result<(), String> {
     let dir = databases::folder(app, id)?;
     let mut node = databases::read(&dir).ok_or("Diese Datenbank gibt es nicht mehr.")?;
-    let existing = state(app).open.lock().unwrap().get(id).cloned();
-    let sidecar = match existing {
-        Some(sidecar) => sidecar,
-        None => {
-            let sidecar = start_sidecar(app, &node, None)?;
-            state(app).open.lock().unwrap().insert(id.to_string(), sidecar.clone());
-            sidecar
+    for attempt in 0..2 {
+        let existing = state(app).open.lock().unwrap().get(id).cloned();
+        let sidecar = match existing {
+            Some(sidecar) => sidecar,
+            None => {
+                let sidecar = start_sidecar(app, &node, None)?;
+                state(app).open.lock().unwrap().insert(id.to_string(), sidecar.clone());
+                sidecar
+            }
+        };
+        match sidecar.wait_ready(Duration::from_secs(120)).await {
+            Ok(()) => break,
+            Err(error) => {
+                // A module fetched from the server (e.g. after an update of the app) loads on a new start.
+                let fetched = attempt == 0 && sidecar.exit_code() == Some(sidecar::MODULE_FETCHED);
+                sidecar.stop();
+                state(app).open.lock().unwrap().remove(id);
+                if !fetched {
+                    return Err(error);
+                }
+                eprintln!("[shell] {id}: module fetched from the server, starting again");
+            }
         }
-    };
-    if let Err(error) = sidecar.wait_ready(Duration::from_secs(120)).await {
-        sidecar.stop();
-        state(app).open.lock().unwrap().remove(id);
-        return Err(error);
     }
     node.last_opened = Some(databases::now());
     let _ = databases::write(&dir, &node);

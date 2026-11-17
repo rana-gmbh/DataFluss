@@ -196,3 +196,34 @@ class PrefetchTests(BundleCase):
                 mock.patch.object(client, "fetch_module") as fetch:
             client.prefetch(self.state(), "token", force=True)
         fetch.assert_not_called()
+
+
+class SidecarFetchTests(SimpleTestCase):
+    """A connected database opened by an app version that lacks its module fetches it from the server; the
+    sidecar then ends with code 4 and the shell starts it once more (client/shell/src-tauri/src/main.rs)."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location("datafluss_sidecar", Path(__file__).resolve().parent.parent / "client" / "sidecar" / "sidecar.py")
+        cls.sidecar = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.sidecar)
+
+    def fetch(self, state, **fetch):
+        with mock.patch.dict(os.environ, {"SYNC_TOKEN": "t"}), \
+                mock.patch("sync.models.ClientState.load", return_value=state), \
+                mock.patch.object(client, "fetch_module", **fetch) as fetch_module:
+            return self.sidecar._fetch_missing({"premium"}), fetch_module
+
+    def test_fetched_with_the_device_token(self):
+        reason, fetch_module = self.fetch(mock.Mock(server_url="https://server.example", revoked=False), return_value=True)
+        self.assertEqual(reason, "")
+        fetch_module.assert_called_once_with("https://server.example", "premium", token="t")
+
+    def test_a_reason_when_it_cannot_be_fetched(self):
+        refused = client.SyncError("Dieses Modul gibt der Server nicht heraus.")
+        self.assertEqual(self.fetch(mock.Mock(server_url="https://s", revoked=False), side_effect=refused)[0], str(refused))
+        self.assertIn("nicht mehr", self.fetch(None, return_value=True)[0])
+        self.assertIn("Ordner", self.fetch(mock.Mock(server_url="https://s", revoked=False), return_value=False)[0])
