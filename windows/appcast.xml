@@ -4,17 +4,23 @@
     <title>DataFluss</title>
     <link>https://github.com/rana-gmbh/DataFluss</link>
     <item>
-      <title>DataFluss 1.1.0</title>
-      <pubDate>Mon, 16 Nov 2026 08:39:08 +0000</pubDate>
-      <sparkle:version>1.1.0</sparkle:version>
-      <description><![CDATA[<h2>DataFluss 1.1.0</h2>
+      <title>DataFluss 1.2.0</title>
+      <pubDate>Tue, 17 Nov 2026 09:09:38 +0000</pubDate>
+      <sparkle:version>1.2.0</sparkle:version>
+      <description><![CDATA[<h2>DataFluss 1.2.0</h2>
 <ul>
-  <li><strong>Regelmäßige Sicherung auf dem Computer:</strong> Eine eigene Datenbank sichert sich täglich oder wöchentlich in einen Ordner Ihrer Wahl, etwa auf ein anderes Laufwerk oder in einen Cloud-Ordner. Einzurichten unter Verwaltung → Sicherung. Die Startseite zeigt, wenn eine Sicherung fehlt oder überfällig ist.</li>
-  <li><strong>Auf einen Server übertragen:</strong> Eine Datenbank, die auf dem Computer begonnen hat, wird mit allen Konten, Bildern und Dokumenten zu den Daten eines DataFluss-Servers. Danach verbindet sich der Computer neu mit dem Server.</li>
-  <li><strong>Vollständige Sicherung vom Server:</strong> In einer verbundenen Datenbank kann IT die vollständige Sicherung des Servers auf den Computer laden.</li>
-  <li>Für die Übertragung braucht der Server ebenfalls DataFluss 1.1.</li>
+  <li><strong>Eigene Tabellen:</strong> Unter Verwaltung → Einstellungen → Tabellen gestalten Sie Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen, Termine oder Inventar. Listen, Filter, Ansichten, Suche, Papierkorb und Verlauf funktionieren wie bei den Personen. Wer welche Tabelle sehen oder bearbeiten darf, legen Sie je Rolle fest.</li>
+  <li><strong>Verknüpfungen:</strong> Felder können auf Datensätze anderer Tabellen, auf Schüler, Personal oder Geräte zeigen. Personen- und Geräteseiten zeigen, was auf sie verweist.</li>
+  <li><strong>Berechnungen:</strong> Formeln rechnen mit Feldern und verknüpften Datensätzen, etwa Summen, Anzahlen oder Tage bis heute. Fertige Berechnungen stehen zur Auswahl.</li>
+  <li><strong>Dateien und Bilder</strong> als Felder, <strong>Import und Export</strong> per Excel oder CSV, <strong>Druckvorlagen</strong> mit Listen verknüpfter Datensätze.</li>
+  <li><strong>Tabelle aus einer Datei:</strong> Eine Excel- oder CSV-Datei wird mit einem Klick zur Tabelle. Feldtypen, Nachkommastellen, Einheiten und Auswahllisten werden aus den Werten erkannt, alle Zeilen übernommen.</li>
+  <li><strong>Vorlagen:</strong> „Bibliothek“ legt Bücher und Ausleihen samt Ausleihschein an, „Inventar“ Räume und Gegenstände mit Etiketten, „Termine“ Veranstaltungen mit Aushang. Neue Datenbanken können außerdem „Leer“ beginnen, nur mit eigenen Tabellen.</li>
+  <li><strong>Weniger Klicks:</strong> Beim Anlegen eines Feldes wird der Typ aus dem Namen vorgeschlagen, beim Anlegen einer Tabelle der Zugriff für alle Rollen gewählt. Neue Datensätze beginnen im ersten Feld; mehrere lassen sich nacheinander erfassen.</li>
+  <li><strong>Startbildschirm in vier Sprachen:</strong> Er beginnt in der Sprache des Systems (Deutsch, Englisch, vereinfachtes oder traditionelles Chinesisch, sonst Englisch) und lässt sich links unten umstellen.</li>
+  <li><strong>Rollen und Rechte:</strong> Unter Einstellungen → Benutzer und Rollen lassen sich eigene Rollen anlegen und Sekretariat, Schulleitung und die Rollen der Module anpassen. Je Bereich gilt Kein Zugriff, Lesen oder Bearbeiten; Schüler, Personal und Eltern sind getrennte Bereiche. Einzelne Felder lassen sich je Rolle nur lesen oder ganz verbergen, auch auf verbundenen Computern. IT darf weiterhin alles.</li>
+  <li>Der Server muss zuerst auf 1.2 aktualisiert werden; verbundene Computer gleichen danach wie gewohnt ab.</li>
 </ul>]]></description>
-      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.1.0/DataFluss-1.1.0-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47490304" type="application/octet-stream" sparkle:edSignature="S9BPwno67hWDuPYKmpUr3vYi0b1eOAB1ETU4ScBv5uWxEu3NALfp71DZA13CSmVGhZFTC+42ExmWPTbUqQ4yBA=="/>
+      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.2.0/DataFluss-1.2.0-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="47813984" type="application/octet-stream" sparkle:edSignature="zXSCtLCqALucp5gsnvlg1V7u8xTq+bdYP68yzYDhqFeNfQhQDYMidQgFyNUi6qevafbR8ZdXR0BLEFFMwIS3Dw=="/>
     </item>
   </channel>
 </rss>
