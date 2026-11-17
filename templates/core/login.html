@@ -11,6 +11,11 @@
   {% if error %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert">{{ error }}</p>{% endif %}
   <div><label class="label" for="username">{% translate "Benutzername" %}</label><input class="input" id="username" name="username" autocomplete="username" required autofocus></div>
   <div><label class="label" for="password">{% translate "Passwort" %}</label><input class="input" id="password" type="password" name="password" autocomplete="current-password" required></div>
+  {% if offer_remember %}
+  {% if remembered_forgotten %}<p class="badge-warn rounded-lg px-3 py-2 text-[13px]" role="status">{% translate "Die gemerkte Anmeldung passt nicht mehr und wurde vergessen. Bitte melden Sie sich neu an." %}</p>{% endif %}
+  <label class="flex items-start gap-2 text-[13px]"><input type="checkbox" name="remember" value="1" class="mt-0.5 accent-[var(--accent)]" {% if remembered %}checked{% endif %}>
+    <span>{% translate "Anmeldedaten merken" %}<span class="block muted text-[12px]">{% if on_windows %}{% translate "Benutzername und Passwort liegen dann in der Windows-Anmeldeinformationsverwaltung, und die Datenbank meldet sich beim Öffnen selbst an. Die Zwei-Faktor-Anmeldung bleibt." %}{% else %}{% translate "Benutzername und Passwort liegen dann im Schlüsselbund dieses Macs, und die Datenbank meldet sich beim Öffnen selbst an. Die Zwei-Faktor-Anmeldung bleibt." %}{% endif %}</span></span></label>
+  {% endif %}
   <button class="btn btn-primary w-full">{% translate "Anmelden" %}</button>
 </form>
 {% endblock %}

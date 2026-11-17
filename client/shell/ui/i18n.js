@@ -104,6 +104,7 @@ window.I18N = (() => {
     "Mehr zu {name}": ["More about {name}", "关于 {name} 的更多操作", "關於 {name} 的更多操作"],
     "Im {app} zeigen": ["Show in {app}", "在 {app} 中显示", "在 {app} 中顯示"],
     "Anmeldedaten zeigen …": ["Show sign-in details …", "显示登录信息…", "顯示登入資訊…"],
+    "Gemerkte Anmeldung vergessen": ["Forget remembered sign-in", "忘记已记住的登录", "忘記已記住的登入"],
     "In den Papierkorb legen …": ["Move to bin …", "移到废纸篓…", "移到垃圾桶…"],
     // buttons, messages and busy texts
     "Abbrechen": ["Cancel", "取消", "取消"],

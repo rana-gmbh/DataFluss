@@ -12,6 +12,7 @@ mod databases;
 #[cfg(target_os = "macos")]
 mod js_dialogs;
 mod legacy;
+mod login;
 #[cfg(target_os = "macos")]
 mod pdf_save;
 mod sidecar;
@@ -20,7 +21,7 @@ mod sparkle;
 #[cfg(windows)]
 mod winsparkle;
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
@@ -48,6 +49,8 @@ struct AppState {
     /// The database window used last, for Print, Save as PDF and Reload. While a menu is open no
     /// window counts as focused, so asking at that moment finds none.
     last_focused: Mutex<Option<String>>,
+    /// Databases whose remembered sign-in just failed and was forgotten (login.rs); their sign-in page says so once.
+    login_forgotten: Mutex<HashSet<String>>,
 }
 
 fn current_window(app: &AppHandle) -> Option<WebviewWindow> {
@@ -338,6 +341,9 @@ async fn open_database(app: &AppHandle, id: &str) -> Result<(), String> {
             }
         }
     }
+    if app.get_webview_window(&window_label(id)).is_none() {
+        sign_in_remembered(app, id).await;
+    }
     node.last_opened = Some(databases::now());
     let _ = databases::write(&dir, &node);
     let app2 = app.clone();
@@ -352,6 +358,23 @@ async fn open_database(app: &AppHandle, id: &str) -> Result<(), String> {
     })
     .map_err(|e| e.to_string())?;
     Ok(())
+}
+
+/// Signs in with the remembered sign-in of this database, if it has one (login.rs), so the window opens
+/// signed in; a second factor is still asked for by its page. One that no longer fits is forgotten.
+async fn sign_in_remembered(app: &AppHandle, id: &str) {
+    let Some(login) = login::load(id) else { return };
+    let Some(sidecar) = state(app).open.lock().unwrap().get(id).cloned() else { return };
+    match sidecar.sign_in(&login).await.as_deref() {
+        Some("ok") => eprintln!("[shell] {id}: signed in with the remembered sign-in"),
+        Some("failed") => {
+            eprintln!("[shell] {id}: the remembered sign-in no longer fits and is forgotten");
+            login::forget(id);
+            state(app).login_forgotten.lock().unwrap().insert(id.to_string());
+        }
+        // Locked for a while after too many failures, or no sign-in page: the page shows what to do.
+        other => eprintln!("[shell] {id}: remembered sign-in not used ({other:?})"),
+    }
 }
 
 fn close_database(app: &AppHandle, id: &str) {
@@ -543,6 +566,8 @@ struct Entry {
     node: Node,
     open: bool,
     size: u64,
+    /// A sign-in is remembered for this database (login.rs).
+    remembered: bool,
     /// The regular backup of a database of its own (archive/plan.py): interval and last results, or null.
     backup: Value,
 }
@@ -579,7 +604,7 @@ fn list_databases(app: AppHandle, window: WebviewWindow) -> Result<Vec<Entry>, S
         .into_iter()
         .map(|node| {
             let dir = root.join(&node.id);
-            Entry { open: open.contains(&node.id), size: databases::size_bytes(&dir), backup: backup_status(&dir, &node), node }
+            Entry { open: open.contains(&node.id), size: databases::size_bytes(&dir), backup: backup_status(&dir, &node), remembered: login::is_kept(&node.id), node }
         })
         .collect())
 }
@@ -839,11 +864,22 @@ fn demo_logins(app: AppHandle, window: WebviewWindow, id: String) -> Result<Vec<
     Ok(text.lines().filter_map(|l| l.split_once('\t')).map(|(u, p)| json!({"username": u, "password": p})).collect())
 }
 
-/// Moves the folder to the Trash. The keys stay in the Keychain, so putting the folder back restores it.
+/// "Gemerkte Anmeldung vergessen" on the start screen: the next opening asks for the sign-in again.
+#[tauri::command]
+fn forget_login(app: AppHandle, window: WebviewWindow, id: String) -> Result<(), String> {
+    from_launcher(&window)?;
+    databases::folder(&app, &id)?; // a valid id
+    login::forget(&id);
+    Ok(())
+}
+
+/// Moves the folder to the Trash. The keys stay in the Keychain, so putting the folder back restores it;
+/// a remembered sign-in does not, so the database asks for one again.
 #[tauri::command]
 fn remove_database(app: AppHandle, window: WebviewWindow, id: String) -> Result<(), String> {
     from_launcher(&window)?;
     let dir = databases::folder(&app, &id)?;
+    login::forget(&id);
     if let Some(db_window) = app.get_webview_window(&window_label(&id)) {
         let _ = db_window.destroy();
     }
@@ -995,6 +1031,49 @@ fn extend_webkit(window: &WebviewWindow) {
     let _ = window;
 }
 
+/// What the shell adds to a request on its way to the sidecar for a remembered sign-in (login.rs). Headers a
+/// page sends under the shell's prefix are dropped first, so only the shell speaks for the Keychain. The sign-in
+/// page learns whether a sign-in is kept, and a sign-in form post hands back its username, password and box.
+fn sign_in_request(app: &AppHandle, id: &str, mut request: Request<Vec<u8>>) -> (Request<Vec<u8>>, Option<(login::Login, bool)>) {
+    let foreign: Vec<_> = request.headers().keys().filter(|name| name.as_str().starts_with(login::SHELL_PREFIX)).cloned().collect();
+    for name in foreign {
+        request.headers_mut().remove(name);
+    }
+    if request.uri().path() != login::PATH {
+        return (request, None);
+    }
+    if request.method() == "POST" {
+        let posted = match login::from_form(request.body()) {
+            (Some(login), remember) => Some((login, remember)),
+            _ => None,
+        };
+        return (request, posted);
+    }
+    let forgotten = state(app).login_forgotten.lock().unwrap().remove(id);
+    let value = if forgotten { Some("forgotten") } else if login::is_kept(id) { Some("1") } else { None };
+    if let Some(value) = value {
+        request.headers_mut().insert(login::REMEMBERED_HEADER, tauri::http::HeaderValue::from_static(value));
+    }
+    (request, None)
+}
+
+/// After a sign-in through the form: with the box ticked, the sign-in is kept in the Keychain; without it, a kept
+/// one is forgotten. Only when Django says it worked, so a mistyped password is never kept.
+fn keep_sign_in(id: &str, posted: Option<(login::Login, bool)>, response: &mut Response<Vec<u8>>) {
+    let result = response.headers_mut().remove(login::RESULT_HEADER);
+    let (Some((login, remember)), Some(result)) = (posted, result) else { return };
+    if result.as_bytes() != b"ok" {
+        return;
+    }
+    if remember {
+        if let Err(error) = login::save(id, &login) {
+            eprintln!("[shell] {id}: sign-in not remembered: {error}");
+        }
+    } else {
+        login::forget(id);
+    }
+}
+
 fn database_of(request: &Request<Vec<u8>>) -> Option<String> {
     let host = request.uri().host()?;
     let id = host.strip_prefix("app.").unwrap_or(host); // Windows shows app://<id> as https://app.<id>
@@ -1025,7 +1104,9 @@ fn main() {
                 let sidecar = state(&app).open.lock().unwrap().get(&id).cloned();
                 match sidecar {
                     Some(sidecar) => {
-                        let response = sidecar.forward(request).await;
+                        let (request, posted) = sign_in_request(&app, &id, request);
+                        let mut response = sidecar.forward(request).await;
+                        keep_sign_in(&id, posted, &mut response);
                         remember_pdf(&app, &label, &response);
                         responder.respond(save_if_attachment(&app, response));
                     }
@@ -1049,6 +1130,7 @@ fn main() {
             open_db,
             reveal_database,
             demo_logins,
+            forget_login,
             remove_database
         ])
         .on_menu_event(|app, event| on_menu(app, event.id().as_ref()))

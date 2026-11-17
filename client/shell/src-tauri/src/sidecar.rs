@@ -263,12 +263,17 @@ impl Sidecar {
         let (mut method, mut path, mut query) =
             (request.method().as_str().to_string(), request.uri().path().to_string(), request.uri().query().unwrap_or("").to_string());
         let mut body = request.body().clone();
+        // How a sign-in went (login.rs). It stays on whatever answer the page gets, the refresh page included.
+        let mut login_result: Option<String> = None;
         // WebKit does not follow redirects from a scheme handler. A page gets a refresh to the new address,
         // so the address and the back button stay right; HTMX and fetch get the result, as a browser would.
         for _ in 0..5 {
             let Some((status, response_headers, content)) = self.exchange(&method, &path, &query, &headers, &body).await else {
                 return plain(503, "Die Datenbank ist nicht mehr erreichbar.");
             };
+            if login_result.is_none() {
+                login_result = response_headers.iter().find(|(n, _)| n.eq_ignore_ascii_case(crate::login::RESULT_HEADER)).map(|(_, v)| v.clone());
+            }
             let location = response_headers.iter().find(|(n, _)| n.eq_ignore_ascii_case("location")).map(|(_, v)| v.clone());
             match location {
                 Some(target) if (300..400).contains(&status) && is_navigation => {
@@ -277,7 +282,11 @@ impl Sidecar {
                     // ran beside the next page's, both without a cookie yet, so Django's 404 page set a
                     // second CSRF cookie over the login page's, and the first sign-in failed.
                     let page = format!("<!doctype html><meta charset=utf-8><link rel=icon href=\"data:,\"><meta http-equiv=refresh content=\"0;url={target}\">");
-                    return Response::builder()
+                    let mut response = Response::builder();
+                    if let Some(result) = &login_result {
+                        response = response.header(crate::login::RESULT_HEADER, result);
+                    }
+                    return response
                         .status(200)
                         .header("content-type", "text/html; charset=utf-8")
                         .header("cache-control", "no-store")
@@ -291,14 +300,39 @@ impl Sidecar {
                 }
                 _ => {
                     let mut response = Response::builder().status(status);
+                    let has_result = response_headers.iter().any(|(n, _)| n.eq_ignore_ascii_case(crate::login::RESULT_HEADER));
                     for (name, value) in response_headers {
                         response = response.header(name, value);
+                    }
+                    if let (Some(result), false) = (&login_result, has_result) {
+                        response = response.header(crate::login::RESULT_HEADER, result);
                     }
                     return response.body(content).unwrap_or_else(|_| plain(500, "Ungültige Antwort"));
                 }
             }
         }
         plain(508, "Zu viele Weiterleitungen.")
+    }
+
+    /// Signs in with a remembered login (login.rs) before the window shows, the way the sign-in form would:
+    /// the page for the CSRF cookie and token, then the post. The session cookie lands in the jar.
+    /// Returns Django's answer ("ok", "failed", "locked"), or None when there was no sign-in page to fill,
+    /// for example because this sidecar is signed in already.
+    pub async fn sign_in(&self, login: &crate::login::Login) -> Option<String> {
+        if self.wait_ready(Duration::from_secs(120)).await.is_err() {
+            return None;
+        }
+        let path = crate::login::PATH;
+        let mut headers = sidecar_headers([("accept", "text/html")].into_iter(), &webview_origin(&self.id));
+        let (status, _, page) = self.exchange("GET", path, "", &headers, &[]).await?;
+        if status != 200 {
+            return None;
+        }
+        let token = crate::login::csrf_token(&String::from_utf8_lossy(&page))?;
+        headers.push(["content-type".into(), "application/x-www-form-urlencoded".into()]);
+        let body = crate::login::form(login, &token);
+        let (_, answer, _) = self.exchange("POST", path, "", &headers, body.as_bytes()).await?;
+        answer.into_iter().find(|(n, _)| n.eq_ignore_ascii_case(crate::login::RESULT_HEADER)).map(|(_, v)| v)
     }
 
     /// One request to the sidecar. Cookies go in from the jar and come back into it.
