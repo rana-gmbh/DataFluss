@@ -11,7 +11,8 @@
   <div class="flex-1"></div>
   {% if request.user|can:'tables.design' %}<a class="btn" href="{% url 'table_settings' table.key %}">{% icon 'settings' %}{% translate "Tabelle gestalten" %}</a>{% endif %}
   {% if can_edit %}<a class="btn" href="{% url 'records_bin' table.key %}">{% icon 'trash' %}{% translate "Papierkorb" %}</a>
-  {% if tmdb.search %}<form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn">{% icon 'plus' %}{% translate "Neuer Datensatz" %}</button></form>
+  {% if tmdb.search %}<a class="btn" href="{% url 'collection' table.key %}" title="{% translate 'Eine Filmsammlung aus MyMovies übernehmen' %}">{% icon 'upload' %}{% translate "Sammlung übernehmen" %}</a>
+  <form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn">{% icon 'plus' %}{% translate "Neuer Datensatz" %}</button></form>
   <button type="button" class="btn btn-primary" x-data @click="$dispatch('tmdb-open', { mode: 'add', action: '{{ tmdb.import_url }}', title: '{{ _("Film oder Serie aus TMDB hinzufügen")|escapejs }}' })">{% icon 'film' %}{% translate "Aus TMDB hinzufügen" %}</button>
   {% else %}<form method="post" action="{% url 'record_new' table.key %}">{% csrf_token %}<button class="btn btn-primary">{% icon 'plus' %}{% translate "Neuer Datensatz" %}</button></form>{% endif %}{% endif %}
 </div>

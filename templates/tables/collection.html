@@ -1,0 +1,63 @@
+{% extends "base.html" %}{% load i18n static ui %}
+{% block title %}{% translate "Sammlung übernehmen" %}{% endblock %}
+{% block scripts %}<script src="{% static 'js/collection.js' %}" defer></script>{% endblock %}
+{% block content %}
+<a class="muted text-[13px] hover:underline" href="{% url 'table_records' table.key %}">{{ table.display_name }}</a>
+<h1 class="page-title mb-1 mt-1">{% translate "Sammlung übernehmen" %}</h1>
+<p class="muted text-[13px] mb-4 max-w-3xl">{% translate "Übernimmt eine Filmsammlung aus MyMovies: Titel, Bewertung und das Datum, an dem ein Titel in die Sammlung kam, als Sichtung. Alles andere – Handlung, Besetzung, Poster, Bilder – kommt von TMDB." %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 space-y-4">
+{% if not session %}
+  {% if not has_key %}<div class="rounded-lg badge-warn px-4 py-3 text-[13px]" role="alert">{% translate "Für diese Datenbank ist noch kein TMDB-Schlüssel eingetragen." %}
+    {% if may_set_key %}<a class="underline font-semibold" href="{% url 'tables_tmdb' %}">{% translate "Schlüssel einrichten" %}</a>{% endif %}</div>{% endif %}
+  <section class="surface p-5 space-y-3" data-collection-upload data-url="{% url 'collection' table.key %}">
+    <h2 class="font-semibold">{% translate "1. In MyMovies exportieren" %}</h2>
+    <p class="text-[13px]">{% translate "In MyMovies die Sammlung als XML-Datei exportieren (Export → XML). Bilder werden nicht gebraucht." %}</p>
+    <h2 class="font-semibold pt-2">{% translate "2. Datei wählen" %}</h2>
+    <p class="muted text-[12px]">{% translate "Die Datei wird auf diesem Gerät gelesen. Zur Datenbank gehen nur Titel, Jahr, IMDb-Nummer, Bewertung und Datum jedes Eintrags." %}</p>
+    <input class="input" type="file" accept=".xml,text/xml,application/xml" data-collection-file {% if not has_key %}disabled{% endif %} aria-label="{% translate 'MyMovies-Datei (XML)' %}">
+    <p class="text-[13px]" data-collection-status role="status" aria-live="polite"></p>
+  </section>
+{% else %}
+  <section class="surface p-5 space-y-4" data-collection-run data-url="{{ step_url }}" data-finished="{% if finished %}1{% endif %}">
+    <div class="flex flex-wrap items-center gap-3">
+      <h2 class="font-semibold flex-1">{{ session.filename }}</h2>
+      {% if not finished %}<button type="button" class="btn btn-primary" data-collection-start>{% icon 'play' %}<span>{% if report.done %}{% translate "Weiter" %}{% else %}{% translate "Starten" %}{% endif %}</span></button>
+      <button type="button" class="btn" data-collection-stop hidden>{% icon 'pause' %}{% translate "Anhalten" %}</button>{% endif %}
+    </div>
+    <p class="text-[13px]">{% blocktranslate trimmed with entries=report.entries titles=report.titles series=report.series merged=report.merged %}
+      {{ entries }} Einträge, daraus {{ titles }} Titel: {{ series }} Serien (Staffeln zusammengefasst), {{ merged }} Titel mit mehreren Sichtungen.{% endblocktranslate %}
+      {% if report.without_imdb %}{% blocktranslate trimmed with n=report.without_imdb %}{{ n }} ohne IMDb-Nummer werden bei TMDB nach Namen gesucht.{% endblocktranslate %}{% endif %}</p>
+    <div>
+      <div class="h-2 rounded-full overflow-hidden" style="background: var(--surface-2)" role="progressbar" aria-valuemin="0" aria-valuemax="{{ report.titles }}" aria-valuenow="{{ report.done }}" data-collection-bar>
+        <div class="h-full" style="background: var(--accent); width: {% widthratio report.done report.titles 100 %}%" data-collection-fill></div></div>
+      <p class="muted text-[12px] mt-1.5"><span data-collection-done>{{ report.done }}</span> / {{ report.titles }} · <span data-collection-note role="status" aria-live="polite">{% if finished %}{% translate "Fertig." %}{% elif report.paused %}{{ report.paused }}{% endif %}</span></p>
+    </div>
+    <ul class="text-[13px] space-y-0.5 max-h-48 overflow-y-auto muted" data-collection-log aria-label="{% translate 'Zuletzt übernommen' %}"></ul>
+  </section>
+  <section class="surface p-5 space-y-2 text-[13px]" data-collection-report>
+    <h2 class="font-semibold">{% translate "Ergebnis" %}</h2>
+    <p>{% translate "Neu angelegt" %}: <strong data-report="created">{{ report.created }}</strong> · {% translate "Schon vorhanden, ergänzt" %}: <strong data-report="existing">{{ report.existing }}</strong> · {% translate "Ohne TMDB" %}: <strong data-report="unmatched">{{ report.unmatched|length }}</strong></p>
+    <details {% if not report.unmatched %}hidden{% endif %} data-report-list="unmatched"><summary class="cursor-pointer">{% translate "Bei TMDB nicht gefunden (nur mit Titel, Bewertung und Sichtung angelegt)" %}</summary>
+      <ul class="list-disc pl-5 mt-1">{% for title in report.unmatched %}<li>{{ title }}</li>{% endfor %}</ul></details>
+    <details {% if not report.problems %}hidden{% endif %} data-report-list="problems"><summary class="cursor-pointer">{% translate "Hinweise" %}</summary>
+      <ul class="list-disc pl-5 mt-1">{% for problem in report.problems %}<li>{{ problem }}</li>{% endfor %}</ul></details>
+    {% if finished %}<a class="btn" href="{% url 'table_records' table.key %}">{% icon 'film' %}{{ table.display_name }}</a>{% endif %}
+  </section>
+{% endif %}
+</div>
+<aside class="surface p-4 space-y-2 text-[13px]">
+  <h2 class="font-semibold">{% translate "So wird übernommen" %}</h2>
+  <ul class="list-disc pl-5 space-y-1">
+    <li>{% translate "Bewertung: 1 bis 10 in MyMovies werden ½ bis 5 Sterne." %}</li>
+    <li>{% translate "„Hinzugefügt am“ wird das Datum der Sichtung." %}</li>
+    <li>{% translate "Ein Film mehrfach in der Sammlung, etwa als DVD und Blu-ray: ein Titel mit einer Sichtung je Eintrag." %}</li>
+    <li>{% translate "Die Staffeln einer Serie: ein Titel, eine Sichtung, als Bewertung der Durchschnitt." %}</li>
+    <li>{% translate "Titel, die schon in der Tabelle sind, bekommen nur fehlende Sichtungen und eine Bewertung, falls sie noch keine haben." %}</li>
+    <li>{% translate "Abbrechen schadet nicht: Weiter macht dort weiter, und ein zweiter Lauf legt nichts doppelt an." %}</li>
+  </ul>
+  {% if earlier %}<h2 class="font-semibold pt-2">{% translate "Frühere Übernahmen" %}</h2>
+  <ul class="space-y-1">{% for item in earlier %}<li><a class="hover:underline" href="{% url 'collection_progress' table.key item.pk %}">{{ item.filename }}</a> <span class="muted">· {{ item.created_at|date:"SHORT_DATETIME_FORMAT" }} · {{ item.report.done }}/{{ item.report.titles }}</span></li>{% endfor %}</ul>{% endif %}
+</aside>
+</div>
+{% endblock %}

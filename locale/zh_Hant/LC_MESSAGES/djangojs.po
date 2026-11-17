@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 16:11+0100\n"
+"POT-Creation-Date: 2026-11-17 19:30+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -381,6 +381,39 @@ msgstr "上次同步：%(when)s。"
 
 msgid "Synchronisiert %(when)s"
 msgstr "同步於 %(when)s"
+
+msgid "Datei wird gelesen …"
+msgstr "正在讀取檔案…"
+
+msgid "Das ist keine XML-Datei aus MyMovies."
+msgstr "這不是 MyMovies 的 XML 檔案。"
+
+msgid "In der Datei wurden keine Titel gefunden."
+msgstr "檔案中未找到任何作品。"
+
+msgid "%(n)s Einträge gefunden, werden vorbereitet …"
+msgstr "找到 %(n)s 個條目，正在準備…"
+
+msgid "Die Datei konnte nicht übernommen werden."
+msgstr "無法匯入該檔案。"
+
+msgid "Weiter"
+msgstr "下一步"
+
+msgid "Läuft … Diese Seite offen lassen."
+msgstr "進行中…請保持此頁面開啟。"
+
+msgid "Keine Verbindung zur Datenbank."
+msgstr "無法連線資料庫。"
+
+msgid "Fertig."
+msgstr "完成。"
+
+msgid "Neuer Versuch in 15 Sekunden …"
+msgstr "15 秒後重試…"
+
+msgid "Angehalten."
+msgstr "已暫停。"
 
 msgid "Name"
 msgstr "名稱"
@@ -758,9 +791,6 @@ msgstr "返回"
 
 msgid "Fertig"
 msgstr "完成"
-
-msgid "Weiter"
-msgstr "下一步"
 
 msgid "In der Warteschlange von Coolify"
 msgstr "在 Coolify 佇列中等待"

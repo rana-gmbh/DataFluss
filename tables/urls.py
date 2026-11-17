@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views, views_records as records, views_tmdb as tmdb
+from . import views, views_collection as films, views_records as records, views_tmdb as tmdb
 
 urlpatterns = [
     path("einstellungen/tabellen/", views.table_list, name="table_list"),
@@ -23,6 +23,9 @@ urlpatterns = [
     path("tabellen/<slug:key>/tmdb/suche/", tmdb.tmdb_search, name="tmdb_search"),
     path("tabellen/<slug:key>/tmdb/bild/<str:size>/<str:path>", tmdb.tmdb_thumb, name="tmdb_thumb"),
     path("tabellen/<slug:key>/tmdb/import/", tmdb.tmdb_import, name="tmdb_import"),
+    path("tabellen/<slug:key>/sammlung/", films.collection_page, name="collection"),
+    path("tabellen/<slug:key>/sammlung/<uuid:pk>/", films.collection_progress, name="collection_progress"),
+    path("tabellen/<slug:key>/sammlung/<uuid:pk>/weiter/", films.collection_step, name="collection_step"),
     path("tabellen/<slug:key>/<uuid:pk>/tmdb/", tmdb.tmdb_refresh, name="tmdb_refresh"),
     path("tabellen/<slug:key>/<uuid:pk>/gesehen/", tmdb.record_watched, name="record_watched"),
     path("tabellen/<slug:key>/<uuid:pk>/", records.record_detail, name="record_detail"),

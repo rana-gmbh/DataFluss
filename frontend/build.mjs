@@ -32,7 +32,7 @@ const aliases = {
   type: "type", heading: "heading", minus: "minus", table: "table-2", pen: "pen-line", code: "code-xml", tag: "tag",
   archive: "archive", "archive-restore": "archive-restore", monitor: "monitor", external: "external-link", info: "info",
   calendar: "calendar", book: "book-open", graduation: "graduation-cap", clipboard: "clipboard-check", copyplus: "copy-plus", move: "move", rows: "rows-3", wand: "wand-sparkles", lock: "lock", help: "circle-question-mark",
-  film: "film", tv: "tv", star: "star", gallery: "layout-grid", clapper: "clapperboard", popcorn: "popcorn", bookmark: "bookmark", "circle-check": "circle-check",
+  film: "film", tv: "tv", star: "star", gallery: "layout-grid", clapper: "clapperboard", popcorn: "popcorn", bookmark: "bookmark", "circle-check": "circle-check", play: "play", pause: "pause",
 };
 let sprite = '<svg xmlns="http://www.w3.org/2000/svg">';
 for (const [name, file] of Object.entries(aliases)) {

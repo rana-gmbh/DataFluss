@@ -258,6 +258,25 @@ reaches connected computers with the sync. Users with **Tabellen gestalten** may
   typed in by hand gets **Bei TMDB suchen** instead, to match it.
 - Fields set read-only for a role are not changed by an import of that user.
 
+#### Taking over a collection from MyMovies
+
+**Sammlung übernehmen** (list of Filme & Serien) takes over a MyMovies collection exported as XML. The
+browser reads the file, which may be far larger than a request, and sends only title, original title,
+year, IMDb number, rating and "added" date of each entry. Each title is found at TMDB by its IMDb number
+(by name when there is none) and taken over like **Aus TMDB hinzufügen**; from the collection come:
+
+- the rating: 1–10 in MyMovies become ½–5 stars;
+- a viewing on the day the entry was added;
+- a film in the collection more than once (two editions): one title with a viewing per entry;
+- the seasons of a series (one IMDb number): one title, one viewing (the day of the last season) and the
+  average rating;
+- what TMDB does not know: a record with the collection's title, rating and viewing only, listed at the end.
+
+A title already in the table keeps its rating and only gets missing viewings, so a second run adds nothing
+twice. The import runs in short steps with a progress bar (about 20 minutes for 500 titles); the page must
+stay open, **Anhalten** and **Weiter** stop and resume it, and earlier runs are listed. Pictures make about
+0.5–0.8 MB per title.
+
 TMDB's terms ask for their logo and the sentence "This application uses TMDB and the TMDB APIs but is not
 endorsed, certified, or otherwise approved by TMDB."; both appear in the search, below lists and record
 pages of TMDB tables and on the settings page.

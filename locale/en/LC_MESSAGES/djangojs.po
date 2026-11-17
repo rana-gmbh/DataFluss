@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 16:11+0100\n"
+"POT-Creation-Date: 2026-11-17 19:30+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -389,6 +389,39 @@ msgstr "Last synced: %(when)s."
 
 msgid "Synchronisiert %(when)s"
 msgstr "Synced %(when)s"
+
+msgid "Datei wird gelesen …"
+msgstr "Reading the file …"
+
+msgid "Das ist keine XML-Datei aus MyMovies."
+msgstr "This is not an XML file from MyMovies."
+
+msgid "In der Datei wurden keine Titel gefunden."
+msgstr "No titles were found in the file."
+
+msgid "%(n)s Einträge gefunden, werden vorbereitet …"
+msgstr "%(n)s entries found, preparing …"
+
+msgid "Die Datei konnte nicht übernommen werden."
+msgstr "The file could not be taken over."
+
+msgid "Weiter"
+msgstr "Next"
+
+msgid "Läuft … Diese Seite offen lassen."
+msgstr "Running … Keep this page open."
+
+msgid "Keine Verbindung zur Datenbank."
+msgstr "No connection to the database."
+
+msgid "Fertig."
+msgstr "Done."
+
+msgid "Neuer Versuch in 15 Sekunden …"
+msgstr "Trying again in 15 seconds …"
+
+msgid "Angehalten."
+msgstr "Paused."
 
 msgid "Name"
 msgstr "Name"
@@ -777,9 +810,6 @@ msgstr "Back"
 
 msgid "Fertig"
 msgstr "Done"
-
-msgid "Weiter"
-msgstr "Next"
 
 msgid "In der Warteschlange von Coolify"
 msgstr "Queued in Coolify"

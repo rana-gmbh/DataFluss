@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 18:58+0100\n"
+"POT-Creation-Date: 2026-11-17 19:30+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1767,6 +1767,12 @@ msgstr "識別碼為 %(key)s 的表格已存在。"
 #, python-format
 msgid "Formel %(field)s: %(problem)s"
 msgstr "公式 %(field)s：%(problem)s"
+
+msgid "Die Datei enthält keine lesbare Sammlung."
+msgstr "該檔案不包含可讀取的收藏。"
+
+msgid "In der Datei wurden keine Titel gefunden."
+msgstr "檔案中未找到任何作品。"
 
 #, python-format
 msgid "Die Formel ist zu lang (höchstens %(n)s Zeichen)."
@@ -4227,6 +4233,109 @@ msgstr "再次套用（補充缺少的內容）"
 msgid "Keine Vorlagen vorhanden."
 msgstr "沒有可用的範本。"
 
+msgid "Sammlung übernehmen"
+msgstr "匯入收藏"
+
+msgid ""
+"Übernimmt eine Filmsammlung aus MyMovies: Titel, Bewertung und das Datum, an"
+" dem ein Titel in die Sammlung kam, als Sichtung. Alles andere – Handlung, "
+"Besetzung, Poster, Bilder – kommt von TMDB."
+msgstr ""
+"從 MyMovies 匯入電影收藏：作品、評分，以及作品加入收藏的日期（作為觀看記錄）。其餘內容——劇情、演員、海報、圖片——來自 TMDB。"
+
+msgid "1. In MyMovies exportieren"
+msgstr "1. 從 MyMovies 匯出"
+
+msgid ""
+"In MyMovies die Sammlung als XML-Datei exportieren (Export → XML). Bilder "
+"werden nicht gebraucht."
+msgstr "在 MyMovies 中將收藏匯出為 XML 檔案（匯出 → XML）。不需要圖片。"
+
+msgid "2. Datei wählen"
+msgstr "2. 選擇檔案"
+
+msgid ""
+"Die Datei wird auf diesem Gerät gelesen. Zur Datenbank gehen nur Titel, "
+"Jahr, IMDb-Nummer, Bewertung und Datum jedes Eintrags."
+msgstr "檔案在本裝置上讀取。只有每個條目的標題、年份、IMDb 編號、評分和日期會進入資料庫。"
+
+msgid "MyMovies-Datei (XML)"
+msgstr "MyMovies 檔案（XML）"
+
+msgid "Starten"
+msgstr "開始"
+
+msgid "Anhalten"
+msgstr "暫停"
+
+#, python-format
+msgid ""
+"%(entries)s Einträge, daraus %(titles)s Titel: %(series)s Serien (Staffeln "
+"zusammengefasst), %(merged)s Titel mit mehreren Sichtungen."
+msgstr ""
+"%(entries)s 個條目，合併為 %(titles)s 部作品：%(series)s 部劇集（各季合併），%(merged)s 部作品有多次觀看。"
+
+#, python-format
+msgid "%(n)s ohne IMDb-Nummer werden bei TMDB nach Namen gesucht."
+msgstr "%(n)s 部沒有 IMDb 編號的作品將按名稱在 TMDB 中查找。"
+
+msgid "Fertig."
+msgstr "完成。"
+
+msgid "Zuletzt übernommen"
+msgstr "最近匯入"
+
+msgid "Ergebnis"
+msgstr "結果"
+
+msgid "Neu angelegt"
+msgstr "新增"
+
+msgid "Schon vorhanden, ergänzt"
+msgstr "已存在，已補充"
+
+msgid "Ohne TMDB"
+msgstr "無 TMDB"
+
+msgid ""
+"Bei TMDB nicht gefunden (nur mit Titel, Bewertung und Sichtung angelegt)"
+msgstr "在 TMDB 中未找到（僅以標題、評分和觀看記錄建立）"
+
+msgid "Hinweise"
+msgstr "提示"
+
+msgid "So wird übernommen"
+msgstr "匯入方式"
+
+msgid "Bewertung: 1 bis 10 in MyMovies werden ½ bis 5 Sterne."
+msgstr "評分：MyMovies 中的 1 到 10 分變為 ½ 到 5 顆星。"
+
+msgid "„Hinzugefügt am“ wird das Datum der Sichtung."
+msgstr "「新增日期」成為觀看日期。"
+
+msgid ""
+"Ein Film mehrfach in der Sammlung, etwa als DVD und Blu-ray: ein Titel mit "
+"einer Sichtung je Eintrag."
+msgstr "收藏中多次出現的電影（例如 DVD 和藍光）：一部作品，每個條目一次觀看。"
+
+msgid ""
+"Die Staffeln einer Serie: ein Titel, eine Sichtung, als Bewertung der "
+"Durchschnitt."
+msgstr "劇集的各季：一部作品、一次觀看，評分取平均值。"
+
+msgid ""
+"Titel, die schon in der Tabelle sind, bekommen nur fehlende Sichtungen und "
+"eine Bewertung, falls sie noch keine haben."
+msgstr "表格中已有的作品只補充缺少的觀看記錄，如尚無評分則補充評分。"
+
+msgid ""
+"Abbrechen schadet nicht: Weiter macht dort weiter, und ein zweiter Lauf legt"
+" nichts doppelt an."
+msgstr "中斷無妨：「繼續」會從中斷處接著進行，再次執行也不會重複建立。"
+
+msgid "Frühere Übernahmen"
+msgstr "以前的匯入"
+
 msgid "Zeigt auf"
 msgstr "指向"
 
@@ -4405,6 +4514,9 @@ msgstr "完成"
 
 msgid "Tabelle gestalten"
 msgstr "設計表格"
+
+msgid "Eine Filmsammlung aus MyMovies übernehmen"
+msgstr "從 MyMovies 匯入電影收藏"
 
 msgid "Neuer Datensatz"
 msgstr "新增記錄"
@@ -4745,9 +4857,6 @@ msgstr "已變更"
 
 msgid "Unverändert"
 msgstr "未變更"
-
-msgid "Hinweise"
-msgstr "提示"
 
 #, python-format
 msgid "Neue Auswahlwerte werden ergänzt: %(options)s"

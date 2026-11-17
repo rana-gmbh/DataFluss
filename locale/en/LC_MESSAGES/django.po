@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 18:58+0100\n"
+"POT-Creation-Date: 2026-11-17 19:30+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1844,6 +1844,12 @@ msgstr "A table with the ID %(key)s already exists."
 #, python-format
 msgid "Formel %(field)s: %(problem)s"
 msgstr "Formula %(field)s: %(problem)s"
+
+msgid "Die Datei enthält keine lesbare Sammlung."
+msgstr "The file holds no readable collection."
+
+msgid "In der Datei wurden keine Titel gefunden."
+msgstr "No titles were found in the file."
 
 #, python-format
 msgid "Die Formel ist zu lang (höchstens %(n)s Zeichen)."
@@ -4440,6 +4446,123 @@ msgstr "Apply again (adds what is missing)"
 msgid "Keine Vorlagen vorhanden."
 msgstr "No templates available."
 
+msgid "Sammlung übernehmen"
+msgstr "Import collection"
+
+msgid ""
+"Übernimmt eine Filmsammlung aus MyMovies: Titel, Bewertung und das Datum, an"
+" dem ein Titel in die Sammlung kam, als Sichtung. Alles andere – Handlung, "
+"Besetzung, Poster, Bilder – kommt von TMDB."
+msgstr ""
+"Takes over a film collection from MyMovies: titles, ratings and the day a "
+"title joined the collection, as a viewing. Everything else – story, cast, "
+"poster, pictures – comes from TMDB."
+
+msgid "1. In MyMovies exportieren"
+msgstr "1. Export from MyMovies"
+
+msgid ""
+"In MyMovies die Sammlung als XML-Datei exportieren (Export → XML). Bilder "
+"werden nicht gebraucht."
+msgstr ""
+"Export the collection from MyMovies as an XML file (Export → XML). Pictures "
+"are not needed."
+
+msgid "2. Datei wählen"
+msgstr "2. Choose the file"
+
+msgid ""
+"Die Datei wird auf diesem Gerät gelesen. Zur Datenbank gehen nur Titel, "
+"Jahr, IMDb-Nummer, Bewertung und Datum jedes Eintrags."
+msgstr ""
+"The file is read on this device. Only the title, year, IMDb number, rating "
+"and date of each entry go to the database."
+
+msgid "MyMovies-Datei (XML)"
+msgstr "MyMovies file (XML)"
+
+msgid "Starten"
+msgstr "Start"
+
+msgid "Anhalten"
+msgstr "Pause"
+
+#, python-format
+msgid ""
+"%(entries)s Einträge, daraus %(titles)s Titel: %(series)s Serien (Staffeln "
+"zusammengefasst), %(merged)s Titel mit mehreren Sichtungen."
+msgstr ""
+"%(entries)s entries, making %(titles)s titles: %(series)s series (seasons "
+"combined), %(merged)s titles with several viewings."
+
+#, python-format
+msgid "%(n)s ohne IMDb-Nummer werden bei TMDB nach Namen gesucht."
+msgstr "%(n)s without an IMDb number are looked up at TMDB by name."
+
+msgid "Fertig."
+msgstr "Done."
+
+msgid "Zuletzt übernommen"
+msgstr "Last taken over"
+
+msgid "Ergebnis"
+msgstr "Result"
+
+msgid "Neu angelegt"
+msgstr "Created"
+
+msgid "Schon vorhanden, ergänzt"
+msgstr "Already there, completed"
+
+msgid "Ohne TMDB"
+msgstr "Without TMDB"
+
+msgid ""
+"Bei TMDB nicht gefunden (nur mit Titel, Bewertung und Sichtung angelegt)"
+msgstr "Not found at TMDB (created with title, rating and viewing only)"
+
+msgid "Hinweise"
+msgstr "Notes"
+
+msgid "So wird übernommen"
+msgstr "How it is taken over"
+
+msgid "Bewertung: 1 bis 10 in MyMovies werden ½ bis 5 Sterne."
+msgstr "Rating: 1 to 10 in MyMovies become ½ to 5 stars."
+
+msgid "„Hinzugefügt am“ wird das Datum der Sichtung."
+msgstr "“Added on” becomes the date of the viewing."
+
+msgid ""
+"Ein Film mehrfach in der Sammlung, etwa als DVD und Blu-ray: ein Titel mit "
+"einer Sichtung je Eintrag."
+msgstr ""
+"A film in the collection more than once, say as DVD and Blu-ray: one title "
+"with a viewing per entry."
+
+msgid ""
+"Die Staffeln einer Serie: ein Titel, eine Sichtung, als Bewertung der "
+"Durchschnitt."
+msgstr ""
+"The seasons of a series: one title, one viewing, the average as its rating."
+
+msgid ""
+"Titel, die schon in der Tabelle sind, bekommen nur fehlende Sichtungen und "
+"eine Bewertung, falls sie noch keine haben."
+msgstr ""
+"Titles already in the table only get missing viewings, and a rating if they "
+"have none yet."
+
+msgid ""
+"Abbrechen schadet nicht: Weiter macht dort weiter, und ein zweiter Lauf legt"
+" nichts doppelt an."
+msgstr ""
+"Stopping does no harm: Continue goes on from there, and a second run creates"
+" nothing twice."
+
+msgid "Frühere Übernahmen"
+msgstr "Earlier imports"
+
 msgid "Zeigt auf"
 msgstr "Points to"
 
@@ -4633,6 +4756,9 @@ msgstr "Done"
 
 msgid "Tabelle gestalten"
 msgstr "Design table"
+
+msgid "Eine Filmsammlung aus MyMovies übernehmen"
+msgstr "Take over a film collection from MyMovies"
 
 msgid "Neuer Datensatz"
 msgstr "New record"
@@ -5005,9 +5131,6 @@ msgstr "Changed"
 
 msgid "Unverändert"
 msgstr "Unchanged"
-
-msgid "Hinweise"
-msgstr "Notes"
 
 #, python-format
 msgid "Neue Auswahlwerte werden ergänzt: %(options)s"
