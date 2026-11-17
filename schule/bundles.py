@@ -149,6 +149,20 @@ def archive_for(module_id, version):
     return None
 
 
+def owner_of(app):
+    """The module a bundle in the modules folders brings `app` in, from any version kept there, or None.
+    Only for naming a module that is not loaded (core/modules.py missing_with_data): nothing is verified."""
+    for folder in folders():
+        for manifest in sorted(Path(folder).glob("*/*/manifest.json"), reverse=True):
+            try:
+                data = json.loads(manifest.read_text())
+            except (OSError, ValueError):
+                continue
+            if app in (data.get("apps") or []):
+                return data.get("id")
+    return None
+
+
 def _warn(text):
     print(f"datafluss modules: {text}", file=sys.stderr)
 

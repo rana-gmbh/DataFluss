@@ -198,6 +198,13 @@ class PrefetchTests(BundleCase):
         fetch.assert_not_called()
 
 
+class OwnerTests(BundleCase):
+    def test_an_app_is_named_by_a_kept_bundle_of_another_version(self):
+        bundles.unpack(make_bundle(self.folder, version="0.0.1"), self.folder)
+        self.assertEqual(bundles.owner_of("zeugnisbuch"), "zeugnisbuch")
+        self.assertIsNone(bundles.owner_of("people"))
+
+
 class SidecarFetchTests(SimpleTestCase):
     """A connected database opened by an app version that lacks its module fetches it from the server; the
     sidecar then ends with code 4 and the shell starts it once more (client/shell/src-tauri/src/main.rs)."""
@@ -211,11 +218,20 @@ class SidecarFetchTests(SimpleTestCase):
         cls.sidecar = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.sidecar)
 
-    def fetch(self, state, **fetch):
+    def fetch(self, state, missing=("premium",), offered=("platform", "schulverwaltung", "premium"), **fetch):
+        info = {"version": "9.9.9", "modules": {name: "9.9.9" for name in offered}}
         with mock.patch.dict(os.environ, {"SYNC_TOKEN": "t"}), \
                 mock.patch("sync.models.ClientState.load", return_value=state), \
+                mock.patch.object(client, "server_info", return_value=info), \
+                mock.patch("core.modules.manifest", return_value={"platform": "x", "schulverwaltung": "x"}), \
                 mock.patch.object(client, "fetch_module", **fetch) as fetch_module:
-            return self.sidecar._fetch_missing({"premium"}), fetch_module
+            return self.sidecar._fetch_missing(set(missing)), fetch_module
+
+    def test_apps_of_an_unknown_module_fetch_what_the_server_has(self):
+        reason, fetch_module = self.fetch(mock.Mock(server_url="https://s", revoked=False), missing=("daz", "teaching"), return_value=True)
+        self.assertEqual(reason, "")
+        fetch_module.assert_called_once_with("https://s", "premium", token="t")
+        self.assertIn("nicht", self.fetch(mock.Mock(server_url="https://s", revoked=False), offered=("platform",), return_value=True)[0])
 
     def test_fetched_with_the_device_token(self):
         reason, fetch_module = self.fetch(mock.Mock(server_url="https://server.example", revoked=False), return_value=True)

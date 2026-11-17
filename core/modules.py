@@ -205,6 +205,7 @@ def missing_with_data():
     from django.db import connection
     from django.db.migrations.recorder import MigrationRecorder
 
+    from schule import bundles
     from schule import modules as catalog
 
     if not MigrationRecorder(connection).has_table():
@@ -220,7 +221,8 @@ def missing_with_data():
             for table in (t for t in tables if t.startswith(f"{app}_")):
                 cursor.execute(f"SELECT 1 FROM {connection.ops.quote_name(table)} LIMIT 1")
                 if cursor.fetchone():
-                    missing.add(catalog.module_of(app) or app)
+                    # A module not loaded here is named by an older bundle of it, e.g. after an update of the app.
+                    missing.add(catalog.module_of(app) or bundles.owner_of(app) or app)
                     break
     return missing
 

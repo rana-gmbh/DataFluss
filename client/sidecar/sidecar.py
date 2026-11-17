@@ -383,13 +383,20 @@ def _handle(app, writer, header, body):
 def _fetch_missing(missing):
     """A connected database whose module this version lacks gets it from its server (schule/bundles.py).
     Returns "" when every module was fetched, else why not, in words for the start screen."""
+    from core import modules
     from sync import client
 
     state = client.ClientState.load()
     if state is None or state.revoked:
         return "Diese Datenbank ist nicht mehr mit ihrem Server verbunden."
+    # Names the server does not know (apps of a module this computer never had) stand for every module the
+    # server has and this version lacks.
+    offered = set((client.server_info(state.server_url) or {}).get("modules") or {})
+    wanted = (missing & offered) | (offered - set(modules.manifest()) if missing - offered else set())
+    if offered and not wanted:
+        return "Der Server hat dieses Modul nicht."
     try:
-        if all([client.fetch_module(state.server_url, module_id, token=os.environ["SYNC_TOKEN"]) for module_id in sorted(missing)]):
+        if all([client.fetch_module(state.server_url, module_id, token=os.environ["SYNC_TOKEN"]) for module_id in sorted(wanted or missing)]):
             return ""
         return "Dieser Computer hat keinen Ordner für Module."
     except client.SyncError as exc:
