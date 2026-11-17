@@ -455,6 +455,11 @@
       RecordPanel.open(item.dataset.card);
       gallery.querySelectorAll(".gallery-card").forEach((c) => c.classList.toggle("is-active", c.dataset.card === RecordPanel.activeId));
     });
+    gallery.addEventListener("contextmenu", (e) => {
+      const item = e.target.closest("[data-card]");
+      const data = item && table.getData().find((row) => String(row.id) === item.dataset.card);
+      if (data) rowMenu(e, data); // the same menu as a row of the list
+    });
     window.addEventListener("resize", App.debounce(fitGallery, 150));
     table.on("tableBuilt", () => setLayout(saved || look.layout || "list", false));
   }
@@ -595,8 +600,10 @@
     } } });
   }
 
-  table.on("rowContext", (e, row) => {
-    const data = row.getData();
+  table.on("rowContext", (e, row) => rowMenu(e, row.getData()));
+
+  // The menu of a record, from the list (right click on a row) or the gallery (on a card).
+  function rowMenu(e, data) {
     const chosen = table.getSelectedData();
     const rows = chosen.some((r) => r.id === data.id) && chosen.length > 1 ? chosen : [data];
     const ids = rows.map((r) => r.id);
@@ -631,7 +638,7 @@
       items.push({ label: single ? gettext("Löschen …") : interpolate(gettext("%(who)s löschen …"), { who: count(ids.length) }, true), icon: "trash", danger: true, run: () => moveToBin(ids, names) });
     }
     ContextMenu.open(e, items);
-  });
+  }
 
   // Export exactly what is shown
   function exportRows(format) {
