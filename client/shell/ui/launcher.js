@@ -169,6 +169,8 @@ function showMenu(db, at) {
   add(db.open ? "Anzeigen" : "Öffnen", () => openDatabase(db.id));
   add(t("Im {app} zeigen", { app: FILE_MANAGER }), () => invoke("reveal_database", { id: db.id }));
   if (db.kind === "demo") add("Anmeldedaten zeigen …", () => showLogins(db.id));
+  // A sign-in kept with "Anmeldedaten merken" (login.rs): the next opening asks again.
+  if (db.remembered) add("Gemerkte Anmeldung vergessen", async () => { await invoke("forget_login", { id: db.id }); refresh(); });
   menu.append(document.createElement("hr"));
   add("In den Papierkorb legen …", () => confirmRemove(db), true);
   menu.hidden = false;

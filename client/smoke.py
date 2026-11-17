@@ -113,6 +113,7 @@ class Sidecar:
             if header.get("id") == rid:
                 break
         location = None
+        self.last_headers = {name.lower(): value for name, value in header["headers"]}
         for name, value in header["headers"]:
             if name.lower() == "set-cookie":
                 key, _, rest = value.partition("=")
@@ -129,6 +130,7 @@ class Sidecar:
     def sign_in(self, username, password):
         status, page, _ = self.request("GET", "/anmelden/")
         check("sign-in page", status, 200)
+        check("sign-in page offers „Anmeldedaten merken“", b'name="remember" value="1"' in page, True)
         token = re.search(rb'name="csrfmiddlewaretoken" value="([^"]+)"', page).group(1).decode()
         status, _, location = self.request("POST", "/anmelden/", {"csrfmiddlewaretoken": token, "username": username, "password": password})
         return status, location
@@ -222,6 +224,8 @@ def main():
         sidecar.wait_ready()
         status, location = sidecar.sign_in("it", logins["it"])
         check("demo: IT signs in", (status, location), (302, "/"))
+        # The shell keeps a remembered sign-in only on this answer (client/shell/src-tauri/src/login.rs).
+        check("demo: the shell hears the sign-in worked", sidecar.last_headers.get("x-datafluss-login"), "ok")
         open_pages(sidecar, "demo")
         sidecar.close()
 

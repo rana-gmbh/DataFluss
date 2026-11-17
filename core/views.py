@@ -5,6 +5,7 @@ import json
 import mimetypes
 import os
 import secrets
+import sys
 import tempfile
 from datetime import timedelta
 from pathlib import Path, PurePosixPath
@@ -96,28 +97,51 @@ def _mac_only_owner(username):
         "owners": owners or "–", "name": username}
 
 
+def _in_client():
+    """The desktop client's sidecar: its shell forwards every request and keeps a remembered sign-in."""
+    return bool(os.environ.get("SCHULE_CLIENT_DB_NAME"))
+
+
+def _login_answer(response, result):
+    """Tells the client's shell how a sign-in went (client/shell/src-tauri/src/login.rs): "ok" keeps or
+    forgets the remembered sign-in, "failed" makes a remembered one go away. A server sends no such header."""
+    if _in_client():
+        response["X-DataFluss-Login"] = result
+    return response
+
+
 @require_http_methods(["GET", "POST"])
 def login_view(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
     error = ""
+    result = ""
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         if _too_many_failures(username, request):
             error = _("Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen.")
+            result = "locked"
         else:
             user = authenticate(request, username=username, password=request.POST.get("password", ""))
             if user is None:
                 known = username if User.objects.filter(username=username).exists() else "unbekannter Benutzername"
                 _note_failure(request, f"Fehlgeschlagene Anmeldung: {known}", username)
                 error = _mac_only_owner(username) or _("Benutzername oder Passwort ist falsch.")
+                result = "failed"
             else:
                 auth_login(request, user, backend="django.contrib.auth.backends.ModelBackend")
                 adopt_cookie_language(request, user)
                 request.session.cycle_key()
                 audit.log("login", f"Anmeldung: {user.username}", request=request, user=user)
-                return redirect(_safe_next(request))
-    return render(request, "core/login.html", {"error": error, "next": request.GET.get("next", "")})
+                return _login_answer(redirect(_safe_next(request)), "ok")
+    # Only the client offers to remember a sign-in; its shell says whether one is kept for this database
+    # ("1") or was just forgotten because it no longer fits ("forgotten"). Page scripts cannot set this header.
+    remembered = request.headers.get("X-DataFluss-Remembered", "") if _in_client() else ""
+    context = {"error": error, "next": request.GET.get("next", ""), "offer_remember": _in_client(),
+               "remembered": remembered == "1" if request.method == "GET" else request.POST.get("remember") == "1",
+               "remembered_forgotten": remembered == "forgotten", "on_windows": sys.platform == "win32"}
+    response = render(request, "core/login.html", context)
+    return _login_answer(response, result) if result else response
 
 
 @require_POST

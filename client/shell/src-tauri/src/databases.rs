@@ -9,8 +9,8 @@ use serde::{Deserialize, Serialize};
 use tauri::Manager;
 
 pub const SERVICE: &str = "de.rana.datafluss";
-/// Every Keychain entry a database can have, as "<id>:<name>".
-pub const KEY_NAMES: [&str; 5] = ["sqlcipher", "vault", "django", "media", "sync"];
+/// Every Keychain entry a database can have, as "<id>:<name>". "login" is a remembered sign-in (login.rs).
+pub const KEY_NAMES: [&str; 6] = ["sqlcipher", "vault", "django", "media", "sync", crate::login::ENTRY];
 const NODE_FILE: &str = "node.json";
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

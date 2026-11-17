@@ -4,7 +4,7 @@
 |---|---|
 | `sidecar/` | `sidecar.py` runs the Django app for one database and answers framed requests on stdin/stdout. `sidecar.spec` freezes it with PyInstaller |
 | `shell/ui/` | The start screen: list of databases, new database, backup import, demo |
-| `shell/src-tauri/src/` | The Tauri 2 app. `main.rs`: windows, menus, the commands of the start screen, the `app://<id>/` scheme. `sidecar.rs`: one sidecar per open database, cookies, redirects. `databases.rs`: the database folders and their keys in the Keychain |
+| `shell/src-tauri/src/` | The Tauri 2 app. `main.rs`: windows, menus, the commands of the start screen, the `app://<id>/` scheme. `sidecar.rs`: one sidecar per open database, cookies, redirects. `databases.rs`: the database folders and their keys in the Keychain. `login.rs`: a remembered sign-in per database |
 | `../core/sealed.py` | Encryption of photos and attachments when `MEDIA_KEY` is set |
 | `../static/js/client.js` | The database switcher at the top of the sidebar, only inside the app |
 | `../schule/sqlcipher/` | Django's SQLite backend on SQLCipher. The key comes from the Keychain through the environment |
@@ -71,6 +71,15 @@ are in the Keychain under `de.rana.datafluss`, accounts `<id>:sqlcipher`, `<id>:
 `<id>:django` and `<id>:media`. A demo database shows its logins through its menu (⋯). Databases of the
 earlier Schulverwaltung client (`de.rana.datafluss`) move over at the first start
 (`src/legacy.rs`); macOS may ask once per key whether DataFluss may read it.
+
+"Anmeldedaten merken" on a database's sign-in page (shown only in the client) keeps username and
+password as JSON in `<id>:login`, never in a file, the WebView's storage or the database (`src/login.rs`).
+The shell sees the form post on its way to the sidecar and keeps the sign-in once Django answers
+`X-DataFluss-Login: ok`; a sign-in without the box forgets it. When the database opens again, the shell
+signs in by itself before the window shows (`Sidecar::sign_in`): the second factor is still asked for, and
+a sign-in Django refuses (`failed`, e.g. a changed password) is forgotten and the sign-in page says so.
+"Gemerkte Anmeldung vergessen" in the database's menu (⋯), moving it to the Trash and a wipe by its server
+remove the entry too. A connected database keeps its device token apart in `<id>:sync`; this does not touch it.
 
 Each database writes its sidecar's output to `sidecar.log` in its folder. Started from a terminal,
 the app prints start times and the start screen's script errors; `SIDECAR_LOG=1` also logs every
