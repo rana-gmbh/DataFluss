@@ -3,26 +3,21 @@
     <channel>
         <title>DataFluss</title>
         <item>
-            <title>1.2.0</title>
-            <pubDate>Tue, 17 Nov 2026 09:14:18 +0000</pubDate>
+            <title>1.2.1</title>
+            <pubDate>Tue, 17 Nov 2026 10:02:31 +0000</pubDate>
             <link>https://github.com/rana-gmbh/DataFluss</link>
-            <sparkle:version>1.2.0</sparkle:version>
-            <sparkle:shortVersionString>1.2.0</sparkle:shortVersionString>
+            <sparkle:version>1.2.1</sparkle:version>
+            <sparkle:shortVersionString>1.2.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>13.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description><![CDATA[<h2>DataFluss 1.2.0</h2>
+            <description><![CDATA[<h2>DataFluss 1.2.1</h2>
 <ul>
-  <li><strong>Your own tables:</strong> under Settings → Tables you design tables with your own fields, for books, loans, events, an inventory or club members. Lists, filters, views, search, recycle bin and history work as they do for people. You decide per role who may see or edit which table.</li>
-  <li><strong>Start quickly:</strong> empty, from a template (Library, Inventory, Events) or from an Excel or CSV file, whose field types and rows are taken over with one click. The type of a new field is suggested from its name.</li>
-  <li><strong>Links:</strong> fields can point to records of other tables, or to pupils, staff or devices. A link can also show up as a field on the other side (“Owner of”) and be edited from both sides.</li>
-  <li><strong>Computations:</strong> formulas compute with fields and linked records, such as sums, counts or days until today. Ready-made computations are offered.</li>
-  <li><strong>Files and images</strong> as fields, <strong>import and export</strong> via Excel or CSV, <strong>print templates</strong> with lists of linked records, and <strong>sections</strong> that group tables in the sidebar.</li>
-  <li><strong>Roles and rights:</strong> under Settings → Users and roles you create your own roles and adjust the existing ones (except IT). Each area is No access, Read or Edit; single fields can be read-only or hidden for a role, also on connected computers.</li>
-  <li><strong>Without the school module:</strong> an empty database speaks of an organisation instead of a school and starts with the roles Team and Guest.</li>
-  <li><strong>Start screen in four languages</strong> (German, English, Simplified and Traditional Chinese), following the system, with a switcher. Settings → Update now opens the app's update check.</li>
-  <li>Update the server to 1.2 first; connected computers then sync as usual.</li>
-</ul>]]></description>
-            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.2.0/DataFluss-1.2.0.zip" length="63580387" type="application/octet-stream" sparkle:edSignature="hK/GhPGwJq0SuD8ca9+NE6pRweE5LGkm5jEA8UPB8zq7EP4ip7jGBsNcggizFP6tSu9BTwH+7KK+wrXOjzVTBw=="/>
+  <li><strong>Connected databases open right after an update of the app.</strong> If the app lacked the module a database uses (such as the premium module), it now fetches the module from the server and opens the database straight away. Before, it reported the module as missing, and the database had to be connected again.</li>
+  <li>If the module cannot be fetched, the message now says why.</li>
+  <li>Update the server to 1.2.1 first: the app fetches the module of the server's version.</li>
+</ul>
+]]></description>
+            <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.2.1/DataFluss-1.2.1.zip" length="63608067" type="application/octet-stream" sparkle:edSignature="wppRgOngCgz6BqMK62gSbDwJgoyiINT1uLswgoJGBPUCrMpcX+UJvCn6UrAs/QdbYbxdFNyGxKlesPAYNgwKAw=="/>
         </item>
     </channel>
 </rss>
