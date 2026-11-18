@@ -63,6 +63,17 @@ databases in `%APPDATA%\de.rana.datafluss\databases\`, and the menu bar is per w
 Windows keys (Strg instead of ⌘, Alt+← for back, F5, F11). WebView2 shows `alert`/`confirm`/`prompt`
 and PDFs itself, so `js_dialogs.rs` and `pdf_save.rs` are macOS only.
 
+## App icon
+
+Two tables with arrows between them: the data on this computer and on the server, kept in step.
+The sources are SVG: `client/shell/icon.svg` (macOS squircle with margin and shadow, for the `.icns`
+and the PNGs), `static/img/favicon.svg` (full square, two thick rows, for the Windows `.ico` and the
+browser tab) and `docs/logo.svg` (the same as `client/shell/ui/logo.svg`, for the README, the
+launcher and the web app's `app-192.png`/`app-512.png`). To change it, render each to a 1024 px PNG
+(for example with headless Chrome), run `npx tauri icon icon-1024.png` in `client/shell`, then run it
+once more with the Windows PNG and `-o` into a scratch folder and copy `icon.ico`, `Square*Logo.png`
+and `StoreLogo.png` from there into `src-tauri/icons/`. Delete the `android`/`ios` folders it makes.
+
 ## Run
 
 Start the app. The start screen lists the databases under

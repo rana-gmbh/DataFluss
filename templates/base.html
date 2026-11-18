@@ -7,7 +7,9 @@
   <meta name="csrf-token" content="{{ csrf_token }}">
   <meta name="app-language" content="{{ ui_language }}" data-name="{{ ui_language_name }}" data-name-scope="{{ ui_name_scope }}"{% if ui_single_language %} data-single="1"{% endif %}>
   <link rel="manifest" href="/manifest.json">
-  <link rel="icon" href="{% static 'img/app-192.png' %}">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="icon" href="{% static 'img/app-192.png' %}" type="image/png">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
   <meta name="theme-color" content="#2553eb">
   <link rel="stylesheet" href="{% static 'css/app.css' %}">{% for sheet in module_stylesheets %}<link rel="stylesheet" href="{% static sheet %}">{% endfor %}
   {% block head %}{% endblock %}
