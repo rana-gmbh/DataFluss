@@ -1,6 +1,6 @@
 {% load i18n %}{% autoescape off %}{% translate "Hallo," %}
 
-{% blocktranslate with title=version.title n=version.number %}Ihre Vorlage „{{ title }}“ (Version {{ n }}) ist freigegeben und auf datafluss.de zu finden. Danke fürs Teilen!{% endblocktranslate %}
+{% blocktranslate with title=version.title n=version.number %}Ihre Vorlage „{{ title }}“ (Version {{ n }}) ist freigegeben und auf vorlagen.datafluss.de zu finden. Danke fürs Teilen!{% endblocktranslate %}
 {% if version.decision %}
 {{ version.decision }}
 {% endif %}

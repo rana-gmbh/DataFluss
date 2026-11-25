@@ -12,6 +12,7 @@ COPY core/__init__.py core/fieldtypes.py core/
 COPY prints/__init__.py prints/presets.py prints/
 COPY tables/__init__.py tables/template_check.py tables/
 COPY tables/library/ tables/library/
+COPY locale/ locale/
 ENV DATA_DIR=/data MEDIA_ROOT=/data/media PYTHONUNBUFFERED=1
 RUN SECRET_KEY=build-only python web/manage.py collectstatic --noinput
 

@@ -1,0 +1,859 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataFluss Vorlagen\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-25 17:56+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Sammlungen und Haushalt"
+msgstr "Collections and household"
+
+msgid "Verein und Ehrenamt"
+msgstr "Clubs and volunteering"
+
+msgid "Schule und Bildung"
+msgstr "School and education"
+
+msgid "Arbeit und Büro"
+msgstr "Work and office"
+
+msgid "Freizeit und Hobby"
+msgstr "Leisure and hobbies"
+
+msgid "Sonstiges"
+msgstr "Other"
+
+msgid "gelöschtes Konto"
+msgstr "deleted account"
+
+msgid "eingereicht"
+msgstr "submitted"
+
+msgid "freigegeben"
+msgstr "approved"
+
+msgid "abgelehnt"
+msgstr "rejected"
+
+msgid "ersetzt"
+msgstr "replaced"
+
+msgid "zurückgezogen"
+msgstr "withdrawn"
+
+msgid "kein Text"
+msgstr "no text"
+
+#, python-format
+msgid "Freigegeben: %(title)s"
+msgstr "Approved: %(title)s"
+
+msgid "Bitte eine Begründung für den Einsender schreiben."
+msgstr "Please write a reason for the person who submitted it."
+
+#, python-format
+msgid "Abgelehnt: %(title)s"
+msgstr "Rejected: %(title)s"
+
+#, python-format
+msgid "%(name)s ist größer als 5 MB."
+msgstr "%(name)s is larger than 5 MB."
+
+#, python-format
+msgid "%(name)s: bitte PNG, JPEG oder WebP."
+msgstr "%(name)s: please use PNG, JPEG or WebP."
+
+#, python-format
+msgid "%(name)s ist kein lesbares Bild."
+msgstr "%(name)s is not a readable image."
+
+msgid "Die Datei ist keine gültige Vorlage."
+msgstr "The file is not a valid template."
+
+#, python-format
+msgid "Die Kennung %(id)s ist vergeben. Bitte eine eigene wählen."
+msgstr "The key %(id)s is taken. Please choose your own."
+
+#, python-format
+msgid "Eine neue Version braucht dieselbe Kennung wie die Vorlage (%(id)s)."
+msgstr "A new version needs the same key as the template (%(id)s)."
+
+#, python-format
+msgid ""
+"Die Versionsnummer muss größer sein als %(n)s, die zuletzt freigegebene."
+msgstr "The version number must be greater than %(n)s, the last approved one."
+
+#, python-format
+msgid "Neue Vorlage zum Prüfen: %(title)s"
+msgstr "New template to review: %(title)s"
+
+#, python-format
+msgid "Ihre Vorlage ist freigegeben: %(title)s"
+msgstr "Your template is approved: %(title)s"
+
+#, python-format
+msgid "Ihre Vorlage wurde nicht freigegeben: %(title)s"
+msgstr "Your template was not approved: %(title)s"
+
+msgid "Neue Bewertung zum Prüfen"
+msgstr "New review to check"
+
+#, python-format
+msgid "%(n)s von 5 Sternen"
+msgstr "%(n)s of 5 stars"
+
+msgid "Neueste"
+msgstr "Newest"
+
+msgid "Beste"
+msgstr "Best rated"
+
+msgid "Meist geladen"
+msgstr "Most downloaded"
+
+msgid "Das ging zu schnell. Bitte noch einmal versuchen."
+msgstr "That was too quick. Please try again."
+
+msgid "Bitte den Bedingungen zustimmen."
+msgstr "Please agree to the terms."
+
+msgid "Bitte eine Vorlagendatei wählen."
+msgstr "Please choose a template file."
+
+msgid "Heute wurden schon viele Vorlagen hochgeladen. Bitte morgen weiter."
+msgstr "Many templates were uploaded today already. Please continue tomorrow."
+
+msgid "Danke! Die Vorlage wird geprüft und erscheint nach der Freigabe."
+msgstr ""
+"Thank you! The template will be reviewed and appears once it is approved."
+
+msgid "Die Vorlage ist zurückgezogen."
+msgstr "The template is withdrawn."
+
+msgid "Die Vorlage wird wieder gezeigt."
+msgstr "The template is shown again."
+
+msgid "Eigene Vorlagen lassen sich nicht bewerten."
+msgstr "You cannot rate your own templates."
+
+msgid "Ihre Bewertung ist gelöscht."
+msgstr "Your review is deleted."
+
+msgid "Heute wurden schon viele Bewertungen abgegeben. Bitte morgen weiter."
+msgstr "Many reviews were given today already. Please continue tomorrow."
+
+msgid "Bitte 0,5 bis 5 Sterne wählen."
+msgstr "Please choose 0.5 to 5 stars."
+
+msgid "Danke! Der Text erscheint nach der Prüfung."
+msgstr "Thank you! The text appears once it is checked."
+
+msgid "Danke für Ihre Bewertung!"
+msgstr "Thank you for your review!"
+
+msgid "Bitte kurz sagen, was nicht stimmt."
+msgstr "Please say briefly what is wrong."
+
+msgid "Neue Meldung"
+msgstr "New report"
+
+msgid "Danke, wir sehen es uns an."
+msgstr "Thank you, we will look into it."
+
+msgid "Heute wurde schon viel gemeldet. Bitte morgen weiter."
+msgstr "Much was reported today already. Please continue tomorrow."
+
+msgid "Bitte eine gültige E-Mail-Adresse eingeben."
+msgstr "Please enter a valid e-mail address."
+
+msgid "Zu viele Anmeldeversuche. Bitte später noch einmal versuchen."
+msgstr "Too many sign-in attempts. Please try again later."
+
+msgid "Anmelden bei DataFluss Vorlagen"
+msgstr "Sign in to DataFluss Templates"
+
+msgid "Bitte einen Namen angeben."
+msgstr "Please enter a name."
+
+msgid "Gespeichert."
+msgstr "Saved."
+
+msgid "Zum Löschen bitte die eigene E-Mail-Adresse eingeben."
+msgstr "To delete, please enter your own e-mail address."
+
+msgid "Das Konto ist gelöscht."
+msgstr "The account is deleted."
+
+msgid "Zu viele Versuche. Bitte später noch einmal versuchen."
+msgstr "Too many attempts. Please try again later."
+
+msgid "Der Code stimmt nicht."
+msgstr "The code is not right."
+
+msgid "Nicht gefunden"
+msgstr "Not found"
+
+msgid "Diese Seite gibt es nicht"
+msgstr "This page does not exist"
+
+msgid ""
+"Vielleicht wurde die Vorlage zurückgezogen, oder der Link ist nicht "
+"vollständig."
+msgstr "Perhaps the template was withdrawn, or the link is incomplete."
+
+msgid "Zu allen Vorlagen"
+msgstr "To all templates"
+
+msgid "Vorlagen"
+msgstr "Templates"
+
+msgid ""
+"Fertige Datenbank-Vorlagen für DataFluss: finden, herunterladen, teilen und "
+"bewerten."
+msgstr ""
+"Ready-made database templates for DataFluss: find, download, share and rate "
+"them."
+
+msgid "Datenbank-Vorlagen für DataFluss"
+msgstr "Database templates for DataFluss"
+
+msgid "Zum Inhalt springen"
+msgstr "Skip to content"
+
+msgid "Hauptmenü"
+msgstr "Main menu"
+
+msgid "Stöbern"
+msgstr "Browse"
+
+msgid "Teilen"
+msgstr "Share"
+
+msgid "Meine Vorlagen"
+msgstr "My templates"
+
+msgid "Prüfen"
+msgstr "Review"
+
+msgid "Abmelden"
+msgstr "Sign out"
+
+msgid "Anmelden"
+msgstr "Sign in"
+
+msgid "Vorlagen für"
+msgstr "Templates for"
+
+msgid "geteilt unter"
+msgstr "shared under"
+
+msgid "Impressum"
+msgstr "Legal notice"
+
+msgid "Datenschutz"
+msgstr "Privacy"
+
+msgid "Nutzungsbedingungen"
+msgstr "Terms of use"
+
+msgid "Offiziell"
+msgstr "Official"
+
+msgid "neu"
+msgstr "new"
+
+#, python-format
+msgid "%(n)s Download"
+msgid_plural "%(n)s Downloads"
+msgstr[0] "%(n)s download"
+msgstr[1] "%(n)s downloads"
+
+msgid "Alle Vorlagen"
+msgstr "All templates"
+
+msgid "Diese Vorlage ist zurückgezogen und wird nicht gezeigt."
+msgstr "This template is withdrawn and not shown."
+
+msgid "Noch nicht freigegeben: nur Sie und die Prüfer sehen diese Seite."
+msgstr "Not approved yet: only you and the reviewers see this page."
+
+msgid "von"
+msgstr "by"
+
+#, python-format
+msgid "Version %(n)s"
+msgstr "Version %(n)s"
+
+#, python-format
+msgid "%(n)s Bewertung"
+msgid_plural "%(n)s Bewertungen"
+msgstr[0] "%(n)s review"
+msgstr[1] "%(n)s reviews"
+
+msgid "Noch keine Bewertung"
+msgstr "No reviews yet"
+
+#, python-format
+msgid "Bildschirmfoto %(n)s"
+msgstr "Screenshot %(n)s"
+
+msgid "Was drin ist"
+msgstr "What is inside"
+
+#, python-format
+msgid "%(n)s Feld"
+msgid_plural "%(n)s Felder"
+msgstr[0] "%(n)s field"
+msgstr[1] "%(n)s fields"
+
+#, python-format
+msgid "%(n)s Beispieldatensatz"
+msgid_plural "%(n)s Beispieldatensätze"
+msgstr[0] "%(n)s sample record"
+msgstr[1] "%(n)s sample records"
+
+msgid "Datensatzseiten"
+msgstr "Record pages"
+
+msgid "Druckvorlagen"
+msgstr "Printouts"
+
+msgid "Ansichten"
+msgstr "Views"
+
+msgid "Bewertungen"
+msgstr "Reviews"
+
+msgid "Ihre Bewertung"
+msgstr "Your review"
+
+msgid "Bewerten"
+msgstr "Rate"
+
+msgid "Sterne"
+msgstr "Stars"
+
+msgid "wählen"
+msgstr "choose"
+
+msgid "Text (freiwillig, erscheint nach Prüfung)"
+msgstr "Text (optional, appears once checked)"
+
+msgid "Ihr Text wartet auf die Prüfung."
+msgstr "Your text is waiting to be checked."
+
+msgid "Ihr Text wurde nicht freigegeben; die Sterne zählen."
+msgstr "Your text was not approved; the stars count."
+
+msgid "Speichern"
+msgstr "Save"
+
+msgid "Bewertung löschen"
+msgstr "Delete review"
+
+msgid "um zu bewerten."
+msgstr "to rate."
+
+#, python-format
+msgid "zu Version %(n)s"
+msgstr "on version %(n)s"
+
+msgid "Melden"
+msgstr "Report"
+
+msgid "Was stimmt nicht?"
+msgstr "What is wrong?"
+
+msgid "Noch keine Texte."
+msgstr "No texts yet."
+
+msgid "Vorlage herunterladen"
+msgstr "Download template"
+
+#, python-format
+msgid "%(n)s-mal heruntergeladen"
+msgid_plural "%(n)s-mal heruntergeladen"
+msgstr[0] "downloaded %(n)s time"
+msgstr[1] "downloaded %(n)s times"
+
+#, python-format
+msgid "aus DataFluss %(v)s"
+msgstr "from DataFluss %(v)s"
+
+msgid "Lizenz"
+msgstr "Licence"
+
+msgid "frei nutzbar und veränderbar mit Nennung von"
+msgstr "free to use and change, crediting"
+
+msgid "Kennung"
+msgstr "Key"
+
+msgid ""
+"Vorlagen enthalten keinen Programmcode. Jede Datei wurde vor dem Erscheinen "
+"geprüft; DataFluss prüft sie beim Anwenden noch einmal."
+msgstr ""
+"Templates contain no program code. Every file was reviewed before it "
+"appeared; DataFluss checks it again when applying it."
+
+msgid "Versionen"
+msgstr "Versions"
+
+msgid "Neue Version hochladen"
+msgstr "Upload a new version"
+
+msgid "Vorlage melden"
+msgstr "Report template"
+
+msgid "Datenbank-Vorlagen"
+msgstr "Database templates"
+
+msgid "Fertige Datenbanken für DataFluss"
+msgstr "Ready-made databases for DataFluss"
+
+msgid ""
+"Vorlagen für Sammlungen, Vereine, Büros und mehr: herunterladen, in "
+"DataFluss als neue Datenbank anwenden und nach Belieben anpassen. Eigene "
+"Vorlagen lassen sich teilen; jede wird vor dem Erscheinen geprüft."
+msgstr ""
+"Templates for collections, clubs, offices and more: download them, apply "
+"them in DataFluss as a new database and adapt them as you like. You can "
+"share your own; each is reviewed before it appears."
+
+msgid "Vorlagen suchen, z. B. Bücher, Verein, Rezepte"
+msgstr "Search templates, e.g. books, club, recipes"
+
+msgid "Suchen"
+msgstr "Search"
+
+msgid "Kategorie"
+msgstr "Category"
+
+msgid "Alle Kategorien"
+msgstr "All categories"
+
+msgid "Sortierung"
+msgstr "Sorting"
+
+msgid "Seiten"
+msgstr "Pages"
+
+msgid "Zurück"
+msgstr "Back"
+
+#, python-format
+msgid "Seite %(n)s von %(of)s"
+msgstr "Page %(n)s of %(of)s"
+
+msgid "Weiter"
+msgstr "Next"
+
+msgid "Keine Vorlage gefunden."
+msgstr "No template found."
+
+msgid "Noch keine Vorlagen."
+msgstr "No templates yet."
+
+msgid "Haben Sie eine Datenbank, die anderen helfen könnte?"
+msgstr "Do you have a database that could help others?"
+
+msgid "Vorlage teilen"
+msgstr "Share a template"
+
+msgid "1. Herunterladen"
+msgstr "1. Download"
+
+msgid ""
+"Eine Vorlage ist eine kleine Datei mit Tabellen, Feldern, Datensatzseiten, "
+"Druckvorlagen und Ansichten – ohne Programmcode."
+msgstr ""
+"A template is a small file with tables, fields, record pages, printouts and "
+"views – without program code."
+
+msgid "2. Anwenden"
+msgstr "2. Apply"
+
+msgid ""
+"In DataFluss ab Version 1.4 unter Tabellen → Vorlage hinzufügen (oder beim "
+"Anlegen einer neuen Datenbank) auswählen – DataFluss lädt und prüft sie "
+"selbst."
+msgstr ""
+"From DataFluss 1.4, choose it under Tables → Add template (or when creating "
+"a new database) – DataFluss downloads and checks it itself."
+
+msgid "3. Teilen"
+msgstr "3. Share"
+
+msgid ""
+"Eigene Tabellen unter Tabellen → Als Vorlage exportieren speichern und hier "
+"hochladen."
+msgstr ""
+"Save your own tables under Tables → Export as template and upload them here."
+
+msgid "veröffentlicht"
+msgstr "published"
+
+msgid "noch nicht veröffentlicht"
+msgstr "not published yet"
+
+msgid "Neue Version"
+msgstr "New version"
+
+msgid "Wieder zeigen"
+msgstr "Show again"
+
+msgid "Die Vorlage nicht mehr zeigen?"
+msgstr "Stop showing this template?"
+
+msgid "Zurückziehen"
+msgstr "Withdraw"
+
+msgid "Sie haben noch keine Vorlage geteilt."
+msgstr "You have not shared a template yet."
+
+msgid "Eingereichte Vorlagen"
+msgstr "Submitted templates"
+
+#, python-format
+msgid "%(n)s Hinweis"
+msgid_plural "%(n)s Hinweise"
+msgstr[0] "%(n)s note"
+msgstr[1] "%(n)s notes"
+
+msgid "Nichts zu prüfen."
+msgstr "Nothing to review."
+
+msgid "Bewertungstexte"
+msgstr "Review texts"
+
+msgid "zu"
+msgstr "on"
+
+msgid "Freigeben"
+msgstr "Approve"
+
+msgid "Ablehnen"
+msgstr "Reject"
+
+msgid "Keine Texte offen."
+msgstr "No texts waiting."
+
+msgid "Meldungen"
+msgstr "Reports"
+
+msgid "Bewertung von"
+msgstr "Review by"
+
+msgid "Text ausblenden"
+msgstr "Hide text"
+
+msgid "Vorlage ausblenden"
+msgstr "Hide template"
+
+msgid "Erledigt, nichts zu tun"
+msgstr "Done, nothing to do"
+
+msgid "Keine Meldungen."
+msgstr "No reports."
+
+msgid "Zuletzt entschieden"
+msgstr "Recently decided"
+
+msgid ""
+"Die automatische Prüfung hat die Datei angenommen: nur bekannte Angaben, "
+"keine Verknüpfung nach außen, keine Module, Grenzen eingehalten."
+msgstr ""
+"The automatic check accepted the file: only known settings, no links outside "
+"the template, no modules, limits kept."
+
+msgid "Bitte ansehen"
+msgstr "Please look at"
+
+msgid "Was ist neu"
+msgstr "What is new"
+
+#, python-format
+msgid "Gegenüber Version %(n)s"
+msgstr "Compared with version %(n)s"
+
+msgid "Neu"
+msgstr "New"
+
+msgid "Nicht mehr dabei"
+msgstr "No longer included"
+
+msgid "Tabellen und Felder"
+msgstr "Tables and fields"
+
+msgid "Weitere Texte"
+msgstr "Further texts"
+
+msgid "Titel, Hinweise, Druck- und Seitentexte der Vorlage:"
+msgstr "Titles, notes, print and page texts of the template:"
+
+msgid "Beispieldaten"
+msgstr "Sample data"
+
+msgid "Datei ansehen"
+msgstr "View file"
+
+msgid "Nachricht an den Einsender (bei Ablehnung nötig)"
+msgstr "Message to the person who submitted it (needed when rejecting)"
+
+#, python-format
+msgid "Neue Version von %(key)s"
+msgstr "New version of %(key)s"
+
+msgid "Das lässt sich so nicht teilen:"
+msgstr "This cannot be shared like this:"
+
+#, python-format
+msgid "… und %(n)s weitere."
+msgstr "… and %(n)s more."
+
+msgid "Vorlagendatei (.json)"
+msgstr "Template file (.json)"
+
+msgid "Was ist neu?"
+msgstr "What is new?"
+
+msgid "Bildschirmfotos (freiwillig, bis zu 4, PNG/JPEG/WebP, je bis 5 MB)"
+msgstr "Screenshots (optional, up to 4, PNG/JPEG/WebP, up to 5 MB each)"
+
+msgid ""
+"Ich veröffentliche die Vorlage unter der Lizenz <a href=\"https://"
+"creativecommons.org/licenses/by/4.0/deed.de\" rel=\"license\">CC BY 4.0</a>: "
+"Jeder darf sie nutzen, verändern und weitergeben, wenn mein Anzeigename "
+"genannt wird."
+msgstr ""
+"I publish the template under the licence <a href=\"https://"
+"creativecommons.org/licenses/by/4.0/deed.en\" rel=\"license\">CC BY 4.0</a>: "
+"anyone may use, change and pass it on if my display name is credited."
+
+msgid ""
+"Die Datei und die Bilder enthalten keine echten personenbezogenen Daten (nur "
+"erfundene Beispiele), und ich darf sie teilen."
+msgstr ""
+"The file and the pictures contain no real personal data (only made-up "
+"examples), and I may share them."
+
+msgid "Zur Prüfung einreichen"
+msgstr "Submit for review"
+
+msgid ""
+"Es gelten die Nutzungsbedingungen. Wir prüfen jede Einreichung, meist "
+"innerhalb weniger Tage, und schreiben Ihnen per E-Mail."
+msgstr ""
+"The terms of use apply. We review every submission, usually within a few "
+"days, and write to you by e-mail."
+
+msgid "So entsteht eine Vorlagendatei"
+msgstr "How to make a template file"
+
+msgid "In DataFluss: Einstellungen → Tabellen → Als Vorlage exportieren …"
+msgstr "In DataFluss: Settings → Tables → Export as template …"
+
+msgid "Tabellen wählen, Titel und Beschreibung eingeben, herunterladen."
+msgstr "Choose the tables, enter a title and description, download."
+
+msgid "Die Datei hier hochladen."
+msgstr "Upload the file here."
+
+msgid "Was eine geteilte Vorlage darf"
+msgstr "What a shared template may contain"
+
+msgid ""
+"Sie ist eine Datenbank für sich: ohne Schulverwaltung und ohne Verknüpfungen "
+"zu Schülern, Personal oder Geräten."
+msgstr ""
+"It is a database of its own: without school administration and without links "
+"to pupils, staff or devices."
+
+msgid "Beispieldaten nur erfunden, ohne Bilder und Dateien."
+msgstr "Sample data only made up, without pictures and files."
+
+msgid ""
+"Eine neue Version behält die Kennung und hat eine höhere Versionsnummer. Wo "
+"die Vorlage angewendet ist, ergänzt sie nur: Was die vorige brachte, bleibt "
+"dort erhalten."
+msgstr ""
+"A new version keeps the key and has a higher version number. Where the "
+"template is applied, it only adds: what the previous one brought stays there."
+
+msgid "Konto"
+msgstr "Account"
+
+msgid ""
+"Bitte zuerst einen Anzeigenamen wählen. Er steht bei Ihren Vorlagen und "
+"Bewertungen (Namensnennung nach CC BY 4.0)."
+msgstr ""
+"Please choose a display name first. It is shown with your templates and "
+"reviews (credit under CC BY 4.0)."
+
+msgid "Anzeigename"
+msgstr "Display name"
+
+msgid "z. B. Anna M. oder Bücherei Musterstadt"
+msgstr "e.g. Anna M. or Springfield Library"
+
+msgid "Öffentlich sichtbar. Ein Spitzname genügt."
+msgstr "Public. A nickname is enough."
+
+msgid "E-Mail-Adresse"
+msgstr "E-mail address"
+
+msgid "nicht öffentlich"
+msgstr "not public"
+
+msgid "Konto löschen"
+msgstr "Delete account"
+
+#, python-format
+msgid "Ihre %(n)s Bewertung wird gelöscht."
+msgid_plural "Ihre %(n)s Bewertungen werden gelöscht."
+msgstr[0] "Your %(n)s review will be deleted."
+msgstr[1] "Your %(n)s reviews will be deleted."
+
+msgid ""
+"Vorlagen, die nie veröffentlicht wurden, auch. Veröffentlichte Vorlagen "
+"bleiben unter „gelöschtes Konto“ (sie sind unter CC BY 4.0 geteilt); wer das "
+"nicht möchte, zieht sie vorher unter „Meine Vorlagen“ zurück."
+msgstr ""
+"So are templates that were never published. Published templates stay under "
+"“deleted account” (they are shared under CC BY 4.0); if you do not want "
+"that, withdraw them under “My templates” first."
+
+msgid "Zur Bestätigung die E-Mail-Adresse eingeben"
+msgstr "Enter your e-mail address to confirm"
+
+msgid "Konto endgültig löschen"
+msgstr "Delete account for good"
+
+msgid "Zweiter Faktor für das Prüfen"
+msgstr "Second factor for reviewing"
+
+#, python-format
+msgid "Als <b>%(email)s</b> anmelden?"
+msgstr "Sign in as <b>%(email)s</b>?"
+
+msgid "Jetzt anmelden"
+msgstr "Sign in now"
+
+msgid "Link ungültig"
+msgstr "Link not valid"
+
+msgid "Dieser Link gilt nicht mehr"
+msgstr "This link is no longer valid"
+
+msgid "Ein Anmeldelink gilt 15 Minuten und nur einmal."
+msgstr "A sign-in link is valid for 15 minutes and only once."
+
+msgid "Neuen Link anfordern"
+msgstr "Request a new link"
+
+msgid ""
+"Zum Teilen und Bewerten. Wir schicken Ihnen einen Link per E-Mail – ohne "
+"Passwort. Beim ersten Mal entsteht so Ihr Konto."
+msgstr ""
+"To share and rate. We send you a link by e-mail – no password. The first "
+"time, this creates your account."
+
+msgid "Anmeldelink schicken"
+msgstr "Send sign-in link"
+
+msgid ""
+"Wir nutzen die Adresse nur für die Anmeldung und für Nachrichten zu Ihren "
+"Vorlagen."
+msgstr ""
+"We use the address only for signing in and for messages about your templates."
+
+msgid "E-Mail unterwegs"
+msgstr "E-mail on its way"
+
+msgid "Bitte ins Postfach schauen"
+msgstr "Please check your inbox"
+
+#, python-format
+msgid ""
+"Wenn die Adresse <b>%(email)s</b> stimmt, kommt gleich eine E-Mail mit einem "
+"Anmeldelink. Er gilt 15 Minuten und nur einmal."
+msgstr ""
+"If the address <b>%(email)s</b> is right, an e-mail with a sign-in link "
+"arrives shortly. It is valid for 15 minutes and only once."
+
+msgid ""
+"Nichts angekommen? Auch im Spam-Ordner nachsehen, oder in ein paar Minuten "
+"noch einmal versuchen."
+msgstr ""
+"Nothing arrived? Check the spam folder too, or try again in a few minutes."
+
+msgid "Zweiter Faktor"
+msgstr "Second factor"
+
+msgid ""
+"Prüfer bestätigen ihre Anmeldung zusätzlich mit einem Code aus einer "
+"Authenticator-App. Einmal einrichten: diesen Code scannen oder den Schlüssel "
+"eintippen."
+msgstr ""
+"Reviewers also confirm their sign-in with a code from an authenticator app. "
+"Set it up once: scan this code or type in the key."
+
+msgid "QR-Code für die Authenticator-App"
+msgstr "QR code for the authenticator app"
+
+msgid "Bitte den Code aus Ihrer Authenticator-App eingeben."
+msgstr "Please enter the code from your authenticator app."
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Bestätigen"
+msgstr "Confirm"
+
+msgid "Hallo,"
+msgstr "Hello,"
+
+#, python-format
+msgid ""
+"Ihre Vorlage „%(title)s“ (Version %(n)s) ist freigegeben und auf "
+"vorlagen.datafluss.de zu finden. Danke fürs Teilen!"
+msgstr ""
+"Your template “%(title)s” (version %(n)s) is approved and can be found on "
+"vorlagen.datafluss.de. Thank you for sharing!"
+
+msgid ""
+"mit diesem Link legen Sie Ihr Konto bei DataFluss Vorlagen an und melden "
+"sich an:"
+msgstr ""
+"with this link you create your account at DataFluss Templates and sign in:"
+
+msgid "mit diesem Link melden Sie sich bei DataFluss Vorlagen an:"
+msgstr "with this link you sign in to DataFluss Templates:"
+
+msgid ""
+"Der Link gilt 15 Minuten und nur einmal. Wenn Sie ihn nicht angefordert "
+"haben, ignorieren Sie diese E-Mail einfach."
+msgstr ""
+"The link is valid for 15 minutes and only once. If you did not ask for it, "
+"simply ignore this e-mail."
+
+#, python-format
+msgid ""
+"Ihre Vorlage „%(title)s“ (Version %(n)s) wurde nicht freigegeben. Der Grund:"
+msgstr ""
+"Your template “%(title)s” (version %(n)s) was not approved. The reason:"
+
+msgid "Sie können eine überarbeitete Fassung jederzeit wieder hochladen."
+msgstr "You can upload a revised version at any time."

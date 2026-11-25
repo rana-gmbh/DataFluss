@@ -343,3 +343,72 @@ class PageTests(SiteCase):
         page = self.client.get(reverse("template_detail", args=[template.key])).content.decode()
         self.assertIn('<option value="3.5"', page)
         self.assertNotIn('value="3,5"', page)
+
+
+class LaunchTests(SiteCase):
+    def test_english_from_the_switch_and_the_browser(self):
+        self.assertContains(self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="en"), "Ready-made databases for DataFluss")
+        self.client.post(reverse("set_language"), {"language": "de", "next": "/"})
+        self.assertContains(self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="en"), "Fertige Datenbanken für DataFluss")
+        self.client.post(reverse("set_language"), {"language": "en", "next": "/"})
+        page = self.client.get(reverse("home"))
+        self.assertContains(page, '<html lang="en">')
+        self.assertContains(page, "Collections and household")  # the categories too
+
+    def test_the_owner_hears_in_the_language_of_their_pages(self):
+        self.client.force_login(self.anna)
+        self.client.post(reverse("set_language"), {"language": "en", "next": "/"})
+        self.client.post(reverse("upload"), human({"file": SimpleUploadedFile("t.json", template_file()), "category": "arbeit",
+                                                  "license": "1", "no_personal_data": "1"}))
+        self.anna.refresh_from_db()
+        self.assertEqual(self.anna.language, "en")
+        services.reject(Version.objects.get(), self.prue, "Bitte ohne echte Namen.")
+        self.assertEqual(mail.outbox[-1].subject, "Your template was not approved: Mein Inventar")
+        self.assertIn("The reason:", mail.outbox[-1].body)
+
+    def test_the_template_checks_messages_are_english_too(self):
+        self.client.force_login(self.anna)
+        self.client.post(reverse("set_language"), {"language": "en", "next": "/"})
+        answer = self.client.post(reverse("upload"), human({"file": SimpleUploadedFile("t.json", template_file(id="filme")),
+                                                           "license": "1", "no_personal_data": "1"}))
+        self.assertContains(answer, "is taken")
+
+    def test_robots_sitemap_and_not_found(self):
+        template = self.published()
+        robots = self.client.get("/robots.txt").content.decode()
+        self.assertIn("Disallow: /pruefen/", robots)
+        self.assertIn("Sitemap: http://127.0.0.1:8140/sitemap.xml", robots)
+        sitemap = self.client.get("/sitemap.xml").content.decode()
+        self.assertIn(f"/vorlagen/{template.key}/</loc>", sitemap)
+        with self.settings(DEBUG=False):
+            missing = self.client.get("/vorlagen/gibt_es_nicht/")
+        self.assertEqual(missing.status_code, 404)
+        self.assertContains(missing, "Diese Seite gibt es nicht", status_code=404)
+
+    def test_a_published_page_tells_link_previews_its_picture(self):
+        version, _problems = services.submit(self.anna, template_file(), uploads=[png()])
+        services.approve(version, self.prue)
+        page = self.client.get(reverse("template_detail", args=["mein_inventar"]))
+        self.assertContains(page, '<meta property="og:title" content="Mein Inventar">')
+        self.assertContains(page, 'property="og:image"')
+
+    def test_the_deploy_checks_name_what_is_missing(self):
+        from konten.checks import site_ready
+
+        ids = {c.id for c in site_ready(None)}
+        self.assertTrue({"web.E001", "web.E004", "web.E005"} <= ids)
+        good = {"SITE_URL": "https://vorlagen.datafluss.de", "DEBUG": False, "SECRET_KEY": "x" * 60, "EMAIL_HOST": "smtp.example",
+                "TRUST_PROXY": True, "REVIEW_NOTIFY": ["a@example.org"],
+                "DATABASES": {"default": {"ENGINE": "django.db.backends.postgresql"}}}
+        with self.settings(**good):
+            self.assertEqual(site_ready(None), [])
+
+    def test_titles_and_numbers_follow_the_language(self):
+        template = self.published()
+        services.rate(template, self.ben, Decimal("3.5"))
+        english = self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="en").content.decode()
+        self.assertIn("Inventory", english)  # the template's own English title (titles.en)
+        self.assertIn("3.5 (1)", english)
+        german = self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="de").content.decode()
+        self.assertIn("Mein Inventar", german)
+        self.assertIn("3,5 (1)", german)

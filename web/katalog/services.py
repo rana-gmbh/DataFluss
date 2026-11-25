@@ -10,7 +10,8 @@ from django.db.models import Avg, Count, F, Max
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import gettext as _
+from django.utils import translation
+from django.utils.translation import gettext as _, gettext_noop
 
 from tables import template_check as tc
 
@@ -104,21 +105,23 @@ def approve(version, reviewer, note=""):
         template.published, template.updated = version, timezone.now()
         template.search = " ".join([version.title, version.description, template.key, *[t["name"] for t in summary["tables"]]]).lower()
         template.save()
-    _tell_owner(version, "mail/approved.txt", _("Ihre Vorlage ist freigegeben: %(title)s"))
+    _tell_owner(version, "mail/approved.txt", gettext_noop("Ihre Vorlage ist freigegeben: %(title)s"))
 
 
 def reject(version, reviewer, note):
     version.status, version.reviewer, version.reviewed, version.decision = Version.REJECTED, reviewer, timezone.now(), note
     version.save()
-    _tell_owner(version, "mail/rejected.txt", _("Ihre Vorlage wurde nicht freigegeben: %(title)s"))
+    _tell_owner(version, "mail/rejected.txt", gettext_noop("Ihre Vorlage wurde nicht freigegeben: %(title)s"))
 
 
 def _tell_owner(version, template_name, subject):
+    """A mail to the template's owner, in the language of the pages they used last."""
     owner = version.template.owner
     if owner is None:
         return
-    text = render_to_string(template_name, {"version": version, "url": settings.SITE_URL + reverse("my_templates")})
-    send_mail(subject % {"title": version.title}, text, None, [owner.email])
+    with translation.override(owner.language or "de"):
+        text = render_to_string(template_name, {"version": version, "url": settings.SITE_URL + reverse("my_templates")})
+        send_mail(_(subject) % {"title": version.title}, text, None, [owner.email])
 
 
 def parse_stars(raw):

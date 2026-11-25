@@ -88,7 +88,7 @@ Open **Environment Variables** and add these:
 | `VAULT_KEY` | from step 1 | **off** |
 | `DATABASE_URL` | Postgres URL from step 3 | **off** |
 | `TIME_ZONE` | The school's time zone, for example `Asia/Shanghai` or `Europe/Berlin`. Without it the server uses `Europe/Berlin` | |
-| `TEMPLATE_CATALOG_URL` | Optional. Where "Vorlage hinzufügen → Von datafluss.de" and the daily question for newer template versions ask (default `https://datafluss.de`); empty switches the template catalog off (docs/tables.md) | |
+| `TEMPLATE_CATALOG_URL` | Optional. Where "Vorlage hinzufügen → Von datafluss.de" and the daily question for newer template versions ask (default `https://vorlagen.datafluss.de`); empty switches the template catalog off (docs/tables.md) | |
 
 **Switch off "Available at Buildtime" for every secret, as marked.** It is on by default, and it
 writes the secrets into the Docker image's history. Testing confirmed this, and that switching it off

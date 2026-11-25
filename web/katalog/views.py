@@ -103,6 +103,9 @@ def upload(request, key=None):
         elif not limits.allowed("upload", request.user.pk):
             problems = [_("Heute wurden schon viele Vorlagen hochgeladen. Bitte morgen weiter.")]
         else:
+            if request.user.language != request.LANGUAGE_CODE:  # the decision's mail comes in this language
+                request.user.language = request.LANGUAGE_CODE
+                request.user.save(update_fields=["language"])
             raw = request.FILES["file"].read(tc.MAX_BYTES + 1)
             version, problems = services.submit(request.user, raw, request.POST.get("category", ""), request.POST.get("changes", ""),
                                                 request.FILES.getlist("pictures"), template=template)

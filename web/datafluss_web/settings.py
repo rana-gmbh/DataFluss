@@ -37,6 +37,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",  # German, or English from the switch or the browser
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -77,6 +78,10 @@ LOGIN_URL = "login"
 
 LANGUAGE_CODE = "de"
 LANGUAGES = [("de", "Deutsch"), ("en", "English")]
+LANGUAGE_COOKIE_NAME = "dfweb_language"
+LANGUAGE_COOKIE_SAMESITE = "Lax"
+# The site's own texts, then the platform's (the template check's messages, tables/template_check.py).
+LOCALE_PATHS = [BASE_DIR / "locale", BASE_DIR.parent / "locale"]
 TIME_ZONE = "Europe/Berlin"
 USE_I18N = True
 USE_TZ = True
@@ -106,13 +111,19 @@ X_FRAME_OPTIONS = "DENY"
 if SITE_URL.startswith("https://"):
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_HSTS_SECONDS = 31536000
+    SECURE_SSL_REDIRECT = True
+    SECURE_REDIRECT_EXEMPT = [r"^healthz/$"]  # the container's own health check asks over plain http
+# HSTS for every subdomain of datafluss.de and the preload list are decisions for the whole domain, not this site.
+SILENCED_SYSTEM_CHECKS = ["security.W005", "security.W021"]
 
 # Mail: sign-in links and decisions. Without a host (on a computer) they are written to the console.
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
+EMAIL_USE_SSL = env_bool("EMAIL_USE_SSL")  # port 465; otherwise STARTTLS on 587
+EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True) and not EMAIL_USE_SSL
+EMAIL_TIMEOUT = 20
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "DataFluss Vorlagen <vorlagen@datafluss.de>")
 EMAIL_BACKEND = ("django.core.mail.backends.smtp.EmailBackend" if EMAIL_HOST else "django.core.mail.backends.console.EmailBackend")
 # Who hears of new uploads and reports (comma-separated); empty: nobody, the queue is still there.

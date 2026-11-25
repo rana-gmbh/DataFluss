@@ -23,6 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
     totp_secret = models.CharField(max_length=64, blank=True, default="")  # set once the reviewer confirmed a code
+    language = models.CharField(max_length=10, blank=True, default="de")  # of the pages last used, for mails
 
     objects = UserManager()
     USERNAME_FIELD = "email"

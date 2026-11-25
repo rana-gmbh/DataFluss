@@ -5,14 +5,15 @@ from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext, gettext_lazy as _
 
 CATEGORIES = [
-    ("sammlung", "Sammlungen und Haushalt"),
-    ("verein", "Verein und Ehrenamt"),
-    ("bildung", "Schule und Bildung"),
-    ("arbeit", "Arbeit und Büro"),
-    ("freizeit", "Freizeit und Hobby"),
-    ("sonstiges", "Sonstiges"),
+    ("sammlung", _("Sammlungen und Haushalt")),
+    ("verein", _("Verein und Ehrenamt")),
+    ("bildung", _("Schule und Bildung")),
+    ("arbeit", _("Arbeit und Büro")),
+    ("freizeit", _("Freizeit und Hobby")),
+    ("sonstiges", _("Sonstiges")),
 ]
 LICENSE = "CC-BY-4.0"
 
@@ -45,12 +46,13 @@ class Template(models.Model):
     def author(self):
         if self.official:
             return "DataFluss"
-        return self.owner.shown_name if self.owner else "gelöschtes Konto"
+        return self.owner.shown_name if self.owner else gettext("gelöschtes Konto")
 
 
 class Version(models.Model):
     SUBMITTED, APPROVED, REJECTED, REPLACED, WITHDRAWN = "submitted", "approved", "rejected", "replaced", "withdrawn"
-    STATUS = [(SUBMITTED, "eingereicht"), (APPROVED, "freigegeben"), (REJECTED, "abgelehnt"), (REPLACED, "ersetzt"), (WITHDRAWN, "zurückgezogen")]
+    STATUS = [(SUBMITTED, _("eingereicht")), (APPROVED, _("freigegeben")), (REJECTED, _("abgelehnt")), (REPLACED, _("ersetzt")),
+              (WITHDRAWN, _("zurückgezogen"))]
 
     template = models.ForeignKey(Template, on_delete=models.CASCADE, related_name="versions")
     number = models.PositiveIntegerField()
@@ -97,7 +99,7 @@ class Review(models.Model):
     """Stars count at once; a text appears once a reviewer approved it."""
 
     NONE, SUBMITTED, APPROVED, REJECTED = "none", "submitted", "approved", "rejected"
-    TEXT_STATUS = [(NONE, "kein Text"), (SUBMITTED, "eingereicht"), (APPROVED, "freigegeben"), (REJECTED, "abgelehnt")]
+    TEXT_STATUS = [(NONE, _("kein Text")), (SUBMITTED, _("eingereicht")), (APPROVED, _("freigegeben")), (REJECTED, _("abgelehnt"))]
 
     template = models.ForeignKey(Template, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")

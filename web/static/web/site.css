@@ -28,7 +28,8 @@ main { flex: 1; padding: 24px 0 48px; outline: none; }
 .nav { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: 14px; } .nav a { color: var(--ink-2); } .nav form { margin: 0; }
 .count { background: var(--accent); color: var(--accent-ink); border-radius: 999px; padding: 0 7px; font-size: 12px; font-weight: 600; }
 .foot { border-top: 1px solid var(--line); color: var(--ink-3); font-size: 13px; padding: 18px 0; }
-.foot-row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; } .foot a { color: var(--ink-2); }
+.foot-row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; } .foot a { color: var(--ink-2); }
+.lang { display: flex; gap: 10px; margin: 0; } .lang .current { color: var(--ink); font-weight: 600; }
 .muted { color: var(--ink-3); } .small { font-size: 13px; } .strong { font-weight: 600; } .break { word-break: break-all; } .ml-auto { margin-left: auto; }
 .title { font-size: 26px; font-weight: 700; letter-spacing: -.01em; } .h2 { font-size: 17px; margin: 0; }
 .lead { font-size: 16px; color: var(--ink-2); } .meta { color: var(--ink-3); font-size: 14px; }

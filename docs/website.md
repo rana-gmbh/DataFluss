@@ -1,4 +1,4 @@
-# The template site (datafluss.de)
+# The template site (vorlagen.datafluss.de)
 
 A website where people find, download, share and rate DataFluss database templates. Every upload and every
 review text is checked by a reviewer before it appears. The site is its own Django project in `web/`, with its
@@ -119,27 +119,64 @@ DEBUG=1 .venv/bin/python web/manage.py runserver 127.0.0.1:8140
 `import_library` publishes DataFluss's own database templates as official ones. Tests:
 `.venv/bin/python web/manage.py test webtests` (CI job `web`).
 
-### On Coolify
+### Start on vorlagen.datafluss.de (Coolify)
 
-Not set up yet; this is what it takes, all of it in your accounts:
+The site runs at `https://vorlagen.datafluss.de` as its own Coolify application on the same server as the demo, with
+its own PostgreSQL. Everything below happens in your accounts; nothing of it is set up from this repository.
 
-1. A **Dockerfile application** from this repository, base directory `/`, Dockerfile `web/Dockerfile`, port 8000,
-   health check `/healthz/`, and a **PostgreSQL** resource. A volume on `/data` keeps the pictures (`/data/media`).
-2. Environment (runtime only, not "Available at Buildtime"):
+1. **DNS.** An `A` record `vorlagen.datafluss.de` → the IP address of the Coolify server (or a `CNAME` to its host
+   name). `datafluss.de` itself stays free for a product page.
+2. **Mailbox.** A mailbox such as `vorlagen@datafluss.de` with SMTP access at your mail provider. For datafluss.de,
+   SPF (the provider's `include:`), DKIM (the provider's key) and a DMARC record (`v=DMARC1; p=quarantine; …`), so
+   sign-in links do not land in spam. A data processing agreement with the provider (Art. 28 GDPR).
+3. **Coolify, PostgreSQL.** New resource PostgreSQL 17, scheduled backups on (daily, keep 14).
+4. **Coolify, application.** New resource → public/private repository `rana-gmbh/DataFluss`, branch `main`, build
+   pack **Dockerfile**, base directory `/`, Dockerfile location `web/Dockerfile`, port `8000`, health check path
+   `/healthz/`, domain `https://vorlagen.datafluss.de`. Persistent storage: a volume mounted on `/data` (pictures in
+   `/data/media`; back it up with the server's backups).
+5. **Environment** (all runtime only: switch off "Available at Buildtime" for each):
 
-   | Variable | |
+   | Variable | Value |
    |---|---|
-   | `SECRET_KEY` | long random value |
-   | `SITE_URL` | `https://datafluss.de` (links in mails, cookies marked secure, HSTS) |
-   | `DATABASE_URL` | `postgres://user:password@host:5432/name` of the PostgreSQL resource |
-   | `TRUST_PROXY` | `1` behind Coolify's proxy (client address from X-Forwarded-For for the limits) |
-   | `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `DEFAULT_FROM_EMAIL` | SMTP of a mail provider with a data processing agreement |
-   | `REVIEW_NOTIFY` | addresses told of new uploads, review texts and reports (comma-separated) |
-   | `ALLOWED_HOSTS` | further host names, e.g. `www.datafluss.de` |
+   | `SECRET_KEY` | a new random value of at least 50 characters (`python3 -c "import secrets; print(secrets.token_urlsafe(60))"`) |
+   | `SITE_URL` | `https://vorlagen.datafluss.de` |
+   | `DATABASE_URL` | `postgres://user:password@host:5432/name`, the internal URL Coolify shows for the PostgreSQL resource |
+   | `TRUST_PROXY` | `1` |
+   | `EMAIL_HOST`, `EMAIL_PORT` | the provider's SMTP server, `587` (STARTTLS) or `465` with `EMAIL_USE_SSL=1` |
+   | `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | the mailbox's login |
+   | `DEFAULT_FROM_EMAIL` | `DataFluss Vorlagen <vorlagen@datafluss.de>` |
+   | `REVIEW_NOTIFY` | your own address(es), comma-separated: new uploads, review texts, reports |
 
-3. **DNS** of datafluss.de to the server, the domain in Coolify (HTTPS by Coolify, which also redirects HTTP).
-4. In the container: `python manage.py createsuperuser` for the first reviewer, `python manage.py import_library`.
-5. Complete the legal pages.
+6. **Deploy**, then in the application's terminal (the container starts in `/app`):
 
-`check --deploy` leaves three warnings that are decisions, not faults: HTTPS redirect (Coolify does it), HSTS for
-subdomains and preload (only once every subdomain is HTTPS for good).
+   ```bash
+   python web/manage.py check --deploy
+   ```
+
+   No errors expected; `web.W…` warnings name settings that are missing.
+
+   ```bash
+   python web/manage.py sendtestemail you@example.org
+   ```
+
+   ```bash
+   python web/manage.py createsuperuser
+   ```
+
+   (your address and name; no password is used: sign in by link, then set up the second factor)
+
+   ```bash
+   python web/manage.py import_library
+   ```
+
+7. **First round:** sign in, set up the second factor, upload a template with a picture, approve it, rate it with
+   half stars, download it; `https://vorlagen.datafluss.de/api/v1/vorlagen.json` lists it with its SHA-256.
+8. **Legal pages** completed and checked; only then share the address.
+
+**Updates:** Coolify builds the image again on every push to `main` (the site's tests run in CI job `web`); the
+container migrates its database when it starts (`web/start.sh`). **Backups:** the PostgreSQL resource's scheduled
+backups and the `/data` volume.
+
+`check --deploy` silences only HSTS for subdomains and the preload list (`security.W005`, `security.W021`): those
+are decisions for the whole domain datafluss.de. HTTP is redirected to HTTPS by the site itself as well, except
+`/healthz/`, which the container's health check asks over plain http.

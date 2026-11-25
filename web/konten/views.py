@@ -63,6 +63,9 @@ def login_link(request, token):
             user.set_unusable_password()
             user.save()
         login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+        if user.language != request.LANGUAGE_CODE:  # mails about their templates follow the pages they use
+            user.language = request.LANGUAGE_CODE
+            user.save(update_fields=["language"])
         if not user.name:
             return redirect(f"{reverse('account')}?next={_next(request)}")
         return redirect(_next(request))

@@ -1,15 +1,18 @@
 {% extends "base.html" %}{% load katalog i18n l10n %}
-{% block title %}{{ version.title }}{% endblock %}
-{% block description %}{{ version.description|truncatechars:160 }}{% endblock %}
+{% block title %}{{ version|localized:'title' }}{% endblock %}
+{% block description %}{{ version|localized:'description'|truncatechars:160 }}{% endblock %}
+{% block og_title %}{{ version|localized:'title' }}{% endblock %}
+{% block og_description %}{{ version|localized:'description'|truncatechars:200 }}{% endblock %}
+{% block og_image %}{% with pic=version.pictures.first %}{% if pic and template.listed %}<meta property="og:image" content="{{ site_url }}{% url 'picture' pic.uid %}">{% endif %}{% endwith %}{% endblock %}
 {% block content %}
 <a class="muted small" href="{% url 'home' %}">← {% translate "Alle Vorlagen" %}</a>
 {% if not template.listed %}<p class="msg msg-warning">{% if template.withdrawn %}{% translate "Diese Vorlage ist zurückgezogen und wird nicht gezeigt." %}{% else %}{% translate "Noch nicht freigegeben: nur Sie und die Prüfer sehen diese Seite." %}{% endif %}</p>{% endif %}
 <div class="detail">
   <div class="detail-main">
-    <h1 class="title">{{ version.title }}</h1>
+    <h1 class="title">{{ version|localized:'title' }}</h1>
     <p class="meta">{% if template.official %}<span class="badge badge-accent">{% translate "Offiziell" %}</span> {% endif %}{{ template.get_category_display }} · {% translate "von" %} {{ template.author }} · {% blocktranslate with n=version.number %}Version {{ n }}{% endblocktranslate %}</p>
     <p class="rating-line">{% stars template.rating %} {% if template.ratings %}<b>{{ template.rating|comma }}</b> <span class="muted">({% blocktranslate count n=template.ratings %}{{ n }} Bewertung{% plural %}{{ n }} Bewertungen{% endblocktranslate %})</span>{% else %}<span class="muted">{% translate "Noch keine Bewertung" %}</span>{% endif %}</p>
-    {% if version.description %}<p class="lead">{{ version.description|linebreaksbr }}</p>{% endif %}
+    {% with text=version|localized:'description' %}{% if text %}<p class="lead">{{ text|linebreaksbr }}</p>{% endif %}{% endwith %}
     {% if version.pictures.all %}<div class="pictures">{% for pic in version.pictures.all %}<a href="{% url 'picture' pic.uid %}"><img src="{% url 'picture' pic.uid %}" alt="{% blocktranslate with n=forloop.counter %}Bildschirmfoto {{ n }}{% endblocktranslate %}" width="{{ pic.width }}" height="{{ pic.height }}" loading="lazy"></a>{% endfor %}</div>{% endif %}
 
     <h2>{% translate "Was drin ist" %}</h2>

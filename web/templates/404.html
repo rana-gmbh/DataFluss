@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Nicht gefunden" %}{% endblock %}
+{% block content %}
+<div class="narrow panel"><h1 class="title">{% translate "Diese Seite gibt es nicht" %}</h1>
+<p>{% translate "Vielleicht wurde die Vorlage zurückgezogen, oder der Link ist nicht vollständig." %}</p>
+<a class="btn btn-primary" href="{% url 'home' %}">{% translate "Zu allen Vorlagen" %}</a></div>
+{% endblock %}

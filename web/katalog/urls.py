@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import api, moderation, views
+from . import api, moderation, seo, views
 
 urlpatterns = [
     path("", views.home, name="home"),
@@ -23,4 +23,6 @@ urlpatterns = [
     path("api/v1/vorlagen.json", api.index, name="api_index"),
     path("api/v1/vorlagen/<slug:key>/<int:number>.json", api.file, name="api_file"),
     path("healthz/", views.healthz, name="healthz"),
+    path("robots.txt", seo.robots, name="robots"),
+    path("sitemap.xml", seo.sitemap, name="sitemap"),
 ]

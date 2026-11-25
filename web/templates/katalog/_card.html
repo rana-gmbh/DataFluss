@@ -1,9 +1,9 @@
 {% load katalog i18n %}<a class="card" href="{% url 'template_detail' t.key %}">
-  {% with pic=t.published.pictures.first %}{% if pic %}<img class="card-pic" src="{% url 'picture' pic.uid %}" alt="" loading="lazy" width="{{ pic.width }}" height="{{ pic.height }}">{% else %}<span class="card-pic card-pic-empty" aria-hidden="true">{{ t.published.title|slice:":1" }}</span>{% endif %}{% endwith %}
+  {% with pic=t.published.pictures.first %}{% if pic %}<img class="card-pic" src="{% url 'picture' pic.uid %}" alt="" loading="lazy" width="{{ pic.width }}" height="{{ pic.height }}">{% else %}<span class="card-pic card-pic-empty" aria-hidden="true">{{ t.published|localized:'title'|slice:":1" }}</span>{% endif %}{% endwith %}
   <span class="card-body">
-    <span class="card-title">{{ t.published.title }}</span>
+    <span class="card-title">{{ t.published|localized:'title' }}</span>
     <span class="card-meta">{% if t.official %}<span class="badge badge-accent">{% translate "Offiziell" %}</span>{% endif %}<span>{{ t.get_category_display }} · {{ t.author }}</span></span>
-    <span class="card-text">{{ t.published.description|truncatechars:140 }}</span>
+    <span class="card-text">{{ t.published|localized:'description'|truncatechars:140 }}</span>
     <span class="card-foot">{% stars t.rating "sm" %}<span class="muted">{% if t.ratings %}{{ t.rating|comma }} ({{ t.ratings }}){% else %}{% translate "neu" %}{% endif %}</span><span class="muted ml-auto">{% blocktranslate count n=t.downloads %}{{ n }} Download{% plural %}{{ n }} Downloads{% endblocktranslate %}</span></span>
   </span>
 </a>
