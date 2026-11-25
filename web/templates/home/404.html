@@ -1,0 +1,10 @@
+{% load static i18n %}<!doctype html>{% get_current_language as LANG %}
+<html lang="{{ LANG }}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% translate "Nicht gefunden" %} · DataFluss</title>
+<link rel="stylesheet" href="{% static 'web/site.css' %}"><link rel="icon" href="{% static 'web/logo.svg' %}" type="image/svg+xml"></head>
+<body><main class="wrap"><div class="narrow panel">
+<h1 class="title">{% translate "Diese Seite gibt es nicht" %}</h1>
+<p><a class="btn btn-primary" href="/">DataFluss</a> <a class="btn" href="{{ catalog_url }}">DataFluss Templates</a></p>
+</div></main></body>
+</html>

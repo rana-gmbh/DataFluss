@@ -1,0 +1,120 @@
+{% load static i18n katalog %}<!doctype html>{% get_current_language as LANG %}
+<html lang="{{ LANG }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataFluss – {% translate "Die eigene Datenbank, offline und im Gleichstand" %}</title>
+  <meta name="description" content="{% translate 'DataFluss hält Ihre Daten in eigenen, verschlüsselten Datenbanken auf Mac, PC und Server – offline nutzbar, auf Wunsch abgeglichen. Open Source.' %}">
+  <meta property="og:site_name" content="DataFluss">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="DataFluss">
+  <meta property="og:description" content="{% translate 'Die eigene Datenbank. Auf Ihrem Computer, auf Ihrem Server oder beidem – immer im Gleichstand.' %}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'home/hero.webp' %}">
+  <link rel="stylesheet" href="{% static 'web/site.css' %}">
+  <link rel="stylesheet" href="{% static 'web/home.css' %}">
+  <link rel="icon" href="{% static 'web/logo.svg' %}" type="image/svg+xml">
+</head>
+<body class="home">
+<a class="skip" href="#main">{% translate "Zum Inhalt springen" %}</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="/"><img src="{% static 'web/logo.svg' %}" alt="" width="28" height="28"><span>DataFluss</span></a>
+    <nav class="nav" aria-label="{% translate 'Hauptmenü' %}">
+      <a href="#funktionen">{% translate "Funktionen" %}</a>
+      <a href="#beispiele">{% translate "Beispiele" %}</a>
+      <a href="{{ catalog_url }}">{% translate "Vorlagen" %}</a>
+      <a href="{{ repository }}">GitHub</a>
+      <a class="btn btn-sm btn-primary" href="#download">{% translate "Herunterladen" %}</a>
+    </nav>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+  <section class="intro wrap">
+    <img class="intro-logo" src="{% static 'web/logo.svg' %}" alt="" width="72" height="72">
+    <h1>{% translate "Die eigene Datenbank." %}<br><span>{% translate "Auf Ihrem Computer, auf Ihrem Server oder beidem – immer im Gleichstand." %}</span></h1>
+    <p class="lead">{% translate "DataFluss hält strukturierte Daten in Datenbanken, die Ihnen gehören: verschlüsselt auf dem Mac oder PC, offline nutzbar und auf Wunsch mit einem eigenen Server abgeglichen. Beginnen Sie mit einer fertigen Vorlage oder gestalten Sie Tabellen, Seiten und Drucke selbst – ganz ohne Programmieren." %}</p>
+    <div class="cta">
+      {% if release.mac %}<a class="btn btn-primary btn-lg" href="{{ release.mac }}">{% translate "Für macOS laden" %}</a>{% endif %}
+      {% if release.windows %}<a class="btn btn-lg" href="{{ release.windows }}">{% translate "Für Windows laden" %}</a>{% endif %}
+      {% if not release.mac and not release.windows %}<a class="btn btn-primary btn-lg" href="{{ releases }}/latest">{% translate "Herunterladen" %}</a>{% endif %}
+    </div>
+    <p class="muted small">{% if release.version %}{% blocktranslate with v=release.version %}Version {{ v }}{% endblocktranslate %}{% if release.date %} · {{ release.date }}{% endif %} · {% endif %}{% translate "kostenlos und Open Source (AGPL-3.0)" %} · {% translate "macOS (Apple silicon) und Windows 10/11" %}</p>
+    <figure class="shot shot-hero"><img src="{% static 'home/hero.webp' %}" alt="{% translate 'DataFluss mit der Schulverwaltung: die Schülerliste' %}" width="1600" height="1072"></figure>
+  </section>
+
+  <section id="funktionen" class="wrap features">
+    <h2>{% translate "Was DataFluss kann" %}</h2>
+    <div class="grid3">
+      <div class="feature"><h3>{% translate "Funktioniert offline" %}</h3><p>{% translate "Jede Datenbank liegt verschlüsselt auf Ihrem Mac oder PC. Arbeiten geht auch ohne Internet." %}</p></div>
+      <div class="feature"><h3>{% translate "Gleicht ab, wenn Sie wollen" %}</h3><p>{% translate "Mit einem DataFluss-Server verbunden, fließen Änderungen in beide Richtungen – auch nach Tagen ohne Verbindung." %}</p></div>
+      <div class="feature"><h3>{% translate "Eigene Tabellen" %}</h3><p>{% translate "Felder, Verknüpfungen, Berechnungen, Datensatzseiten und Drucke selbst gestalten – ohne eine Zeile Code." %}</p></div>
+      <div class="feature"><h3>{% translate "Fertige Vorlagen" %}</h3><p>{% translate "Schulverwaltung, Filme & Serien, Bibliothek, Termine, Inventar – und Vorlagen, die andere teilen." %}</p></div>
+      <div class="feature"><h3>{% translate "Druckt gut" %}</h3><p>{% translate "Ausweise, Listen und Briefe im Designer gestalten und als PDF drucken." %}</p></div>
+      <div class="feature"><h3>{% translate "Rollen und Rechte" %}</h3><p>{% translate "Wer was sehen und ändern darf, bis hinunter zu einzelnen Feldern – mit Verlauf jeder Änderung." %}</p></div>
+    </div>
+  </section>
+
+  <section id="beispiele" class="wrap showcase">
+    <div class="show">
+      <div class="show-text">
+        <p class="eyebrow">{% translate "Beispiel" %}</p>
+        <h2>{% translate "Schulverwaltung" %}</h2>
+        <p>{% translate "Schüler, Personal, Eltern und Klassen, Geräte, Schäden und Zugänge an einem Ort. Mit Druckvorlagen für Ausweise und Listen, Import und Export, Sicherungen und einem Server für das ganze Kollegium." %}</p>
+      </div>
+      <div class="pair">
+        <figure class="shot"><img src="{% static 'home/dashboard.webp' %}" alt="{% translate 'Die Startseite der Schulverwaltung' %}" width="1200" height="804" loading="lazy"></figure>
+        <figure class="shot"><img src="{% static 'home/record.webp' %}" alt="{% translate 'Der Datensatz einer Schülerin' %}" width="1200" height="804" loading="lazy"></figure>
+      </div>
+    </div>
+    <div class="show">
+      <div class="show-text">
+        <p class="eyebrow">{% translate "Beispiel" %}</p>
+        <h2>{% translate "Filme & Serien" %}</h2>
+        <p>{% translate "Die eigene Filmsammlung als Postergalerie: Titel aus The Movie Database übernehmen, mit halben Sternen bewerten, notieren wann und wie Sie gesehen haben, und eine MyMovies-Sammlung mitbringen." %}</p>
+      </div>
+      <figure class="shot"><img src="{% static 'home/films.webp' %}" alt="{% translate 'Die Vorlage Filme & Serien als Postergalerie' %}" width="1600" height="1042" loading="lazy">
+        <figcaption class="muted small">{% translate "Daten und Bilder von TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB." %}</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="wrap catalog">
+    <div class="show-text">
+      <p class="eyebrow">{% translate "Vorlagen" %}</p>
+      <h2>{% translate "Fertige Datenbanken zum Herunterladen" %}</h2>
+      <p>{% translate "Auf DataFluss Templates finden Sie Vorlagen, die andere geteilt haben – jede wird vor dem Erscheinen geprüft. Eigene Tabellen lassen sich als Vorlage exportieren und dort teilen." %}</p>
+      <a class="btn" href="{{ catalog_url }}">{% translate "Zu den Vorlagen" %}</a>
+    </div>
+    {% if templates %}<div class="cards">{% for t in templates %}<a class="card" href="{{ t.page_url }}">
+      <span class="card-body"><span class="card-title">{{ t.published|localized:'title' }}</span>
+      <span class="card-meta">{% if t.official %}<span class="badge badge-accent">{% translate "Offiziell" %}</span>{% endif %}<span>{{ t.get_category_display }}</span></span>
+      <span class="card-text">{{ t.published|localized:'description'|truncatechars:120 }}</span></span></a>{% endfor %}</div>{% endif %}
+  </section>
+
+  <section id="download" class="wrap download">
+    <h2>{% translate "Herunterladen" %}</h2>
+    <p class="muted">{% if release.version %}{% blocktranslate with v=release.version %}Aktuelle Version: {{ v }}.{% endblocktranslate %} <a href="{{ release.notes }}">{% translate "Was ist neu" %}</a> · {% endif %}{% translate "Die Apps aktualisieren sich selbst. Server und Apps tragen immer dieselbe Versionsnummer." %}</p>
+    <div class="grid3">
+      <div class="feature"><h3>macOS</h3><p class="muted small">{% translate "Apple silicon, signiert und notarisiert" %}</p>
+        <a class="btn btn-primary" href="{{ release.mac|default:releases }}">{% translate "DMG laden" %}</a></div>
+      <div class="feature"><h3>Windows</h3><p class="muted small">{% translate "Windows 10 und 11, x64" %}</p>
+        <a class="btn btn-primary" href="{{ release.windows|default:releases }}">{% translate "Installer laden" %}</a></div>
+      <div class="feature"><h3>{% translate "Server" %}</h3><p class="muted small">{% translate "Docker-Image für Coolify oder Docker Compose" %}</p>
+        <code class="small">ghcr.io/rana-gmbh/datafluss</code><p class="small"><a href="{{ repository }}/blob/main/docs/server.md">{% translate "Anleitung" %}</a></p></div>
+    </div>
+  </section>
+
+  <section class="wrap opensource">
+    <h2>{% translate "Open Source" %}</h2>
+    <p>{% translate "DataFluss ist freie Software unter der AGPL-3.0. Quellcode, Fehlermeldungen und Anleitungen zum Selbstbauen finden Sie auf GitHub. Entwickelt von der Rana GmbH in Leipzig." %}</p>
+    <a class="btn" href="{{ repository }}">{% translate "DataFluss auf GitHub" %}</a>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap foot-row">
+    <span>© Rana GmbH · <a href="{{ repository }}">GitHub</a> · <a href="{{ catalog_url }}">DataFluss Templates</a></span>
+    <span><a href="{{ catalog_url }}/impressum/">{% translate "Impressum" %}</a> · <a href="{{ catalog_url }}/datenschutz/">{% translate "Datenschutz" %}</a></span>
+    <nav class="lang" aria-label="{% translate 'Sprache' %}">{% get_available_languages as languages %}{% for code, name in languages %}{% get_language_info for code as info %}<a href="{% url 'language' code %}?next=/" lang="{{ code }}" hreflang="{{ code }}"{% if code == LANG %} class="current" aria-current="true"{% endif %}>{{ info.name_local }}</a>{% endfor %}</nav>
+  </div>
+</footer>
+</body>
+</html>

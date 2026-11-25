@@ -123,6 +123,20 @@ People publish read-only websites from DataFluss to **`databases.datafluss.de/<n
 **Before it goes public:** the terms of use and the imprint need a section on websites people publish
 (responsibility for content, removal on notice); that is a legal text for you to write.
 
+## The main page (datafluss.de)
+
+`datafluss.de` is the product's main page, served by the same application (`web/home/`, chosen by host in
+`home/middleware.py`; `www.datafluss.de` redirects to it). It describes DataFluss, shows screenshots of the school
+database and the films template (`web/static/home/`, made from `docs/screenshots/`), the three best templates of the
+catalog, and download buttons for the newest release: the server asks the GitHub API for it at most once an hour
+(`home/github.py`) and only accepts download links of this repository; without an answer the buttons lead to the
+release page. The page sets no cookie and loads nothing from other servers. German and English like the catalog;
+imprint and privacy are the catalog's pages, which cover all three hosts. Locally it answers at
+`http://datafluss.localhost:8140`.
+
+To change screenshots: replace the files in `docs/screenshots/` and write the WebP files again (1600 px wide for the
+large ones, 1200 px for the pair).
+
 ## Running it
 
 Locally (SQLite in `web/data/`, mails in the console):
@@ -147,17 +161,19 @@ DEBUG=1 .venv/bin/python web/manage.py runserver 127.0.0.1:8140
 The site runs at `https://templates.datafluss.de` as its own Coolify application on the same server as the demo, with
 its own PostgreSQL. Everything below happens in your accounts; nothing of it is set up from this repository.
 
-1. **DNS.** An `A` record `templates.datafluss.de` → the IP address of the Coolify server (or a `CNAME` to its host
-   name), and the same for `databases.datafluss.de` (websites people publish). `datafluss.de` itself stays free for a
-   product page.
+1. **DNS** (datafluss.de uses netcup's CloudDNS: CCP → Domains → datafluss.de → CloudDNS). `A` records
+   `templates`, `databases`, `@` (datafluss.de itself, the main page) and `www` → the IP address of the Coolify server.
+   The MX, `mail` and SPF records and the wildcard `*` stay as they are, so mail keeps running on the webhosting.
 2. **Mailbox.** A mailbox such as `templates@datafluss.de` with SMTP access at your mail provider. For datafluss.de,
    SPF (the provider's `include:`), DKIM (the provider's key) and a DMARC record (`v=DMARC1; p=quarantine; …`), so
    sign-in links do not land in spam. A data processing agreement with the provider (Art. 28 GDPR).
 3. **Coolify, PostgreSQL.** New resource PostgreSQL 17, scheduled backups on (daily, keep 14).
 4. **Coolify, application.** New resource → public/private repository `rana-gmbh/DataFluss`, branch `main`, build
    pack **Dockerfile**, base directory `/`, Dockerfile location `web/Dockerfile`, port `8000`, health check path
-   `/healthz/`, domains `https://templates.datafluss.de,https://databases.datafluss.de`. Persistent storage: a volume mounted on `/data` (pictures in
-   `/data/media`; back it up with the server's backups).
+   `/healthz/` (leave Coolify's own health check off: the image has one), domains `https://templates.datafluss.de`,
+   `https://databases.datafluss.de`, `https://datafluss.de` and `https://www.datafluss.de` (HTTP → HTTPS on, permanent).
+   Persistent storage: a volume mounted on `/data` (pictures in `/data/media`). Auto Deploy off: a new version goes live
+   with **Redeploy**.
 5. **Environment** (all runtime only: switch off "Available at Buildtime" for each):
 
    | Variable | Value |
@@ -172,6 +188,7 @@ its own PostgreSQL. Everything below happens in your accounts; nothing of it is 
    | `REVIEW_NOTIFY` | your own address(es), comma-separated: new uploads, review texts, reports |
    | `SITES_URL` | `https://databases.datafluss.de` (websites people publish; see *Websites*) |
    | `SITES_QUOTA_MB`, `SITES_PER_ACCOUNT` | optional, `200` and `3` |
+   | `HOME_URL` | `https://datafluss.de` (the main page; www redirects to it) |
 
 6. **Deploy**, then in the application's terminal (the container starts in `/app`):
 

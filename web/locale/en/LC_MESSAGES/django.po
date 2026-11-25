@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataFluss Templates\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-25 20:38+0100\n"
+"POT-Creation-Date: 2026-11-25 20:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -320,8 +320,204 @@ msgstr "Terms of use"
 msgid "Sprache"
 msgstr "Language"
 
+msgid "Die eigene Datenbank, offline und im Gleichstand"
+msgstr "Your own database, offline and in sync"
+
+msgid ""
+"DataFluss hält Ihre Daten in eigenen, verschlüsselten Datenbanken auf Mac, "
+"PC und Server – offline nutzbar, auf Wunsch abgeglichen. Open Source."
+msgstr "DataFluss keeps your data in your own encrypted databases on Mac, PC and server – usable offline, synced when you want. Open source."
+
+msgid ""
+"Die eigene Datenbank. Auf Ihrem Computer, auf Ihrem Server oder beidem – "
+"immer im Gleichstand."
+msgstr "Your own database. On your computer, on your server, or both – always in sync."
+
+msgid "Funktionen"
+msgstr "Features"
+
+msgid "Beispiele"
+msgstr "Examples"
+
+msgid "Herunterladen"
+msgstr "Download"
+
+msgid "Die eigene Datenbank."
+msgstr "Your own database."
+
+msgid ""
+"Auf Ihrem Computer, auf Ihrem Server oder beidem – immer im Gleichstand."
+msgstr "On your computer, on your server, or both – always in sync."
+
+msgid ""
+"DataFluss hält strukturierte Daten in Datenbanken, die Ihnen gehören: "
+"verschlüsselt auf dem Mac oder PC, offline nutzbar und auf Wunsch mit einem "
+"eigenen Server abgeglichen. Beginnen Sie mit einer fertigen Vorlage oder "
+"gestalten Sie Tabellen, Seiten und Drucke selbst – ganz ohne Programmieren."
+msgstr "DataFluss keeps structured data in databases you own: encrypted on your Mac or PC, usable offline and, if you want, synced with your own server. Start from a ready-made template or design tables, pages and printouts yourself – no programming needed."
+
+msgid "Für macOS laden"
+msgstr "Download for macOS"
+
+msgid "Für Windows laden"
+msgstr "Download for Windows"
+
+#, python-format
+msgid "Version %(v)s"
+msgstr "Version %(v)s"
+
+msgid "kostenlos und Open Source (AGPL-3.0)"
+msgstr "free and open source (AGPL-3.0)"
+
+msgid "macOS (Apple silicon) und Windows 10/11"
+msgstr "macOS (Apple silicon) and Windows 10/11"
+
+msgid "DataFluss mit der Schulverwaltung: die Schülerliste"
+msgstr "DataFluss with school administration: the list of pupils"
+
+msgid "Was DataFluss kann"
+msgstr "What DataFluss does"
+
+msgid "Funktioniert offline"
+msgstr "Works offline"
+
+msgid ""
+"Jede Datenbank liegt verschlüsselt auf Ihrem Mac oder PC. Arbeiten geht auch "
+"ohne Internet."
+msgstr "Every database lives encrypted on your Mac or PC. You can work without internet."
+
+msgid "Gleicht ab, wenn Sie wollen"
+msgstr "Syncs when you want"
+
+msgid ""
+"Mit einem DataFluss-Server verbunden, fließen Änderungen in beide Richtungen "
+"– auch nach Tagen ohne Verbindung."
+msgstr "Connected to a DataFluss server, changes flow both ways – even after days without a connection."
+
+msgid "Eigene Tabellen"
+msgstr "Your own tables"
+
+msgid ""
+"Felder, Verknüpfungen, Berechnungen, Datensatzseiten und Drucke selbst "
+"gestalten – ohne eine Zeile Code."
+msgstr "Design fields, links, computed values, record pages and printouts yourself – without a line of code."
+
+msgid "Fertige Vorlagen"
+msgstr "Ready-made templates"
+
+msgid ""
+"Schulverwaltung, Filme & Serien, Bibliothek, Termine, Inventar – und "
+"Vorlagen, die andere teilen."
+msgstr "School administration, films & series, library, events, inventory – and templates others share."
+
+msgid "Druckt gut"
+msgstr "Prints well"
+
+msgid "Ausweise, Listen und Briefe im Designer gestalten und als PDF drucken."
+msgstr "Design ID cards, lists and letters in the designer and print them as PDF."
+
+msgid "Rollen und Rechte"
+msgstr "Roles and rights"
+
+msgid ""
+"Wer was sehen und ändern darf, bis hinunter zu einzelnen Feldern – mit "
+"Verlauf jeder Änderung."
+msgstr "Who may see and change what, down to single fields – with a history of every change."
+
+msgid "Beispiel"
+msgstr "Example"
+
+msgid "Schulverwaltung"
+msgstr "School administration"
+
+msgid ""
+"Schüler, Personal, Eltern und Klassen, Geräte, Schäden und Zugänge an einem "
+"Ort. Mit Druckvorlagen für Ausweise und Listen, Import und Export, "
+"Sicherungen und einem Server für das ganze Kollegium."
+msgstr "Pupils, staff, parents and classes, devices, damage reports and logins in one place. With print templates for ID cards and lists, import and export, backups and a server for the whole staff."
+
+msgid "Die Startseite der Schulverwaltung"
+msgstr "The start page of school administration"
+
+msgid "Der Datensatz einer Schülerin"
+msgstr "A pupil's record"
+
+msgid "Filme & Serien"
+msgstr "Films & series"
+
+msgid ""
+"Die eigene Filmsammlung als Postergalerie: Titel aus The Movie Database "
+"übernehmen, mit halben Sternen bewerten, notieren wann und wie Sie gesehen "
+"haben, und eine MyMovies-Sammlung mitbringen."
+msgstr "Your film collection as a poster gallery: take titles over from The Movie Database, rate them with half stars, note when and how you watched them, and bring your MyMovies collection along."
+
+msgid "Die Vorlage Filme & Serien als Postergalerie"
+msgstr "The template Films & series as a poster gallery"
+
+msgid ""
+"Daten und Bilder von TMDB. This product uses the TMDB API but is not "
+"endorsed or certified by TMDB."
+msgstr "Data and pictures from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB."
+
+msgid "Fertige Datenbanken zum Herunterladen"
+msgstr "Ready-made databases to download"
+
+msgid ""
+"Auf DataFluss Templates finden Sie Vorlagen, die andere geteilt haben – jede "
+"wird vor dem Erscheinen geprüft. Eigene Tabellen lassen sich als Vorlage "
+"exportieren und dort teilen."
+msgstr "On DataFluss Templates you find templates others have shared – each is reviewed before it appears. You can export your own tables as a template and share them there."
+
+msgid "Zu den Vorlagen"
+msgstr "To the templates"
+
 msgid "Offiziell"
 msgstr "Official"
+
+#, python-format
+msgid "Aktuelle Version: %(v)s."
+msgstr "Current version: %(v)s."
+
+msgid "Was ist neu"
+msgstr "What is new"
+
+msgid ""
+"Die Apps aktualisieren sich selbst. Server und Apps tragen immer dieselbe "
+"Versionsnummer."
+msgstr "The apps update themselves. Server and apps always carry the same version number."
+
+msgid "Apple silicon, signiert und notarisiert"
+msgstr "Apple silicon, signed and notarised"
+
+msgid "DMG laden"
+msgstr "Download DMG"
+
+msgid "Windows 10 und 11, x64"
+msgstr "Windows 10 and 11, x64"
+
+msgid "Installer laden"
+msgstr "Download installer"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Docker-Image für Coolify oder Docker Compose"
+msgstr "Docker image for Coolify or Docker Compose"
+
+msgid "Anleitung"
+msgstr "Guide"
+
+msgid "Open Source"
+msgstr "Open source"
+
+msgid ""
+"DataFluss ist freie Software unter der AGPL-3.0. Quellcode, Fehlermeldungen "
+"und Anleitungen zum Selbstbauen finden Sie auf GitHub. Entwickelt von der "
+"Rana GmbH in Leipzig."
+msgstr "DataFluss is free software under the AGPL-3.0. Source code, issues and build instructions are on GitHub. Made by Rana GmbH in Leipzig."
+
+msgid "DataFluss auf GitHub"
+msgstr "DataFluss on GitHub"
 
 msgid "neu"
 msgstr "new"
@@ -635,9 +831,6 @@ msgstr ""
 
 msgid "Bitte ansehen"
 msgstr "Please look at"
-
-msgid "Was ist neu"
-msgstr "What is new"
 
 #, python-format
 msgid "Gegenüber Version %(n)s"
