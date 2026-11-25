@@ -4,16 +4,21 @@
     <title>DataFluss</title>
     <link>https://github.com/rana-gmbh/DataFluss</link>
     <item>
-      <title>DataFluss 1.3.1</title>
-      <pubDate>Wed, 18 Nov 2026 11:52:17 +0000</pubDate>
-      <sparkle:version>1.3.1</sparkle:version>
-      <description><![CDATA[<h2>DataFluss 1.3.1</h2>
+      <title>DataFluss 1.4.0</title>
+      <pubDate>Wed, 25 Nov 2026 20:31:01 +0000</pubDate>
+      <sparkle:version>1.4.0</sparkle:version>
+      <description><![CDATA[<h2>DataFluss 1.4.0</h2>
 <ul>
-  <li><strong>New icon:</strong> two tables with arrows between them, for what DataFluss does: your data on this computer and on the server, kept in step in both directions.</li>
-  <li>The web app has the new icon too, in the browser tab and when installed.</li>
-  <li>Nothing else changes, and the database stays the same: computers keep syncing with servers on 1.3.0.</li>
+  <li><strong>New: template catalog.</strong> Browse and install databases others shared on templates.datafluss.de, under "Add template" and in "New database". DataFluss checks every file itself before applying it and tells you when a newer version appears.</li>
+  <li><strong>Templates from a file</strong>, and your own tables <strong>exported as a template</strong> to share or to use in another database.</li>
+  <li><strong>New: Publish.</strong> Turn chosen tables into a read-only website with gallery, record pages and search, as a ZIP, in a folder, on your DataFluss server under /p/…, or on WebDAV or FTP. Only chosen fields that the publication's role may see go out; secret fields, history, people and devices never do.</li>
+  <li><strong>Publish again, only the changes.</strong> "Neu veröffentlichen" sends only what changed, by hand, after changes or daily. If the role comes to see more than you confirmed, it waits for your confirmation.</li>
+  <li><strong>From a connected Mac:</strong> see your server's publications and publish them again; your changes are synced first.</li>
+  <li><strong>More targets:</strong> SFTP, S3-compatible storage, Netlify and GitHub Pages, and an optional password for sites on your server. <strong>Websites on databases.datafluss.de</strong> for accounts a reviewer unlocked.</li>
+  <li>Partial stars in the gallery, and security fixes for record pages, list headers and printouts.</li>
+  <li>Update the server to 1.4.0 first: this version changes the database.</li>
 </ul>]]></description>
-      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.3.1/DataFluss-1.3.1-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="48133856" type="application/octet-stream" sparkle:edSignature="SuHJOT22eJyZMZ36P1gIfbw1KjlKvX56xdfBikM9gmZXfgoBIpzWG9nc9OWAViikTDrzvsYzH2TIKoGrNz/8Cw=="/>
+      <enclosure url="https://github.com/rana-gmbh/DataFluss/releases/download/v1.4.0/DataFluss-1.4.0-setup.exe" sparkle:os="windows-x64" sparkle:installerArguments="/P /UPDATE /R" length="49444664" type="application/octet-stream" sparkle:edSignature="1sACcV3Nk48b5Rqchlwf3xipaNW7nOOvLG/gdKK2X/91QGt7fpM/zuG37WXU6HCmsKA3kiae1GbW6HiCVRt3Bw=="/>
     </item>
   </channel>
 </rss>
