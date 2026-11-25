@@ -1,5 +1,20 @@
 {% extends "base.html" %}{% load i18n ui %}
-{% block title %}{% translate "Veröffentlichen" %}{% if connected %}<div class="mt-4" hx-get="{% url 'publication_remote' %}" hx-trigger="load" hx-swap="outerHTML">
+{% block title %}{% translate "Veröffentlichen" %}{% if on_server %}<section class="surface mt-4" aria-labelledby="hosted-title">
+  <div class="p-4 pb-2"><h2 id="hosted-title" class="font-semibold">{% translate "Websites von anderen Geräten" %}</h2>
+    <p class="muted text-[12.5px]">{% translate "Ein anderer Computer mit DataFluss veröffentlicht hierher (Ziel „DataFluss-Hosting“). Er bekommt dafür einen Token; die Website erscheint unter /p/…. Sie läuft abgeschirmt vom Rest dieses Servers." %}</p></div>
+  {% if hosted %}<table class="data-table"><thead><tr><th>{% translate "Name" %}</th><th>{% translate "Adresse" %}</th><th>{% translate "Belegt" %}</th><th></th></tr></thead>
+    <tbody>{% for h in hosted %}<tr>
+      <td class="font-medium">{{ h.site.name }}</td><td><a class="text-[var(--accent)] hover:underline" href="/p/{{ h.site.slug }}/" target="_blank" rel="noopener">/p/{{ h.site.slug }}/</a></td>
+      <td class="muted">{{ h.used|filesizeformat }} / {{ h.site.quota|filesizeformat }}</td>
+      <td class="text-right whitespace-nowrap"><form method="post" action="{% url 'hosted_sites' %}" class="inline-flex gap-1">{% csrf_token %}<input type="hidden" name="site" value="{{ h.site.pk }}">
+        <button class="btn btn-sm" name="action" value="token" data-confirm="{% translate 'Einen neuen Token erstellen? Der alte gilt danach nicht mehr.' %}">{% icon 'key' %}{% translate "Neuer Token" %}</button>
+        <button class="btn btn-sm btn-danger" name="action" value="delete" data-confirm="{% translate 'Diese Website mit allen Dateien löschen?' %}">{% icon 'trash' %}</button></form></td>
+    </tr>{% endfor %}</tbody></table>{% endif %}
+  <form method="post" action="{% url 'hosted_sites' %}" class="p-4 flex flex-wrap items-end gap-2">{% csrf_token %}<input type="hidden" name="action" value="create">
+    <div class="grow max-w-sm"><label class="label" for="hosted-name">{% translate "Neue Website für ein anderes Gerät" %}</label><input id="hosted-name" class="input" name="name" maxlength="100" required></div>
+    <button class="btn">{% icon 'plus' %}{% translate "Anlegen" %}</button></form>
+</section>{% endif %}
+{% if connected %}<div class="mt-4" hx-get="{% url 'publication_remote' %}" hx-trigger="load" hx-swap="outerHTML">
   <div class="surface p-4 muted text-[13px]">{% translate "Veröffentlichungen des Servers werden geladen …" %}</div></div>{% endif %}
 {% endblock %}
 {% block content %}
@@ -25,6 +40,21 @@
     <p class="muted text-[12px]">{% translate "Danach wählen Sie Tabellen, Felder und das Ziel. Veröffentlicht wird erst, wenn Sie es bestätigen." %}</p>
   </form>
 </div>
+{% if on_server %}<section class="surface mt-4" aria-labelledby="hosted-title">
+  <div class="p-4 pb-2"><h2 id="hosted-title" class="font-semibold">{% translate "Websites von anderen Geräten" %}</h2>
+    <p class="muted text-[12.5px]">{% translate "Ein anderer Computer mit DataFluss veröffentlicht hierher (Ziel „DataFluss-Hosting“). Er bekommt dafür einen Token; die Website erscheint unter /p/…. Sie läuft abgeschirmt vom Rest dieses Servers." %}</p></div>
+  {% if hosted %}<table class="data-table"><thead><tr><th>{% translate "Name" %}</th><th>{% translate "Adresse" %}</th><th>{% translate "Belegt" %}</th><th></th></tr></thead>
+    <tbody>{% for h in hosted %}<tr>
+      <td class="font-medium">{{ h.site.name }}</td><td><a class="text-[var(--accent)] hover:underline" href="/p/{{ h.site.slug }}/" target="_blank" rel="noopener">/p/{{ h.site.slug }}/</a></td>
+      <td class="muted">{{ h.used|filesizeformat }} / {{ h.site.quota|filesizeformat }}</td>
+      <td class="text-right whitespace-nowrap"><form method="post" action="{% url 'hosted_sites' %}" class="inline-flex gap-1">{% csrf_token %}<input type="hidden" name="site" value="{{ h.site.pk }}">
+        <button class="btn btn-sm" name="action" value="token" data-confirm="{% translate 'Einen neuen Token erstellen? Der alte gilt danach nicht mehr.' %}">{% icon 'key' %}{% translate "Neuer Token" %}</button>
+        <button class="btn btn-sm btn-danger" name="action" value="delete" data-confirm="{% translate 'Diese Website mit allen Dateien löschen?' %}">{% icon 'trash' %}</button></form></td>
+    </tr>{% endfor %}</tbody></table>{% endif %}
+  <form method="post" action="{% url 'hosted_sites' %}" class="p-4 flex flex-wrap items-end gap-2">{% csrf_token %}<input type="hidden" name="action" value="create">
+    <div class="grow max-w-sm"><label class="label" for="hosted-name">{% translate "Neue Website für ein anderes Gerät" %}</label><input id="hosted-name" class="input" name="name" maxlength="100" required></div>
+    <button class="btn">{% icon 'plus' %}{% translate "Anlegen" %}</button></form>
+</section>{% endif %}
 {% if connected %}<div class="mt-4" hx-get="{% url 'publication_remote' %}" hx-trigger="load" hx-swap="outerHTML">
   <div class="surface p-4 muted text-[13px]">{% translate "Veröffentlichungen des Servers werden geladen …" %}</div></div>{% endif %}
 {% endblock %}

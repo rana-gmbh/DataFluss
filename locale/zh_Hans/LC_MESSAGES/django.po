@@ -6075,3 +6075,227 @@ msgstr "必须修改"
 #, python-brace-format
 #~ msgid "z. B. {Preis} * {Menge}"
 #~ msgstr "例如 {价格} * {数量}"
+
+#, python-format
+msgid ""
+"%(name)s: Zugang abgelehnt (%(code)s). Bitte Token oder Schlüssel prüfen."
+msgstr "%(name)s：访问被拒绝（%(code)s）。请检查令牌或密钥。"
+
+#, python-format
+msgid "%(name)s antwortet mit %(code)s: %(detail)s"
+msgstr "%(name)s 返回 %(code)s：%(detail)s"
+
+#, python-format
+msgid "%(name)s nicht erreichbar: %(error)s"
+msgstr "无法连接 %(name)s：%(error)s"
+
+#, python-format
+msgid "%(name)s: Bitte eine Adresse mit https:// angeben."
+msgstr "%(name)s：请输入以 https:// 开头的地址。"
+
+msgid "S3: Bitte Bucket, Zugriffsschlüssel und Geheimnis angeben."
+msgstr "S3：请输入存储桶、访问密钥和密钥。"
+
+#, python-format
+msgid "S3: Den Bucket %(bucket)s gibt es nicht."
+msgstr "S3：存储桶 %(bucket)s 不存在。"
+
+msgid "Netlify: Bitte Site-ID und Token angeben."
+msgstr "Netlify：请输入站点 ID 和令牌。"
+
+msgid "GitHub: Bitte das Repository als „Besitzer/Name“ angeben."
+msgstr "GitHub：请按“所有者/名称”格式输入仓库。"
+
+msgid "GitHub: Bitte einen Token angeben."
+msgstr "GitHub：请输入令牌。"
+
+#, python-format
+msgid "GitHub: Der Token darf in %(repo)s nicht schreiben."
+msgstr "GitHub：该令牌无权写入 %(repo)s。"
+
+msgid "DataFluss-Hosting: Bitte den Token der Website angeben."
+msgstr "DataFluss 托管：请输入网站的令牌。"
+
+msgid "Das Passwort stimmt nicht."
+msgstr "密码不正确。"
+
+msgid "DataFluss-Hosting"
+msgstr "DataFluss 托管"
+
+msgid "S3-kompatibel"
+msgstr "兼容 S3"
+
+msgid ""
+"SFTP: Der SSH-Schlüssel lässt sich nicht lesen (nur Schlüssel ohne "
+"Passphrase)."
+msgstr "SFTP：无法读取 SSH 密钥（仅支持无密码短语的密钥）。"
+
+msgid "SFTP: Bitte Server und Benutzer angeben."
+msgstr "SFTP：请输入服务器和用户。"
+
+#, python-format
+msgid ""
+"SFTP: Der Server meldet einen anderen Schlüssel als beim ersten Mal "
+"(%(key)s). Aus Sicherheit wird nichts übertragen. Wenn der Server neu "
+"eingerichtet wurde, das Ziel neu speichern und testen."
+msgstr "SFTP：服务器提供的密钥与第一次不同（%(key)s）。为安全起见不传输任何内容。如果服务器已重新设置，请重新保存并测试该目标。"
+
+msgid "SFTP: Anmeldung abgelehnt."
+msgstr "SFTP：登录被拒绝。"
+
+#, python-format
+msgid "SFTP nicht erreichbar: %(error)s"
+msgstr "无法连接 SFTP：%(error)s"
+
+#, python-format
+msgid "SFTP: %(path)s konnte nicht gespeichert werden (%(error)s)."
+msgstr "SFTP：无法保存 %(path)s（%(error)s）。"
+
+#, python-format
+msgid "%(n)s Dateien werden übertragen …"
+msgstr "正在传输 %(n)s 个文件 …"
+
+msgid "DataFluss-Hosting (datafluss.de oder anderer Server)"
+msgstr "DataFluss 托管（datafluss.de 或其他服务器）"
+
+msgid "Bitte ein Passwort für die Website eingeben."
+msgstr "请为网站输入密码。"
+
+#, python-format
+msgid "Der Schlüssel des Servers ist jetzt vertraut: %(key)s"
+msgstr "服务器的密钥现已受信任：%(key)s"
+
+msgid "Mit Passwort"
+msgstr "使用密码"
+
+msgid "Mit SSH-Schlüssel"
+msgstr "使用 SSH 密钥"
+
+msgid "Vertrauter Schlüssel des Servers:"
+msgstr "服务器的受信任密钥："
+
+msgid "Endpunkt"
+msgstr "端点"
+
+msgid "Bucket"
+msgstr "存储桶"
+
+msgid "Region"
+msgstr "区域"
+
+msgid "Ordner im Bucket (optional)"
+msgstr "存储桶中的文件夹（可选）"
+
+msgid "Zugriffsschlüssel (Access Key ID)"
+msgstr "访问密钥 ID（Access Key ID）"
+
+msgid ""
+"Dass der Bucket als Website erreichbar ist, stellen Sie beim Anbieter ein "
+"(Startseite index.html)."
+msgstr "请在服务商处将存储桶设置为可作为网站访问（首页 index.html）。"
+
+msgid "Site-ID (unter Site configuration → Site details)"
+msgstr "站点 ID（在 Site configuration → Site details 中）"
+
+msgid "Repository (Besitzer/Name)"
+msgstr "仓库（所有者/名称）"
+
+msgid "Branch"
+msgstr "分支"
+
+msgid "Ordner (optional, z. B. docs)"
+msgstr "文件夹（可选，例如 docs）"
+
+msgid ""
+"Ein Token mit Schreibrecht auf „Contents“ dieses Repositorys. GitHub Pages "
+"stellen Sie im Repository auf diesen Branch und Ordner."
+msgstr "需要一个对此仓库“Contents”有写入权限的令牌。请在仓库中将 GitHub Pages 设置为此分支和文件夹。"
+
+msgid "Adresse"
+msgstr "地址"
+
+msgid ""
+"Die Website legen Sie dort an: auf datafluss.de unter „Websites“, auf einem "
+"DataFluss-Server unter Veröffentlichen → Websites von anderen Geräten. Dort "
+"steht auch der Token."
+msgstr ""
+"请在那里创建网站：在 datafluss.de 的“网站”中，或在 DataFluss 服务器的“发布 → 来自其他设备的网站”中。令牌也在那里显示。"
+
+msgid "Geheimer Schlüssel (Secret Access Key)"
+msgstr "私密访问密钥（Secret Access Key）"
+
+msgid "Token"
+msgstr "令牌"
+
+msgid "Privater SSH-Schlüssel"
+msgstr "SSH 私钥"
+
+msgid "Jeder, der Adresse und Passwort kennt, kann alles davon lesen."
+msgstr "任何知道地址和密码的人都可以阅读全部内容。"
+
+msgid ""
+"Dieser Server zeigt die Website unter seiner eigenen Adresse, ohne Anmeldung "
+"bei DataFluss."
+msgstr "此服务器在自己的地址下展示该网站，无需登录 DataFluss。"
+
+msgid "Mit einem Passwort schützen"
+msgstr "用密码保护"
+
+msgid "Neues Passwort für die Website"
+msgstr "网站的新密码"
+
+msgid "Passwort für die Website"
+msgstr "网站密码"
+
+msgid ""
+"Wer es kennt, sieht die Website 30 Tage lang ohne neue Eingabe. Ein neues "
+"Passwort meldet alle ab. Suchmaschinen bleiben draußen."
+msgstr "知道密码的人可在 30 天内无需重新输入即可查看网站。新密码会让所有人退出。搜索引擎无法收录。"
+
+msgid "Für das andere Gerät"
+msgstr "用于另一台设备"
+
+msgid ""
+"Dort unter Veröffentlichen das Ziel „DataFluss-Hosting“ wählen und eintragen:"
+msgstr "在那里的“发布”中选择目标“DataFluss 托管”并输入："
+
+msgid "Nur jetzt sichtbar"
+msgstr "仅此一次显示"
+
+msgid ""
+"Der Token wird nur dieses eine Mal gezeigt. Wer ihn hat, kann diese Website "
+"ändern."
+msgstr "令牌仅显示这一次。拥有它的人可以更改此网站。"
+
+#, python-format
+msgid "Die Website erscheint unter /p/%(url)s/."
+msgstr "网站将显示在 /p/%(url)s/ 下。"
+
+msgid "Websites von anderen Geräten"
+msgstr "来自其他设备的网站"
+
+msgid ""
+"Ein anderer Computer mit DataFluss veröffentlicht hierher (Ziel „DataFluss-"
+"Hosting“). Er bekommt dafür einen Token; die Website erscheint unter /p/…. "
+"Sie läuft abgeschirmt vom Rest dieses Servers."
+msgstr ""
+"另一台装有 DataFluss 的电脑可发布到这里（目标“DataFluss 托管”）。它为此获得一个令牌；网站显示在 /p/… "
+"下，并与此服务器的其他部分隔离运行。"
+
+msgid "Belegt"
+msgstr "已用"
+
+msgid "Einen neuen Token erstellen? Der alte gilt danach nicht mehr."
+msgstr "要创建新令牌吗？旧令牌将失效。"
+
+msgid "Neuer Token"
+msgstr "新令牌"
+
+msgid "Diese Website mit allen Dateien löschen?"
+msgstr "要删除此网站及其所有文件吗？"
+
+msgid "Neue Website für ein anderes Gerät"
+msgstr "为另一台设备新建网站"
+
+msgid "Diese Website ist mit einem Passwort geschützt."
+msgstr "此网站受密码保护。"

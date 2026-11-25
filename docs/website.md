@@ -100,6 +100,27 @@ Who asks, and when: a DataFluss server or a computer with its own database when 
 or picks a catalog template, and once a day while a catalog template is applied there (can be switched off); the
 app when its "Neue Datenbank" wizard opens. The site logs nothing of this beyond the server's access log.
 
+## Websites
+
+People publish read-only websites from DataFluss to **`seiten.datafluss.de/<name>/`** (docs/publish.md, target
+*DataFluss-Hosting*). It lives in `web/seiten/`:
+
+- An account asks for websites under **Websites** with a short reason; a reviewer unlocks it (or refuses, with a
+  reason sent by mail) under **Prüfen → Websites prüfen**. Unlocked accounts make up to `SITES_PER_ACCOUNT` sites of
+  `SITES_QUOTA_MB` each; each site has a token, shown once, that DataFluss uses to publish.
+- Files are served only on the sites' own host (`SITES_URL`), never on the template site's: `SitesHostMiddleware`
+  answers every request to that host before sessions or CSRF, so no cookie of the accounts is read or set there.
+  Each page also runs in a sandbox (`publish/hosting.py SANDBOX_CSP`), and files that are not part of a website
+  download instead of opening.
+- Anyone can report a site under **Websites → Eine Website melden**; reviewers switch a site off or block the
+  account (which switches all its sites off and refuses its tokens).
+- The hosting protocol is DataFluss's own (`publish/hosting.py`, copied into the image like the template check).
+- `check --deploy` refuses a `SITES_URL` that is not https, that is the template site's own host or below it, and
+  any `SESSION_COOKIE_DOMAIN`/`CSRF_COOKIE_DOMAIN` (web.E101–E103): the accounts' cookies stay host-only.
+
+**Before it goes public:** the terms of use and the imprint need a section on websites people publish
+(responsibility for content, removal on notice); that is a legal text for you to write.
+
 ## Running it
 
 Locally (SQLite in `web/data/`, mails in the console):
@@ -125,14 +146,15 @@ The site runs at `https://vorlagen.datafluss.de` as its own Coolify application 
 its own PostgreSQL. Everything below happens in your accounts; nothing of it is set up from this repository.
 
 1. **DNS.** An `A` record `vorlagen.datafluss.de` → the IP address of the Coolify server (or a `CNAME` to its host
-   name). `datafluss.de` itself stays free for a product page.
+   name), and the same for `seiten.datafluss.de` (websites people publish). `datafluss.de` itself stays free for a
+   product page.
 2. **Mailbox.** A mailbox such as `vorlagen@datafluss.de` with SMTP access at your mail provider. For datafluss.de,
    SPF (the provider's `include:`), DKIM (the provider's key) and a DMARC record (`v=DMARC1; p=quarantine; …`), so
    sign-in links do not land in spam. A data processing agreement with the provider (Art. 28 GDPR).
 3. **Coolify, PostgreSQL.** New resource PostgreSQL 17, scheduled backups on (daily, keep 14).
 4. **Coolify, application.** New resource → public/private repository `rana-gmbh/DataFluss`, branch `main`, build
    pack **Dockerfile**, base directory `/`, Dockerfile location `web/Dockerfile`, port `8000`, health check path
-   `/healthz/`, domain `https://vorlagen.datafluss.de`. Persistent storage: a volume mounted on `/data` (pictures in
+   `/healthz/`, domains `https://vorlagen.datafluss.de,https://seiten.datafluss.de`. Persistent storage: a volume mounted on `/data` (pictures in
    `/data/media`; back it up with the server's backups).
 5. **Environment** (all runtime only: switch off "Available at Buildtime" for each):
 
@@ -146,6 +168,8 @@ its own PostgreSQL. Everything below happens in your accounts; nothing of it is 
    | `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | the mailbox's login |
    | `DEFAULT_FROM_EMAIL` | `DataFluss Vorlagen <vorlagen@datafluss.de>` |
    | `REVIEW_NOTIFY` | your own address(es), comma-separated: new uploads, review texts, reports |
+   | `SITES_URL` | `https://seiten.datafluss.de` (websites people publish; see *Websites*) |
+   | `SITES_QUOTA_MB`, `SITES_PER_ACCOUNT` | optional, `200` and `3` |
 
 6. **Deploy**, then in the application's terminal (the container starts in `/app`):
 

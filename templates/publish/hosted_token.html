@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{{ site.name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl space-y-4">
+  <h1 class="page-title">{{ site.name }}</h1>
+  <section class="surface p-5 space-y-3">
+    <h2 class="font-semibold">{% translate "Für das andere Gerät" %}</h2>
+    <p class="text-[13px]">{% translate "Dort unter Veröffentlichen das Ziel „DataFluss-Hosting“ wählen und eintragen:" %}</p>
+    <div><div class="label">{% translate "Adresse" %}</div><div class="input mono flex items-center select-all">{{ server }}</div></div>
+    <div><div class="label">{% translate "Token" %}</div><div class="input mono flex items-center select-all break-all h-auto py-2">{{ token }}</div></div>
+    <p class="text-[12.5px]"><span class="badge badge-warn">{% icon 'alert' %}{% translate "Nur jetzt sichtbar" %}</span> {% translate "Der Token wird nur dieses eine Mal gezeigt. Wer ihn hat, kann diese Website ändern." %}</p>
+    <p class="muted text-[12.5px]">{% blocktranslate trimmed with url=site.slug %}Die Website erscheint unter /p/{{ url }}/.{% endblocktranslate %}</p>
+  </section>
+  <a class="btn" href="{% url 'publication_list' %}">{% translate "Fertig" %}</a>
+</div>
+{% endblock %}

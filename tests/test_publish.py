@@ -302,6 +302,7 @@ class FakeDav(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         if self._ok():
+            FakeDav.deleted.append(self._path())
             FakeDav.files.pop(self._path(), None)
             self.send_response(204)
             self.end_headers()
@@ -312,7 +313,7 @@ class WebDavTests(Synchronous, PublishCase):
         super().setUp()
         from base64 import b64encode
 
-        FakeDav.files, FakeDav.folders = {}, set()
+        FakeDav.files, FakeDav.folders, FakeDav.deleted = {}, set(), []
         FakeDav.auth = "Basic " + b64encode(b"anna:geheim").decode()
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), FakeDav)
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
@@ -345,8 +346,9 @@ class WebDavTests(Synchronous, PublishCase):
     def test_the_connection_test(self):
         self.login(self.it)
         page = self.client.post(reverse("publication_test", args=[self.publication.pk])).content.decode()
-        self.assertIn("Klappt", page)
-        self.assertNotIn(".datafluss-test", FakeDav.files)
+        self.assertIn("badge-ok", page)
+        self.assertIn("datafluss-test.txt", [c for c in FakeDav.deleted])  # written and removed again
+        self.assertNotIn("datafluss-test.txt", FakeDav.files)
 
 
 class FakeFtp:

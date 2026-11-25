@@ -857,3 +857,235 @@ msgstr ""
 
 msgid "Sie können eine überarbeitete Fassung jederzeit wieder hochladen."
 msgstr "You can upload a revised version at any time."
+
+msgid "Bitte kurz beschreiben, was Sie veröffentlichen möchten."
+msgstr "Please describe briefly what you want to publish."
+
+msgid "Neuer Antrag auf Websites"
+msgstr "New request for websites"
+
+msgid "Danke! Ihr Antrag wird geprüft; Sie bekommen eine E-Mail."
+msgstr "Thank you! Your request will be reviewed; you will get an email."
+
+msgid "Websites sind für Ihr Konto noch nicht freigeschaltet."
+msgstr "Websites are not unlocked for your account yet."
+
+msgid "Bitte einen Namen eingeben."
+msgstr "Please enter a name."
+
+#, python-format
+msgid "Mehr als %(n)s Websites gehen nicht."
+msgstr "No more than %(n)s websites are possible."
+
+msgid "Die Website ist gelöscht."
+msgstr "The website is deleted."
+
+msgid "Bitte die Adresse der Website und einen Grund angeben."
+msgstr "Please enter the website's address and a reason."
+
+msgid "Neue Meldung einer Website"
+msgstr "New report of a website"
+
+msgid "Bitte einen Grund für das Konto schreiben."
+msgstr "Please write a reason for the account."
+
+msgid "Ihre Websites sind freigeschaltet"
+msgstr "Your websites are unlocked"
+
+msgid "Ihr Antrag auf Websites"
+msgstr "Your request for websites"
+
+msgid "Websites"
+msgstr "Websites"
+
+msgid "Websites prüfen"
+msgstr "Review websites"
+
+msgid ""
+"Ihr Konto bei DataFluss Vorlagen darf jetzt Websites veröffentlichen. Legen "
+"Sie eine Website an, und tragen Sie in DataFluss unter Veröffentlichen → "
+"„DataFluss-Hosting“ Adresse und Token ein:"
+msgstr ""
+"Your account at DataFluss Templates may now publish websites. Create a "
+"website, then enter its address and token in DataFluss under Publish → "
+"“DataFluss hosting”:"
+
+msgid ""
+"Ihr Antrag auf Websites bei DataFluss Vorlagen wurde nicht freigeschaltet. "
+"Der Grund:"
+msgstr ""
+"Your request for websites at DataFluss Templates was not granted. The reason:"
+
+msgid "Zurück zu den Vorlagen"
+msgstr "Back to the templates"
+
+msgid "Anträge"
+msgstr "Requests"
+
+msgid "Nachricht an das Konto (bei Ablehnung nötig)"
+msgstr "Message to the account (needed when refusing)"
+
+msgid "Freischalten"
+msgstr "Unlock"
+
+msgid "Keine Anträge."
+msgstr "No requests."
+
+msgid "Grund (sieht das Konto)"
+msgstr "Reason (the account sees it)"
+
+msgid "Website abschalten"
+msgstr "Switch website off"
+
+msgid "Gesperrt nach einer Meldung."
+msgstr "Blocked after a report."
+
+msgid ""
+"Alle Websites dieses Kontos abschalten und das Konto für Websites sperren?"
+msgstr "Switch off all websites of this account and block it from websites?"
+
+msgid "Konto sperren"
+msgstr "Block account"
+
+msgid "abgeschaltet"
+msgstr "switched off"
+
+msgid "Wieder an"
+msgstr "Switch on again"
+
+msgid "Abschalten"
+msgstr "Switch off"
+
+msgid "Noch keine Website."
+msgstr "No website yet."
+
+msgid "Abgelehnt oder gesperrt"
+msgstr "Refused or blocked"
+
+msgid "Doch freischalten"
+msgstr "Unlock after all"
+
+msgid ""
+"In DataFluss unter Veröffentlichen das Ziel „DataFluss-Hosting“ wählen und "
+"eintragen:"
+msgstr ""
+"In DataFluss, under Publish, choose the target “DataFluss hosting” and enter:"
+
+msgid "Adresse"
+msgstr "Address"
+
+msgid "Token"
+msgstr "Token"
+
+msgid ""
+"Der Token wird nur dieses eine Mal gezeigt. Wer ihn hat, kann diese Website "
+"ändern."
+msgstr ""
+"The token is shown only this once. Whoever has it can change this website."
+
+msgid "Die Website erscheint unter"
+msgstr "The website appears at"
+
+msgid "Fertig"
+msgstr "Done"
+
+msgid "Websites aus DataFluss"
+msgstr "Websites from DataFluss"
+
+#, python-format
+msgid ""
+"In DataFluss lassen sich ausgewählte Tabellen als Website veröffentlichen, "
+"die jeder lesen kann: mit Galerie, Datensatzseiten und Suche. Hier können Sie"
+" solche Websites unter %(host)s/… veröffentlichen, kostenlos und ohne eigenen"
+" Webspace."
+msgstr ""
+"DataFluss can publish chosen tables as a website anyone can read: with "
+"gallery, record pages and search. Here you can publish such websites at "
+"%(host)s/…, free and without web space of your own."
+
+msgid ""
+"Websites gibt es für angemeldete Konten, nachdem ein Prüfer sie "
+"freigeschaltet hat."
+msgstr ""
+"Websites are available to signed-in accounts once a reviewer has unlocked "
+"them."
+
+msgid "Websites beantragen"
+msgstr "Ask for websites"
+
+msgid ""
+"Damit hier niemand Werbung oder Betrug veröffentlicht, schaltet ein Prüfer "
+"jedes Konto frei. Bitte kurz beschreiben, was Sie veröffentlichen möchten "
+"(zum Beispiel: die Filmliste unseres Vereins)."
+msgstr ""
+"So that nobody publishes advertising or fraud here, a reviewer unlocks each "
+"account. Please describe briefly what you want to publish (for example: our "
+"club's film list)."
+
+msgid "Beantragen"
+msgstr "Ask"
+
+msgid "Beantragt"
+msgstr "Requested"
+
+msgid ""
+"Ihr Antrag wird geprüft. Sie bekommen eine E-Mail, sobald er entschieden ist."
+msgstr ""
+"Your request is being reviewed. You will get an email once it is decided."
+
+msgid "Meine Websites"
+msgstr "My websites"
+
+#, python-format
+msgid "bis zu %(n)s Websites, je %(mb)s MB"
+msgstr "up to %(n)s websites, %(mb)s MB each"
+
+msgid "Einen neuen Token erstellen? Der alte gilt danach nicht mehr."
+msgstr "Create a new token? The old one stops working."
+
+msgid "Neuer Token"
+msgstr "New token"
+
+msgid "Diese Website mit allen Dateien löschen?"
+msgstr "Delete this website with all its files?"
+
+msgid "Löschen"
+msgstr "Delete"
+
+msgid "seit"
+msgstr "since"
+
+msgid "Neue Website"
+msgstr "New website"
+
+msgid "z. B. Filmclub Lindenhof"
+msgstr "e.g. Lindenhof film club"
+
+msgid "Anlegen"
+msgstr "Create"
+
+msgid ""
+"In DataFluss: Einstellungen → Veröffentlichen → Ziel „DataFluss-Hosting“, "
+"dort Adresse und Token eintragen."
+msgstr ""
+"In DataFluss: Settings → Publish → target “DataFluss hosting”; enter address "
+"and token there."
+
+msgid "Eine Website melden"
+msgstr "Report a website"
+
+msgid ""
+"Steht auf einer Website hier etwas, das nicht dorthin gehört? Wir sehen es "
+"uns an."
+msgstr ""
+"Is there something on a website here that does not belong there? We will look"
+" into it."
+
+msgid "beantragt"
+msgstr "requested"
+
+msgid "freigeschaltet"
+msgstr "unlocked"
+
+msgid "gesperrt"
+msgstr "blocked"

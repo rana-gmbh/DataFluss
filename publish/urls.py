@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import api, views
+from . import api, hosting_api, views
 
 urlpatterns = [
     path("einstellungen/veroeffentlichen/", views.publication_list, name="publication_list"),
@@ -18,6 +18,10 @@ urlpatterns = [
     # For a computer connected to this server, with its device token (core/middleware.py PUBLIC_NAMES).
     path("sync/v1/publish/list", api.remote_list, name="sync_publish_list"),
     path("sync/v1/publish/run", api.remote_run, name="sync_publish_run"),
+    # Sites other computers publish here with a token (publish/hosting.py; core/middleware.py PUBLIC_NAMES).
+    path("api/hosting/v1/site", hosting_api.site, name="hosting_site"),
+    path("api/hosting/v1/files/<path:path>", hosting_api.files, name="hosting_files"),
+    path("einstellungen/veroeffentlichen/gastseiten/", views.hosted_sites, name="hosted_sites"),
     # The sites this server hosts: public (core/middleware.py PUBLIC_NAMES).
     path("p/<slug:slug>/", views.site_file, name="site_file"),
     path("p/<slug:slug>/<path:path>", views.site_file, name="site_file_path"),

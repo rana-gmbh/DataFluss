@@ -13,8 +13,11 @@ from django.utils.translation import gettext_lazy as _
 
 class Publication(models.Model):
     ZIP, FOLDER, SERVER, WEBDAV, FTP = "zip", "folder", "server", "webdav", "ftp"
-    TARGETS = (ZIP, FOLDER, SERVER, WEBDAV, FTP)
-    TARGET_CHOICES = [(ZIP, _("ZIP-Datei")), (FOLDER, _("Ordner")), (SERVER, _("Dieser Server")), (WEBDAV, "WebDAV"), (FTP, "FTP / FTPS")]
+    SFTP, S3, NETLIFY, GITHUB, HOSTING = "sftp", "s3", "netlify", "github", "hosting"
+    TARGETS = (ZIP, FOLDER, SERVER, HOSTING, WEBDAV, FTP, SFTP, S3, NETLIFY, GITHUB)
+    TARGET_CHOICES = [(ZIP, _("ZIP-Datei")), (FOLDER, _("Ordner")), (SERVER, _("Dieser Server")), (HOSTING, _("DataFluss-Hosting")),
+                      (WEBDAV, "WebDAV"), (FTP, "FTP / FTPS"), (SFTP, "SFTP"), (S3, _("S3-kompatibel")), (NETLIFY, "Netlify"),
+                      (GITHUB, "GitHub Pages")]
     IDLE, RUNNING, DONE, FAILED = "idle", "running", "done", "failed"
     OFF, CHANGES, DAILY = "off", "changes", "daily"
     AUTO_CHOICES = [(OFF, _("Nur von Hand")), (CHANGES, _("Nach Änderungen")), (DAILY, _("Täglich"))]
@@ -26,6 +29,7 @@ class Publication(models.Model):
     language = models.CharField(max_length=10, default="de")
     role = models.CharField(max_length=40, default="gast")  # it never shows more than this role sees
     indexable = models.BooleanField(default=True)  # search engines may list it
+    password = models.CharField(max_length=128, blank=True, default="")  # hash; a site on this server asks for it (publish/guard.py)
     choice = models.JSONField(default=dict, blank=True)  # {table key: {"fields": [keys], "layout": "list"|"gallery", "files": bool}}
     target = models.CharField(max_length=10, default=ZIP, choices=TARGET_CHOICES)
     target_config = models.JSONField(default=dict, blank=True)  # url, path, user, tls … (never the password)
@@ -59,3 +63,26 @@ class Publication(models.Model):
 
     def fields_of(self, table_key):
         return set((self.tables().get(table_key) or {}).get("fields") or [])
+
+
+class HostedSite(models.Model):
+    """A site another computer publishes to this server with a token (publish/hosting.py), shown under
+    /p/<slug>/ like the server's own publications. Only the token's hash is kept."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=40, unique=True)
+    token_hash = models.CharField(max_length=64, unique=True)
+    quota_mb = models.PositiveIntegerField(default=500)
+    indexable = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def quota(self):
+        return self.quota_mb * 1024 * 1024

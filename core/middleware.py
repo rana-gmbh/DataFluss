@@ -27,7 +27,9 @@ PUBLIC_NAMES = {"login", "set_language", "js_catalog", "oidc_authentication_init
                 "sync_backup_start", "sync_backup_file",
                 # Read-only sites this server hosts (publish/views.py site_file), and its publications for a
                 # connected computer, with a device token (publish/api.py).
-                "site_file", "site_file_path", "sync_publish_list", "sync_publish_run"}
+                "site_file", "site_file_path", "sync_publish_list", "sync_publish_run",
+                # Sites other computers publish here, with a site token (publish/hosting.py).
+                "hosting_site", "hosting_files"}
 
 
 def _refuse(request, target):
@@ -132,8 +134,9 @@ class BodyLimitMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # The sync API reads a body only after its device token checked out, so it may send large pushes.
-        device = request.path.startswith("/sync/v1/") and request.headers.get("Authorization", "").startswith("Bearer ")
+        # The sync API and the hosting API (publish/hosting.py) read a body only after their token checked out,
+        # so they may send large pushes and files.
+        device = request.path.startswith(("/sync/v1/", "/api/hosting/v1/")) and request.headers.get("Authorization", "").startswith("Bearer ")
         limit = settings.MAX_BODY_BYTES if request.user.is_authenticated or device else settings.ANONYMOUS_BODY_BYTES
         try:
             size = int(request.META.get("CONTENT_LENGTH") or 0)

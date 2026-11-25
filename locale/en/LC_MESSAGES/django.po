@@ -6304,3 +6304,242 @@ msgstr "Must be changed"
 #, python-brace-format
 #~ msgid "z. B. {Preis} * {Menge}"
 #~ msgstr "e.g. {Price} * {Quantity}"
+
+#, python-format
+msgid ""
+"%(name)s: Zugang abgelehnt (%(code)s). Bitte Token oder Schlüssel prüfen."
+msgstr "%(name)s: access refused (%(code)s). Please check the token or key."
+
+#, python-format
+msgid "%(name)s antwortet mit %(code)s: %(detail)s"
+msgstr "%(name)s answers with %(code)s: %(detail)s"
+
+#, python-format
+msgid "%(name)s nicht erreichbar: %(error)s"
+msgstr "%(name)s cannot be reached: %(error)s"
+
+#, python-format
+msgid "%(name)s: Bitte eine Adresse mit https:// angeben."
+msgstr "%(name)s: please enter an address starting with https://."
+
+msgid "S3: Bitte Bucket, Zugriffsschlüssel und Geheimnis angeben."
+msgstr "S3: please enter the bucket, access key and secret."
+
+#, python-format
+msgid "S3: Den Bucket %(bucket)s gibt es nicht."
+msgstr "S3: the bucket %(bucket)s does not exist."
+
+msgid "Netlify: Bitte Site-ID und Token angeben."
+msgstr "Netlify: please enter the site ID and token."
+
+msgid "GitHub: Bitte das Repository als „Besitzer/Name“ angeben."
+msgstr "GitHub: please enter the repository as “owner/name”."
+
+msgid "GitHub: Bitte einen Token angeben."
+msgstr "GitHub: please enter a token."
+
+#, python-format
+msgid "GitHub: Der Token darf in %(repo)s nicht schreiben."
+msgstr "GitHub: the token may not write to %(repo)s."
+
+msgid "DataFluss-Hosting: Bitte den Token der Website angeben."
+msgstr "DataFluss hosting: please enter the website's token."
+
+msgid "Das Passwort stimmt nicht."
+msgstr "The password is wrong."
+
+msgid "DataFluss-Hosting"
+msgstr "DataFluss hosting"
+
+msgid "S3-kompatibel"
+msgstr "S3-compatible"
+
+msgid ""
+"SFTP: Der SSH-Schlüssel lässt sich nicht lesen (nur Schlüssel ohne "
+"Passphrase)."
+msgstr "SFTP: the SSH key cannot be read (only keys without a passphrase)."
+
+msgid "SFTP: Bitte Server und Benutzer angeben."
+msgstr "SFTP: please enter the server and user."
+
+#, python-format
+msgid ""
+"SFTP: Der Server meldet einen anderen Schlüssel als beim ersten Mal "
+"(%(key)s). Aus Sicherheit wird nichts übertragen. Wenn der Server neu "
+"eingerichtet wurde, das Ziel neu speichern und testen."
+msgstr ""
+"SFTP: the server shows a different key than the first time (%(key)s). For "
+"safety nothing is sent. If the server was set up anew, save the target again "
+"and test it."
+
+msgid "SFTP: Anmeldung abgelehnt."
+msgstr "SFTP: sign-in refused."
+
+#, python-format
+msgid "SFTP nicht erreichbar: %(error)s"
+msgstr "SFTP cannot be reached: %(error)s"
+
+#, python-format
+msgid "SFTP: %(path)s konnte nicht gespeichert werden (%(error)s)."
+msgstr "SFTP: could not save %(path)s (%(error)s)."
+
+#, python-format
+msgid "%(n)s Dateien werden übertragen …"
+msgstr "Sending %(n)s files …"
+
+msgid "DataFluss-Hosting (datafluss.de oder anderer Server)"
+msgstr "DataFluss hosting (datafluss.de or another server)"
+
+msgid "Bitte ein Passwort für die Website eingeben."
+msgstr "Please enter a password for the website."
+
+#, python-format
+msgid "Der Schlüssel des Servers ist jetzt vertraut: %(key)s"
+msgstr "The server's key is now trusted: %(key)s"
+
+msgid "Mit Passwort"
+msgstr "With password"
+
+msgid "Mit SSH-Schlüssel"
+msgstr "With SSH key"
+
+msgid "Vertrauter Schlüssel des Servers:"
+msgstr "Trusted key of the server:"
+
+msgid "Endpunkt"
+msgstr "Endpoint"
+
+msgid "Bucket"
+msgstr "Bucket"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Ordner im Bucket (optional)"
+msgstr "Folder in the bucket (optional)"
+
+msgid "Zugriffsschlüssel (Access Key ID)"
+msgstr "Access key ID"
+
+msgid ""
+"Dass der Bucket als Website erreichbar ist, stellen Sie beim Anbieter ein "
+"(Startseite index.html)."
+msgstr ""
+"Making the bucket reachable as a website is set up at the provider (start "
+"page index.html)."
+
+msgid "Site-ID (unter Site configuration → Site details)"
+msgstr "Site ID (under Site configuration → Site details)"
+
+msgid "Repository (Besitzer/Name)"
+msgstr "Repository (owner/name)"
+
+msgid "Branch"
+msgstr "Branch"
+
+msgid "Ordner (optional, z. B. docs)"
+msgstr "Folder (optional, e.g. docs)"
+
+msgid ""
+"Ein Token mit Schreibrecht auf „Contents“ dieses Repositorys. GitHub Pages "
+"stellen Sie im Repository auf diesen Branch und Ordner."
+msgstr ""
+"A token with write access to the “Contents” of this repository. In the "
+"repository, set GitHub Pages to this branch and folder."
+
+msgid "Adresse"
+msgstr "Address"
+
+msgid ""
+"Die Website legen Sie dort an: auf datafluss.de unter „Websites“, auf einem "
+"DataFluss-Server unter Veröffentlichen → Websites von anderen Geräten. Dort "
+"steht auch der Token."
+msgstr ""
+"Create the website there: on datafluss.de under “Websites”, on a DataFluss "
+"server under Publish → Websites from other devices. The token is shown there "
+"too."
+
+msgid "Geheimer Schlüssel (Secret Access Key)"
+msgstr "Secret access key"
+
+msgid "Token"
+msgstr "Token"
+
+msgid "Privater SSH-Schlüssel"
+msgstr "Private SSH key"
+
+msgid "Jeder, der Adresse und Passwort kennt, kann alles davon lesen."
+msgstr "Anyone who knows the address and password can read all of it."
+
+msgid ""
+"Dieser Server zeigt die Website unter seiner eigenen Adresse, ohne Anmeldung "
+"bei DataFluss."
+msgstr ""
+"This server shows the website at its own address, without signing in to "
+"DataFluss."
+
+msgid "Mit einem Passwort schützen"
+msgstr "Protect with a password"
+
+msgid "Neues Passwort für die Website"
+msgstr "New password for the website"
+
+msgid "Passwort für die Website"
+msgstr "Password for the website"
+
+msgid ""
+"Wer es kennt, sieht die Website 30 Tage lang ohne neue Eingabe. Ein neues "
+"Passwort meldet alle ab. Suchmaschinen bleiben draußen."
+msgstr ""
+"Whoever knows it sees the website for 30 days without entering it again. A "
+"new password signs everyone out. Search engines stay out."
+
+msgid "Für das andere Gerät"
+msgstr "For the other device"
+
+msgid ""
+"Dort unter Veröffentlichen das Ziel „DataFluss-Hosting“ wählen und eintragen:"
+msgstr "There, under Publish, choose the target “DataFluss hosting” and enter:"
+
+msgid "Nur jetzt sichtbar"
+msgstr "Shown only now"
+
+msgid ""
+"Der Token wird nur dieses eine Mal gezeigt. Wer ihn hat, kann diese Website "
+"ändern."
+msgstr ""
+"The token is shown only this once. Whoever has it can change this website."
+
+#, python-format
+msgid "Die Website erscheint unter /p/%(url)s/."
+msgstr "The website appears at /p/%(url)s/."
+
+msgid "Websites von anderen Geräten"
+msgstr "Websites from other devices"
+
+msgid ""
+"Ein anderer Computer mit DataFluss veröffentlicht hierher (Ziel „DataFluss-"
+"Hosting“). Er bekommt dafür einen Token; die Website erscheint unter /p/…. "
+"Sie läuft abgeschirmt vom Rest dieses Servers."
+msgstr ""
+"Another computer with DataFluss publishes here (target “DataFluss hosting”). "
+"It gets a token for this; the website appears under /p/…. It runs shielded "
+"from the rest of this server."
+
+msgid "Belegt"
+msgstr "Used"
+
+msgid "Einen neuen Token erstellen? Der alte gilt danach nicht mehr."
+msgstr "Create a new token? The old one stops working."
+
+msgid "Neuer Token"
+msgstr "New token"
+
+msgid "Diese Website mit allen Dateien löschen?"
+msgstr "Delete this website with all its files?"
+
+msgid "Neue Website für ein anderes Gerät"
+msgstr "New website for another device"
+
+msgid "Diese Website ist mit einem Passwort geschützt."
+msgstr "This website is protected with a password."

@@ -33,36 +33,27 @@
     {% if offer %}<button class="btn btn-primary">{% icon 'save' %}{% translate "Inhalt speichern" %}</button>{% endif %}
   </form>
 
-  <form method="post" class="surface p-5 space-y-3" aria-labelledby="pub-target" x-data="{ target: '{{ p.target }}' }">{% csrf_token %}<input type="hidden" name="section" value="target">
+  <form method="post" class="surface p-5 space-y-3" aria-labelledby="pub-target" x-data="{ target: '{{ p.target }}', auth: '{{ config.auth|default:'password' }}' }">{% csrf_token %}<input type="hidden" name="section" value="target">
     <h2 id="pub-target" class="font-semibold">{% translate "Ziel" %}</h2>
     <div class="flex flex-wrap gap-x-4 gap-y-2">{% for value, label in targets %}<label class="flex items-center gap-1.5 text-[13px]"><input type="radio" class="accent-[var(--accent)]" name="target" value="{{ value }}" x-model="target" {% if p.target == value %}checked{% endif %}>{{ label }}</label>{% endfor %}</div>
     <p class="muted text-[12.5px]" x-show="target === 'zip'" x-cloak>{% translate "Die ganze Website als ZIP-Datei zum Herunterladen, zum Beispiel für einen USB-Stick oder um sie selbst hochzuladen." %}</p>
-    <p class="muted text-[12.5px]" x-show="target === 'server'" x-cloak>{% translate "Dieser Server zeigt die Website unter seiner eigenen Adresse, öffentlich und ohne Anmeldung." %}</p>
+    <div x-show="target === 'server'" x-cloak class="space-y-2" x-data="{ protect: {% if p.password %}true{% else %}false{% endif %} }">
+      <p class="muted text-[12.5px]">{% translate "Dieser Server zeigt die Website unter seiner eigenen Adresse, ohne Anmeldung bei DataFluss." %}</p>
+      <label class="flex items-center gap-1.5 text-[13px]"><input type="checkbox" class="accent-[var(--accent)]" name="protect" value="1" x-model="protect">{% translate "Mit einem Passwort schützen" %}</label>
+      <div x-show="protect" x-cloak><label class="label" for="pub-site-password">{% if p.password %}{% translate "Neues Passwort für die Website" %}{% else %}{% translate "Passwort für die Website" %}{% endif %}</label>
+        <input id="pub-site-password" class="input" name="site_password" type="password" autocomplete="new-password" placeholder="{% if p.password %}{% translate 'Leer lassen, um das gespeicherte zu behalten' %}{% endif %}" :disabled="!protect">
+        <p class="muted text-[12px] mt-1">{% translate "Wer es kennt, sieht die Website 30 Tage lang ohne neue Eingabe. Ein neues Passwort meldet alle ab. Suchmaschinen bleiben draußen." %}</p></div>
+    </div>
     <div x-show="target === 'folder'" x-cloak class="space-y-2">
       <label class="label" for="pub-path">{% translate "Ordner" %}</label>
       <div class="flex gap-2"><input id="pub-path" class="input mono" name="path" value="{% if p.target == 'folder' %}{{ config.path }}{% endif %}" placeholder="/Users/…/Website" data-folder-input :disabled="target !== 'folder'">
         {% if on_computer %}<button type="button" class="btn" data-pick-folder>{% icon 'file' %}{% translate "Wählen …" %}</button>{% endif %}</div>
       <p class="muted text-[12px]">{% translate "Zum Beispiel ein Ordner, den ein anderes Programm hochlädt oder synchronisiert. DataFluss löscht dort nur Dateien, die es selbst angelegt hat." %}</p>
     </div>
-    <div x-show="target === 'webdav'" x-cloak class="grid sm:grid-cols-2 gap-3">
-      <div class="sm:col-span-2"><label class="label" for="pub-url">{% translate "WebDAV-Adresse des Ordners" %}</label><input id="pub-url" class="input mono" name="url" value="{% if p.target == 'webdav' %}{{ config.url }}{% endif %}" placeholder="https://cloud.example.org/remote.php/dav/files/name/website/"></div>
-      <div><label class="label" for="pub-user-dav">{% translate "Benutzer" %}</label><input id="pub-user-dav" class="input" name="user" value="{% if p.target == 'webdav' %}{{ config.user }}{% endif %}" autocomplete="off" :disabled="target !== 'webdav'"></div>
-    </div>
-    <div x-show="target === 'ftp'" x-cloak class="grid sm:grid-cols-2 gap-3">
-      <div><label class="label" for="pub-host">{% translate "Server" %}</label><input id="pub-host" class="input mono" name="host" value="{% if p.target == 'ftp' %}{{ config.host }}{% endif %}" placeholder="ftp.example.org"></div>
-      <div><label class="label" for="pub-port">{% translate "Port" %}</label><input id="pub-port" class="input" name="port" inputmode="numeric" value="{% if p.target == 'ftp' %}{{ config.port }}{% endif %}" placeholder="21"></div>
-      <div><label class="label" for="pub-user-ftp">{% translate "Benutzer" %}</label><input id="pub-user-ftp" class="input" name="user" value="{% if p.target == 'ftp' %}{{ config.user }}{% endif %}" autocomplete="off" :disabled="target !== 'ftp'"></div>
-      <div><label class="label" for="pub-folder">{% translate "Ordner auf dem Server" %}</label><input id="pub-folder" class="input mono" name="path" value="{% if p.target == 'ftp' %}{{ config.path }}{% endif %}" placeholder="/htdocs/sammlung" :disabled="target !== 'ftp'"></div>
-      <label class="sm:col-span-2 flex items-center gap-1.5 text-[13px]"><input type="checkbox" class="accent-[var(--accent)]" name="plain" value="1" {% if p.target == 'ftp' and config.tls is False %}checked{% endif %}>{% translate "Ohne Verschlüsselung (nur wenn der Server kein FTPS kann: Passwort und Daten gehen dann lesbar über das Netz)" %}</label>
-    </div>
-    <div x-show="target === 'webdav' || target === 'ftp'" x-cloak>
-      <label class="label" for="pub-password">{% if has_password %}{% translate "Neues Passwort" %}{% else %}{% translate "Passwort" %}{% endif %}</label>
-      <input id="pub-password" class="input" name="password" type="password" autocomplete="new-password" placeholder="{% if has_password %}{% translate 'Leer lassen, um das gespeicherte zu behalten' %}{% endif %}">
-      <p class="muted text-[12px] mt-1">{% translate "Wird verschlüsselt gespeichert und nie angezeigt." %}</p>
-    </div>
+    {% include "publish/_target_fields.html" %}
     <div class="flex flex-wrap gap-2">
       <button class="btn btn-primary">{% icon 'save' %}{% translate "Ziel speichern" %}</button>
-      {% if p.target == 'folder' or p.target == 'webdav' or p.target == 'ftp' %}<button type="button" class="btn" hx-post="{% url 'publication_test' p.pk %}" hx-target="#pub-test">{% icon 'check' %}{% translate "Gespeichertes Ziel testen" %}</button>{% endif %}
+      {% if p.target != 'zip' and p.target != 'server' %}<button type="button" class="btn" hx-post="{% url 'publication_test' p.pk %}" hx-target="#pub-test">{% icon 'check' %}{% translate "Gespeichertes Ziel testen" %}</button>{% endif %}
     </div>
     <div id="pub-test" aria-live="polite"></div>
   </form>

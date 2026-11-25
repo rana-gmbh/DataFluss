@@ -25,7 +25,8 @@
       <a href="{% url 'upload' %}">{% translate "Teilen" %}</a>
       {% if user.is_authenticated %}
         <a href="{% url 'my_templates' %}">{% translate "Meine Vorlagen" %}</a>
-        {% if user.is_staff %}<a href="{% url 'review_queue' %}">{% translate "Prüfen" %}{% if review_waiting %} <span class="count">{{ review_waiting }}</span>{% endif %}</a>{% endif %}
+        <a href="{% url 'websites' %}">{% translate "Websites" %}</a>
+        {% if user.is_staff %}<a href="{% url 'review_queue' %}">{% translate "Prüfen" %}{% if review_waiting or sites_waiting %} <span class="count">{{ review_waiting|add:sites_waiting }}</span>{% endif %}</a>{% endif %}
         <a href="{% url 'account' %}" title="{{ user.email }}">{{ user.shown_name }}</a>
         <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">{% translate "Abmelden" %}</button></form>
       {% else %}

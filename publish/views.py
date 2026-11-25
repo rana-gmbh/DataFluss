@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
-from django.views.decorators.http import require_GET, require_POST, require_safe
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 from archive import plan
 from core import audit, fieldrules
@@ -19,14 +19,12 @@ from core.models import Role, role_choices
 from core.permissions import require
 from tables import services
 
-from . import service, snapshot, targets
-from .models import Publication
+from . import guard, hosting, hosting_api, service, snapshot, targets
+from .cloud import TYPES
+from .models import HostedSite, Publication
 from .render import MANIFEST
 
 LAYOUTS = ("list", "gallery")
-TYPES = {"html": "text/html; charset=utf-8", "css": "text/css; charset=utf-8", "js": "text/javascript; charset=utf-8",
-         "svg": "image/svg+xml", "webp": "image/webp", "woff2": "font/woff2", "txt": "text/plain; charset=utf-8",
-         "json": "application/json"}
 SITE_CSP = ("default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; "
             "base-uri 'none'; form-action 'none'; frame-ancestors 'none'")
 
@@ -34,7 +32,9 @@ SITE_CSP = ("default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inl
 def _targets():
     """The targets this database offers: a computer hosts nothing, a server has no folder of its own to pick."""
     names = {Publication.ZIP: _("ZIP-Datei"), Publication.FOLDER: _("Ordner auf diesem Computer"),
-             Publication.SERVER: _("Auf diesem Server (/p/…)"), Publication.WEBDAV: _("WebDAV"), Publication.FTP: _("FTP / FTPS")}
+             Publication.SERVER: _("Auf diesem Server (/p/…)"), Publication.HOSTING: _("DataFluss-Hosting (datafluss.de oder anderer Server)"),
+             Publication.WEBDAV: _("WebDAV"), Publication.FTP: _("FTP / FTPS"), Publication.SFTP: "SFTP",
+             Publication.S3: _("S3-kompatibel"), Publication.NETLIFY: "Netlify", Publication.GITHUB: "GitHub Pages"}
     hidden = {Publication.SERVER} if plan.is_client() else {Publication.FOLDER}
     return [(key, names[key]) for key in Publication.TARGETS if key not in hidden]
 
@@ -57,9 +57,14 @@ def _languages():
     return allowed_languages()
 
 
+def _taken_slugs(exclude=None):
+    """Addresses under /p/ in use: the server's publications and the sites other computers publish here."""
+    return set(Publication.objects.exclude(pk=exclude).values_list("slug", flat=True)) | set(HostedSite.objects.exclude(pk=exclude).values_list("slug", flat=True))
+
+
 def _unique_slug(text, exclude=None):
     base = slugify(services._slug(text, 40).replace("_", "-")) or "seite"
-    taken = set(Publication.objects.exclude(pk=exclude).values_list("slug", flat=True))
+    taken = _taken_slugs(exclude)
     slug, n = base[:40], 1
     while slug in taken:
         n += 1
@@ -123,8 +128,9 @@ def publication_list(request):
         return redirect("publication_detail", pk=publication.pk)
     from . import remote
 
+    hosted = [] if plan.is_client() else [{"site": h, "used": hosting.usage(hosting_api.root(h))} for h in HostedSite.objects.all()]
     return render(request, "publish/list.html", {"publications": Publication.objects.all(), "active_nav": "settings_home",
-                                                 "connected": remote.available()})
+                                                 "connected": remote.available(), "on_server": not plan.is_client(), "hosted": hosted})
 
 
 @require("publish.manage")
@@ -158,7 +164,7 @@ def _save(request, publication):
         publication.name = (post.get("name") or publication.name).strip()[:100] or publication.name
         slug = slugify(post.get("slug") or "")[:40]
         if slug and slug != publication.slug:
-            if Publication.objects.exclude(pk=publication.pk).filter(slug=slug).exists():
+            if slug in _taken_slugs(publication.pk):
                 raise ValidationError(_("Diese Adresse ist schon vergeben."))
             publication.slug = slug
         if post.get("language") in dict(_languages()):
@@ -200,7 +206,33 @@ def _save(request, publication):
             config = {"host": (post.get("host") or "").strip()[:200], "port": int(port) if port else 21,
                       "user": (post.get("user") or "").strip()[:200], "path": (post.get("path") or "").strip()[:500],
                       "tls": not post.get("plain")}
+        elif kind == Publication.SFTP:
+            port = (post.get("port") or "").strip()
+            if port and not port.isdigit():
+                raise ValidationError(_("Der Port ist eine Zahl."))
+            old = publication.target_config or {}
+            config = {"host": (post.get("host") or "").strip()[:200], "port": int(port) if port else 22,
+                      "user": (post.get("user") or "").strip()[:200], "path": (post.get("path") or "").strip()[:500],
+                      "auth": "key" if post.get("auth") == "key" else "password"}
+            if publication.target == Publication.SFTP and old.get("host") == config["host"] and old.get("port") == config["port"]:
+                config["host_key"] = old.get("host_key", "")  # the server's key stays trusted while it is the same server
+        elif kind == Publication.S3:
+            config = {name: (post.get(name) or "").strip()[:300] for name in ("endpoint", "region", "bucket", "prefix", "key_id")}
+        elif kind == Publication.NETLIFY:
+            config = {"site_id": (post.get("site_id") or "").strip()[:100]}
+        elif kind == Publication.GITHUB:
+            config = {"repo": (post.get("repo") or "").strip()[:200], "branch": (post.get("branch") or "gh-pages").strip()[:100],
+                      "folder": (post.get("folder") or "").strip()[:200]}
+        elif kind == Publication.HOSTING:
+            config = {"url": (post.get("url") or "").strip()[:300]}
         publication.target_config = config
+        if kind == Publication.SERVER:
+            if post.get("protect") and not post.get("site_password") and not publication.password:
+                raise ValidationError(_("Bitte ein Passwort für die Website eingeben."))
+            if post.get("protect") and post.get("site_password"):
+                publication.password = guard.hashed(post["site_password"])
+            elif not post.get("protect"):
+                publication.password = ""
         if post.get("password"):
             targets.set_password(publication, post["password"])
         elif post.get("forget"):
@@ -218,10 +250,15 @@ def _save(request, publication):
 def publication_test(request, pk):
     publication = _pick(request, pk)
     try:
-        targets.target_for(publication).test()
+        target = targets.target_for(publication)
+        target.test()
     except ValidationError as exc:
         return render(request, "publish/_test.html", {"ok": False, "message": " ".join(exc.messages)})
-    return render(request, "publish/_test.html", {"ok": True, "message": _("Verbindung klappt, Schreiben geht.")})
+    message = _("Verbindung klappt, Schreiben geht.")
+    if getattr(target, "seen_key", "") and not (publication.target_config or {}).get("host_key"):
+        targets.remember_host_key(publication, target)
+        message += " " + _("Der Schlüssel des Servers ist jetzt vertraut: %(key)s") % {"key": target.seen_key}
+    return render(request, "publish/_test.html", {"ok": True, "message": message})
 
 
 @require("publish.manage")
@@ -258,6 +295,42 @@ def publication_confirm(request, pk):
         "role_name": dict(_roles()).get(publication.role, publication.role), "seen": service.state_hash(service.confirmed_state(publication)),
         "records": sum(t.records.count() for t, _fields in listed), "again": known and bool(new),
     })
+
+
+@require("publish.manage")
+def hosted_sites(request):
+    """On a server: sites other computers publish here with a token (publish/hosting.py)."""
+    if plan.is_client():
+        raise Http404
+    token, site = "", None
+    if request.method == "POST":
+        action = request.POST.get("action")
+        if action == "create":
+            name = (request.POST.get("name") or "").strip()[:100]
+            if not name:
+                messages.error(request, _("Bitte einen Namen eingeben."))
+                return redirect("publication_list")
+            token = hosting.new_token()
+            site = HostedSite.objects.create(name=name, slug=_unique_slug(name), token_hash=hosting.token_hash(token))
+            audit.log("publish", f"Website für andere Geräte angelegt: {name}", request=request, target=site.pk)
+        else:
+            site = get_object_or_404(HostedSite, pk=request.POST.get("site"))
+            if action == "token":
+                token = hosting.new_token()
+                site.token_hash = hosting.token_hash(token)
+                site.save()
+                audit.log("publish", f"Neuer Token für die Website {site.name}", request=request, target=site.pk)
+            elif action == "delete":
+                hosting.remove_all(hosting_api.root(site))
+                audit.log("publish", f"Website gelöscht: {site.name}", request=request, target=site.pk)
+                site.delete()
+                messages.success(request, _("Gelöscht."))
+                return redirect("publication_list")
+    if not token:
+        return redirect("publication_list")
+    # The token is shown this once; only its hash is kept.
+    return render(request, "publish/hosted_token.html", {"site": site, "token": token, "server": request.build_absolute_uri("/").rstrip("/"),
+                                                        "active_nav": "settings_home"})
 
 
 def _remote_page(request, problem=""):
@@ -352,16 +425,28 @@ def publication_preview(request, pk, path=""):
 
 # ---------------------------------------------------------------- the sites of this server
 
-@require_safe
+@require_http_methods(["GET", "HEAD", "POST"])
 def site_file(request, slug, path=""):
-    """A file of a site this server hosts: public, read-only, for anyone (core/middleware.py PUBLIC_NAMES)."""
-    publication = Publication.objects.filter(slug=slug, target=Publication.SERVER).exclude(published_at=None).first()
-    if publication is None or plan.is_client():
+    """A file of a site this server hosts: read-only, for anyone, or for whoever knows its password
+    (core/middleware.py PUBLIC_NAMES, publish/guard.py)."""
+    if plan.is_client():
         raise Http404
-    return _serve(targets.server_folder(publication), path, indexable=publication.indexable, private=False)
+    publication = Publication.objects.filter(slug=slug, target=Publication.SERVER).exclude(published_at=None).first()
+    if publication is None:
+        hosted = HostedSite.objects.filter(slug=slug).first()  # a site another computer publishes here
+        if hosted is None or request.method == "POST":
+            raise Http404
+        return hosting.serve(hosting_api.root(hosted), path, indexable=hosted.indexable)
+    if not guard.allowed(request, slug, publication.password):
+        return guard.page(request, slug, publication.password, publication.name)
+    if request.method == "POST":
+        return redirect(request.path)
+    protected = bool(publication.password)
+    return _serve(targets.server_folder(publication), path, indexable=publication.indexable and not protected, private=False,
+                  protected=protected)
 
 
-def _serve(folder, path, indexable, private):
+def _serve(folder, path, indexable, private, protected=False):
     if path == "" or path.endswith("/"):
         path += "index.html"
     if path == MANIFEST:
@@ -384,6 +469,8 @@ def _serve(folder, path, indexable, private):
         response["X-Robots-Tag"] = "noindex, nofollow"
     if private:
         response["Cache-Control"] = "private, no-store"
+    elif protected:
+        response["Cache-Control"] = "private, no-cache"  # never in a shared cache
     elif path.startswith("_media/"):
         response["Cache-Control"] = "public, max-age=31536000, immutable"  # named after their content
     else:

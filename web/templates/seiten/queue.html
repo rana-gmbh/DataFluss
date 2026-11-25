@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Websites prüfen" %}{% endblock %}
+{% block content %}
+<h1 class="title">{% translate "Websites prüfen" %}</h1>
+<p><a href="{% url 'review_queue' %}">{% translate "Zurück zu den Vorlagen" %}</a></p>
+<h2>{% translate "Anträge" %} <span class="muted">({{ requests|length }})</span></h2>
+{% for a in requests %}<div class="panel"><p><b>{{ a.user.shown_name }}</b> <span class="muted small">{{ a.user.email }} · {{ a.requested|date:"j. n. Y H:i" }}</span></p><p>{{ a.reason }}</p>
+  <form method="post" action="{% url 'sites_decide' a.pk %}" class="row">{% csrf_token %}<input class="input" name="note" placeholder="{% translate 'Nachricht an das Konto (bei Ablehnung nötig)' %}">
+    <button class="btn btn-primary btn-sm" name="action" value="grant">{% translate "Freischalten" %}</button><button class="btn btn-sm" name="action" value="refuse">{% translate "Ablehnen" %}</button></form></div>
+{% empty %}<p class="muted">{% translate "Keine Anträge." %}</p>{% endfor %}
+
+<h2>{% translate "Meldungen" %} <span class="muted">({{ reports|length }})</span></h2>
+{% for m in reports %}<div class="panel"><p><b>{{ m.site.name }}</b> <span class="muted small">/{{ m.site.slug }}/ · {{ m.site.owner.email }}</span></p><p class="muted">{{ m.reason }} – {{ m.reporter.email|default:"?" }}, {{ m.created|date:"j. n. Y" }}</p>
+  <form method="post" action="{% url 'sites_switch' m.site.pk %}" class="row">{% csrf_token %}<input class="input" name="note" placeholder="{% translate 'Grund (sieht das Konto)' %}">
+    <button class="btn btn-sm" name="action" value="off">{% translate "Website abschalten" %}</button><button class="btn btn-sm btn-ghost" name="action" value="done">{% translate "Erledigt, nichts zu tun" %}</button></form>
+  <form method="post" action="{% url 'sites_decide' m.site.owner.site_access.pk %}" class="row">{% csrf_token %}<input type="hidden" name="note" value="{% translate 'Gesperrt nach einer Meldung.' %}">
+    <button class="btn btn-sm btn-ghost" name="action" value="block" data-confirm="{% translate 'Alle Websites dieses Kontos abschalten und das Konto für Websites sperren?' %}">{% translate "Konto sperren" %}</button></form></div>
+{% empty %}<p class="muted">{% translate "Keine Meldungen." %}</p>{% endfor %}
+
+<h2>{% translate "Websites" %}</h2>
+<table class="fields"><tbody>{% for r in sites %}<tr><td><a href="{{ r.url }}" rel="noopener">{{ r.site.name }}</a>{% if r.site.disabled %} <span class="badge badge-warn">{% translate "abgeschaltet" %}</span>{% endif %}</td><td class="muted">{{ r.site.owner.email }}</td><td class="muted">{{ r.used|filesizeformat }}</td>
+  <td><form method="post" action="{% url 'sites_switch' r.site.pk %}">{% csrf_token %}{% if r.site.disabled %}<button class="btn btn-sm" name="action" value="on">{% translate "Wieder an" %}</button>{% else %}<button class="btn btn-sm btn-ghost" name="action" value="off">{% translate "Abschalten" %}</button>{% endif %}</form></td></tr>{% empty %}<tr><td class="muted">{% translate "Noch keine Website." %}</td></tr>{% endfor %}</tbody></table>
+{% if blocked %}<h2>{% translate "Abgelehnt oder gesperrt" %}</h2><table class="fields"><tbody>{% for a in blocked %}<tr><td>{{ a.user.email }}</td><td>{{ a.get_status_display }}</td><td class="muted">{{ a.note }}</td>
+  <td><form method="post" action="{% url 'sites_decide' a.pk %}">{% csrf_token %}<button class="btn btn-sm" name="action" value="grant">{% translate "Doch freischalten" %}</button></form></td></tr>{% endfor %}</tbody></table>{% endif %}
+{% endblock %}

@@ -86,9 +86,14 @@ show. If it finds anything else, the publish stops and nothing is sent.
 |---|---|---|
 | ZIP-Datei | Download | The whole website, for a USB stick or to upload yourself. |
 | Ordner | A folder on this computer (app only) | For example a folder another program syncs. |
-| Dieser Server | `https://<server>/p/<short name>/` (server only) | Public, without login. **Vom Server nehmen** removes it. |
+| Dieser Server | `https://<server>/p/<short name>/` (server only) | Without a DataFluss login; optionally with a password (see below). **Vom Server nehmen** removes it. |
+| DataFluss-Hosting | `seiten.datafluss.de/<name>/`, or `/p/<name>/` on another DataFluss server | Address and token of a site made there (see *Hosting*). |
 | WebDAV | A folder on a web space or a cloud (Nextcloud …) | Only `https://`. |
 | FTP / FTPS | A folder on a web space | Encrypted (FTPS) unless switched off on purpose. |
+| SFTP | A folder on a server reached by SSH | Password or private SSH key (without passphrase). The server's key is trusted on first use and then held to. |
+| S3-kompatibel | A bucket of AWS S3, Hetzner Object Storage, Cloudflare R2, MinIO … | Endpoint, region, bucket, optional folder, access key and secret. Serving the bucket as a website is set up at the provider. |
+| Netlify | A Netlify site | Site ID and a personal access token. Each publish is a deploy; Netlify asks only for files it does not have. |
+| GitHub Pages | A branch (default `gh-pages`) and optional folder of a repository | A token with write access to the repository's contents. One commit per publish, with `.nojekyll`. |
 
 Passwords of a target are stored encrypted with the database's key and are never shown again. **Gespeichertes
 Ziel testen** checks that the target can be reached and written.
@@ -98,8 +103,34 @@ Each publish compares the new website with what it put at the target last time (
 longer part of the website. Files at the target that DataFluss did not put there are never touched.
 Pictures are named after their content, so an unchanged picture is never sent again.
 
-Deleting a publication takes the website off this server. On a folder, WebDAV or FTP it stays where it is
-until you delete it there.
+Deleting a publication takes the website off this server. Anywhere else it stays where it is until you delete
+it there.
+
+**SFTP host key.** The first connection (best: **Gespeichertes Ziel testen**) records the fingerprint of the
+server's key and shows it. From then on a different key stops every connection, as that is what someone in
+between would look like. If the server was set up anew, save the target again (same server and port keep the key;
+another server or port starts afresh) and test it.
+
+### Password for a site on this server
+
+Under **Ziel → Dieser Server**, **Mit einem Passwort schützen** asks visitors for a password before anything of the
+website (pages, pictures, files) is sent. Whoever enters it gets a cookie for 30 days that only this website's
+address receives. A new password signs everyone out. After ten wrong tries an address waits a quarter of an hour.
+A protected website is never listed by search engines.
+
+### Hosting
+
+A DataFluss server can host websites that other computers publish to it: **Veröffentlichen → Websites von anderen
+Geräten → Anlegen** gives an address under `/p/…` and a token, shown once. On the other computer the target
+**DataFluss-Hosting** takes the server's address and that token. The same works with `https://seiten.datafluss.de`
+for accounts of datafluss.de that a reviewer unlocked (docs/website.md, *Websites*).
+
+What arrives this way is not made by this server, so it is served apart from it: every page runs in a sandbox
+(Content-Security-Policy `sandbox`), its scripts cannot use the server's sign-ins, files that are not part of a
+website download instead of opening, and each site has a quota (500 MB on a DataFluss server).
+
+The protocol (`publish/hosting.py`, used by both): `Authorization: Bearer <token>`; `GET /api/hosting/v1/site`
+(name, address, quota, used); `GET|PUT|DELETE /api/hosting/v1/files/<path>`.
 
 ## The website
 
@@ -131,5 +162,7 @@ until you delete it there.
   caps a publish to those fields and shrinks them when the role sees less.
 - `publish/api.py` (`sync/v1/publish/list|run`, device token) and `publish/remote.py` serve a connected
   computer. Both names are in `core/middleware.py PUBLIC_NAMES`.
-- Later: SFTP, Netlify, S3, GitHub Pages, a password for `/p/…`, and publishing to datafluss.de (a target
-  with a token and the same manifest).
+- `publish/cloud.py` (S3 with its own SigV4 signature, Netlify, GitHub, hosting), `publish/sftp.py` (paramiko),
+  `publish/guard.py` (the password), `publish/hosting.py` + `publish/hosting_api.py` (hosting). Targets that take a
+  whole state at once have `deploy(site, changed, gone, manifest)`; `targets.send` calls it instead of its loop.
+- The template site's part of hosting is `web/seiten/` (docs/website.md).

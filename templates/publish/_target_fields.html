@@ -1,0 +1,44 @@
+{% load i18n %}{# The fields of the targets that need an address and a secret (publish/views.py _save, section "target"). Inputs of a target that is not chosen are disabled, so names may repeat. #}
+<div x-show="target === 'webdav'" x-cloak class="grid sm:grid-cols-2 gap-3">
+  <div class="sm:col-span-2"><label class="label" for="pub-url">{% translate "WebDAV-Adresse des Ordners" %}</label><input id="pub-url" class="input mono" name="url" value="{% if p.target == 'webdav' %}{{ config.url }}{% endif %}" placeholder="https://cloud.example.org/remote.php/dav/files/name/website/" :disabled="target !== 'webdav'"></div>
+  <div><label class="label" for="pub-user-dav">{% translate "Benutzer" %}</label><input id="pub-user-dav" class="input" name="user" value="{% if p.target == 'webdav' %}{{ config.user }}{% endif %}" autocomplete="off" :disabled="target !== 'webdav'"></div>
+</div>
+<div x-show="target === 'ftp' || target === 'sftp'" x-cloak class="grid sm:grid-cols-2 gap-3">
+  <div><label class="label" for="pub-host">{% translate "Server" %}</label><input id="pub-host" class="input mono" name="host" value="{% if p.target == 'ftp' or p.target == 'sftp' %}{{ config.host }}{% endif %}" placeholder="ftp.example.org" :disabled="target !== 'ftp' && target !== 'sftp'"></div>
+  <div><label class="label" for="pub-port">{% translate "Port" %}</label><input id="pub-port" class="input" name="port" inputmode="numeric" value="{% if p.target == 'ftp' or p.target == 'sftp' %}{{ config.port }}{% endif %}" :placeholder="target === 'sftp' ? '22' : '21'" :disabled="target !== 'ftp' && target !== 'sftp'"></div>
+  <div><label class="label" for="pub-user-ftp">{% translate "Benutzer" %}</label><input id="pub-user-ftp" class="input" name="user" value="{% if p.target == 'ftp' or p.target == 'sftp' %}{{ config.user }}{% endif %}" autocomplete="off" :disabled="target !== 'ftp' && target !== 'sftp'"></div>
+  <div><label class="label" for="pub-folder">{% translate "Ordner auf dem Server" %}</label><input id="pub-folder" class="input mono" name="path" value="{% if p.target == 'ftp' or p.target == 'sftp' %}{{ config.path }}{% endif %}" placeholder="/htdocs/sammlung" :disabled="target !== 'ftp' && target !== 'sftp'"></div>
+  <label class="sm:col-span-2 flex items-center gap-1.5 text-[13px]" x-show="target === 'ftp'"><input type="checkbox" class="accent-[var(--accent)]" name="plain" value="1" {% if p.target == 'ftp' and config.tls is False %}checked{% endif %} :disabled="target !== 'ftp'">{% translate "Ohne Verschlüsselung (nur wenn der Server kein FTPS kann: Passwort und Daten gehen dann lesbar über das Netz)" %}</label>
+  <div class="sm:col-span-2 flex flex-wrap gap-x-4 gap-y-1 text-[13px]" x-show="target === 'sftp'">
+    <label class="flex items-center gap-1.5"><input type="radio" class="accent-[var(--accent)]" name="auth" value="password" x-model="auth" :disabled="target !== 'sftp'">{% translate "Mit Passwort" %}</label>
+    <label class="flex items-center gap-1.5"><input type="radio" class="accent-[var(--accent)]" name="auth" value="key" x-model="auth" :disabled="target !== 'sftp'">{% translate "Mit SSH-Schlüssel" %}</label>
+  </div>
+  {% if p.target == 'sftp' and config.host_key %}<p class="sm:col-span-2 muted text-[12px]" x-show="target === 'sftp'">{% translate "Vertrauter Schlüssel des Servers:" %} <span class="mono">{{ config.host_key }}</span></p>{% endif %}
+</div>
+<div x-show="target === 's3'" x-cloak class="grid sm:grid-cols-2 gap-3">
+  <div class="sm:col-span-2"><label class="label" for="pub-endpoint">{% translate "Endpunkt" %}</label><input id="pub-endpoint" class="input mono" name="endpoint" value="{% if p.target == 's3' %}{{ config.endpoint }}{% endif %}" placeholder="https://s3.eu-central-1.amazonaws.com" :disabled="target !== 's3'"></div>
+  <div><label class="label" for="pub-bucket">{% translate "Bucket" %}</label><input id="pub-bucket" class="input mono" name="bucket" value="{% if p.target == 's3' %}{{ config.bucket }}{% endif %}" :disabled="target !== 's3'"></div>
+  <div><label class="label" for="pub-region">{% translate "Region" %}</label><input id="pub-region" class="input mono" name="region" value="{% if p.target == 's3' %}{{ config.region }}{% endif %}" placeholder="eu-central-1" :disabled="target !== 's3'"></div>
+  <div><label class="label" for="pub-prefix">{% translate "Ordner im Bucket (optional)" %}</label><input id="pub-prefix" class="input mono" name="prefix" value="{% if p.target == 's3' %}{{ config.prefix }}{% endif %}" :disabled="target !== 's3'"></div>
+  <div><label class="label" for="pub-key-id">{% translate "Zugriffsschlüssel (Access Key ID)" %}</label><input id="pub-key-id" class="input mono" name="key_id" value="{% if p.target == 's3' %}{{ config.key_id }}{% endif %}" autocomplete="off" :disabled="target !== 's3'"></div>
+  <p class="sm:col-span-2 muted text-[12px]">{% translate "Dass der Bucket als Website erreichbar ist, stellen Sie beim Anbieter ein (Startseite index.html)." %}</p>
+</div>
+<div x-show="target === 'netlify'" x-cloak>
+  <label class="label" for="pub-site-id">{% translate "Site-ID (unter Site configuration → Site details)" %}</label><input id="pub-site-id" class="input mono" name="site_id" value="{% if p.target == 'netlify' %}{{ config.site_id }}{% endif %}" :disabled="target !== 'netlify'">
+</div>
+<div x-show="target === 'github'" x-cloak class="grid sm:grid-cols-2 gap-3">
+  <div class="sm:col-span-2"><label class="label" for="pub-repo">{% translate "Repository (Besitzer/Name)" %}</label><input id="pub-repo" class="input mono" name="repo" value="{% if p.target == 'github' %}{{ config.repo }}{% endif %}" placeholder="filmclub/website" :disabled="target !== 'github'"></div>
+  <div><label class="label" for="pub-branch">{% translate "Branch" %}</label><input id="pub-branch" class="input mono" name="branch" value="{% if p.target == 'github' %}{{ config.branch }}{% else %}gh-pages{% endif %}" :disabled="target !== 'github'"></div>
+  <div><label class="label" for="pub-gh-folder">{% translate "Ordner (optional, z. B. docs)" %}</label><input id="pub-gh-folder" class="input mono" name="folder" value="{% if p.target == 'github' %}{{ config.folder }}{% endif %}" :disabled="target !== 'github'"></div>
+  <p class="sm:col-span-2 muted text-[12px]">{% translate "Ein Token mit Schreibrecht auf „Contents“ dieses Repositorys. GitHub Pages stellen Sie im Repository auf diesen Branch und Ordner." %}</p>
+</div>
+<div x-show="target === 'hosting'" x-cloak>
+  <label class="label" for="pub-host-url">{% translate "Adresse" %}</label><input id="pub-host-url" class="input mono" name="url" value="{% if p.target == 'hosting' %}{{ config.url }}{% endif %}" placeholder="https://seiten.datafluss.de" :disabled="target !== 'hosting'">
+  <p class="muted text-[12px] mt-1">{% translate "Die Website legen Sie dort an: auf datafluss.de unter „Websites“, auf einem DataFluss-Server unter Veröffentlichen → Websites von anderen Geräten. Dort steht auch der Token." %}</p>
+</div>
+<div x-show="['webdav', 'ftp', 'sftp', 's3', 'netlify', 'github', 'hosting'].includes(target)" x-cloak>
+  <label class="label" for="pub-password" x-text="{ s3: '{{ _('Geheimer Schlüssel (Secret Access Key)')|escapejs }}', netlify: '{{ _('Token')|escapejs }}', github: '{{ _('Token')|escapejs }}', hosting: '{{ _('Token')|escapejs }}' }[target] || (target === 'sftp' && auth === 'key' ? '{{ _('Privater SSH-Schlüssel')|escapejs }}' : '{{ _('Passwort')|escapejs }}')">{% translate "Passwort" %}</label>
+  <input id="pub-password" class="input" name="password" type="password" autocomplete="new-password" placeholder="{% if has_password %}{% translate 'Leer lassen, um das gespeicherte zu behalten' %}{% endif %}" x-show="!(target === 'sftp' && auth === 'key')" :disabled="target === 'sftp' && auth === 'key'">
+  <textarea class="input mono text-[12px]" name="password" rows="4" autocomplete="off" spellcheck="false" placeholder="{% if has_password %}{% translate 'Leer lassen, um den gespeicherten zu behalten' %}{% else %}-----BEGIN OPENSSH PRIVATE KEY-----{% endif %}" x-show="target === 'sftp' && auth === 'key'" x-cloak :disabled="!(target === 'sftp' && auth === 'key')"></textarea>
+  <p class="muted text-[12px] mt-1">{% translate "Wird verschlüsselt gespeichert und nie angezeigt." %}</p>
+</div>

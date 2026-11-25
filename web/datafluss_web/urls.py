@@ -5,4 +5,5 @@ urlpatterns = [
     path("sprache/", set_language, name="set_language"),
     path("", include("konten.urls")),
     path("", include("katalog.urls")),
+    path("", include("seiten.urls")),
 ]

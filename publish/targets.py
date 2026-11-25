@@ -80,8 +80,8 @@ class Target:
         """Raise ValidationError when the target cannot be reached or written."""
         self.start()
         try:
-            self.put(".datafluss-test", b"ok")
-            self.delete(".datafluss-test")
+            self.put("datafluss-test.txt", b"ok")
+            self.delete("datafluss-test.txt")
         finally:
             self.close()
 
@@ -319,6 +319,22 @@ def target_for(publication):
     if kind == Publication.FTP:
         return FtpTarget(config.get("host"), config.get("port"), config.get("user"), password(publication), config.get("path"),
                          tls=config.get("tls", True) is not False)
+    if kind in (Publication.S3, Publication.NETLIFY, Publication.GITHUB, Publication.HOSTING):
+        from . import cloud
+
+        if kind == Publication.S3:
+            return cloud.S3Target(config.get("endpoint"), config.get("region"), config.get("bucket"), config.get("prefix"),
+                                  config.get("key_id"), password(publication))
+        if kind == Publication.NETLIFY:
+            return cloud.NetlifyTarget(config.get("site_id"), password(publication))
+        if kind == Publication.GITHUB:
+            return cloud.GitHubTarget(config.get("repo"), config.get("branch"), config.get("folder"), password(publication))
+        return cloud.HostingTarget(config.get("url"), password(publication))
+    if kind == Publication.SFTP:
+        from . import sftp
+
+        return sftp.SftpTarget(config.get("host"), config.get("port"), config.get("user"), password(publication), config.get("path"),
+                               config.get("host_key", ""), config.get("auth", "password"))
     raise ValidationError(_("Dieses Ziel lädt nichts hoch."))
 
 
@@ -332,6 +348,15 @@ def _order(path):
     if path.endswith(".html"):
         return (2, path)
     return (1, path)
+
+
+def remember_host_key(publication, target):
+    """Trust on first use: the SFTP server's key seen on the first connection is kept (publish/sftp.py)."""
+    seen = getattr(target, "seen_key", "")
+    config = publication.target_config or {}
+    if seen and not config.get("host_key"):
+        publication.target_config = {**config, "host_key": seen}
+        Publication.objects.filter(pk=publication.pk).update(target_config=publication.target_config)
 
 
 def fingerprint(publication):
@@ -370,12 +395,16 @@ def send(publication, site, target, progress=None, old=None):
         old = previous(publication, target) if old is None else old
         new = site.files
         changed = sorted((p for p in new if old.get(p) != new[p]), key=_order)
+        gone = sorted(p for p in old if p not in new and p != MANIFEST and SAFE_PATH.match(p))
+        if hasattr(target, "deploy"):  # a service that takes one whole state (publish/cloud.py)
+            say(_("%(n)s Dateien werden übertragen …") % {"n": len(changed)})
+            target.deploy(site, changed, gone, manifest_bytes(site))
+            return len(changed), len(gone)
         for n, path in enumerate(changed, 1):
             if n % 20 == 0:
                 say(_("%(n)s von %(total)s Dateien übertragen") % {"n": n, "total": len(changed)})
             target.put(path, site.read(path))
         target.put(MANIFEST, manifest_bytes(site))
-        gone = sorted(p for p in old if p not in new and p != MANIFEST)
         for path in gone:
             try:
                 target.delete(safe(path))

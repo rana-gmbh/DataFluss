@@ -1,0 +1,5 @@
+{% load i18n %}{% translate "Hallo," %}
+
+{% translate "Ihr Antrag auf Websites bei DataFluss Vorlagen wurde nicht freigeschaltet. Der Grund:" %}
+
+{{ access.note }}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{{ site.name }}{% endblock %}
+{% block content %}
+<h1 class="title">{{ site.name }}</h1>
+<section class="panel form">
+  <p>{% translate "In DataFluss unter Veröffentlichen das Ziel „DataFluss-Hosting“ wählen und eintragen:" %}</p>
+  <label class="strong">{% translate "Adresse" %}</label><input class="input" value="{{ sites_url }}" readonly>
+  <label class="strong">{% translate "Token" %}</label><input class="input" value="{{ token }}" readonly data-token>
+  <p class="msg msg-error">{% translate "Der Token wird nur dieses eine Mal gezeigt. Wer ihn hat, kann diese Website ändern." %}</p>
+  <p>{% translate "Die Website erscheint unter" %} <a href="{{ url }}" rel="noopener">{{ url }}</a></p>
+  <a class="btn btn-primary" href="{% url 'websites' %}">{% translate "Fertig" %}</a>
+</section>
+{% endblock %}

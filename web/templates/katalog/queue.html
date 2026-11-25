@@ -2,6 +2,7 @@
 {% block title %}{% translate "Prüfen" %}{% endblock %}
 {% block content %}
 <h1 class="title">{% translate "Prüfen" %}</h1>
+<p><a href="{% url 'sites_queue' %}">{% translate "Websites prüfen" %}{% if sites_waiting %} ({{ sites_waiting }}){% endif %}</a></p>
 <h2>{% translate "Eingereichte Vorlagen" %} <span class="muted">({{ versions|length }})</span></h2>
 {% for v in versions %}<a class="panel queue-row" href="{% url 'review_version' v.pk %}"><b>{{ v.title }}</b> <span class="muted">{{ v.template.key }} · {% blocktranslate with n=v.number %}Version {{ n }}{% endblocktranslate %} · {{ v.template.author }} · {{ v.created|date:"j. n. Y H:i" }}</span>{% if v.notes %}<span class="badge badge-warn">{% blocktranslate count n=v.notes|length %}{{ n }} Hinweis{% plural %}{{ n }} Hinweise{% endblocktranslate %}</span>{% endif %}</a>{% empty %}<p class="muted">{% translate "Nichts zu prüfen." %}</p>{% endfor %}
 

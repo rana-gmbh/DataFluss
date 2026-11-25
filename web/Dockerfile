@@ -1,6 +1,7 @@
 # The template site datafluss.de (docs/website.md). Built from the repository's root:
 #   docker build -f web/Dockerfile .
-# It carries only the site and the few platform files it shares (the template check), not DataFluss itself.
+# It carries only the site and the few platform files it shares (the template check, the hosting protocol), not
+# DataFluss itself.
 FROM python:3.13-slim@sha256:ae14d4ce8771606477a81446e7ef429edd6762305fc50c84507c1041fa8285d1
 
 ARG PIP_INDEX_URL=https://pypi.org/simple
@@ -11,6 +12,7 @@ COPY web/ web/
 COPY core/__init__.py core/fieldtypes.py core/
 COPY prints/__init__.py prints/presets.py prints/
 COPY tables/__init__.py tables/template_check.py tables/
+COPY publish/__init__.py publish/hosting.py publish/
 COPY tables/library/ tables/library/
 COPY locale/ locale/
 ENV DATA_DIR=/data MEDIA_ROOT=/data/media PYTHONUNBUFFERED=1

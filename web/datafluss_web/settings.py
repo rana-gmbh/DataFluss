@@ -19,7 +19,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY") or ("dev-only-not-secret" if DEBUG or 
 if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY fehlt.")
 SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8140").rstrip("/")
-ALLOWED_HOSTS = [h for h in os.environ.get("ALLOWED_HOSTS", "").split(",") if h] + [urlparse(SITE_URL).hostname, "127.0.0.1", "localhost"]
+# Websites people publish from DataFluss live on a host of their own (seiten/hosting.py), apart from the accounts.
+SITES_URL = os.environ.get("SITES_URL", "http://seiten.localhost:8140").rstrip("/")
+SITES_QUOTA_MB = int(os.environ.get("SITES_QUOTA_MB", "200"))
+SITES_PER_ACCOUNT = int(os.environ.get("SITES_PER_ACCOUNT", "3"))
+ALLOWED_HOSTS = [h for h in os.environ.get("ALLOWED_HOSTS", "").split(",") if h] + [urlparse(SITE_URL).hostname, urlparse(SITES_URL).hostname,
+                                                                                     "127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [SITE_URL]
 # Behind Coolify's proxy the client's address is the first one in X-Forwarded-For (konten/limits.py).
 TRUST_PROXY = env_bool("TRUST_PROXY")
@@ -32,9 +37,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "konten",
     "katalog",
+    "seiten",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "seiten.hosting.SitesHostMiddleware",  # the sites' own host: hosted files and the hosting API, no sessions
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",  # German, or English from the switch or the browser
@@ -56,6 +63,7 @@ TEMPLATES = [{
         "django.contrib.auth.context_processors.auth",
         "django.contrib.messages.context_processors.messages",
         "katalog.context.site",
+        "seiten.context.waiting",
     ]},
 }]
 

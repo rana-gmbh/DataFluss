@@ -13,7 +13,8 @@
       <div class="flex flex-wrap gap-1.5 mt-2">{% for f, new in fields %}<span class="badge{% if new %} badge-warn{% endif %}">{{ f.display_label }}{% if new %} · {% translate "neu" %}{% endif %}</span>{% endfor %}</div>
     </div>{% empty %}<p class="muted text-[13px]">{% translate "Nichts: Die Rolle darf keine der gewählten Tabellen lesen." %}</p>{% endfor %}
     <p class="muted text-[12.5px]">{% translate "Nie dabei: geheime Felder, der Änderungsverlauf, Benutzer, Papierkorb und Felder, die nicht ausgewählt sind." %}{% if school %} {% translate "Schüler, Personal, Eltern, Geräte und Zugänge der Schulverwaltung werden nie veröffentlicht, auch nicht über Verknüpfungen." %}{% endif %}</p>
-    {% if p.target != 'zip' %}<p class="text-[13px]"><span class="badge badge-warn">{% icon 'alert' %}{% translate "Öffentlich" %}</span> {% translate "Jeder, der die Adresse kennt, kann alles davon lesen." %}{% if p.indexable %} {% translate "Suchmaschinen dürfen die Seiten aufnehmen." %}{% endif %}</p>{% endif %}
+    {% if p.target == 'server' and p.password %}<p class="text-[13px]"><span class="badge">{% icon 'lock' %}{% translate "Mit Passwort" %}</span> {% translate "Jeder, der Adresse und Passwort kennt, kann alles davon lesen." %}</p>
+    {% elif p.target != 'zip' %}<p class="text-[13px]"><span class="badge badge-warn">{% icon 'alert' %}{% translate "Öffentlich" %}</span> {% translate "Jeder, der die Adresse kennt, kann alles davon lesen." %}{% if p.indexable %} {% translate "Suchmaschinen dürfen die Seiten aufnehmen." %}{% endif %}</p>{% endif %}
   </section>
   <form method="post" class="flex flex-wrap gap-2">{% csrf_token %}<input type="hidden" name="kind" value="publish"><input type="hidden" name="confirm" value="1"><input type="hidden" name="seen" value="{{ seen }}">
     <button class="btn btn-primary" {% if not listed %}disabled{% endif %}>{% icon 'upload' %}{% translate "Ja, veröffentlichen" %}</button>

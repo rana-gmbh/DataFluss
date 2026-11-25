@@ -152,6 +152,7 @@ def run(pk, kind, automatic=False):
         else:
             target = targets.target_for(publication)
             sent, gone = targets.send(publication, site, target, progress=say)
+            targets.remember_host_key(publication, target)
             done = _("Veröffentlicht: %(sent)s Dateien übertragen, %(gone)s entfernt.") % {"sent": sent, "gone": gone}
         fields = {"status": Publication.DONE, "progress": done, "error": "", "busy_until": None}
         if kind == PUBLISH:

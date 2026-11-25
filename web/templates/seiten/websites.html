@@ -1,0 +1,44 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Websites" %}{% endblock %}
+{% block content %}
+<h1 class="title">{% translate "Websites aus DataFluss" %}</h1>
+<p>{% blocktranslate trimmed with host=sites_url %}In DataFluss lassen sich ausgewählte Tabellen als Website veröffentlichen, die jeder lesen kann: mit Galerie, Datensatzseiten und Suche. Hier können Sie solche Websites unter {{ host }}/… veröffentlichen, kostenlos und ohne eigenen Webspace.{% endblocktranslate %}</p>
+
+{% if not user.is_authenticated %}
+<section class="panel"><p>{% translate "Websites gibt es für angemeldete Konten, nachdem ein Prüfer sie freigeschaltet hat." %}</p>
+  <a class="btn btn-primary" href="{% url 'login' %}?next={{ request.get_full_path|urlencode }}">{% translate "Anmelden" %}</a></section>
+{% elif not access %}
+<form method="post" action="{% url 'sites_ask' %}" class="panel form">{% csrf_token %}
+  <h2 class="h2">{% translate "Websites beantragen" %}</h2>
+  <p class="muted small">{% translate "Damit hier niemand Werbung oder Betrug veröffentlicht, schaltet ein Prüfer jedes Konto frei. Bitte kurz beschreiben, was Sie veröffentlichen möchten (zum Beispiel: die Filmliste unseres Vereins)." %}</p>
+  <textarea class="input" name="reason" rows="3" maxlength="1000" required></textarea>
+  <button class="btn btn-primary">{% translate "Beantragen" %}</button>
+</form>
+{% elif access.status == 'requested' %}
+<section class="panel"><span class="badge badge-warn">{% translate "Beantragt" %}</span> {% translate "Ihr Antrag wird geprüft. Sie bekommen eine E-Mail, sobald er entschieden ist." %}</section>
+{% elif not access.granted %}
+<section class="panel"><span class="badge">{{ access.get_status_display }}</span> {{ access.note }}</section>
+{% else %}
+<div class="row-between"><h2 class="h2">{% translate "Meine Websites" %}</h2><span class="muted small">{% blocktranslate trimmed with n=limit mb=quota_mb %}bis zu {{ n }} Websites, je {{ mb }} MB{% endblocktranslate %}</span></div>
+{% for r in rows %}<section class="panel">
+  <div class="row-between"><div><b>{{ r.site.name }}</b>{% if r.site.disabled %} <span class="badge badge-warn">{% translate "abgeschaltet" %}</span>{% endif %}<br><a href="{{ r.url }}" rel="noopener">{{ r.url }}</a></div>
+    <form method="post" action="{% url 'sites_action' %}" class="row">{% csrf_token %}<input type="hidden" name="site" value="{{ r.site.pk }}">
+      <button class="btn btn-sm" name="action" value="token" data-confirm="{% translate 'Einen neuen Token erstellen? Der alte gilt danach nicht mehr.' %}">{% translate "Neuer Token" %}</button>
+      <button class="btn btn-sm btn-ghost" name="action" value="delete" data-confirm="{% translate 'Diese Website mit allen Dateien löschen?' %}">{% translate "Löschen" %}</button></form></div>
+  <p class="muted small">{{ r.used|filesizeformat }} · {% translate "seit" %} {{ r.site.created|date:"j. n. Y" }}{% if r.site.disabled_reason %} · {{ r.site.disabled_reason }}{% endif %}</p>
+</section>{% empty %}<p class="muted">{% translate "Noch keine Website." %}</p>{% endfor %}
+{% if rows|length < limit %}<form method="post" action="{% url 'sites_action' %}" class="panel form">{% csrf_token %}<input type="hidden" name="action" value="create">
+  <label class="strong" for="site-name">{% translate "Neue Website" %}</label><input id="site-name" class="input" name="name" maxlength="100" required placeholder="{% translate 'z. B. Filmclub Lindenhof' %}">
+  <button class="btn btn-primary">{% translate "Anlegen" %}</button></form>{% endif %}
+<p class="muted small">{% translate "In DataFluss: Einstellungen → Veröffentlichen → Ziel „DataFluss-Hosting“, dort Adresse und Token eintragen." %}</p>
+{% endif %}
+
+<form method="post" action="{% url 'sites_report' %}" class="panel form small">{% csrf_token %}
+  <h2 class="h2">{% translate "Eine Website melden" %}</h2>
+  <p class="muted small">{% translate "Steht auf einer Website hier etwas, das nicht dorthin gehört? Wir sehen es uns an." %}</p>
+  <input class="input" name="address" placeholder="{{ sites_url }}/…" required>
+  <textarea class="input" name="reason" rows="2" maxlength="1000" required placeholder="{% translate 'Was stimmt nicht?' %}"></textarea>
+  <input type="hidden" name="stamp" value="{{ stamp }}"><input class="trap" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button class="btn btn-sm">{% translate "Melden" %}</button>
+</form>
+{% endblock %}

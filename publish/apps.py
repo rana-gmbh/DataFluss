@@ -8,5 +8,5 @@ class PublishConfig(AppConfig):
     def ready(self):
         from core import modules
 
-        # Built sites on a server are served by publish/views.py site_file, never as plain media.
-        modules.contribute(private_media=("published/",))
+        # Built and hosted sites on a server are served by publish/views.py site_file, never as plain media.
+        modules.contribute(private_media=("published/", "hosted/"))
