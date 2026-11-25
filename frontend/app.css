@@ -328,6 +328,7 @@ body { background: var(--bg); color: var(--ink); font-size: 14px; -webkit-font-s
 }
 .gallery-card { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; text-align: left; cursor: pointer; border-radius: 0.6rem; }
 .gallery-card:focus-visible { outline: none; }
+.gallery-card > .stars { align-self: flex-start; } /* a stretched star row would make every rating look full */
 .gallery-cover { position: relative; aspect-ratio: var(--cover-ratio); border-radius: 0.6rem; overflow: hidden; background: var(--surface-2);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 6px 18px rgb(0 0 0 / 0.08); transition: transform 0.15s ease, box-shadow 0.15s ease; }
 .gallery-card:hover .gallery-cover, .gallery-card:focus-visible .gallery-cover { transform: translateY(-3px); box-shadow: 0 12px 28px rgb(0 0 0 / 0.2); }
