@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Anmelden" %}{% endblock %}
+{% block content %}
+<div class="narrow panel form">
+  <h1 class="title">{% translate "Anmelden" %}</h1>
+  <p class="muted">{% translate "Zum Teilen und Bewerten. Wir schicken Ihnen einen Link per E-Mail – ohne Passwort. Beim ersten Mal entsteht so Ihr Konto." %}</p>
+  {% if error %}<p class="msg msg-error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post">{% csrf_token %}
+    <input type="hidden" name="stamp" value="{{ stamp }}"><input type="hidden" name="next" value="{{ next }}">
+    <input class="trap" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label for="l-email">{% translate "E-Mail-Adresse" %}</label>
+    <input class="input" id="l-email" type="email" name="email" required autocomplete="email" autofocus>
+    <button class="btn btn-primary btn-block">{% translate "Anmeldelink schicken" %}</button>
+  </form>
+  <p class="muted small">{% translate "Wir nutzen die Adresse nur für die Anmeldung und für Nachrichten zu Ihren Vorlagen." %} <a href="{% url 'privacy' %}">{% translate "Datenschutz" %}</a></p>
+</div>
+{% endblock %}

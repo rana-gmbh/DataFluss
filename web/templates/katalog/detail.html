@@ -1,0 +1,58 @@
+{% extends "base.html" %}{% load katalog i18n l10n %}
+{% block title %}{{ version.title }}{% endblock %}
+{% block description %}{{ version.description|truncatechars:160 }}{% endblock %}
+{% block content %}
+<a class="muted small" href="{% url 'home' %}">← {% translate "Alle Vorlagen" %}</a>
+{% if not template.listed %}<p class="msg msg-warning">{% if template.withdrawn %}{% translate "Diese Vorlage ist zurückgezogen und wird nicht gezeigt." %}{% else %}{% translate "Noch nicht freigegeben: nur Sie und die Prüfer sehen diese Seite." %}{% endif %}</p>{% endif %}
+<div class="detail">
+  <div class="detail-main">
+    <h1 class="title">{{ version.title }}</h1>
+    <p class="meta">{% if template.official %}<span class="badge badge-accent">{% translate "Offiziell" %}</span> {% endif %}{{ template.get_category_display }} · {% translate "von" %} {{ template.author }} · {% blocktranslate with n=version.number %}Version {{ n }}{% endblocktranslate %}</p>
+    <p class="rating-line">{% stars template.rating %} {% if template.ratings %}<b>{{ template.rating|comma }}</b> <span class="muted">({% blocktranslate count n=template.ratings %}{{ n }} Bewertung{% plural %}{{ n }} Bewertungen{% endblocktranslate %})</span>{% else %}<span class="muted">{% translate "Noch keine Bewertung" %}</span>{% endif %}</p>
+    {% if version.description %}<p class="lead">{{ version.description|linebreaksbr }}</p>{% endif %}
+    {% if version.pictures.all %}<div class="pictures">{% for pic in version.pictures.all %}<a href="{% url 'picture' pic.uid %}"><img src="{% url 'picture' pic.uid %}" alt="{% blocktranslate with n=forloop.counter %}Bildschirmfoto {{ n }}{% endblocktranslate %}" width="{{ pic.width }}" height="{{ pic.height }}" loading="lazy"></a>{% endfor %}</div>{% endif %}
+
+    <h2>{% translate "Was drin ist" %}</h2>
+    <div class="tables">{% for table in summary.tables %}<details class="panel"{% if forloop.first %} open{% endif %}><summary><b>{{ table.name }}</b> <span class="muted">· {% blocktranslate count n=table.fields|length %}{{ n }} Feld{% plural %}{{ n }} Felder{% endblocktranslate %}{% if table.records %} · {% blocktranslate count n=table.records %}{{ n }} Beispieldatensatz{% plural %}{{ n }} Beispieldatensätze{% endblocktranslate %}{% endif %}</span></summary>
+      {% if table.description %}<p class="muted small">{{ table.description }}</p>{% endif %}
+      <table class="fields"><tbody>{% for f in table.fields %}<tr><td>{{ f.label }}</td><td class="muted">{{ f.type_label }}{% if f.options %}: {{ f.options|join:", "|truncatechars:80 }}{% endif %}</td></tr>{% endfor %}</tbody></table>
+    </details>{% endfor %}</div>
+    <p class="muted small">{% if summary.masks %}{% translate "Datensatzseiten" %}: {{ summary.masks|join:", " }}. {% endif %}{% if summary.prints %}{% translate "Druckvorlagen" %}: {{ summary.prints|join:", " }}. {% endif %}{% if summary.views %}{% translate "Ansichten" %}: {{ summary.views|join:", " }}.{% endif %}</p>
+
+    <h2 id="bewertungen">{% translate "Bewertungen" %}</h2>
+    {% if may_review %}
+    <form method="post" action="{% url 'template_review' template.key %}" class="panel review-form">{% csrf_token %}
+      <input type="hidden" name="stamp" value="{{ stamp }}"><input class="trap" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="strong">{% if own %}{% translate "Ihre Bewertung" %}{% else %}{% translate "Bewerten" %}{% endif %}</p>
+      <div class="star-input" data-star-input>
+        <label class="small" for="r-stars">{% translate "Sterne" %}</label>
+        <select class="input" id="r-stars" name="stars" required>
+          <option value="">{% translate "wählen" %}</option>
+          {% for s in star_choices %}<option value="{{ s|unlocalize }}" {% if own and own.stars == s %}selected{% endif %}>{{ s|comma }}</option>{% endfor %}
+        </select>
+      </div>
+      <label class="small" for="r-text">{% translate "Text (freiwillig, erscheint nach Prüfung)" %}</label>
+      <textarea class="input" id="r-text" name="text" rows="3" maxlength="2000">{{ own.text }}</textarea>
+      {% if own and own.text_status == "submitted" %}<p class="muted small">{% translate "Ihr Text wartet auf die Prüfung." %}</p>{% elif own and own.text_status == "rejected" %}<p class="muted small">{% translate "Ihr Text wurde nicht freigegeben; die Sterne zählen." %}</p>{% endif %}
+      <div class="row"><button class="btn btn-primary">{% translate "Speichern" %}</button>{% if own %}<button class="btn btn-ghost" name="action" value="delete" formnovalidate>{% translate "Bewertung löschen" %}</button>{% endif %}</div>
+    </form>
+    {% elif not user.is_authenticated and template.listed %}<p class="muted"><a href="{% url 'login' %}?next={{ request.path|urlencode }}%23bewertungen">{% translate "Anmelden" %}</a>, {% translate "um zu bewerten." %}</p>{% endif %}
+    {% for r in reviews %}<article class="review"><p>{% stars r.stars "sm" %} <b>{{ r.user.shown_name }}</b> <span class="muted small">· {{ r.updated|date:"j. F Y" }}{% if r.version %} · {% blocktranslate with n=r.version %}zu Version {{ n }}{% endblocktranslate %}{% endif %}</span></p><p>{{ r.text|linebreaksbr }}</p>
+      {% if user.is_authenticated %}<details class="report"><summary class="muted small">{% translate "Melden" %}</summary><form method="post" action="{% url 'template_report' template.key %}">{% csrf_token %}<input type="hidden" name="review" value="{{ r.pk }}"><input class="input" name="reason" maxlength="1000" required placeholder="{% translate 'Was stimmt nicht?' %}"><button class="btn btn-sm">{% translate "Melden" %}</button></form></details>{% endif %}
+    </article>{% empty %}<p class="muted">{% translate "Noch keine Texte." %}</p>{% endfor %}
+  </div>
+  <aside class="detail-side">
+    {% if template.listed %}<a class="btn btn-primary btn-block" href="{% url 'template_download' template.key %}">{% translate "Vorlage herunterladen" %}</a>
+    <p class="muted small">{% blocktranslate count n=template.downloads %}{{ n }}-mal heruntergeladen{% plural %}{{ n }}-mal heruntergeladen{% endblocktranslate %}{% if version.data.datafluss %} · {% blocktranslate with v=version.data.datafluss %}aus DataFluss {{ v }}{% endblocktranslate %}{% endif %}</p>{% endif %}
+    <div class="panel small">
+      <p><b>{% translate "Lizenz" %}:</b> <a href="https://creativecommons.org/licenses/by/4.0/deed.de" rel="license">CC BY 4.0</a> – {% translate "frei nutzbar und veränderbar mit Nennung von" %} {{ template.author }}.</p>
+      <p><b>{% translate "Kennung" %}:</b> <code>{{ template.key }}</code></p>
+      {% if version.sha256 %}<p class="muted break"><b>SHA-256:</b> <code>{{ version.sha256|slice:":16" }}…</code></p>{% endif %}
+      <p class="muted">{% translate "Vorlagen enthalten keinen Programmcode. Jede Datei wurde vor dem Erscheinen geprüft; DataFluss prüft sie beim Anwenden noch einmal." %}</p>
+    </div>
+    {% if history %}<div class="panel small"><p class="strong">{% translate "Versionen" %}</p><ul class="plain">{% for v in history %}<li><b>{{ v.number }}</b> · {{ v.reviewed|date:"j. n. Y" }}{% if v.changes %}<br><span class="muted">{{ v.changes }}</span>{% endif %}</li>{% endfor %}</ul></div>{% endif %}
+    {% if user.is_authenticated and template.owner_id == user.pk %}<a class="btn btn-block" href="{% url 'template_new_version' template.key %}">{% translate "Neue Version hochladen" %}</a>{% endif %}
+    {% if user.is_authenticated and template.listed and template.owner_id != user.pk %}<details class="report"><summary class="muted small">{% translate "Vorlage melden" %}</summary><form method="post" action="{% url 'template_report' template.key %}">{% csrf_token %}<input class="input" name="reason" maxlength="1000" required placeholder="{% translate 'Was stimmt nicht?' %}"><button class="btn btn-sm">{% translate "Melden" %}</button></form></details>{% endif %}
+  </aside>
+</div>
+{% endblock %}

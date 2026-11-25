@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Link ungültig" %}{% endblock %}
+{% block content %}
+<div class="narrow panel"><h1 class="title">{% translate "Dieser Link gilt nicht mehr" %}</h1>
+<p>{% translate "Ein Anmeldelink gilt 15 Minuten und nur einmal." %}</p><a class="btn btn-primary" href="{% url 'login' %}">{% translate "Neuen Link anfordern" %}</a></div>
+{% endblock %}

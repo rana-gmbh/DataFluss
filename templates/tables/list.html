@@ -24,6 +24,7 @@
   <div><label class="label" for="t-access">{% translate "Zugriff" %}</label><select id="t-access" class="input" name="access">{% for value, label in access %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></div>
   <button class="btn btn-primary w-full">{% translate "Anlegen" %}</button>
   {% if templates_offered %}<a class="btn w-full" href="{% url 'table_blueprints' %}">{% icon 'layout' %}{% translate "Vorlage hinzufügen …" %}</a>{% endif %}
+  {% if rows %}<a class="btn w-full" href="{% url 'table_export' %}">{% icon 'download' %}{% translate "Als Vorlage exportieren …" %}</a>{% endif %}
   <p class="muted text-[12px]">{% translate "Die Tabelle beginnt mit einem Feld „Name“. Rechte je Rolle lassen sich später unter Rechte genauer festlegen." %}</p></form>
 {% if can_import %}<form method="post" action="{% url 'table_from_file' %}" enctype="multipart/form-data" class="surface p-4 space-y-3">{% csrf_token %}<h2 class="font-semibold">{% translate "Aus Excel- oder CSV-Datei" %}</h2>
   <p class="muted text-[12px]">{% translate "Jede Spalte wird ein Feld mit passendem Typ, jede Zeile ein Datensatz." %}</p>

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Datenschutz{% endblock %}
+{% block content %}<article class="prose">
+<h1 class="title">Datenschutzerklärung</h1>
+{% include "recht/_draft.html" %}
+<h2>Verantwortlich</h2>
+<p>Rana GmbH, [Anschrift], [E-Mail-Adresse]. [Datenschutzbeauftragte/r, falls bestellt.]</p>
+<h2>Kurz gesagt</h2>
+<ul>
+<li>Stöbern und Herunterladen geht ohne Konto und ohne Cookies.</li>
+<li>Keine Werbung, keine Tracker, keine Analyse-Dienste, keine Schriften oder Skripte von anderen Servern.</li>
+<li>Ein Konto besteht aus Ihrer E-Mail-Adresse und einem Anzeigenamen. Die Adresse ist nie öffentlich.</li>
+</ul>
+<h2>Was wir verarbeiten und warum</h2>
+<ul>
+<li><b>Aufruf der Website:</b> Der Server verarbeitet technisch nötige Daten (IP-Adresse, Zeitpunkt, aufgerufene Seite), um die Seite auszuliefern und vor Missbrauch zu schützen (Art. 6 Abs. 1 lit. f DSGVO). [Speicherdauer der Server-Protokolle, z. B. 7 Tage.]</li>
+<li><b>Anmeldung:</b> Ihre E-Mail-Adresse, um Ihnen Anmeldelinks und Nachrichten zu Ihren Vorlagen zu schicken (Art. 6 Abs. 1 lit. b DSGVO). Für die Begrenzung von Anmeldeversuchen speichern wir einen verschlüsselten Prüfwert (keinen Klartext) der Adresse und der IP-Adresse höchstens einen Tag.</li>
+<li><b>Sitzungs-Cookie:</b> Nur nach der Anmeldung, damit Sie angemeldet bleiben (technisch notwendig, § 25 Abs. 2 TDDDG). Es läuft nach 30 Tagen ab oder beim Abmelden.</li>
+<li><b>Geteilte Vorlagen, Bilder und Bewertungen:</b> mit Ihrem Anzeigenamen, so lange sie veröffentlicht sind. Bilder werden beim Hochladen neu erzeugt; Metadaten wie Standort oder Kamera werden dabei entfernt.</li>
+</ul>
+<h2>Empfänger</h2>
+<p>Hosting: [Anbieter, Standort Deutschland/EU], E-Mail-Versand: [Anbieter]. Mit beiden besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO).</p>
+<h2>Ihre Rechte</h2>
+<p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie auf Beschwerde bei einer Aufsichtsbehörde. Ihr Konto und Ihre Bewertungen können Sie jederzeit selbst unter „Konto“ löschen. Veröffentlichte Vorlagen bleiben nach der Löschung des Kontos unter „gelöschtes Konto“ erhalten, weil sie unter CC BY 4.0 geteilt sind; Sie können sie vorher zurückziehen.</p>
+</article>{% endblock %}

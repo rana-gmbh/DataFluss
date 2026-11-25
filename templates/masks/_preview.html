@@ -2,9 +2,9 @@
 <div class="fixed inset-0 z-50 bg-black/40 p-4 overflow-y-auto" data-close-modal-area>
   <div class="mx-auto max-w-5xl rounded-xl p-5" style="background: var(--bg)">
     <div class="flex items-center justify-between mb-3"><div><h2 class="font-semibold">{% translate "Vorschau" %}</h2><p class="muted text-[12px]">{% blocktranslate trimmed with name=person.display_name %}Beispiel: {{ name }}. Hier wird nichts gespeichert.{% endblocktranslate %}</p></div><button class="btn" data-close-modal>{% icon 'x' %}{% translate "Schließen" %}</button></div>
-    <div x-data="{ tab: '{{ tabs.0.id }}' }">
-      <div class="flex overflow-x-auto border-b mb-4" style="border-color: var(--line)">{% for tab in tabs %}<button type="button" class="tab" :class="tab === '{{ tab.id }}' && 'active'" @click="tab = '{{ tab.id }}'">{{ tab.title }}</button>{% endfor %}</div>
-      {% for tab in tabs %}<div x-show="tab === '{{ tab.id }}'" class="space-y-4">
+    <div x-data="{ tab: '{{ tabs.0.id|escapejs }}' }">
+      <div class="flex overflow-x-auto border-b mb-4" style="border-color: var(--line)">{% for tab in tabs %}<button type="button" class="tab" :class="tab === '{{ tab.id|escapejs }}' && 'active'" @click="tab = '{{ tab.id|escapejs }}'">{{ tab.title }}</button>{% endfor %}</div>
+      {% for tab in tabs %}<div x-show="tab === '{{ tab.id|escapejs }}'" class="space-y-4">
         {% for section in tab.sections %}<section class="surface p-4 mask-wrap">{% if section.title %}<h2 class="section-title mb-3">{{ section.title }}</h2>{% endif %}
           <div class="mask-grid">{% for item in section.items %}<div class="mask-item" data-w="{{ item.w }}" style="--w: {{ item.w }}">
             {% if item.type == 'field' %}{% include 'masks/_widget.html' %}{% elif item.type == 'note' %}<p class="text-[13px] soft whitespace-pre-line">{{ item.text }}</p>{% else %}<div class="rounded-lg p-3 text-[13px] muted" style="background: var(--surface-2)">{{ item.title }}</div>{% endif %}

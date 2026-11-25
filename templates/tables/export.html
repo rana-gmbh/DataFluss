@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Als Vorlage exportieren" %}{% endblock %}
+{% block content %}
+<a class="muted text-[13px] hover:underline" href="{% url 'table_list' %}">{% translate "Tabellen" %}</a>
+<h1 class="page-title mb-1 mt-1">{% translate "Als Vorlage exportieren" %}</h1>
+<p class="muted text-[13px] mb-4 max-w-3xl">{% translate "Die gewählten Tabellen werden eine Vorlagendatei: mit Feldern, Datensatzseiten, Druckvorlagen und gemeinsamen Ansichten. Sie lässt sich auf datafluss.de teilen oder in einer anderen Datenbank anwenden. Verknüpfungen zu Tabellen, die nicht dabei sind, und zu Schülern, Personal oder Geräten bleiben weg." %}</p>
+<form method="post" class="grid lg:grid-cols-3 gap-4 items-start">{% csrf_token %}
+<div class="lg:col-span-2 surface p-4 space-y-3">
+  <h2 class="font-semibold">{% translate "Tabellen" %}</h2>
+  {% for section, tables in groups %}<fieldset class="space-y-1"><legend class="text-[12px] font-semibold uppercase tracking-wide muted mb-1">{{ section|default:_("Tabellen") }}</legend>
+    {% for table in tables %}<label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="tables" value="{{ table.pk }}" class="accent-[var(--accent)]" {% if table.pk|stringformat:"s" in chosen %}checked{% endif %}>{% icon table.icon 'text-[15px] muted' %}{{ table.display_name }}</label>{% endfor %}
+  </fieldset>{% empty %}<p class="muted text-[13px]">{% translate "Noch keine eigenen Tabellen." %}</p>{% endfor %}
+</div>
+<div class="surface p-4 space-y-3">
+  {% if problems %}<div class="badge-bad rounded-lg px-3 py-2 text-[13px]" role="alert"><p class="font-semibold">{% translate "So lässt sich das nicht exportieren:" %}</p><ul class="list-disc pl-5">{% for p in problems|slice:":12" %}<li>{{ p }}</li>{% endfor %}</ul></div>{% endif %}
+  <div><label class="label" for="e-title">{% translate "Titel" %}</label><input id="e-title" class="input" name="title" value="{{ values.title }}" required maxlength="100" placeholder="{% translate 'z. B. Vereinsverwaltung' %}"></div>
+  <div><label class="label" for="e-id">{% translate "Kennung" %}</label><input id="e-id" class="input font-mono" name="id" value="{{ values.id }}" maxlength="20" pattern="[a-z0-9_]{1,20}" placeholder="{% translate 'aus dem Titel' %}">
+    <p class="muted text-[12px] mt-1">{% translate "Kleinbuchstaben, Ziffern und _, bis 20 Zeichen. Sie bleibt für alle Versionen gleich." %}</p></div>
+  <div><label class="label" for="e-description">{% translate "Beschreibung" %}</label><textarea id="e-description" class="input" name="description" rows="3" maxlength="1000">{{ values.description }}</textarea></div>
+  <label class="flex items-start gap-2 text-[13px]"><input type="checkbox" name="demo" class="accent-[var(--accent)] mt-0.5" {% if values.demo %}checked{% endif %}>
+    <span>{% blocktranslate trimmed with n=20 %}Bis zu {{ n }} Datensätze je Tabelle als Beispieldaten mitnehmen{% endblocktranslate %}
+    <span class="block muted text-[12px]">{% translate "Ohne Dateien, Bilder und Geheimfelder. Vorsicht: Beim Teilen sieht jeder diese Daten – nur erfundene Beispiele, keine echten Namen, Adressen oder Telefonnummern." %}</span></span></label>
+  <button class="btn btn-primary w-full">{% icon 'download' %}{% translate "Vorlage herunterladen" %}</button>
+  {% if skipped %}<p class="muted text-[12px]">{% translate "Nicht dabei" %}: {{ skipped|join:", " }}</p>{% endif %}
+</div>
+</form>
+{% endblock %}

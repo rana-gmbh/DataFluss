@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% if template %}{% translate "Neue Version" %}{% else %}{% translate "Vorlage teilen" %}{% endif %}{% endblock %}
+{% block content %}
+<h1 class="title">{% if template %}{% blocktranslate with key=template.key %}Neue Version von {{ key }}{% endblocktranslate %}{% else %}{% translate "Vorlage teilen" %}{% endif %}</h1>
+<div class="two">
+<form method="post" enctype="multipart/form-data" class="panel form">{% csrf_token %}
+  <input type="hidden" name="stamp" value="{{ stamp }}"><input class="trap" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  {% if problems %}<div class="msg msg-error" role="alert"><p class="strong">{% translate "Das lässt sich so nicht teilen:" %}</p><ul>{% for p in problems|slice:":15" %}<li>{{ p }}</li>{% endfor %}</ul>{% if problems|length > 15 %}<p>{% blocktranslate with n=problems|length|add:"-15" %}… und {{ n }} weitere.{% endblocktranslate %}</p>{% endif %}</div>{% endif %}
+  <label for="u-file">{% translate "Vorlagendatei (.json)" %}</label>
+  <input class="input" id="u-file" type="file" name="file" accept=".json,application/json" required>
+  <label for="u-category">{% translate "Kategorie" %}</label>
+  <select class="input" id="u-category" name="category">{% for value, label in categories %}<option value="{{ value }}" {% if value == values.category or not values.category and value == template.category %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+  {% if template %}<label for="u-changes">{% translate "Was ist neu?" %}</label><input class="input" id="u-changes" name="changes" maxlength="500" value="{{ values.changes }}">{% endif %}
+  <label for="u-pictures">{% translate "Bildschirmfotos (freiwillig, bis zu 4, PNG/JPEG/WebP, je bis 5 MB)" %}</label>
+  <input class="input" id="u-pictures" type="file" name="pictures" accept="image/png,image/jpeg,image/webp" multiple>
+  <label class="check"><input type="checkbox" name="license" required> <span>{% blocktranslate trimmed %}Ich veröffentliche die Vorlage unter der Lizenz <a href="https://creativecommons.org/licenses/by/4.0/deed.de" rel="license">CC BY 4.0</a>: Jeder darf sie nutzen, verändern und weitergeben, wenn mein Anzeigename genannt wird.{% endblocktranslate %}</span></label>
+  <label class="check"><input type="checkbox" name="no_personal_data" required> <span>{% translate "Die Datei und die Bilder enthalten keine echten personenbezogenen Daten (nur erfundene Beispiele), und ich darf sie teilen." %}</span></label>
+  <button class="btn btn-primary">{% translate "Zur Prüfung einreichen" %}</button>
+  <p class="muted small">{% blocktranslate trimmed %}Es gelten die Nutzungsbedingungen. Wir prüfen jede Einreichung, meist innerhalb weniger Tage, und schreiben Ihnen per E-Mail.{% endblocktranslate %} <a href="{% url 'terms' %}">{% translate "Nutzungsbedingungen" %}</a></p>
+</form>
+<div class="panel small">
+  <p class="strong">{% translate "So entsteht eine Vorlagendatei" %}</p>
+  <ol>
+    <li>{% translate "In DataFluss: Einstellungen → Tabellen → Als Vorlage exportieren …" %}</li>
+    <li>{% translate "Tabellen wählen, Titel und Beschreibung eingeben, herunterladen." %}</li>
+    <li>{% translate "Die Datei hier hochladen." %}</li>
+  </ol>
+  <p class="strong">{% translate "Was eine geteilte Vorlage darf" %}</p>
+  <ul>
+    <li>{% translate "Sie ist eine Datenbank für sich: ohne Schulverwaltung und ohne Verknüpfungen zu Schülern, Personal oder Geräten." %}</li>
+    <li>{% translate "Beispieldaten nur erfunden, ohne Bilder und Dateien." %}</li>
+    <li>{% translate "Eine neue Version behält die Kennung und hat eine höhere Versionsnummer. Wo die Vorlage angewendet ist, ergänzt sie nur: Was die vorige brachte, bleibt dort erhalten." %}</li>
+  </ul>
+</div>
+</div>
+{% endblock %}

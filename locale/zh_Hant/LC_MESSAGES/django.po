@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-17 19:30+0100\n"
+"POT-Creation-Date: 2026-11-25 16:58+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -100,11 +100,11 @@ msgstr "%(day)s 的備份僅存於此伺服器，異地副本失敗：%(problem)
 msgid ""
 "Letzte automatische Sicherung: %(day)s, geprüft. Sie liegt nur auf diesem "
 "Server, weil keine Kopie außer Haus eingerichtet ist."
-msgstr "最近一次自動備份：%(day)s，已驗證。由於未設定異地副本，備份僅存於此伺服器。"
+msgstr ""
+"最近一次自動備份：%(day)s，已驗證。由於未設定異地副本，備份僅存於此伺服器。"
 
 #, python-format
-msgid ""
-"Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
+msgid "Letzte automatische Sicherung: %(day)s, geprüft und außer Haus kopiert."
 msgstr "最近一次自動備份：%(day)s，已驗證並已複製到異地。"
 
 msgid "Kopie wird übertragen"
@@ -194,7 +194,8 @@ msgid ""
 "Version fehlt. Sie lässt sich nur in einer DataFluss-Version mit diesem "
 "Modul einspielen."
 msgstr ""
-"此備份包含模組 %(names)s 的資料，而目前 DataFluss 版本沒有該模組。只能在帶有該模組的 DataFluss 版本中還原。"
+"此備份包含模組 %(names)s 的資料，而目前 DataFluss 版本沒有該模組。只能在帶有"
+"該模組的 DataFluss 版本中還原。"
 
 msgid "Diese Sicherungsdatei enthält ungültige Einträge."
 msgstr "此備份檔案包含無效條目。"
@@ -206,8 +207,8 @@ msgid "Datenbank wird angepasst"
 msgstr "正在更新資料庫結構"
 
 msgid ""
-"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht"
-" es die Rolle IT."
+"Dieses Konto darf auf dem Server keine Sicherungen einspielen. Dafür braucht "
+"es die Rolle IT."
 msgstr "此帳戶無權在伺服器上還原備份。這需要 IT 角色。"
 
 msgid "Ungültige Anfrage."
@@ -249,8 +250,8 @@ msgstr "此位址沒有 DataFluss 伺服器回應。"
 
 #, python-format
 msgid ""
-"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version"
-" 1.1 oder neuer."
+"Der Server hat DataFluss %(version)s. Für die Übertragung braucht er Version "
+"1.1 oder neuer."
 msgstr "伺服器的 DataFluss 版本為 %(version)s。傳輸需要 1.1 或更新版本。"
 
 msgid "Wird auf den Server übertragen"
@@ -266,7 +267,9 @@ msgstr "伺服器無法還原資料庫：%(reason)s"
 msgid ""
 "Die Datenbank ist auf dem Server. Arbeiten Sie ab jetzt mit dem Server: "
 "Änderungen in dieser Datenbank auf dem Computer erreichen ihn nicht mehr."
-msgstr "資料庫已在伺服器上。從現在起請使用伺服器：在這台電腦上對此資料庫的變更不會再同步到伺服器。"
+msgstr ""
+"資料庫已在伺服器上。從現在起請使用伺服器：在這台電腦上對此資料庫的變更不會再"
+"同步到伺服器。"
 
 #, python-format
 msgid "Der Server antwortet mit %(code)s."
@@ -654,8 +657,8 @@ msgid ""
 "Version fehlt. Sie bleibt unverändert und lässt sich mit einer DataFluss-"
 "Version mit diesem Modul öffnen."
 msgstr ""
-"此資料庫包含模組 %(names)s 的資料，而目前 DataFluss 版本沒有該模組。資料庫保持不變，可用帶有該模組的 DataFluss "
-"版本開啟。"
+"此資料庫包含模組 %(names)s 的資料，而目前 DataFluss 版本沒有該模組。資料庫保"
+"持不變，可用帶有該模組的 DataFluss 版本開啟。"
 
 msgid ""
 "Voller Zugriff, inklusive Masken, Vorlagen, Benutzer und Export von "
@@ -800,6 +803,12 @@ msgstr "安裝新版本。"
 msgid "Sicherungen anlegen und zurückspielen."
 msgstr "建立和還原備份。"
 
+msgid "Veröffentlichen"
+msgstr "發佈"
+
+msgid "Ausgewählte Tabellen als Website veröffentlichen, die jeder lesen kann."
+msgstr "將所選表格發佈為任何人都可閱讀的網站。"
+
 msgid "Protokoll"
 msgstr "操作紀錄"
 
@@ -851,7 +860,8 @@ msgid ""
 "Tabellen, die Ihre Schule selbst gestaltet: mit eigenen Feldern, "
 "Verknüpfungen und Berechnungen. Listen und Datensätze funktionieren wie bei "
 "den Personen."
-msgstr "由學校自行設計的表格：包含自訂欄位、關聯和計算。清單和記錄的用法與人員相同。"
+msgstr ""
+"由學校自行設計的表格：包含自訂欄位、關聯和計算。清單和記錄的用法與人員相同。"
 
 msgid ""
 "Druckvorlagen für Ausweise, Listen und Briefe, mit einem Designer zum "
@@ -899,8 +909,7 @@ msgstr "GitHub 沒有回應。"
 msgid "GitHub ist nicht erreichbar."
 msgstr "無法連線至 GitHub。"
 
-msgid ""
-"Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
+msgid "Die Datenbank konnte nicht gesichert werden. Es wurde nichts verändert."
 msgstr "無法備份資料庫。未做任何變更。"
 
 msgid "Coolify lehnt das Token ab."
@@ -916,7 +925,9 @@ msgstr "無法連線至 Coolify。未做任何變更。"
 msgid ""
 "Coolify hat unerwartet geantwortet. Bitte dort unter Deployments prüfen, ob "
 "die Aktualisierung gestartet ist."
-msgstr "Coolify 傳回了非預期的回應。請在 Coolify 的 Deployments 中確認更新是否已開始。"
+msgstr ""
+"Coolify 傳回了非預期的回應。請在 Coolify 的 Deployments 中確認更新是否已開"
+"始。"
 
 msgid "Es gibt nichts zurückzusetzen."
 msgstr "沒有可復原的內容。"
@@ -939,8 +950,7 @@ msgid ""
 "Die neue Version wurde nicht übernommen. Die bisherige Version läuft weiter."
 msgstr "新版本未生效。舊版本繼續執行。"
 
-msgid ""
-"Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
+msgid "Die Datenbank wurde auf den Stand vor der Aktualisierung zurückgesetzt."
 msgstr "資料庫已復原到更新前的狀態。"
 
 #, python-format
@@ -951,24 +961,27 @@ msgstr "資料庫無法復原。請手動還原備份 %(name)s。"
 
 #, python-format
 msgid ""
-"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch"
-" hier, bitte die Sicherung %(name)s von Hand einspielen."
+"Die Datenbank wird gerade zurückgesetzt. Steht das nach einigen Minuten noch "
+"hier, bitte die Sicherung %(name)s von Hand einspielen."
 msgstr "資料庫正在復原。如果幾分鐘後仍顯示此訊息，請手動還原備份 %(name)s。"
 
 #, python-format
 msgid ""
-"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand"
-" von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
+"Die neue Version hat die Datenbank bereits verändert. Sie kann auf den Stand "
+"von %(when)s zurückgesetzt werden. Alles, was seitdem gespeichert wurde, "
 "geht dabei verloren."
-msgstr "新版本已變更資料庫。可將其復原到 %(when)s 的狀態。此後儲存的所有內容都將遺失。"
+msgstr ""
+"新版本已變更資料庫。可將其復原到 %(when)s 的狀態。此後儲存的所有內容都將遺"
+"失。"
 
 #, python-format
 msgid ""
 "Auf diesem Mac kann sich nur das Konto anmelden, mit dem diese Datenbank "
-"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit"
-" „Mit Server verbinden“ eine eigene Datenbank anlegen."
+"verbunden wurde (%(owners)s). Für %(name)s bitte auf dem Startbildschirm mit "
+"„Mit Server verbinden“ eine eigene Datenbank anlegen."
 msgstr ""
-"此 Mac 上只能登入連接此資料庫的帳戶（%(owners)s）。如需使用 %(name)s，請在啟動畫面透過「連接到伺服器」建立一個單獨的資料庫。"
+"此 Mac 上只能登入連接此資料庫的帳戶（%(owners)s）。如需使用 %(name)s，請在啟"
+"動畫面透過「連接到伺服器」建立一個單獨的資料庫。"
 
 msgid "Zu viele Fehlversuche. Bitte in 15 Minuten erneut versuchen."
 msgstr "失敗次數過多。請 15 分鐘後再試。"
@@ -1488,8 +1501,8 @@ msgstr "學年 %(name)s 已存在，未再次執行學年切換。"
 
 #, python-format
 msgid ""
-"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch"
-" einmal ausgeführt."
+"Das Schuljahr %(name)s hat noch nicht begonnen. Der Wechsel wurde nicht noch "
+"einmal ausgeführt."
 msgstr "學年 %(name)s 尚未開始，未再次執行學年切換。"
 
 msgid "Diese Datei ist kein gültiges Bild."
@@ -1571,6 +1584,155 @@ msgstr "範本有誤：%(error)s"
 msgid "Version %(number)s wiederhergestellt."
 msgstr "已還原版本 %(number)s。"
 
+msgid "ZIP-Datei"
+msgstr "ZIP 檔案"
+
+msgid "Ordner"
+msgstr "資料夾"
+
+msgid "Dieser Server"
+msgstr "此伺服器"
+
+msgid "Wird vorbereitet …"
+msgstr "正在準備 …"
+
+msgid "Diese Veröffentlichung läuft gerade."
+msgstr "此發佈正在進行中。"
+
+#, python-format
+msgid "Vorschau fertig: %(n)s Dateien."
+msgstr "預覽已就緒：%(n)s 個檔案。"
+
+msgid "ZIP wird gepackt …"
+msgstr "正在打包 ZIP …"
+
+#, python-format
+msgid "ZIP fertig: %(n)s Dateien."
+msgstr "ZIP 已就緒：%(n)s 個檔案。"
+
+#, python-format
+msgid "Veröffentlicht: %(sent)s Dateien übertragen, %(gone)s entfernt."
+msgstr "已發佈：已傳輸 %(sent)s 個檔案，已刪除 %(gone)s 個。"
+
+msgid ""
+"Angehalten: Die Prüfung hat Daten gefunden, die nicht veröffentlicht werden "
+"dürfen. Nichts wurde übertragen."
+msgstr "已停止：檢查發現了不得發佈的資料。未傳輸任何內容。"
+
+#, python-format
+msgid "Fehler: %(error)s"
+msgstr "錯誤：%(error)s"
+
+msgid "Daten werden gelesen …"
+msgstr "正在讀取資料 …"
+
+msgid "Seiten werden erstellt …"
+msgstr "正在產生頁面 …"
+
+#, python-format
+msgid "Bilder und Dateien: %(n)s"
+msgstr "圖片和檔案：%(n)s"
+
+msgid "nicht sichtbar"
+msgstr "不可見"
+
+msgid "(ohne Titel)"
+msgstr "（無標題）"
+
+#, python-format
+msgid "Ungültiger Pfad: %(path)s"
+msgstr "無效路徑：%(path)s"
+
+#, python-format
+msgid "Den Ordner gibt es nicht: %(folder)s"
+msgstr "該資料夾不存在：%(folder)s"
+
+msgid "Bitte eine Adresse mit https:// angeben."
+msgstr "請輸入以 https:// 開頭的網址。"
+
+#, python-format
+msgid "WebDAV: Anmeldung abgelehnt (%(code)s)."
+msgstr "WebDAV：登入被拒絕（%(code)s）。"
+
+#, python-format
+msgid "WebDAV nicht erreichbar: %(error)s"
+msgstr "無法連線 WebDAV：%(error)s"
+
+#, python-format
+msgid ""
+"WebDAV: Den Ordner gibt es nicht oder er ist nicht erreichbar (%(code)s)."
+msgstr "WebDAV：資料夾不存在或無法存取（%(code)s）。"
+
+#, python-format
+msgid "WebDAV: Ordner %(folder)s konnte nicht angelegt werden (%(code)s)."
+msgstr "WebDAV：無法建立資料夾 %(folder)s（%(code)s）。"
+
+#, python-format
+msgid "WebDAV: %(path)s konnte nicht gespeichert werden (%(code)s)."
+msgstr "WebDAV：無法儲存 %(path)s（%(code)s）。"
+
+#, python-format
+msgid "WebDAV: %(path)s konnte nicht gelöscht werden (%(code)s)."
+msgstr "WebDAV：無法刪除 %(path)s（%(code)s）。"
+
+msgid "Bitte den Server angeben."
+msgstr "請輸入伺服器。"
+
+#, python-format
+msgid "FTP: %(error)s"
+msgstr "FTP：%(error)s"
+
+#, python-format
+msgid "FTP nicht erreichbar: %(error)s"
+msgstr "無法連線 FTP：%(error)s"
+
+#, python-format
+msgid "FTP: %(path)s konnte nicht gespeichert werden (%(error)s)."
+msgstr "FTP：無法儲存 %(path)s（%(error)s）。"
+
+msgid "Dieses Ziel lädt nichts hoch."
+msgstr "此目標不上傳任何內容。"
+
+#, python-format
+msgid "%(n)s von %(total)s Dateien übertragen"
+msgstr "已傳輸 %(n)s / %(total)s 個檔案"
+
+msgid "Ordner auf diesem Computer"
+msgstr "此電腦上的資料夾"
+
+msgid "Auf diesem Server (/p/…)"
+msgstr "在此伺服器上（/p/…）"
+
+msgid "WebDAV"
+msgstr "WebDAV"
+
+msgid "FTP / FTPS"
+msgstr "FTP / FTPS"
+
+msgid "Bitte einen Namen eingeben."
+msgstr "請輸入名稱。"
+
+msgid "Diese Adresse ist schon vergeben."
+msgstr "此網址已被使用。"
+
+msgid "Unbekanntes Ziel."
+msgstr "未知目標。"
+
+msgid "Der Port ist eine Zahl."
+msgstr "連接埠必須是數字。"
+
+msgid "Verbindung klappt, Schreiben geht."
+msgstr "連線正常，可以寫入。"
+
+msgid "Es ist noch keine Tabelle ausgewählt."
+msgstr "尚未選擇任何表格。"
+
+msgid "Zurückgezogen."
+msgstr "已撤下。"
+
+msgid "Gelöscht."
+msgstr "已刪除。"
+
 msgid "Dieses Gerät wurde getrennt."
 msgstr "此設備已中斷連線。"
 
@@ -1582,7 +1744,8 @@ msgstr "無法驗證來自伺服器的模組（%(reason)s）。"
 msgid ""
 "Das Modul %(names)s wurde vom Server geladen. Bitte noch einmal verbinden, "
 "mit einem neuen Code aus der Authenticator-App."
-msgstr "已從伺服器載入模組 %(names)s。請使用驗證器應用程式中的新驗證碼再次連線。"
+msgstr ""
+"已從伺服器載入模組 %(names)s。請使用驗證器應用程式中的新驗證碼再次連線。"
 
 #, python-format
 msgid ""
@@ -1593,7 +1756,8 @@ msgstr "伺服器使用模組 %(names)s，而目前 DataFluss 版本沒有該模
 msgid ""
 "Der Server hat DataFluss %(server)s, dieser Computer %(here)s. Bitte beide "
 "auf dieselbe Version bringen."
-msgstr "伺服器為 DataFluss %(server)s，本電腦為 %(here)s。請將兩者更新到同一版本。"
+msgstr ""
+"伺服器為 DataFluss %(server)s，本電腦為 %(here)s。請將兩者更新到同一版本。"
 
 msgid "Daten werden übertragen"
 msgstr "正在傳輸資料"
@@ -1605,7 +1769,8 @@ msgstr "正在載入圖片和文件"
 msgid ""
 "Dieser Computer hat DataFluss %(theirs)s, der Server %(ours)s. Bitte beide "
 "auf dieselbe Version bringen."
-msgstr "本電腦為 DataFluss %(theirs)s，伺服器為 %(ours)s。請將兩者更新到同一版本。"
+msgstr ""
+"本電腦為 DataFluss %(theirs)s，伺服器為 %(ours)s。請將兩者更新到同一版本。"
 
 msgid ""
 "Computer und Server haben verschiedene Versionen. Bitte beide aktualisieren."
@@ -1614,9 +1779,11 @@ msgstr "電腦和伺服器的版本不同。請更新兩者。"
 msgid ""
 "Der Server wurde aus einer Sicherung wiederhergestellt. Diese Kopie gleicht "
 "sich deshalb nicht mehr ab: bitte noch nicht übertragene Änderungen "
-"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server"
-" verbinden."
-msgstr "伺服器已從備份還原，因此此副本不再同步：請記下尚未上傳的修改，從本電腦移除該資料庫，然後重新連線伺服器。"
+"notieren, die Datenbank auf diesem Computer entfernen und neu mit dem Server "
+"verbinden."
+msgstr ""
+"伺服器已從備份還原，因此此副本不再同步：請記下尚未上傳的修改，從本電腦移除該"
+"資料庫，然後重新連線伺服器。"
 
 msgid "Kein Gerät angemeldet."
 msgstr "未註冊設備。"
@@ -1686,76 +1853,12 @@ msgid ""
 "übernehmen."
 msgstr "該記錄已刪除，無法再採用另一版本。"
 
-msgid "Unbekanntes Vorlagenformat."
-msgstr "未知的範本格式。"
-
-msgid "Die Vorlage braucht eine Kennung aus Kleinbuchstaben, Ziffern und _."
-msgstr "範本需要由小寫字母、數字和 _ 組成的識別碼。"
-
-msgid "Die Vorlage braucht eine Versionsnummer."
-msgstr "範本需要版本號。"
-
-msgid "Die Vorlage braucht einen Titel."
-msgstr "範本需要標題。"
-
-msgid "Die Vorlage enthält keine Tabellen."
-msgstr "範本中沒有表格。"
-
 #, python-format
-msgid "Tabelle %(key)s: ungültige oder doppelte Kennung."
-msgstr "表格 %(key)s：識別碼無效或重複。"
+msgid "Die Vorlage lässt sich nicht anwenden: %(problem)s"
+msgstr "無法套用此範本：%(problem)s"
 
-#, python-format
-msgid "Tabelle %(key)s: Name fehlt."
-msgstr "表格 %(key)s：缺少名稱。"
-
-#, python-format
-msgid "Tabelle %(key)s: unbekanntes Recht %(right)s."
-msgstr "表格 %(key)s：未知權限 %(right)s。"
-
-#, python-format
-msgid "Tabelle %(key)s: ungültiges oder doppeltes Feld %(field)s."
-msgstr "表格 %(key)s：欄位 %(field)s 無效或重複。"
-
-#, python-format
-msgid "Feld %(field)s: unbekannter Typ."
-msgstr "欄位 %(field)s：未知類型。"
-
-#, python-format
-msgid "Feld %(field)s: Bezeichnung fehlt."
-msgstr "欄位 %(field)s：缺少名稱。"
-
-#, python-format
-msgid "Feld %(field)s: Optionen fehlen."
-msgstr "欄位 %(field)s：缺少選項。"
-
-#, python-format
-msgid "Feld %(field)s: unbekanntes Ziel der Verknüpfung."
-msgstr "欄位 %(field)s：未知的關聯目標。"
-
-#, python-format
-msgid "Feld %(field)s: Die verknüpfte Tabelle fehlt in der Vorlage."
-msgstr "欄位 %(field)s：範本中缺少所關聯的表格。"
-
-#, python-format
-msgid "Feld %(field)s: Formel fehlt."
-msgstr "欄位 %(field)s：缺少公式。"
-
-#, python-format
-msgid "Tabelle %(key)s: ungültige Darstellung."
-msgstr "表格 %(key)s：顯示設定無效。"
-
-#, python-format
-msgid "Tabelle %(key)s: Das Titelfeld fehlt."
-msgstr "表格 %(key)s：缺少標題欄位。"
-
-#, python-format
-msgid "%(group)s: Eintrag ohne Tabelle oder Namen."
-msgstr "%(group)s：項目缺少表格或名稱。"
-
-#, python-format
-msgid "Beispieldaten für eine unbekannte Tabelle %(key)s."
-msgstr "未知表格 %(key)s 的範例資料。"
+msgid "Die Vorlage lässt sich nicht anwenden: Sie enthält ungültige Angaben."
+msgstr "無法套用此範本：其中包含無效設定。"
 
 msgid "Diese Vorlage braucht ein Modul, das diese Datenbank nicht nutzt."
 msgstr "此範本需要本資料庫未使用的模組。"
@@ -1875,9 +1978,6 @@ msgstr "這些值無法這樣計算。"
 msgid "Teilen durch null."
 msgstr "除以零。"
 
-msgid "nicht sichtbar"
-msgstr "不可見"
-
 #, python-format
 msgid "Anzahl verknüpfter Datensätze: %(field)s"
 msgstr "關聯記錄數：%(field)s"
@@ -1955,9 +2055,6 @@ msgstr "未知表格"
 #, python-format
 msgid "%(field)s ist archiviert und kann nicht geändert werden."
 msgstr "%(field)s 已封存，無法變更。"
-
-msgid "(ohne Titel)"
-msgstr "（無標題）"
 
 #, python-format
 msgid "%(field)s: Bitte ein Bild hochladen (JPEG, PNG, GIF oder WebP)."
@@ -2050,9 +2147,269 @@ msgstr "部分記錄在此有多個項目，請先刪除。"
 msgid "Die Tabelle enthält Datensätze. Archivieren Sie sie stattdessen."
 msgstr "該表格包含記錄，請改為封存。"
 
+msgid "Unbekanntes Vorlagenformat."
+msgstr "未知的範本格式。"
+
+msgid "Die Vorlage braucht eine Kennung aus Kleinbuchstaben, Ziffern und _."
+msgstr "範本需要由小寫字母、數字和 _ 組成的識別碼。"
+
+msgid "Die Vorlage braucht eine Versionsnummer."
+msgstr "範本需要版本號。"
+
+msgid "Die Vorlage braucht einen Titel."
+msgstr "範本需要標題。"
+
+msgid "Die Vorlage enthält keine Tabellen."
+msgstr "範本中沒有表格。"
+
+#, python-format
+msgid "Tabelle %(key)s: ungültige oder doppelte Kennung."
+msgstr "表格 %(key)s：識別碼無效或重複。"
+
+#, python-format
+msgid "Tabelle %(key)s: Name fehlt."
+msgstr "表格 %(key)s：缺少名稱。"
+
+#, python-format
+msgid "Tabelle %(key)s: unbekanntes Recht %(right)s."
+msgstr "表格 %(key)s：未知權限 %(right)s。"
+
+#, python-format
+msgid "Tabelle %(key)s: ungültiges oder doppeltes Feld %(field)s."
+msgstr "表格 %(key)s：欄位 %(field)s 無效或重複。"
+
+#, python-format
+msgid "Feld %(field)s: unbekannter Typ."
+msgstr "欄位 %(field)s：未知類型。"
+
+#, python-format
+msgid "Feld %(field)s: Bezeichnung fehlt."
+msgstr "欄位 %(field)s：缺少名稱。"
+
+#, python-format
+msgid "Feld %(field)s: Optionen fehlen."
+msgstr "欄位 %(field)s：缺少選項。"
+
+#, python-format
+msgid "Feld %(field)s: unbekanntes Ziel der Verknüpfung."
+msgstr "欄位 %(field)s：未知的關聯目標。"
+
+#, python-format
+msgid "Feld %(field)s: Die verknüpfte Tabelle fehlt in der Vorlage."
+msgstr "欄位 %(field)s：範本中缺少所關聯的表格。"
+
+#, python-format
+msgid "Feld %(field)s: Formel fehlt."
+msgstr "欄位 %(field)s：缺少公式。"
+
+#, python-format
+msgid "Tabelle %(key)s: ungültige Darstellung."
+msgstr "表格 %(key)s：顯示設定無效。"
+
+#, python-format
+msgid "Tabelle %(key)s: Das Titelfeld fehlt."
+msgstr "表格 %(key)s：缺少標題欄位。"
+
+#, python-format
+msgid "%(group)s: Eintrag ohne Tabelle oder Namen."
+msgstr "%(group)s：項目缺少表格或名稱。"
+
+#, python-format
+msgid "Beispieldaten für eine unbekannte Tabelle %(key)s."
+msgstr "未知表格 %(key)s 的範例資料。"
+
+msgid "Die Datei ist zu groß (höchstens 1 MB)."
+msgstr "檔案過大（最多 1 MB）。"
+
+msgid "Die Datei ist keine gültige Vorlage (kein JSON)."
+msgstr "該檔案不是有效的範本（不是 JSON）。"
+
+msgid "Die Vorlage ist zu tief verschachtelt."
+msgstr "範本巢狀層級過深。"
+
+msgid "erwartet ein Objekt."
+msgstr "應為物件。"
+
+#, python-format
+msgid "unbekannte Angabe %(keys)s."
+msgstr "未知設定 %(keys)s。"
+
+msgid "fehlt."
+msgstr "缺少。"
+
+msgid "muss ein Text sein."
+msgstr "必須是文字。"
+
+#, python-format
+msgid "zu lang (höchstens %(n)s Zeichen)."
+msgstr "過長（最多 %(n)s 個字元）。"
+
+msgid "enthält Steuerzeichen."
+msgstr "包含控制字元。"
+
+msgid "ungültige Übersetzungen."
+msgstr "無效的翻譯。"
+
+#, python-format
+msgid "unbekannte Sprache %(code)s."
+msgstr "未知語言 %(code)s。"
+
+msgid "muss ja oder nein sein."
+msgstr "必須為是或否。"
+
+msgid "muss eine Zahl sein."
+msgstr "必須是數字。"
+
+#, python-format
+msgid "muss zwischen %(low)s und %(high)s liegen."
+msgstr "必須介於 %(low)s 和 %(high)s 之間。"
+
+#, python-format
+msgid "ungültiger Wert %(value)s."
+msgstr "無效值 %(value)s。"
+
+msgid "verweist auf ein Feld, das es nicht gibt."
+msgstr "引用了不存在的欄位。"
+
+msgid "verweist auf ein Feld der falschen Art."
+msgstr "引用的欄位類型不對。"
+
+msgid "erwartet eine Liste."
+msgstr "應為清單。"
+
+#, python-format
+msgid "zu viele Einträge (höchstens %(n)s)."
+msgstr "項目過多（最多 %(n)s 個）。"
+
+#, python-format
+msgid "Die Kennung %(id)s ist vergeben. Bitte eine eigene wählen."
+msgstr "識別碼 %(id)s 已被使用，請另選一個。"
+
+msgid "Beschreibung"
+msgstr "描述"
+
 msgid ""
-"Das sieht weder wie ein API-Schlüssel (32 Zeichen) noch wie ein "
-"Lesezugriffs-Token (beginnt mit „eyJ“) aus."
+"Eine geteilte Vorlage ist eine Datenbank für sich und kann keine Module "
+"voraussetzen."
+msgstr "共享範本是獨立的資料庫，不能依賴模組。"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Änderungen"
+msgstr "變更"
+
+msgid "zu viele Einträge."
+msgstr "項目過多。"
+
+#, python-format
+msgid "Änderungen in Version %(n)s"
+msgstr "版本 %(n)s 的變更"
+
+#, python-format
+msgid "Zu viele Tabellen (höchstens %(n)s)."
+msgstr "表格過多（最多 %(n)s 個）。"
+
+#, python-format
+msgid "Tabelle %(key)s"
+msgstr "表格 %(key)s"
+
+msgid "ungültiges Symbol."
+msgstr "無效圖示。"
+
+msgid "ungültiges Titelfeld."
+msgstr "無效的標題欄位。"
+
+#, python-format
+msgid "Feld %(field)s"
+msgstr "欄位 %(field)s"
+
+msgid "Nur Auswahlfelder haben Optionen."
+msgstr "只有選擇欄位才有選項。"
+
+msgid "ungültige Farbe."
+msgstr "無效顏色。"
+
+msgid "Grenze muss eine Zahl sein."
+msgstr "界限必須是數字。"
+
+msgid "Eine geteilte Vorlage verknüpft nur ihre eigenen Tabellen."
+msgstr "共享範本只能連結自身的表格。"
+
+msgid "Die Gegenseite gehört zu keiner Verknüpfung dieser Vorlage."
+msgstr "反向欄位不屬於此範本中的任何連結。"
+
+#, python-format
+msgid "Die Formel verweist auf %(ref)s, das es in der Vorlage nicht gibt."
+msgstr "公式引用了範本中不存在的 %(ref)s。"
+
+msgid "ungültige Sprache."
+msgstr "無效語言。"
+
+msgid "verweist auf eine Tabelle, die es nicht gibt."
+msgstr "引用了不存在的表格。"
+
+msgid "zu groß."
+msgstr "過大。"
+
+#, python-format
+msgid "ungültige Kennung %(id)s."
+msgstr "無效識別碼 %(id)s。"
+
+msgid "Ränder brauchen vier Zahlen."
+msgstr "頁邊距需要四個數字。"
+
+msgid "Die Fußzeile darf keine Anführungszeichen enthalten."
+msgstr "頁尾不能包含引號。"
+
+msgid "ungültiges Feld."
+msgstr "無效欄位。"
+
+msgid "ungültige Spalte."
+msgstr "無效欄。"
+
+msgid "Die Liste verweist auf keine Verknüpfung zu dieser Tabelle."
+msgstr "該清單未引用到此表格的連結。"
+
+msgid "ungültige Sortierung."
+msgstr "無效排序。"
+
+msgid "ungültiger Wert."
+msgstr "無效值。"
+
+msgid "Beispieldaten"
+msgstr "範例資料"
+
+#, python-format
+msgid "Beispieldaten %(key)s"
+msgstr "範例資料 %(key)s"
+
+#, python-format
+msgid "ungültiger Wert für %(field)s."
+msgstr "%(field)s 的值無效。"
+
+msgid "Die Vorlage ist ungültig."
+msgstr "範本無效。"
+
+#, python-format
+msgid "Links in Texten: %(urls)s"
+msgstr "文字中的連結：%(urls)s"
+
+#, python-format
+msgid ""
+"%(n)s Beispieldatensätze – bitte auf echte personenbezogene Daten prüfen."
+msgstr "%(n)s 筆範例記錄——請檢查是否含有真實個人資料。"
+
+#, python-format
+msgid "Beispieldaten enthalten Felder wie %(fields)s."
+msgstr "範例資料包含 %(fields)s 等欄位。"
+
+msgid "Die Vorlage gibt Rollen das Recht zu bearbeiten."
+msgstr "該範本賦予角色編輯權限。"
+
+msgid ""
+"Das sieht weder wie ein API-Schlüssel (32 Zeichen) noch wie ein Lesezugriffs-"
+"Token (beginnt mit „eyJ“) aus."
 msgstr "這既不像 API 金鑰（32 個字元），也不像讀取存取權杖（以「eyJ」開頭）。"
 
 msgid "TMDB hat ein zu großes Bild geschickt."
@@ -2159,6 +2516,9 @@ msgstr "%(template)s：已新增 %(n)s 項。"
 msgid "Angepasst und deshalb nicht aktualisiert: %(items)s."
 msgstr "已被修改，因此未更新：%(items)s。"
 
+msgid "Bitte mindestens eine Tabelle wählen."
+msgstr "請至少選擇一個表格。"
+
 msgid "Bitte eine Datei wählen."
 msgstr "請選擇檔案。"
 
@@ -2240,8 +2600,8 @@ msgid "Als gesehen markiert."
 msgstr "已標記為已看。"
 
 msgid ""
-"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich"
-" an die IT."
+"Ihre Rolle erlaubt diese Seite nicht. Wenn Sie sie brauchen, wenden Sie sich "
+"an die IT."
 msgstr "您的角色無權存取此頁面。如有需要，請聯絡 IT。"
 
 msgid "Nicht gefunden"
@@ -2265,23 +2625,24 @@ msgid "Zur Startseite"
 msgstr "返回首頁"
 
 msgid ""
-"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle"
-" Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
+"Eine Sicherung enthält die ganze Datenbank mit allen Zugangsdaten sowie alle "
+"Bilder und Dokumente. Laden Sie die Datei herunter und bewahren Sie sie an "
 "einem anderen Ort auf. Sie lässt sich in jeder Installation der "
 "Schulverwaltung einspielen."
-msgstr "備份包含整個資料庫（含所有帳號）以及所有圖片和文件。請下載此檔案並存放在其他地方。它可以還原到任何一個學校管理系統中。"
+msgstr ""
+"備份包含整個資料庫（含所有帳號）以及所有圖片和文件。請下載此檔案並存放在其他"
+"地方。它可以還原到任何一個學校管理系統中。"
 
 msgid "Regelmäßige Sicherung"
 msgstr "定期備份"
 
 msgid ""
-"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem"
-" anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
+"DataFluss legt die Sicherung in einen Ordner Ihrer Wahl, am besten auf einem "
+"anderen Laufwerk oder in einem Cloud-Ordner. Sie entsteht, während die "
 "Datenbank geöffnet ist."
-msgstr "DataFluss 會把備份存放在您選擇的資料夾中，最好位於另一個磁碟機或雲端資料夾中。備份在資料庫開啟時進行。"
-
-msgid "Ordner"
-msgstr "資料夾"
+msgstr ""
+"DataFluss 會把備份存放在您選擇的資料夾中，最好位於另一個磁碟機或雲端資料夾"
+"中。備份在資料庫開啟時進行。"
 
 msgid "Ordner wählen …"
 msgstr "選擇資料夾 …"
@@ -2313,8 +2674,8 @@ msgid ""
 "anderen Ort:</strong> Geht dieser Computer verloren, öffnet nur dieses "
 "Passwort die Sicherung."
 msgstr ""
-"至少 %(n)s 個字元。DataFluss "
-"會加密保存密碼，以便自動備份。<strong>請把密碼記在別處：</strong>如果這台電腦遺失，只有此密碼能開啟備份。"
+"至少 %(n)s 個字元。DataFluss 會加密保存密碼，以便自動備份。<strong>請把密碼記"
+"在別處：</strong>如果這台電腦遺失，只有此密碼能開啟備份。"
 
 msgid "Speichern"
 msgstr "儲存"
@@ -2338,7 +2699,9 @@ msgstr "傳輸到伺服器"
 msgid ""
 "Diese Datenbank wurde auf %(url)s übertragen. Arbeiten Sie ab jetzt mit dem "
 "Server: Änderungen hier erreichen ihn nicht mehr."
-msgstr "此資料庫已傳輸到 %(url)s。從現在起請使用伺服器：這裡的變更不會再同步到伺服器。"
+msgstr ""
+"此資料庫已傳輸到 %(url)s。從現在起請使用伺服器：這裡的變更不會再同步到伺服"
+"器。"
 
 msgid "Mit dem Server verbinden …"
 msgstr "連接到伺服器 …"
@@ -2350,8 +2713,9 @@ msgid ""
 "erste IT-Konto angelegt ist. Hat der Server schon Daten, fragt DataFluss "
 "nach und legt vorher eine Sicherung davon auf dem Server ab."
 msgstr ""
-"整個資料庫（包括所有帳戶、圖片和文件）將成為 DataFluss 伺服器的資料。之後伺服器將使用此資料庫的帳戶。最好用於只建立了第一個 IT "
-"帳戶的新伺服器。如果伺服器上已有資料，DataFluss 會先詢問，並事先在伺服器上保存一份備份。"
+"整個資料庫（包括所有帳戶、圖片和文件）將成為 DataFluss 伺服器的資料。之後伺服"
+"器將使用此資料庫的帳戶。最好用於只建立了第一個 IT 帳戶的新伺服器。如果伺服器"
+"上已有資料，DataFluss 會先詢問，並事先在伺服器上保存一份備份。"
 
 msgid "Adresse des Servers"
 msgstr "伺服器位址"
@@ -2372,7 +2736,8 @@ msgstr "所傳輸備份的密碼"
 msgid ""
 "Mindestens %(n)s Zeichen. Es schützt die Datei unterwegs und die Sicherung, "
 "die der Server vorher von seinem bisherigen Stand anlegt."
-msgstr "至少 %(n)s 個字元。它保護傳輸中的檔案，以及伺服器事先為其原有資料建立的備份。"
+msgstr ""
+"至少 %(n)s 個字元。它保護傳輸中的檔案，以及伺服器事先為其原有資料建立的備份。"
 
 msgid "Übertragen …"
 msgstr "傳輸 …"
@@ -2384,7 +2749,9 @@ msgid ""
 "Diese Datenbank enthält nur, was Ihr Konto sehen darf. Die vollständige "
 "Sicherung des Servers mit allen Daten lässt sich hierher laden. Dafür noch "
 "einmal mit Passwort und Code bestätigen."
-msgstr "此資料庫只包含您的帳戶有權檢視的內容。可以在此下載包含全部資料的伺服器完整備份。請再次用密碼和驗證碼確認。"
+msgstr ""
+"此資料庫只包含您的帳戶有權檢視的內容。可以在此下載包含全部資料的伺服器完整備"
+"份。請再次用密碼和驗證碼確認。"
 
 msgid "Ihr Passwort"
 msgstr "您的密碼"
@@ -2404,7 +2771,8 @@ msgid ""
 "nirgends gespeichert. <strong>Ohne dieses Passwort lässt sich die Sicherung "
 "nicht mehr öffnen.</strong> Bewahren Sie es getrennt von der Datei auf."
 msgstr ""
-"至少 %(n)s 個字元。此密碼用於加密檔案，不會儲存在任何地方。<strong>沒有此密碼將無法再開啟備份。</strong>請將密碼與檔案分開保管。"
+"至少 %(n)s 個字元。此密碼用於加密檔案，不會儲存在任何地方。<strong>沒有此密碼"
+"將無法再開啟備份。</strong>請將密碼與檔案分開保管。"
 
 msgid "Sicherung erstellen"
 msgstr "建立備份"
@@ -2415,7 +2783,8 @@ msgstr "上傳備份"
 msgid ""
 "Eine Sicherung von dieser oder einer anderen Installation. Das Hochladen "
 "ändert noch nichts, eingespielt wird erst in der Liste unten."
-msgstr "來自本系統或其他系統的備份。上傳本身不會做任何變更，需在下方清單中執行還原。"
+msgstr ""
+"來自本系統或其他系統的備份。上傳本身不會做任何變更，需在下方清單中執行還原。"
 
 msgid "Datei auswählen"
 msgstr "選擇檔案"
@@ -2482,10 +2851,12 @@ msgid "Alle Daten dieser Installation werden ersetzt."
 msgstr "此系統中的所有資料都將被取代。"
 
 msgid ""
-"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der"
-" Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
+"Das betrifft auch die Benutzerkonten: Danach gelten die Anmeldedaten aus der "
+"Sicherung, und alle werden abgemeldet. Vorher wird der aktuelle Stand "
 "automatisch als Sicherung mit demselben Passwort abgelegt."
-msgstr "這也包括使用者帳戶：之後將使用備份中的登入資訊，所有人都會被登出。在此之前，目前資料會自動儲存為一個使用相同密碼的備份。"
+msgstr ""
+"這也包括使用者帳戶：之後將使用備份中的登入資訊，所有人都會被登出。在此之前，"
+"目前資料會自動儲存為一個使用相同密碼的備份。"
 
 #, python-format
 msgid "Zur Bestätigung %(word)s eingeben"
@@ -2683,9 +3054,6 @@ msgstr "時間"
 msgid "Aktion"
 msgstr "操作"
 
-msgid "Beschreibung"
-msgstr "描述"
-
 msgid "IP"
 msgstr "IP"
 
@@ -2744,8 +3112,8 @@ msgid "Felder, Auswahlwerte und Masken umbenennen"
 msgstr "重新命名欄位、選項和表單版面"
 
 msgid ""
-"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für"
-" eine Sprache umbenennt."
+"Namen behalten die Sprache, in der sie eingegeben wurden, bis jemand sie für "
+"eine Sprache umbenennt."
 msgstr "名稱會保持輸入時所用的語言，直到有人為某種語言重新命名。"
 
 msgid "Jedes Mal fragen"
@@ -2786,13 +3154,17 @@ msgid ""
 "Benutzername und Passwort liegen dann in der Windows-"
 "Anmeldeinformationsverwaltung, und die Datenbank meldet sich beim Öffnen "
 "selbst an. Die Zwei-Faktor-Anmeldung bleibt."
-msgstr "使用者名稱和密碼將保存在 Windows 認證管理員中，開啟資料庫時會自動登入。雙重驗證仍然有效。"
+msgstr ""
+"使用者名稱和密碼將保存在 Windows 認證管理員中，開啟資料庫時會自動登入。雙重驗"
+"證仍然有效。"
 
 msgid ""
 "Benutzername und Passwort liegen dann im Schlüsselbund dieses Macs, und die "
 "Datenbank meldet sich beim Öffnen selbst an. Die Zwei-Faktor-Anmeldung "
 "bleibt."
-msgstr "使用者名稱和密碼將保存在這台 Mac 的鑰匙圈中，開啟資料庫時會自動登入。雙重驗證仍然有效。"
+msgstr ""
+"使用者名稱和密碼將保存在這台 Mac 的鑰匙圈中，開啟資料庫時會自動登入。雙重驗證"
+"仍然有效。"
 
 msgid ""
 "Bitte vergeben Sie jetzt ein eigenes Passwort. Das bisherige kennt auch die "
@@ -2850,7 +3222,9 @@ msgid ""
 "Bearbeiten: wie der Bereich es erlaubt. Nur lesen: sichtbar, aber nie "
 "änderbar. Verborgen: nirgends zu sehen, weder auf Seiten noch in Listen, "
 "Suche, Ausdrucken, Exporten, Verlauf und auf verbundenen Computern."
-msgstr "編輯：依區域權限。唯讀：可見但不可修改。隱藏：任何地方都看不到，包括頁面、清單、搜尋、列印、匯出、歷史記錄和已連線的電腦。"
+msgstr ""
+"編輯：依區域權限。唯讀：可見但不可修改。隱藏：任何地方都看不到，包括頁面、清"
+"單、搜尋、列印、匯出、歷史記錄和已連線的電腦。"
 
 msgid "Feld suchen"
 msgstr "搜尋欄位"
@@ -2898,7 +3272,9 @@ msgid ""
 "Eine Rolle legt fest, welche Bereiche ein Konto sieht, was es bearbeiten "
 "darf und welche Felder es nur lesen oder gar nicht sehen soll. Jedes Konto "
 "hat genau eine Rolle."
-msgstr "角色決定帳戶能看到哪些區域、可以編輯什麼，以及哪些欄位只能檢視或完全不可見。每個帳戶只有一個角色。"
+msgstr ""
+"角色決定帳戶能看到哪些區域、可以編輯什麼，以及哪些欄位只能檢視或完全不可見。"
+"每個帳戶只有一個角色。"
 
 msgid "Fest"
 msgstr "固定"
@@ -2978,13 +3354,16 @@ msgid ""
 "oder die erste erlaubte Sprache, wenn Deutsch nicht erlaubt ist. Die eigene "
 "Wahl bleibt gespeichert und gilt wieder, sobald die Sprache erlaubt ist."
 msgstr ""
-"選擇了不再允許的語言的使用者將看到德語；如果德語不被允許，則看到第一個允許的語言。使用者自己的選擇會被保留，一旦該語言重新被允許即再次生效。"
+"選擇了不再允許的語言的使用者將看到德語；如果德語不被允許，則看到第一個允許的"
+"語言。使用者自己的選擇會被保留，一旦該語言重新被允許即再次生效。"
 
 msgid ""
 "Ist nur eine Sprache erlaubt, verschwindet die Sprachauswahl, und beim "
 "Umbenennen wird nicht mehr nachgefragt: Die übrigen Sprachen behalten ihre "
 "Namen."
-msgstr "如果只允許一種語言，語言選單將不再顯示，重新命名時也不再詢問：其他語言保留各自的名稱。"
+msgstr ""
+"如果只允許一種語言，語言選單將不再顯示，重新命名時也不再詢問：其他語言保留各"
+"自的名稱。"
 
 msgid "Verbundene Macs übernehmen diese Auswahl beim nächsten Abgleich."
 msgstr "已連線的 Mac 會在下次同步時採用此設定。"
@@ -3030,6 +3409,9 @@ msgstr "檢查應用程式的新版本"
 
 msgid "Neueste Version installieren"
 msgstr "安裝最新版本"
+
+msgid "Tabellen als Website, die jeder lesen kann"
+msgstr "將表格發佈為任何人都可閱讀的網站"
 
 msgid "Alle Daten sichern und einspielen"
 msgstr "備份和還原所有資料"
@@ -3083,15 +3465,18 @@ msgstr "確認"
 
 msgid ""
 "Installiert die neueste Version auf dem Server. Vorher wird die Datenbank "
-"gesichert. Die bisherige Version läuft weiter, bis die neue bereit ist, alle"
-" können also normal weiterarbeiten."
-msgstr "在伺服器上安裝最新版本。安裝前會先備份資料庫。新版本就緒前，目前版本繼續執行，所有人都可以照常工作。"
+"gesichert. Die bisherige Version läuft weiter, bis die neue bereit ist, alle "
+"können also normal weiterarbeiten."
+msgstr ""
+"在伺服器上安裝最新版本。安裝前會先備份資料庫。新版本就緒前，目前版本繼續執"
+"行，所有人都可以照常工作。"
 
 msgid ""
 "Die Verbindung zu Coolify ist noch nicht eingerichtet. Die Anleitung steht "
 "in <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>."
 msgstr ""
-"尚未設定與 Coolify 的連線。說明見 <span class=\"mono\">docs/INSTALL-COOLIFY.md</span>。"
+"尚未設定與 Coolify 的連線。說明見 <span class=\"mono\">docs/INSTALL-"
+"COOLIFY.md</span>。"
 
 msgid "Installiert"
 msgstr "已安裝"
@@ -3126,7 +3511,9 @@ msgstr "此版本新增內容"
 msgid ""
 "Diese Datenbank liegt auf diesem Computer. Sie wird mit der App DataFluss "
 "aktualisiert, installiert ist Version %(version)s."
-msgstr "此資料庫位於這台電腦上，隨 DataFluss 應用程式一起更新，已安裝版本 %(version)s。"
+msgstr ""
+"此資料庫位於這台電腦上，隨 DataFluss 應用程式一起更新，已安裝版本 "
+"%(version)s。"
 
 msgid ""
 "Die App sucht von selbst nach neuen Versionen. Ist der Computer mit einem "
@@ -3190,7 +3577,9 @@ msgstr "要為所有使用者關閉雙重驗證登入嗎？之後僅需密碼即
 msgid ""
 "Zur Anmeldung genügt das Passwort. Nur für Demos ohne echte Daten gedacht. "
 "Bereits eingerichtete Apps gelten nach dem Einschalten weiter."
-msgstr "登入時只需密碼。僅適用於不含真實資料的示範。重新開啟後，已設定的驗證器 App 仍然有效。"
+msgstr ""
+"登入時只需密碼。僅適用於不含真實資料的示範。重新開啟後，已設定的驗證器 App 仍"
+"然有效。"
 
 msgid "Einschalten"
 msgstr "開啟"
@@ -3222,7 +3611,8 @@ msgstr "未儲存"
 msgid ""
 "Die Seite war zu lange offen oder Sie haben sich inzwischen neu angemeldet. "
 "Gehen Sie zurück, laden Sie die Seite neu und versuchen Sie es noch einmal."
-msgstr "頁面開啟時間過長，或您在此期間重新登入過。請返回、重新整理頁面後再試一次。"
+msgstr ""
+"頁面開啟時間過長，或您在此期間重新登入過。請返回、重新整理頁面後再試一次。"
 
 msgid "Product Key"
 msgstr "產品金鑰"
@@ -3413,9 +3803,6 @@ msgstr "復原"
 
 msgid "Entwurf speichern"
 msgstr "儲存草稿"
-
-msgid "Veröffentlichen"
-msgstr "發佈"
 
 msgid "Bausteine"
 msgstr "模組"
@@ -3630,7 +4017,9 @@ msgid ""
 msgid_plural ""
 "Gelöschte Personen bleiben %(days)s Tage hier. Danach sind sie endgültig "
 "gelöscht, mit ihren Zugängen, Karten, Kommentaren und Dateien."
-msgstr[0] "已刪除的人員會在此保留 %(days)s 天，之後將連同其帳號、證件卡、留言和檔案一起被永久刪除。"
+msgstr[0] ""
+"已刪除的人員會在此保留 %(days)s 天，之後將連同其帳號、證件卡、留言和檔案一起"
+"被永久刪除。"
 
 msgid "Gelöscht am"
 msgstr "刪除時間"
@@ -3818,7 +4207,8 @@ msgstr "新生入學登記"
 msgid ""
 "Eine Aufnahme in einem Durchgang: Daten eingeben, Zugänge erzeugen, danach "
 "Eltern, Gerät und Druck auf der Personenseite."
-msgstr "一次完成入學登記：輸入資料、產生帳號，然後在人員頁面處理家長、設備和列印。"
+msgstr ""
+"一次完成入學登記：輸入資料、產生帳號，然後在人員頁面處理家長、設備和列印。"
 
 msgid "Stammdaten"
 msgstr "基本資料"
@@ -3846,9 +4236,11 @@ msgstr "變為"
 
 #, python-format
 msgid ""
-"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das"
-" lässt sich nur über eine Sicherung zurücknehmen."
-msgstr "將 %(total)s 名學生升級，並將其中 %(leaving)s 名作為離校封存？此操作只能透過備份復原。"
+"%(total)s Schüler versetzen, davon %(leaving)s als Austritt archivieren? Das "
+"lässt sich nur über eine Sicherung zurücknehmen."
+msgstr ""
+"將 %(total)s 名學生升級，並將其中 %(leaving)s 名作為離校封存？此操作只能透過"
+"備份復原。"
 
 msgid "Wechsel durchführen"
 msgstr "執行學年切換"
@@ -3929,6 +4321,270 @@ msgid ""
 "PDFs werden nicht gespeichert. Protokolliert wird nur, wer was gedruckt hat."
 msgstr "不儲存 PDF。僅記錄誰列印了什麼。"
 
+msgid "Läuft"
+msgstr "進行中"
+
+msgid "Fehlgeschlagen"
+msgstr "失敗"
+
+msgid "Fertig"
+msgstr "完成"
+
+#, python-format
+msgid "Zuletzt veröffentlicht: %(when)s"
+msgstr "上次發佈：%(when)s"
+
+msgid "Noch nicht veröffentlicht."
+msgstr "尚未發佈。"
+
+msgid "Klappt"
+msgstr "正常"
+
+msgid "Klappt nicht"
+msgstr "不正常"
+
+#, python-format
+msgid "„%(name)s“ veröffentlichen"
+msgstr "發佈「%(name)s」"
+
+msgid "Das wird öffentlich"
+msgstr "以下內容將會公開"
+
+#, python-format
+msgid ""
+"%(n)s Datensatz, so wie die Rolle „%(role)s“ ihn sieht, mit Bildern; Ziel: "
+"%(target)s."
+msgid_plural ""
+"%(n)s Datensätze, so wie die Rolle „%(role)s“ sie sieht, mit Bildern; Ziel: "
+"%(target)s."
+msgstr[0] ""
+"%(n)s 筆記錄，按角色「%(role)s」可見的內容，含圖片；目標：%(target)s。"
+
+msgid "Nichts: Die Rolle darf keine der gewählten Tabellen lesen."
+msgstr "無：該角色無權讀取任何所選表格。"
+
+msgid ""
+"Nie dabei: geheime Felder, der Änderungsverlauf, Benutzer, Papierkorb und "
+"Felder, die nicht ausgewählt sind."
+msgstr "絕不包含：機密欄位、修改記錄、使用者、回收筒以及未選擇的欄位。"
+
+msgid ""
+"Schüler, Personal, Eltern, Geräte und Zugänge der Schulverwaltung werden nie "
+"veröffentlicht, auch nicht über Verknüpfungen."
+msgstr ""
+"學校管理中的學生、教職員、家長、設備和帳號絕不會被發佈，即使透過關聯也不會。"
+
+msgid "Öffentlich"
+msgstr "公開"
+
+msgid "Jeder, der die Adresse kennt, kann alles davon lesen."
+msgstr "任何知道網址的人都可以閱讀全部內容。"
+
+msgid "Suchmaschinen dürfen die Seiten aufnehmen."
+msgstr "搜尋引擎可以收錄這些頁面。"
+
+msgid "Ja, veröffentlichen"
+msgstr "是，發佈"
+
+msgid "Zurück zu den Veröffentlichungen"
+msgstr "返回發佈列表"
+
+msgid ""
+"Angeboten wird nur, was die Rolle der Veröffentlichung sehen darf. Neue "
+"Felder und Tabellen kommen nie von selbst dazu. Geheime Felder, der "
+"Änderungsverlauf sowie Personen und Geräte werden nie veröffentlicht."
+msgstr ""
+"只提供發佈所用角色可見的內容。新欄位和新表格絕不會自動加入。機密欄位、修改記"
+"錄以及人員和設備絕不會被發佈。"
+
+msgid "Der Titel kommt immer mit."
+msgstr "標題始終包含在內。"
+
+msgid "Galerie"
+msgstr "圖庫"
+
+msgid "Dateien (PDF usw.) zum Herunterladen"
+msgstr "可下載的檔案（PDF 等）"
+
+msgid ""
+"Die gewählte Rolle darf keine Tabelle lesen. Wählen Sie unten eine andere "
+"Rolle oder geben Sie ihr Rechte an Tabellen."
+msgstr "所選角色無權讀取任何表格。請在下方選擇其他角色，或為其授予表格權限。"
+
+msgid "Inhalt speichern"
+msgstr "儲存內容"
+
+msgid "Ziel"
+msgstr "目標欄位"
+
+msgid ""
+"Die ganze Website als ZIP-Datei zum Herunterladen, zum Beispiel für einen "
+"USB-Stick oder um sie selbst hochzuladen."
+msgstr "將整個網站下載為 ZIP 檔案，例如用於隨身碟或自行上傳。"
+
+msgid ""
+"Dieser Server zeigt die Website unter seiner eigenen Adresse, öffentlich und "
+"ohne Anmeldung."
+msgstr "此伺服器在自己的網址下公開展示該網站，無需登入。"
+
+msgid "Wählen …"
+msgstr "選擇 …"
+
+msgid ""
+"Zum Beispiel ein Ordner, den ein anderes Programm hochlädt oder "
+"synchronisiert. DataFluss löscht dort nur Dateien, die es selbst angelegt "
+"hat."
+msgstr ""
+"例如由其他程式上傳或同步的資料夾。DataFluss 只會刪除其中由它自己建立的檔案。"
+
+msgid "WebDAV-Adresse des Ordners"
+msgstr "資料夾的 WebDAV 網址"
+
+msgid "Port"
+msgstr "連接埠"
+
+msgid "Ordner auf dem Server"
+msgstr "伺服器上的資料夾"
+
+msgid ""
+"Ohne Verschlüsselung (nur wenn der Server kein FTPS kann: Passwort und Daten "
+"gehen dann lesbar über das Netz)"
+msgstr "不加密（僅當伺服器不支援 FTPS 時：密碼和資料將以明文在網路上傳輸）"
+
+msgid "Leer lassen, um das gespeicherte zu behalten"
+msgstr "留空以保留已儲存的"
+
+msgid "Wird verschlüsselt gespeichert und nie angezeigt."
+msgstr "加密儲存，絕不顯示。"
+
+msgid "Ziel speichern"
+msgstr "儲存目標"
+
+msgid "Gespeichertes Ziel testen"
+msgstr "測試已儲存的目標"
+
+msgid "Name der Website"
+msgstr "網站名稱"
+
+msgid "Kurzname (für die Adresse)"
+msgstr "簡稱（用於網址）"
+
+msgid "Zeigt höchstens, was diese Rolle sieht"
+msgstr "最多顯示此角色可見的內容"
+
+msgid "Sprache der Website"
+msgstr "網站語言"
+
+msgid "Suchmaschinen dürfen die Website aufnehmen"
+msgstr "搜尋引擎可以收錄該網站"
+
+msgid "Einstellungen speichern"
+msgstr "儲存設定"
+
+msgid "Vorschau erstellen"
+msgstr "產生預覽"
+
+msgid "Vorschau öffnen"
+msgstr "開啟預覽"
+
+msgid "Veröffentlichen …"
+msgstr "發佈 …"
+
+msgid "Neu veröffentlichen"
+msgstr "重新發佈"
+
+msgid "ZIP herunterladen"
+msgstr "下載 ZIP"
+
+msgid "Zuerst unter „Inhalt“ mindestens eine Tabelle wählen."
+msgstr "請先在「內容」中至少選擇一個表格。"
+
+msgid "Zurückziehen und löschen"
+msgstr "撤下和刪除"
+
+msgid "Die Website von diesem Server nehmen? Die Einstellungen bleiben."
+msgstr "要從此伺服器上撤下該網站嗎？設定將保留。"
+
+msgid "Vom Server nehmen"
+msgstr "從伺服器撤下"
+
+msgid ""
+"Auf einem fremden Webspace (WebDAV, FTP) oder in einem Ordner bleibt die "
+"Website liegen, bis Sie sie dort löschen."
+msgstr ""
+"在其他網路空間（WebDAV、FTP）或資料夾中，網站會一直保留，直到您在那裡將其刪"
+"除。"
+
+msgid ""
+"Diese Veröffentlichung löschen? Auf diesem Server wird die Website entfernt."
+msgstr "要刪除此發佈嗎？該網站將從此伺服器上移除。"
+
+msgid "Veröffentlichung löschen"
+msgstr "刪除發佈"
+
+msgid "Zurück zu den Einstellungen"
+msgstr "返回設定"
+
+msgid ""
+"Ausgewählte Tabellen als Website, die jeder lesen kann: mit Liste oder "
+"Galerie, Datensatzseiten und Suche, aber ohne Anlegen oder Ändern. Geändert "
+"wird weiter hier; danach überträgt „Veröffentlichen“ nur, was sich geändert "
+"hat."
+msgstr ""
+"將所選表格發佈為任何人都可閱讀的網站：包含清單或圖庫、記錄頁面和搜尋，但不能"
+"新增或修改。修改仍在這裡進行；之後「發佈」只傳輸有變化的內容。"
+
+msgid "Noch nicht veröffentlicht"
+msgstr "尚未發佈"
+
+msgid "Noch keine Veröffentlichung."
+msgstr "尚無發佈。"
+
+msgid "Neue Veröffentlichung"
+msgstr "新增發佈"
+
+msgid "z. B. Unsere Filmsammlung"
+msgstr "例如：我們的電影收藏"
+
+msgid ""
+"Danach wählen Sie Tabellen, Felder und das Ziel. Veröffentlicht wird erst, "
+"wenn Sie es bestätigen."
+msgstr "然後選擇表格、欄位和目標。在您確認之前不會發佈任何內容。"
+
+msgid "Daten und Bilder von TMDB."
+msgstr "資料和圖片來自 TMDB。"
+
+msgid "Suchen …"
+msgstr "搜尋 …"
+
+msgid "Nichts gefunden."
+msgstr "未找到結果。"
+
+msgid "Hell oder dunkel"
+msgstr "淺色或深色"
+
+#, python-format
+msgid "Stand: %(date)s. Nur zum Lesen."
+msgstr "截至 %(date)s。僅供閱讀。"
+
+msgid "Erstellt mit"
+msgstr "製作工具："
+
+msgid "Noch keine Tabellen veröffentlicht."
+msgstr "尚未發佈任何表格。"
+
+msgid "Brotkrümel"
+msgstr "導覽路徑"
+
+msgid "Besetzung"
+msgstr "演員"
+
+msgid "In dieser Tabelle filtern"
+msgstr "在此表格中篩選"
+
+msgid "Keine Datensätze."
+msgstr "沒有記錄。"
+
 msgid ""
 "Macs mit einer Kopie der Daten, und Änderungen, bei denen eine Person "
 "entscheiden sollte."
@@ -3940,7 +4596,8 @@ msgstr "檢查同步衝突"
 msgid ""
 "Dasselbe Feld wurde an zwei Stellen verschieden geändert. Die neuere "
 "Änderung gilt bereits. Bestätigen oder die andere Fassung übernehmen."
-msgstr "同一欄位在兩處被改成了不同的值。較新的變更已生效。請確認，或採用另一版本。"
+msgstr ""
+"同一欄位在兩處被改成了不同的值。較新的變更已生效。請確認，或採用另一版本。"
 
 msgid "Datensatz und Feld"
 msgstr "記錄和欄位"
@@ -3987,8 +4644,8 @@ msgstr "已中斷連線"
 
 #, python-format
 msgid ""
-"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt"
-" mit dem Server."
+"%(name)s trennen? Der Mac löscht seine Kopie der Daten beim nächsten Kontakt "
+"mit dem Server."
 msgstr "中斷 %(name)s 的連線？該 Mac 下次連線伺服器時會刪除其資料副本。"
 
 msgid "Trennen"
@@ -3997,7 +4654,8 @@ msgstr "中斷連線"
 msgid ""
 "Noch kein Mac verbunden. Ein Mac verbindet sich in der App über „Mit Server "
 "verbinden“, mit dem eigenen Konto."
-msgstr "尚未連線任何 Mac。在 App 中透過「連線伺服器」並使用自己的帳號即可連線 Mac。"
+msgstr ""
+"尚未連線任何 Mac。在 App 中透過「連線伺服器」並使用自己的帳號即可連線 Mac。"
 
 msgid "Nur auf dem Server"
 msgstr "僅限伺服器"
@@ -4010,15 +4668,17 @@ msgid ""
 "Faktor-Anmeldung, die Einstellungen der Schule, Sicherungen und Updates "
 "verwaltet der Server. Eine Änderung hier würde bei der nächsten "
 "Synchronisation wieder ersetzt."
-msgstr "此資料庫已連線到伺服器。帳號、密碼、雙重驗證登入、學校設定、備份和更新均由伺服器管理。在此處所做的變更會在下次同步時被覆寫。"
+msgstr ""
+"此資料庫已連線到伺服器。帳號、密碼、雙重驗證登入、學校設定、備份和更新均由伺"
+"服器管理。在此處所做的變更會在下次同步時被覆寫。"
 
 #, python-format
 msgid ""
 "Bitte dafür die Schulverwaltung im Browser öffnen: <a class=\"underline\" "
 "href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>."
 msgstr ""
-"請在瀏覽器中開啟學校管理系統進行此操作：<a class=\"underline\" href=\"%(url)s\" "
-"target=\"_blank\" rel=\"noopener\">%(url)s</a>。"
+"請在瀏覽器中開啟學校管理系統進行此操作：<a class=\"underline\" "
+"href=\"%(url)s\" target=\"_blank\" rel=\"noopener\">%(url)s</a>。"
 
 msgid "Bitte dafür die Schulverwaltung im Browser öffnen."
 msgstr "請在瀏覽器中開啟學校管理系統進行此操作。"
@@ -4058,20 +4718,18 @@ msgstr "公式的功能"
 
 #, python-format
 msgid ""
-"Felder in geschweiften Klammern, etwa %(example)s. Rechnen mit + − * /, Text"
-" verbinden mit &, vergleichen mit = != < > <= >=, dazu and, or, not."
+"Felder in geschweiften Klammern, etwa %(example)s. Rechnen mit + − * /, Text "
+"verbinden mit &, vergleichen mit = != < > <= >=, dazu and, or, not."
 msgstr ""
-"欄位寫在大括號中，例如 %(example)s。可用 + − * / 計算，用 & 連接文字，用 = != < > <= >= 比較，另有 "
-"and、or、not。"
+"欄位寫在大括號中，例如 %(example)s。可用 + − * / 計算，用 & 連接文字，用 = !"
+"= < > <= >= 比較，另有 and、or、not。"
 
 #, python-format
 msgid ""
-"Felder verknüpfter Datensätze: %(example)s. Datensätze anderer Tabellen, die"
-" hierher verknüpfen, unter dem Namen auf der Gegenseite."
-msgstr "關聯記錄的欄位：%(example)s。其他表格中關聯到此處的記錄，使用對方顯示的名稱。"
-
-msgid "Nichts gefunden."
-msgstr "未找到結果。"
+"Felder verknüpfter Datensätze: %(example)s. Datensätze anderer Tabellen, die "
+"hierher verknüpfen, unter dem Namen auf der Gegenseite."
+msgstr ""
+"關聯記錄的欄位：%(example)s。其他表格中關聯到此處的記錄，使用對方顯示的名稱。"
 
 #, python-format
 msgid "„%(name)s“ neu anlegen"
@@ -4096,15 +4754,14 @@ msgstr "範本「%(name)s」有新版本 %(n)s。"
 
 #, python-format
 msgid ""
-"„%(name)s“ auf Version %(n)s ergänzen? Neue Tabellen und Felder kommen dazu;"
-" was hier geändert wurde, bleibt."
-msgstr "將「%(name)s」補充到版本 %(n)s？將新增新的表格和欄位；此處已做的修改保持不變。"
+"„%(name)s“ auf Version %(n)s ergänzen? Neue Tabellen und Felder kommen dazu; "
+"was hier geändert wurde, bleibt."
+msgstr ""
+"將「%(name)s」補充到版本 %(n)s？將新增新的表格和欄位；此處已做的修改保持不"
+"變。"
 
 msgid "Ergänzen"
 msgstr "補充"
-
-msgid "Daten und Bilder von TMDB."
-msgstr "資料和圖片來自 TMDB。"
 
 msgid "Titel eines Films oder einer Serie"
 msgstr "電影或劇集名稱"
@@ -4151,7 +4808,9 @@ msgstr "登記"
 msgid ""
 "Handlung, Besetzung, Bilder und die anderen Angaben von TMDB neu holen? "
 "Bewertung, Status, Sichtungen und Notizen bleiben."
-msgstr "要從 TMDB 重新取得劇情、演員、圖片等資訊嗎？評分、狀態、觀看記錄和筆記會保留。"
+msgstr ""
+"要從 TMDB 重新取得劇情、演員、圖片等資訊嗎？評分、狀態、觀看記錄和筆記會保"
+"留。"
 
 msgid "Mit TMDB aktualisieren"
 msgstr "從 TMDB 更新"
@@ -4208,7 +4867,9 @@ msgid ""
 "Eine Vorlage legt fertige Tabellen mit Feldern, Datensatzseiten, "
 "Druckvorlagen und Ansichten an. Danach lässt sich alles anpassen; eine "
 "neuere Version ergänzt nur, was fehlt."
-msgstr "範本會建立現成的表格，包括欄位、記錄頁面、列印範本和檢視。之後一切均可修改；新版本只會補充缺少的內容。"
+msgstr ""
+"範本會建立現成的表格，包括欄位、記錄頁面、列印範本和檢視。之後一切均可修改；"
+"新版本只會補充缺少的內容。"
 
 #, python-format
 msgid "Version %(n)s angewendet"
@@ -4237,11 +4898,12 @@ msgid "Sammlung übernehmen"
 msgstr "匯入收藏"
 
 msgid ""
-"Übernimmt eine Filmsammlung aus MyMovies: Titel, Bewertung und das Datum, an"
-" dem ein Titel in die Sammlung kam, als Sichtung. Alles andere – Handlung, "
+"Übernimmt eine Filmsammlung aus MyMovies: Titel, Bewertung und das Datum, an "
+"dem ein Titel in die Sammlung kam, als Sichtung. Alles andere – Handlung, "
 "Besetzung, Poster, Bilder – kommt von TMDB."
 msgstr ""
-"從 MyMovies 匯入電影收藏：作品、評分，以及作品加入收藏的日期（作為觀看記錄）。其餘內容——劇情、演員、海報、圖片——來自 TMDB。"
+"從 MyMovies 匯入電影收藏：作品、評分，以及作品加入收藏的日期（作為觀看記"
+"錄）。其餘內容——劇情、演員、海報、圖片——來自 TMDB。"
 
 msgid "1. In MyMovies exportieren"
 msgstr "1. 從 MyMovies 匯出"
@@ -4257,7 +4919,9 @@ msgstr "2. 選擇檔案"
 msgid ""
 "Die Datei wird auf diesem Gerät gelesen. Zur Datenbank gehen nur Titel, "
 "Jahr, IMDb-Nummer, Bewertung und Datum jedes Eintrags."
-msgstr "檔案在本裝置上讀取。只有每個條目的標題、年份、IMDb 編號、評分和日期會進入資料庫。"
+msgstr ""
+"檔案在本裝置上讀取。只有每個條目的標題、年份、IMDb 編號、評分和日期會進入資料"
+"庫。"
 
 msgid "MyMovies-Datei (XML)"
 msgstr "MyMovies 檔案（XML）"
@@ -4273,7 +4937,8 @@ msgid ""
 "%(entries)s Einträge, daraus %(titles)s Titel: %(series)s Serien (Staffeln "
 "zusammengefasst), %(merged)s Titel mit mehreren Sichtungen."
 msgstr ""
-"%(entries)s 個條目，合併為 %(titles)s 部作品：%(series)s 部劇集（各季合併），%(merged)s 部作品有多次觀看。"
+"%(entries)s 個條目，合併為 %(titles)s 部作品：%(series)s 部劇集（各季合併），"
+"%(merged)s 部作品有多次觀看。"
 
 #, python-format
 msgid "%(n)s ohne IMDb-Nummer werden bei TMDB nach Namen gesucht."
@@ -4329,12 +4994,56 @@ msgid ""
 msgstr "表格中已有的作品只補充缺少的觀看記錄，如尚無評分則補充評分。"
 
 msgid ""
-"Abbrechen schadet nicht: Weiter macht dort weiter, und ein zweiter Lauf legt"
-" nichts doppelt an."
+"Abbrechen schadet nicht: Weiter macht dort weiter, und ein zweiter Lauf legt "
+"nichts doppelt an."
 msgstr "中斷無妨：「繼續」會從中斷處接著進行，再次執行也不會重複建立。"
 
 msgid "Frühere Übernahmen"
 msgstr "以前的匯入"
+
+msgid "Als Vorlage exportieren"
+msgstr "匯出為範本"
+
+msgid ""
+"Die gewählten Tabellen werden eine Vorlagendatei: mit Feldern, "
+"Datensatzseiten, Druckvorlagen und gemeinsamen Ansichten. Sie lässt sich auf "
+"datafluss.de teilen oder in einer anderen Datenbank anwenden. Verknüpfungen "
+"zu Tabellen, die nicht dabei sind, und zu Schülern, Personal oder Geräten "
+"bleiben weg."
+msgstr "所選表格將產生一個範本檔案：包含欄位、記錄頁面、列印範本和共享檢視。可在 datafluss.de 上分享，或在其他資料庫中套用。指向未包含的表格以及學生、教職員或設備的連結將被省略。"
+
+msgid "So lässt sich das nicht exportieren:"
+msgstr "無法這樣匯出："
+
+msgid "z. B. Vereinsverwaltung"
+msgstr "例如：社團管理"
+
+msgid "Kennung"
+msgstr "識別碼"
+
+msgid "aus dem Titel"
+msgstr "取自標題"
+
+msgid ""
+"Kleinbuchstaben, Ziffern und _, bis 20 Zeichen. Sie bleibt für alle "
+"Versionen gleich."
+msgstr "小寫字母、數字和 _，最多 20 個字元。所有版本保持不變。"
+
+#, python-format
+msgid "Bis zu %(n)s Datensätze je Tabelle als Beispieldaten mitnehmen"
+msgstr "每個表格最多帶上 %(n)s 筆記錄作為範例資料"
+
+msgid ""
+"Ohne Dateien, Bilder und Geheimfelder. Vorsicht: Beim Teilen sieht jeder "
+"diese Daten – nur erfundene Beispiele, keine echten Namen, Adressen oder "
+"Telefonnummern."
+msgstr "不含檔案、圖片和機密欄位。注意：分享後所有人都能看到這些資料——請只用虛構的範例，不要用真實的姓名、地址或電話號碼。"
+
+msgid "Vorlage herunterladen"
+msgstr "下載範本"
+
+msgid "Nicht dabei"
+msgstr "未包含"
 
 msgid "Zeigt auf"
 msgstr "指向"
@@ -4441,17 +5150,18 @@ msgid "%(name)s als Titel"
 msgstr "以 %(name)s 作為標題"
 
 msgid ""
-"Der Titel nennt einen Datensatz in Listen, Verknüpfungen und der Suche. Nach"
-" dem Anlegen lässt sich der Import unter Import & Export 24 Stunden lang "
+"Der Titel nennt einen Datensatz in Listen, Verknüpfungen und der Suche. Nach "
+"dem Anlegen lässt sich der Import unter Import & Export 24 Stunden lang "
 "zurücknehmen."
-msgstr "標題用於在清單、關聯和搜尋中稱呼一筆記錄。建立後，可在「匯入與匯出」中於 24 小時內撤銷此次匯入。"
+msgstr ""
+"標題用於在清單、關聯和搜尋中稱呼一筆記錄。建立後，可在「匯入與匯出」中於 24 "
+"小時內撤銷此次匯入。"
 
 msgid "Tabelle anlegen und Daten übernehmen"
 msgstr "建立表格並匯入資料"
 
 msgid ""
-"Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder "
-"Termine."
+"Eigene Tabellen mit eigenen Feldern, etwa für Bücher, Ausleihen oder Termine."
 msgstr "自訂表格和欄位，例如用於圖書、借閱或預約。"
 
 msgid "Name des Bereichs"
@@ -4470,6 +5180,9 @@ msgstr "請在右側建立第一個。"
 
 msgid "z. B. Bücher"
 msgstr "例如：圖書"
+
+msgid "Als Vorlage exportieren …"
+msgstr "匯出為範本…"
 
 msgid ""
 "Die Tabelle beginnt mit einem Feld „Name“. Rechte je Rolle lassen sich "
@@ -4497,9 +5210,6 @@ msgstr "移至資源回收筒"
 msgid "Diesen Datensatz in den Papierkorb legen?"
 msgstr "將此記錄移至資源回收筒？"
 
-msgid "Besetzung"
-msgstr "演員"
-
 msgid "Neuer Datensatz. Alles wird beim Verlassen eines Feldes gespeichert."
 msgstr "新記錄。離開欄位時會自動儲存。"
 
@@ -4508,9 +5218,6 @@ msgstr "捨棄"
 
 msgid "Weiterer Datensatz"
 msgstr "再建一筆記錄"
-
-msgid "Fertig"
-msgstr "完成"
 
 msgid "Tabelle gestalten"
 msgstr "設計表格"
@@ -4529,9 +5236,6 @@ msgstr "從 TMDB 新增"
 
 msgid "Darstellung"
 msgstr "顯示方式"
-
-msgid "Galerie"
-msgstr "圖庫"
 
 msgid "Sortieren"
 msgstr "排序"
@@ -4557,7 +5261,9 @@ msgstr "也在那裡顯示為欄位"
 msgid ""
 "Die andere Tabelle bekommt ein Feld mit diesem Namen, z. B. „Inhaber von“, "
 "das die Verknüpfung von ihrer Seite zeigt und ändert."
-msgstr "另一張表格會得到一個此名稱的欄位（例如「負責」），從它那一側顯示和修改該連結。"
+msgstr ""
+"另一張表格會得到一個此名稱的欄位（例如「負責」），從它那一側顯示和修改該連"
+"結。"
 
 msgid "Wie ein Datensatz aussieht"
 msgstr "記錄的外觀"
@@ -4566,7 +5272,9 @@ msgid ""
 "Ordnen Sie die Felder im Maskendesigner in Reitern und Abschnitten an. "
 "Felder, die nicht in der Maske stehen, erscheinen unten unter „Weitere "
 "Felder“."
-msgstr "在表單設計器中將欄位排列到分頁和區段中。未放入表單的欄位顯示在底部的「更多欄位」中。"
+msgstr ""
+"在表單設計器中將欄位排列到分頁和區段中。未放入表單的欄位顯示在底部的「更多欄"
+"位」中。"
 
 #, python-format
 msgid "Version %(n)s"
@@ -4606,7 +5314,9 @@ msgstr "側邊欄分區"
 msgid ""
 "Tabellen mit demselben Bereich stehen in der Seitenleiste zusammen, etwa "
 "unter „Bibliothek“ oder „Verein“. Leer: unter „Tabellen“."
-msgstr "分區相同的表格在側邊欄中排在一起，例如「圖書館」或「協會」下。留空：放在「表格」下。"
+msgstr ""
+"分區相同的表格在側邊欄中排在一起，例如「圖書館」或「協會」下。留空：放在「表"
+"格」下。"
 
 msgid "In der Seitenleiste zeigen"
 msgstr "在側邊欄中顯示"
@@ -4623,9 +5333,11 @@ msgid "Eine Tabelle mit Datensätzen lässt sich nur archivieren."
 msgstr "包含記錄的表格只能封存。"
 
 msgid ""
-"Mit einem Titelbild zeigt die Liste die Datensätze auch als Galerie, und die"
-" Datensatzseite bekommt einen Kopf mit Bild, Untertitel und Bewertung."
-msgstr "設定封面圖後，清單也可以以圖庫形式顯示記錄，記錄頁面會有帶圖片、副標題和評分的頁首。"
+"Mit einem Titelbild zeigt die Liste die Datensätze auch als Galerie, und die "
+"Datensatzseite bekommt einen Kopf mit Bild, Untertitel und Bewertung."
+msgstr ""
+"設定封面圖後，清單也可以以圖庫形式顯示記錄，記錄頁面會有帶圖片、副標題和評分"
+"的頁首。"
 
 msgid "Titelbild"
 msgstr "封面圖"
@@ -4685,8 +5397,9 @@ msgid ""
 "Genres, Besetzung, Poster und Bildern übernehmen. Die Bilder werden im "
 "Datensatz gespeichert und sind danach auch ohne Internet da."
 msgstr ""
-"使用您自己的 themoviedb.org "
-"免費金鑰，可以在「電影與劇集」等表格中搜尋電影和劇集，並匯入劇情、類別、演員、海報和圖片。圖片儲存在記錄中，之後無需連網也能查看。"
+"使用您自己的 themoviedb.org 免費金鑰，可以在「電影與劇集」等表格中搜尋電影和"
+"劇集，並匯入劇情、類別、演員、海報和圖片。圖片儲存在記錄中，之後無需連網也能"
+"查看。"
 
 msgid "So kommen Sie zu einem Schlüssel"
 msgstr "如何取得金鑰"
@@ -4701,9 +5414,11 @@ msgstr "註冊帳戶"
 
 msgid ""
 "Angemeldet die API-Einstellungen öffnen und einen Schlüssel beantragen. Als "
-"Nutzung „Persönlich“ wählen; die Angaben zur Anwendung dürfen knapp sein (z."
-" B. „DataFluss, private Filmliste“)."
-msgstr "登入後開啟 API 設定並申請金鑰。用途選擇「個人」；應用說明可以簡短（例如「DataFluss，個人片單」）。"
+"Nutzung „Persönlich“ wählen; die Angaben zur Anwendung dürfen knapp sein (z. "
+"B. „DataFluss, private Filmliste“)."
+msgstr ""
+"登入後開啟 API 設定並申請金鑰。用途選擇「個人」；應用說明可以簡短（例如"
+"「DataFluss，個人片單」）。"
 
 msgid "API-Einstellungen öffnen"
 msgstr "開啟 API 設定"
@@ -4711,7 +5426,9 @@ msgstr "開啟 API 設定"
 msgid ""
 "Dort den „API-Schlüssel“ (32 Zeichen) oder den „API-Lesezugriffs-Token“ "
 "(sehr lang, beginnt mit „eyJ“) kopieren. Beides funktioniert."
-msgstr "在那裡複製「API 金鑰」（32 個字元）或「API 讀取存取權杖」（很長，以「eyJ」開頭）。兩者都可以。"
+msgstr ""
+"在那裡複製「API 金鑰」（32 個字元）或「API 讀取存取權杖」（很長，以「eyJ」開"
+"頭）。兩者都可以。"
 
 msgid "Hier einfügen, testen und speichern."
 msgstr "貼到這裡，測試並儲存。"
@@ -4735,7 +5452,9 @@ msgid ""
 "Der Schlüssel gilt für die ganze Datenbank und wird verschlüsselt "
 "gespeichert. Verbundene Computer erhalten ihn mit dem Abgleich. Er wird nie "
 "angezeigt."
-msgstr "該金鑰適用於整個資料庫，並加密儲存。已連線的電腦會在同步時取得它。它永遠不會被顯示。"
+msgstr ""
+"該金鑰適用於整個資料庫，並加密儲存。已連線的電腦會在同步時取得它。它永遠不會"
+"被顯示。"
 
 msgid "Eingerichtet"
 msgstr "已設定"
@@ -4762,7 +5481,8 @@ msgstr "還沒有。「電影與劇集」範本會建立一個。"
 msgid ""
 "Noch keine. „Filme & Serien“ ist eine eigene Datenbank: in der App unter "
 "„Neue Datenbank“."
-msgstr "暫無。「電影與劇集」是獨立的資料庫：在應用程式中透過「新增資料庫」建立。"
+msgstr ""
+"暫無。「電影與劇集」是獨立的資料庫：在應用程式中透過「新增資料庫」建立。"
 
 msgid ""
 "CSV oder Excel. Sie ordnen die Spalten zu und sehen eine Prüfung, bevor "
@@ -4835,9 +5555,6 @@ msgstr "同名的欄已自動對應。"
 
 msgid "Spalte in der Datei"
 msgstr "檔案中的欄位"
-
-msgid "Ziel"
-msgstr "目標欄位"
 
 #, python-format
 msgid "Ziel für %(header)s"
@@ -5034,395 +5751,8 @@ msgstr "中等（5 年級起）：12 個字元，易讀"
 msgid "Stark (Oberstufe, Personal): 16 Zeichen mit Sonderzeichen"
 msgstr "強（高中部、教職員）：16 個字元，含特殊字元"
 
-msgid "Kennung"
-msgstr "識別碼"
-
 msgid "Muss geändert werden"
 msgstr "必須修改"
-
-msgid ""
-"Ausgewählte Tabellen als Website veröffentlichen, die jeder lesen kann."
-msgstr "將所選表格發佈為任何人都可閱讀的網站。"
-
-msgid "Diese Veröffentlichung läuft gerade."
-msgstr "此發佈正在進行中。"
-
-msgid "ZIP wird gepackt …"
-msgstr "正在打包 ZIP …"
-
-#, python-format
-msgid "Veröffentlicht: %(sent)s Dateien übertragen, %(gone)s entfernt."
-msgstr "已發佈：已傳輸 %(sent)s 個檔案，已刪除 %(gone)s 個。"
-
-msgid ""
-"Angehalten: Die Prüfung hat Daten gefunden, die nicht veröffentlicht werden "
-"dürfen. Nichts wurde übertragen."
-msgstr "已停止：檢查發現了不得發佈的資料。未傳輸任何內容。"
-
-#, python-format
-msgid "WebDAV: Anmeldung abgelehnt (%(code)s)."
-msgstr "WebDAV：登入被拒絕（%(code)s）。"
-
-#, python-format
-msgid "WebDAV: Ordner %(folder)s konnte nicht angelegt werden (%(code)s)."
-msgstr "WebDAV：無法建立資料夾 %(folder)s（%(code)s）。"
-
-#, python-format
-msgid "FTP: %(error)s"
-msgstr "FTP：%(error)s"
-
-#, python-format
-msgid "FTP: %(path)s konnte nicht gespeichert werden (%(error)s)."
-msgstr "FTP：無法儲存 %(path)s（%(error)s）。"
-
-msgid "Auf diesem Server (/p/…)"
-msgstr "在此伺服器上（/p/…）"
-
-msgid "WebDAV"
-msgstr "WebDAV"
-
-msgid "FTP / FTPS"
-msgstr "FTP / FTPS"
-
-msgid "Verbindung klappt, Schreiben geht."
-msgstr "連線正常，可以寫入。"
-
-msgid "Tabellen als Website, die jeder lesen kann"
-msgstr "將表格發佈為任何人都可閱讀的網站"
-
-msgid "Läuft"
-msgstr "進行中"
-
-msgid "Klappt"
-msgstr "正常"
-
-msgid "Klappt nicht"
-msgstr "不正常"
-
-msgid "Nichts: Die Rolle darf keine der gewählten Tabellen lesen."
-msgstr "無：該角色無權讀取任何所選表格。"
-
-msgid ""
-"Nie dabei: geheime Felder, der Änderungsverlauf, Benutzer, Papierkorb und "
-"Felder, die nicht ausgewählt sind."
-msgstr "絕不包含：機密欄位、修改記錄、使用者、回收筒以及未選擇的欄位。"
-
-msgid ""
-"Schüler, Personal, Eltern, Geräte und Zugänge der Schulverwaltung werden nie"
-" veröffentlicht, auch nicht über Verknüpfungen."
-msgstr "學校管理中的學生、教職員、家長、設備和帳號絕不會被發佈，即使透過關聯也不會。"
-
-msgid "Jeder, der die Adresse kennt, kann alles davon lesen."
-msgstr "任何知道網址的人都可以閱讀全部內容。"
-
-msgid "Suchmaschinen dürfen die Seiten aufnehmen."
-msgstr "搜尋引擎可以收錄這些頁面。"
-
-msgid ""
-"Angeboten wird nur, was die Rolle der Veröffentlichung sehen darf. Neue "
-"Felder und Tabellen kommen nie von selbst dazu. Geheime Felder, der "
-"Änderungsverlauf sowie Personen und Geräte werden nie veröffentlicht."
-msgstr "只提供發佈所用角色可見的內容。新欄位和新表格絕不會自動加入。機密欄位、修改記錄以及人員和設備絕不會被發佈。"
-
-msgid "Der Titel kommt immer mit."
-msgstr "標題始終包含在內。"
-
-msgid "Dateien (PDF usw.) zum Herunterladen"
-msgstr "可下載的檔案（PDF 等）"
-
-msgid ""
-"Die gewählte Rolle darf keine Tabelle lesen. Wählen Sie unten eine andere "
-"Rolle oder geben Sie ihr Rechte an Tabellen."
-msgstr "所選角色無權讀取任何表格。請在下方選擇其他角色，或為其授予表格權限。"
-
-msgid ""
-"Die ganze Website als ZIP-Datei zum Herunterladen, zum Beispiel für einen "
-"USB-Stick oder um sie selbst hochzuladen."
-msgstr "將整個網站下載為 ZIP 檔案，例如用於隨身碟或自行上傳。"
-
-msgid ""
-"Dieser Server zeigt die Website unter seiner eigenen Adresse, öffentlich und"
-" ohne Anmeldung."
-msgstr "此伺服器在自己的網址下公開展示該網站，無需登入。"
-
-msgid ""
-"Zum Beispiel ein Ordner, den ein anderes Programm hochlädt oder "
-"synchronisiert. DataFluss löscht dort nur Dateien, die es selbst angelegt "
-"hat."
-msgstr "例如由其他程式上傳或同步的資料夾。DataFluss 只會刪除其中由它自己建立的檔案。"
-
-msgid "Port"
-msgstr "連接埠"
-
-msgid ""
-"Ohne Verschlüsselung (nur wenn der Server kein FTPS kann: Passwort und Daten"
-" gehen dann lesbar über das Netz)"
-msgstr "不加密（僅當伺服器不支援 FTPS 時：密碼和資料將以明文在網路上傳輸）"
-
-msgid "Wird verschlüsselt gespeichert und nie angezeigt."
-msgstr "加密儲存，絕不顯示。"
-
-msgid "Kurzname (für die Adresse)"
-msgstr "簡稱（用於網址）"
-
-msgid "Zeigt höchstens, was diese Rolle sieht"
-msgstr "最多顯示此角色可見的內容"
-
-msgid "Suchmaschinen dürfen die Website aufnehmen"
-msgstr "搜尋引擎可以收錄該網站"
-
-msgid "Zuerst unter „Inhalt“ mindestens eine Tabelle wählen."
-msgstr "請先在「內容」中至少選擇一個表格。"
-
-msgid "Die Website von diesem Server nehmen? Die Einstellungen bleiben."
-msgstr "要從此伺服器上撤下該網站嗎？設定將保留。"
-
-msgid ""
-"Auf einem fremden Webspace (WebDAV, FTP) oder in einem Ordner bleibt die "
-"Website liegen, bis Sie sie dort löschen."
-msgstr "在其他網路空間（WebDAV、FTP）或資料夾中，網站會一直保留，直到您在那裡將其刪除。"
-
-msgid ""
-"Diese Veröffentlichung löschen? Auf diesem Server wird die Website entfernt."
-msgstr "要刪除此發佈嗎？該網站將從此伺服器上移除。"
-
-msgid ""
-"Ausgewählte Tabellen als Website, die jeder lesen kann: mit Liste oder "
-"Galerie, Datensatzseiten und Suche, aber ohne Anlegen oder Ändern. Geändert "
-"wird weiter hier; danach überträgt „Veröffentlichen“ nur, was sich geändert "
-"hat."
-msgstr "將所選表格發佈為任何人都可閱讀的網站：包含清單或圖庫、記錄頁面和搜尋，但不能新增或修改。修改仍在這裡進行；之後「發佈」只傳輸有變化的內容。"
-
-msgid "z. B. Unsere Filmsammlung"
-msgstr "例如：我們的電影收藏"
-
-msgid ""
-"Danach wählen Sie Tabellen, Felder und das Ziel. Veröffentlicht wird erst, "
-"wenn Sie es bestätigen."
-msgstr "然後選擇表格、欄位和目標。在您確認之前不會發佈任何內容。"
-
-#, python-format
-msgid "Stand: %(date)s. Nur zum Lesen."
-msgstr "截至 %(date)s。僅供閱讀。"
-
-msgid "Brotkrümel"
-msgstr "導覽路徑"
-
-msgid "ZIP-Datei"
-msgstr "ZIP 檔案"
-
-msgid "Dieser Server"
-msgstr "此伺服器"
-
-msgid "Wird vorbereitet …"
-msgstr "正在準備 …"
-
-#, python-format
-msgid "Vorschau fertig: %(n)s Dateien."
-msgstr "預覽已就緒：%(n)s 個檔案。"
-
-#, python-format
-msgid "ZIP fertig: %(n)s Dateien."
-msgstr "ZIP 已就緒：%(n)s 個檔案。"
-
-#, python-format
-msgid "Fehler: %(error)s"
-msgstr "錯誤：%(error)s"
-
-msgid "Daten werden gelesen …"
-msgstr "正在讀取資料 …"
-
-msgid "Seiten werden erstellt …"
-msgstr "正在產生頁面 …"
-
-#, python-format
-msgid "Bilder und Dateien: %(n)s"
-msgstr "圖片和檔案：%(n)s"
-
-#, python-format
-msgid "Ungültiger Pfad: %(path)s"
-msgstr "無效路徑：%(path)s"
-
-#, python-format
-msgid "Den Ordner gibt es nicht: %(folder)s"
-msgstr "該資料夾不存在：%(folder)s"
-
-msgid "Bitte eine Adresse mit https:// angeben."
-msgstr "請輸入以 https:// 開頭的網址。"
-
-#, python-format
-msgid "WebDAV nicht erreichbar: %(error)s"
-msgstr "無法連線 WebDAV：%(error)s"
-
-#, python-format
-msgid ""
-"WebDAV: Den Ordner gibt es nicht oder er ist nicht erreichbar (%(code)s)."
-msgstr "WebDAV：資料夾不存在或無法存取（%(code)s）。"
-
-#, python-format
-msgid "WebDAV: %(path)s konnte nicht gespeichert werden (%(code)s)."
-msgstr "WebDAV：無法儲存 %(path)s（%(code)s）。"
-
-#, python-format
-msgid "WebDAV: %(path)s konnte nicht gelöscht werden (%(code)s)."
-msgstr "WebDAV：無法刪除 %(path)s（%(code)s）。"
-
-msgid "Bitte den Server angeben."
-msgstr "請輸入伺服器。"
-
-#, python-format
-msgid "FTP nicht erreichbar: %(error)s"
-msgstr "無法連線 FTP：%(error)s"
-
-msgid "Dieses Ziel lädt nichts hoch."
-msgstr "此目標不上傳任何內容。"
-
-#, python-format
-msgid "%(n)s von %(total)s Dateien übertragen"
-msgstr "已傳輸 %(n)s / %(total)s 個檔案"
-
-msgid "Ordner auf diesem Computer"
-msgstr "此電腦上的資料夾"
-
-msgid "Bitte einen Namen eingeben."
-msgstr "請輸入名稱。"
-
-msgid "Diese Adresse ist schon vergeben."
-msgstr "此網址已被使用。"
-
-msgid "Unbekanntes Ziel."
-msgstr "未知目標。"
-
-msgid "Der Port ist eine Zahl."
-msgstr "連接埠必須是數字。"
-
-msgid "Es ist noch keine Tabelle ausgewählt."
-msgstr "尚未選擇任何表格。"
-
-msgid "Zurückgezogen."
-msgstr "已撤下。"
-
-msgid "Gelöscht."
-msgstr "已刪除。"
-
-msgid "Fehlgeschlagen"
-msgstr "失敗"
-
-#, python-format
-msgid "Zuletzt veröffentlicht: %(when)s"
-msgstr "上次發佈：%(when)s"
-
-msgid "Noch nicht veröffentlicht."
-msgstr "尚未發佈。"
-
-msgid "Noch nicht veröffentlicht"
-msgstr "尚未發佈"
-
-#, python-format
-msgid "„%(name)s“ veröffentlichen"
-msgstr "發佈「%(name)s」"
-
-msgid "Das wird öffentlich"
-msgstr "以下內容將會公開"
-
-msgid "Öffentlich"
-msgstr "公開"
-
-msgid "Ja, veröffentlichen"
-msgstr "是，發佈"
-
-msgid "Zurück zu den Veröffentlichungen"
-msgstr "返回發佈列表"
-
-msgid "Inhalt speichern"
-msgstr "儲存內容"
-
-msgid "Wählen …"
-msgstr "選擇 …"
-
-msgid "WebDAV-Adresse des Ordners"
-msgstr "資料夾的 WebDAV 網址"
-
-msgid "Ordner auf dem Server"
-msgstr "伺服器上的資料夾"
-
-msgid "Leer lassen, um das gespeicherte zu behalten"
-msgstr "留空以保留已儲存的"
-
-msgid "Ziel speichern"
-msgstr "儲存目標"
-
-msgid "Gespeichertes Ziel testen"
-msgstr "測試已儲存的目標"
-
-msgid "Name der Website"
-msgstr "網站名稱"
-
-msgid "Sprache der Website"
-msgstr "網站語言"
-
-msgid "Einstellungen speichern"
-msgstr "儲存設定"
-
-msgid "Vorschau erstellen"
-msgstr "產生預覽"
-
-msgid "Vorschau öffnen"
-msgstr "開啟預覽"
-
-msgid "Veröffentlichen …"
-msgstr "發佈 …"
-
-msgid "Neu veröffentlichen"
-msgstr "重新發佈"
-
-msgid "ZIP herunterladen"
-msgstr "下載 ZIP"
-
-msgid "Zurückziehen und löschen"
-msgstr "撤下和刪除"
-
-msgid "Vom Server nehmen"
-msgstr "從伺服器撤下"
-
-msgid "Veröffentlichung löschen"
-msgstr "刪除發佈"
-
-msgid "Zurück zu den Einstellungen"
-msgstr "返回設定"
-
-msgid "Noch keine Veröffentlichung."
-msgstr "尚無發佈。"
-
-msgid "Neue Veröffentlichung"
-msgstr "新增發佈"
-
-msgid "Suchen …"
-msgstr "搜尋 …"
-
-msgid "Hell oder dunkel"
-msgstr "淺色或深色"
-
-msgid "Erstellt mit"
-msgstr "製作工具："
-
-msgid "Noch keine Tabellen veröffentlicht."
-msgstr "尚未發佈任何表格。"
-
-msgid "In dieser Tabelle filtern"
-msgstr "在此表格中篩選"
-
-msgid "Keine Datensätze."
-msgstr "沒有記錄。"
-
-#, python-format
-msgid ""
-"%(n)s Datensatz, so wie die Rolle „%(role)s“ ihn sieht, mit Bildern; Ziel: "
-"%(target)s."
-msgid_plural ""
-"%(n)s Datensätze, so wie die Rolle „%(role)s“ sie sieht, mit Bildern; Ziel: "
-"%(target)s."
-msgstr[0] "%(n)s 筆記錄，按角色「%(role)s」可見的內容，含圖片；目標：%(target)s。"
 
 #~ msgid "Schule und Sprachen"
 #~ msgstr "學校和語言"

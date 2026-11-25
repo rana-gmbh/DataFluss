@@ -11,7 +11,7 @@ from vault import crypto
 
 from core import fieldrules, fieldtypes, modules
 
-from . import i18n
+from . import i18n, safe
 from .models import FieldDefinition, Mask, MaskVersion
 from .registry import BLOCKS
 
@@ -178,14 +178,14 @@ def build_view(tree, person, user, readonly=False):
     fixed = fieldrules.read_only(user, person.kind)
     classes = None
     tabs = []
-    for tab in tree.get("tabs", []):
+    for index, tab in enumerate(tree.get("tabs", [])):
         sections = []
         for section in tab.get("sections", []):
             items = []
             for item in section.get("items", []):
                 if not condition_met(item, person, every):
                     continue
-                entry = {"w": item.get("w", 12), "type": item.get("type")}
+                entry = {"w": safe.width(item.get("w")), "type": item.get("type")}
                 if item.get("type") == "field":
                     fd = fields.get(item.get("field"))
                     if fd is None:
@@ -219,7 +219,7 @@ def build_view(tree, person, user, readonly=False):
             if items or title:
                 sections.append({"title": title, "items": items})
         if sections:
-            tabs.append({"id": tab.get("id"), "title": i18n.pick(tab.get("title", ""), tab.get("titles")), "sections": sections})
+            tabs.append({"id": safe.tab_id(tab.get("id"), index), "title": i18n.pick(tab.get("title", ""), tab.get("titles")), "sections": sections})
     return tabs
 
 

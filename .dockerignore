@@ -9,3 +9,5 @@ staticfiles
 frontend/node_modules
 docs
 tests
+web/data
+web/staticfiles

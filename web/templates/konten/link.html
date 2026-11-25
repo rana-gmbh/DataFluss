@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Anmelden" %}{% endblock %}
+{% block content %}
+<div class="narrow panel form"><h1 class="title">{% translate "Anmelden" %}</h1>
+<p>{% blocktranslate trimmed %}Als <b>{{ email }}</b> anmelden?{% endblocktranslate %}</p>
+<form method="post">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}"><button class="btn btn-primary btn-block">{% translate "Jetzt anmelden" %}</button></form></div>
+{% endblock %}

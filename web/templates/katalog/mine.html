@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% load katalog i18n %}
+{% block title %}{% translate "Meine Vorlagen" %}{% endblock %}
+{% block content %}
+<div class="row-between"><h1 class="title">{% translate "Meine Vorlagen" %}</h1><a class="btn btn-primary" href="{% url 'upload' %}">{% translate "Vorlage teilen" %}</a></div>
+{% for t in templates %}<section class="panel">
+  <div class="row-between"><h2 class="h2"><a href="{% url 'template_detail' t.key %}">{{ t.published.title|default:t.versions.first.title }}</a> <span class="muted small">{{ t.key }}</span></h2>
+    <div class="row">{% if t.listed %}<span class="badge badge-ok">{% translate "veröffentlicht" %}</span>{% elif t.withdrawn %}<span class="badge">{% translate "zurückgezogen" %}</span>{% else %}<span class="badge badge-warn">{% translate "noch nicht veröffentlicht" %}</span>{% endif %}
+    <a class="btn btn-sm" href="{% url 'template_new_version' t.key %}">{% translate "Neue Version" %}</a>
+    <form method="post" action="{% url 'template_withdraw' t.key %}">{% csrf_token %}{% if t.withdrawn %}<button class="btn btn-sm" name="action" value="restore">{% translate "Wieder zeigen" %}</button>{% else %}<button class="btn btn-sm btn-ghost" data-confirm="{% translate 'Die Vorlage nicht mehr zeigen?' %}">{% translate "Zurückziehen" %}</button>{% endif %}</form></div></div>
+  {% if t.listed %}<p class="small">{% stars t.rating "sm" %} {{ t.rating|comma }} ({{ t.ratings }}) · {% blocktranslate count n=t.downloads %}{{ n }} Download{% plural %}{{ n }} Downloads{% endblocktranslate %}</p>{% endif %}
+  <table class="fields"><tbody>{% for v in t.versions.all %}<tr><td>{% blocktranslate with n=v.number %}Version {{ n }}{% endblocktranslate %}</td><td>{{ v.get_status_display }}</td><td class="muted">{{ v.created|date:"j. n. Y" }}</td><td class="muted">{{ v.decision }}</td></tr>{% endfor %}</tbody></table>
+</section>{% empty %}<div class="empty"><p>{% translate "Sie haben noch keine Vorlage geteilt." %}</p></div>{% endfor %}
+{% endblock %}

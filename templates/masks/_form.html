@@ -1,11 +1,11 @@
 {% load ui i18n %}
 <div id="record-form" hx-get="{{ form_url }}" hx-trigger="reloadForm from:body" hx-swap="outerHTML"
-     x-data="recordTabs('{{ form_kind }}', '{{ tabs.0.id }}')">
+     x-data="recordTabs('{{ form_kind }}', '{{ tabs.0.id|escapejs }}')">
   <div class="record-tabs flex overflow-x-auto border-b mb-4" style="border-color: var(--line)" role="tablist">
-    {% for tab in tabs %}<button type="button" role="tab" class="tab" data-tab-id="{{ tab.id }}" :class="tab === '{{ tab.id }}' && 'active'" :aria-selected="tab === '{{ tab.id }}'" @click="show('{{ tab.id }}', $el)">{{ tab.title }}</button>{% endfor %}
+    {% for tab in tabs %}<button type="button" role="tab" class="tab" data-tab-id="{{ tab.id }}" :class="tab === '{{ tab.id|escapejs }}' && 'active'" :aria-selected="tab === '{{ tab.id|escapejs }}'" @click="show('{{ tab.id|escapejs }}', $el)">{{ tab.title }}</button>{% endfor %}
   </div>
   {% for tab in tabs %}
-  <div x-show="tab === '{{ tab.id }}'" x-cloak class="space-y-4" role="tabpanel" aria-label="{{ tab.title }}">
+  <div x-show="tab === '{{ tab.id|escapejs }}'" x-cloak class="space-y-4" role="tabpanel" aria-label="{{ tab.title }}">
     {% for section in tab.sections %}
     <section class="surface p-4 mask-wrap">
       {% if section.title %}<h2 class="section-title mb-3">{{ section.title }}</h2>{% endif %}

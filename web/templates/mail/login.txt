@@ -1,0 +1,8 @@
+{% load i18n %}{% autoescape off %}{% translate "Hallo," %}
+
+{% if new %}{% translate "mit diesem Link legen Sie Ihr Konto bei DataFluss Vorlagen an und melden sich an:" %}{% else %}{% translate "mit diesem Link melden Sie sich bei DataFluss Vorlagen an:" %}{% endif %}
+
+{{ link }}
+
+{% translate "Der Link gilt 15 Minuten und nur einmal. Wenn Sie ihn nicht angefordert haben, ignorieren Sie diese E-Mail einfach." %}
+{% endautoescape %}

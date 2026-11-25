@@ -297,6 +297,26 @@ Which fields TMDB fills is set in the template, under `look.tmdb` (see below), s
 TMDB with its own fields.
 
 
+### Exporting tables as a template
+
+**Tabellen → Als Vorlage exportieren …** (for those who may design tables) turns chosen tables into a template
+file, to share on [datafluss.de](website.md) or to apply in another database. Choose the tables (those of the
+first section are preselected), a title, an id (lower-case letters, digits and `_`, at most 20; it stays the same
+for every later version) and a description. The file holds the tables with their fields, look and rights for the
+platform's roles and Team/Gast, the record page, the printouts of these tables (not those in code mode) and the
+shared saved views. It is always a database template of its own (`"database": true`, `"requires": []`).
+
+- Links to tables that are not chosen, and to pupils, staff or devices, stay behind, and so does a formula or a
+  printed list column that needs them; the page names what was left out.
+- **Beispieldaten**, if ticked: up to 20 records per table, without files, pictures, secrets and computed
+  values; links name their targets by title. Shared files are public: only made-up examples.
+- The file must pass the strict check for templates of others (`tables/template_check.py` `check_untrusted`,
+  see [the template site](website.md)); the page names what does not, for instance an id the platform uses.
+
+A file from the catalog carries `"catalog": {"source", "author", "license", "url"}` and `"datafluss"` (the version
+it was exported from); DataFluss ignores both when applying.
+
+
 ### Writing a template
 
 A template is one JSON file. A module can consist of templates only: its `datafluss-module.json` lists

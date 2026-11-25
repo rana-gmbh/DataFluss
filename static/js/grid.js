@@ -86,7 +86,8 @@
   }
 
   function column(c) {
-    const col = { title: c.title, field: c.key, visible: c.visible, minWidth: 80, resizable: true, headerClick: (e, column) => openMenu(e, column, c) };
+    // Tabulator writes a title as HTML, and a field name is anyone's text (also from a template): escape it.
+    const col = { title: c.title, titleFormatter: () => App.esc(c.title), field: c.key, visible: c.visible, minWidth: 80, resizable: true, headerClick: (e, column) => openMenu(e, column, c) };
     if (c.type === "photo") {
       return { title: "", field: "photo_url", width: 44, hozAlign: "center", headerSort: false, resizable: false, visible: c.visible,
         formatter: (cell) => { const r = cell.getData(); return r.photo_url ? `<img class="grid-avatar" src="${App.esc(r.photo_url)}" alt="" loading="lazy">` : `<span class="avatar" style="width:24px;height:24px;font-size:10px">${App.esc(r.initials)}</span>`; } };

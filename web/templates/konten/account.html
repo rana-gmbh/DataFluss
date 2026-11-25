@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Konto" %}{% endblock %}
+{% block content %}
+<h1 class="title">{% translate "Konto" %}</h1>
+<div class="two">
+<form method="post" class="panel form">{% csrf_token %}<input type="hidden" name="action" value="name"><input type="hidden" name="next" value="{{ next }}">
+  {% if not user.name %}<p class="msg msg-warning">{% translate "Bitte zuerst einen Anzeigenamen wählen. Er steht bei Ihren Vorlagen und Bewertungen (Namensnennung nach CC BY 4.0)." %}</p>{% endif %}
+  <label for="a-name">{% translate "Anzeigename" %}</label>
+  <input class="input" id="a-name" name="name" value="{{ user.name }}" maxlength="60" required placeholder="{% translate 'z. B. Anna M. oder Bücherei Musterstadt' %}">
+  <p class="muted small">{% translate "Öffentlich sichtbar. Ein Spitzname genügt." %}</p>
+  <label>{% translate "E-Mail-Adresse" %}</label><p>{{ user.email }} <span class="muted small">({% translate "nicht öffentlich" %})</span></p>
+  <button class="btn btn-primary">{% translate "Speichern" %}</button>
+</form>
+<div class="panel form">
+  <h2 class="h2">{% translate "Konto löschen" %}</h2>
+  <p class="small">{% blocktranslate trimmed count n=reviews %}Ihre {{ n }} Bewertung wird gelöscht.{% plural %}Ihre {{ n }} Bewertungen werden gelöscht.{% endblocktranslate %} {% translate "Vorlagen, die nie veröffentlicht wurden, auch. Veröffentlichte Vorlagen bleiben unter „gelöschtes Konto“ (sie sind unter CC BY 4.0 geteilt); wer das nicht möchte, zieht sie vorher unter „Meine Vorlagen“ zurück." %}</p>
+  <form method="post">{% csrf_token %}<input type="hidden" name="action" value="delete">
+    <label for="a-confirm">{% translate "Zur Bestätigung die E-Mail-Adresse eingeben" %}</label><input class="input" id="a-confirm" name="confirm" autocomplete="off">
+    <button class="btn btn-danger">{% translate "Konto endgültig löschen" %}</button></form>
+  {% if user.is_staff %}<p class="small"><a href="{% url 'totp' %}">{% translate "Zweiter Faktor für das Prüfen" %}</a></p>{% endif %}
+</div>
+</div>
+{% endblock %}

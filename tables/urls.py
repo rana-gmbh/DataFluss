@@ -5,6 +5,7 @@ from . import views, views_collection as films, views_records as records, views_
 urlpatterns = [
     path("einstellungen/tabellen/", views.table_list, name="table_list"),
     path("einstellungen/tabellen/vorlagen/", views.table_blueprints, name="table_blueprints"),
+    path("einstellungen/tabellen/vorlagen/exportieren/", views.table_export, name="table_export"),
     path("einstellungen/tabellen/tmdb/", tmdb.tmdb_settings, name="tables_tmdb"),
     path("einstellungen/tabellen/tmdb/testen/", tmdb.tmdb_test, name="tables_tmdb_test"),
     path("einstellungen/tabellen/aus-datei/", views.table_from_file, name="table_from_file"),

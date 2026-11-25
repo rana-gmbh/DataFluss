@@ -85,13 +85,31 @@ def esc(value):
     return html.escape(str(value if value is not None else ""))
 
 
+# Values of a tree that end up in CSS or attributes. A tree may come from a template someone else wrote
+# (tables/blueprints.py), so they are held to what they may be instead of being escaped.
+ALIGN = {"left", "center", "right", "justify"}
+VALIGN = {"flex-start", "center", "flex-end"}
+
+
+def _num(value, default, low=0.0, high=1000.0):
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return default
+    return min(max(number, low), high) if number == number else default  # NaN is not equal to itself
+
+
+def _align(value, default="left"):
+    return value if value in ALIGN else default
+
+
 def _style(el, defaults=None):
     parts = dict(defaults or {})
     if el.get("size"):
-        parts["font-size"] = f"{float(el['size'])}pt"
+        parts["font-size"] = f"{_num(el['size'], 9.5, 4, 72)}pt"
     if el.get("bold"):
         parts["font-weight"] = "700"
-    if el.get("align"):
+    if el.get("align") in ALIGN:
         parts["text-align"] = el["align"]
     if el.get("color") and re.fullmatch(r"#[0-9a-fA-F]{3,8}", el["color"]):
         parts["color"] = el["color"]
@@ -115,7 +133,7 @@ def render_element(el, record, school):
         return f'<p style="{_style(el)}">{esc(fill(el.get("text", ""), record)).replace(chr(10), "<br>")}</p>'
     if kind == "name":
         name = record["title"]
-        size = _fit_size(name, float(el.get("size") or 17), 26)
+        size = _fit_size(name, _num(el.get("size") or 17, 17, 4, 72), 26)
         return f'<h1 class="name bm" style="font-size:{size:.1f}pt">{esc(name)}</h1>'
     if kind == "field":
         value = record["fields"].get(el.get("key"), "")
@@ -128,17 +146,17 @@ def render_element(el, record, school):
             return f'<div class="{value_class}" style="{_style(el)}">{shown}</div>'
         return f'<div class="kv" style="{_style(el)}"><span class="key">{label}</span><span class="{value_class}">{shown}</span></div>'
     if kind == "photo":
-        width, height = float(el.get("w_mm") or 24), float(el.get("h_mm") or 33.6)
+        width, height = _num(el.get("w_mm") or 24, 24, 1, 300), _num(el.get("h_mm") or 33.6, 33.6, 1, 300)
         if record.get("photo"):
             return f'<img class="photo" src="{record["photo"]}" alt="" style="width:{width}mm;height:{height}mm">'
         return f'<div class="photo empty" style="width:{width}mm;height:{height}mm"></div>'
     if kind == "logo":
-        width = float(el.get("w_mm") or 20)
+        width, align = _num(el.get("w_mm") or 20, 20, 1, 300), _align(el.get("align"), "right")
         if school["logo"]:
-            return f'<div style="text-align:{el.get("align", "right")}"><img src="{school["logo"]}" alt="" style="width:{width}mm"></div>'
-        return f'<div style="text-align:{el.get("align", "right")}"><div class="logo-box" style="width:{width}mm;height:{width}mm">{esc(school["short"])}</div></div>'
+            return f'<div style="text-align:{align}"><img src="{school["logo"]}" alt="" style="width:{width}mm"></div>'
+        return f'<div style="text-align:{align}"><div class="logo-box" style="width:{width}mm;height:{width}mm">{esc(school["short"])}</div></div>'
     if kind == "qr":
-        size = float(el.get("size_mm") or 18)
+        size = _num(el.get("size_mm") or 18, 18, 1, 300)
         return f'<img src="{qr_uri(fill(el.get("value", ""), record))}" alt="" style="width:{size}mm;height:{size}mm">'
     if kind == "logins":
         return render_logins(el, record)
@@ -157,7 +175,7 @@ def render_element(el, record, school):
         cells = "".join(f'<div class="sign"><span>{esc(line)}</span></div>' for line in lines)
         return f'<div class="signs">{cells}</div>'
     if kind == "spacer":
-        return f'<div style="height:{float(el.get("h_mm") or 5)}mm"></div>'
+        return f'<div style="height:{_num(el.get("h_mm") or 5, 5, 0, 300)}mm"></div>'
     if kind == "divider":
         return '<hr>'
     return ""
@@ -190,12 +208,13 @@ def render_rows(tree, record, school):
     out = []
     for row in tree.get("rows", []):
         cols = row.get("cols", [])
-        total = sum(c.get("w", 12) for c in cols) or 12
+        total = sum(_num(c.get("w", 12), 12, 0, 12) for c in cols) or 12
         cells = []
         for col in cols:
             inner = "".join(render_element(el, record, school) for el in col.get("items", []))
-            percent = 100 * col.get("w", 12) / total
-            cells.append(f'<div class="col" style="flex:0 0 {percent:.3f}%;width:{percent:.3f}%;align-self:{col.get("valign", "flex-start")}">{inner}</div>')
+            percent = 100 * _num(col.get("w", 12), 12, 0, 12) / total
+            valign = col.get("valign") if col.get("valign") in VALIGN else "flex-start"
+            cells.append(f'<div class="col" style="flex:0 0 {percent:.3f}%;width:{percent:.3f}%;align-self:{valign}">{inner}</div>')
         out.append(f'<div class="row">{"".join(cells)}</div>')
     return "".join(out)
 
@@ -242,16 +261,25 @@ img{max-width:100%%}
 """ % {"font": BASE_FONT, "mono": MONO_FONT}
 
 
+def _css_text(text):
+    """Text for a CSS string in quotes inside <style>: nothing that ends the string, escapes out of it or closes
+    the style element."""
+    return "".join(ch for ch in text if ch not in "'\"\\\n\r\f<>")
+
+
 def page_css(page, school, confidential):
     preset = PRESETS.get(page.get("preset"), PRESETS["a4"])
-    margin = page.get("margin") or DEFAULT_PAGE["margin"]
+    margin = page.get("margin")
+    if not isinstance(margin, (list, tuple)) or len(margin) != 4:
+        margin = DEFAULT_PAGE["margin"]
+    margin = [_num(m, 15, 0, 100) for m in margin]
     is_grid = "cols" in preset
     top, right, bottom, left = (0, 0, 0, 0) if is_grid or page.get("preset") == "card" else margin
     footer = ""
     if page.get("footer", True) and not is_grid and page.get("preset") != "card":
-        text = esc(page.get("footer_text") if page.get("footer_text") is not None else (school["footer"] if confidential else ""))
+        text = str(page.get("footer_text") if page.get("footer_text") is not None else (school["footer"] if confidential else ""))
         footer = (
-            f"@bottom-left{{content:'{text.replace(chr(39), '')}';font-family:{BASE_FONT};font-size:7.5pt;color:#667}}"
+            f"@bottom-left{{content:'{_css_text(text)}';font-family:{BASE_FONT};font-size:7.5pt;color:#667}}"
             f"@bottom-right{{content:'Seite ' counter(page) ' von ' counter(pages);font-family:{BASE_FONT};font-size:7.5pt;color:#667}}"
         )
     return f"@page{{size:{preset['w']}mm {preset['h']}mm;margin:{top}mm {right}mm {bottom}mm {left}mm;{footer}}}"
@@ -273,7 +301,7 @@ def wrap_records(sheets, page):
     pad_x, pad_y = preset.get("pad_x", 0), preset.get("pad_y", 0)
     cell_w = (preset["w"] - 2 * pad_x) / cols
     cell_h = (preset["h"] - 2 * pad_y) / rows - 0.25
-    inner = float(page.get("cell_padding", 6 if preset.get("cut") else 3))
+    inner = _num(page.get("cell_padding", 6 if preset.get("cut") else 3), 3, 0, 30)
     per_page = cols * rows
     tables = []
     for start in range(0, len(sheets), per_page):

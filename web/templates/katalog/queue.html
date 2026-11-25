@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load katalog i18n %}
+{% block title %}{% translate "Prüfen" %}{% endblock %}
+{% block content %}
+<h1 class="title">{% translate "Prüfen" %}</h1>
+<h2>{% translate "Eingereichte Vorlagen" %} <span class="muted">({{ versions|length }})</span></h2>
+{% for v in versions %}<a class="panel queue-row" href="{% url 'review_version' v.pk %}"><b>{{ v.title }}</b> <span class="muted">{{ v.template.key }} · {% blocktranslate with n=v.number %}Version {{ n }}{% endblocktranslate %} · {{ v.template.author }} · {{ v.created|date:"j. n. Y H:i" }}</span>{% if v.notes %}<span class="badge badge-warn">{% blocktranslate count n=v.notes|length %}{{ n }} Hinweis{% plural %}{{ n }} Hinweise{% endblocktranslate %}</span>{% endif %}</a>{% empty %}<p class="muted">{% translate "Nichts zu prüfen." %}</p>{% endfor %}
+
+<h2>{% translate "Bewertungstexte" %} <span class="muted">({{ reviews|length }})</span></h2>
+{% for r in reviews %}<div class="panel"><p>{% stars r.stars "sm" %} <b>{{ r.user.shown_name }}</b> <span class="muted small">{{ r.user.email }} · {% translate "zu" %} <a href="{% url 'template_detail' r.template.key %}">{{ r.template.key }}</a></span></p><p>{{ r.text|linebreaksbr }}</p>
+  <form method="post" action="{% url 'review_text' r.pk %}" class="row">{% csrf_token %}<button class="btn btn-primary btn-sm" name="action" value="approve">{% translate "Freigeben" %}</button><button class="btn btn-sm" name="action" value="reject">{% translate "Ablehnen" %}</button></form></div>{% empty %}<p class="muted">{% translate "Keine Texte offen." %}</p>{% endfor %}
+
+<h2>{% translate "Meldungen" %} <span class="muted">({{ reports|length }})</span></h2>
+{% for m in reports %}<div class="panel"><p><a href="{% url 'template_detail' m.template.key %}">{{ m.template.key }}</a>{% if m.review %} · {% translate "Bewertung von" %} {{ m.review.user.shown_name }}: „{{ m.review.text|truncatechars:120 }}“{% endif %}</p><p class="muted">{{ m.reason }} – {{ m.reporter.email|default:"?" }}, {{ m.created|date:"j. n. Y" }}</p>
+  <form method="post" action="{% url 'review_report' m.pk %}" class="row">{% csrf_token %}{% if m.review %}<button class="btn btn-sm" name="action" value="hide_review">{% translate "Text ausblenden" %}</button>{% else %}<button class="btn btn-sm" name="action" value="hide_template">{% translate "Vorlage ausblenden" %}</button>{% endif %}<button class="btn btn-sm btn-ghost" name="action" value="done">{% translate "Erledigt, nichts zu tun" %}</button></form></div>{% empty %}<p class="muted">{% translate "Keine Meldungen." %}</p>{% endfor %}
+
+{% if recent %}<h2>{% translate "Zuletzt entschieden" %}</h2><table class="fields"><tbody>{% for v in recent %}<tr><td><a href="{% url 'review_version' v.pk %}">{{ v.title }}</a> {{ v.number }}</td><td>{{ v.get_status_display }}</td><td class="muted">{{ v.reviewer.shown_name|default:"–" }}, {{ v.reviewed|date:"j. n. Y" }}</td></tr>{% endfor %}</tbody></table>{% endif %}
+{% endblock %}

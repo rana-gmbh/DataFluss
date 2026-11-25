@@ -41,6 +41,18 @@ jobs:
       - run: python manage.py makemigrations --check --dry-run
       - run: python manage.py test tests
 
+  # The template site datafluss.de (web/, docs/website.md): its own project, its own tests.
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install --require-hashes -r requirements.lock
+      - run: python web/manage.py makemigrations --check --dry-run
+      - run: python web/manage.py test webtests
+
   # The desktop client runs the same code on SQLCipher, so the suite runs there too.
   tests-sqlcipher:
     runs-on: ubuntu-latest

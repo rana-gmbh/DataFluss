@@ -9,11 +9,11 @@ cd "$(dirname "$0")/.."
 PY=.venv/bin/python
 export DATABASE_URL=${DATABASE_URL:-sqlite://}
 if [ "$1" = "compile" ]; then
-  $PY manage.py compilemessages -i .venv -i client -i frontend
+  $PY manage.py compilemessages -i .venv -i client -i frontend -i web
   exit
 fi
 for domain in django djangojs; do
   $PY manage.py makemessages -d "$domain" -l en -l zh_Hans -l zh_Hant --no-location \
-    -i client -i frontend -i .venv -i staticfiles -i vendor -i tests -i node_modules -i backups -i media -i data -i docs
+    -i client -i frontend -i .venv -i staticfiles -i vendor -i tests -i node_modules -i backups -i media -i data -i docs -i web
 done
 grep -c '^msgstr ""$' locale/*/LC_MESSAGES/*.po || true

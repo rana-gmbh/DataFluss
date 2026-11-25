@@ -1,0 +1,34 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Prüfen" %}: {{ version.title }}{% endblock %}
+{% block content %}
+<a class="muted small" href="{% url 'review_queue' %}">← {% translate "Prüfen" %}</a>
+<h1 class="title">{{ version.title }} <span class="muted">{{ version.template.key }} · {% blocktranslate with n=version.number %}Version {{ n }}{% endblocktranslate %}</span></h1>
+<p class="meta"><span class="badge">{{ version.get_status_display }}</span> {% translate "von" %} {{ version.template.author }}{% if version.template.owner %} ({{ version.template.owner.email }}){% endif %} · {{ version.created|date:"j. n. Y H:i" }} · {{ version.template.get_category_display }}</p>
+<p class="msg msg-ok">{% translate "Die automatische Prüfung hat die Datei angenommen: nur bekannte Angaben, keine Verknüpfung nach außen, keine Module, Grenzen eingehalten." %}</p>
+{% if version.notes %}<div class="msg msg-warning"><p class="strong">{% translate "Bitte ansehen" %}</p><ul>{% for n in version.notes %}<li>{{ n }}</li>{% endfor %}</ul></div>{% endif %}
+<div class="two">
+<div>
+  {% if version.description %}<p class="lead">{{ version.description|linebreaksbr }}</p>{% endif %}
+  {% if version.changes %}<p><b>{% translate "Was ist neu" %}:</b> {{ version.changes }}</p>{% endif %}
+  {% if diff %}<div class="panel small"><p class="strong">{% blocktranslate with n=diff.from %}Gegenüber Version {{ n }}{% endblocktranslate %}</p>
+    <p>{% translate "Neu" %}: {{ diff.added|join:", "|default:"–" }}</p><p>{% translate "Nicht mehr dabei" %}: {{ diff.removed|join:", "|default:"–" }}</p></div>{% endif %}
+  {% if version.pictures.all %}<div class="pictures">{% for pic in version.pictures.all %}<img src="{% url 'picture' pic.uid %}" alt="" width="{{ pic.width }}" height="{{ pic.height }}">{% endfor %}</div>{% endif %}
+  <h2>{% translate "Tabellen und Felder" %}</h2>
+  {% for table in summary.tables %}<details class="panel" open><summary><b>{{ table.name }}</b> <span class="muted">{{ table.key }}</span></summary>{% if table.description %}<p class="muted small">{{ table.description }}</p>{% endif %}
+    <table class="fields"><tbody>{% for f in table.fields %}<tr><td>{{ f.label }}</td><td class="muted">{{ f.type_label }}{% if f.options %}: {{ f.options|join:", " }}{% endif %}</td></tr>{% endfor %}</tbody></table></details>{% endfor %}
+  <p class="muted small">{% translate "Datensatzseiten" %}: {{ summary.masks|join:", "|default:"–" }} · {% translate "Druckvorlagen" %}: {{ summary.prints|join:", "|default:"–" }} · {% translate "Ansichten" %}: {{ summary.views|join:", "|default:"–" }}</p>
+  {% if texts %}<h2>{% translate "Weitere Texte" %}</h2><p class="muted small">{% translate "Titel, Hinweise, Druck- und Seitentexte der Vorlage:" %}</p><ul class="small">{% for t in texts %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
+  {% if demo %}<h2>{% translate "Beispieldaten" %}</h2>{% for table, rows in demo.items %}<details class="panel"><summary><b>{{ table }}</b> · {{ rows|length }}</summary><ul class="small">{% for row in rows %}<li>{% for k, v in row.items %}{{ k }}: {{ v }}{% if not forloop.last %} · {% endif %}{% endfor %}</li>{% endfor %}</ul></details>{% endfor %}{% endif %}
+  <details class="panel"><summary>{% translate "Datei ansehen" %}</summary><pre class="raw">{{ raw }}</pre></details>
+</div>
+<div>
+  {% if version.status == "submitted" %}
+  <form method="post" class="panel form">{% csrf_token %}
+    <label for="d-note">{% translate "Nachricht an den Einsender (bei Ablehnung nötig)" %}</label>
+    <textarea class="input" id="d-note" name="decision" rows="5" maxlength="2000"></textarea>
+    <div class="row"><button class="btn btn-primary" name="action" value="approve">{% translate "Freigeben" %}</button><button class="btn" name="action" value="reject">{% translate "Ablehnen" %}</button></div>
+  </form>
+  {% else %}<div class="panel small"><p>{{ version.get_status_display }}{% if version.reviewer %} · {{ version.reviewer.shown_name }}{% endif %}{% if version.reviewed %}, {{ version.reviewed|date:"j. n. Y H:i" }}{% endif %}</p>{% if version.decision %}<p>{{ version.decision }}</p>{% endif %}</div>{% endif %}
+</div>
+</div>
+{% endblock %}

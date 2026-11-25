@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _, gettext_lazy
 
 from core import fieldtypes as ft
-from masks import i18n
+from masks import i18n, safe
 from masks.models import Mask, MaskVersion
 
 from . import links, services
@@ -76,7 +76,7 @@ def _field_entry(item, record, field, user, editable):
         places = ft.decimals(field)
         step = f"{10 ** -places:.{places}f}" if places else "1"
     entry = {
-        "w": item.get("w", 12), "type": "field", "fd": field,
+        "w": safe.width(item.get("w")), "type": "field", "fd": field,
         "value": services.form(record, field), "display": services.display(record, field, localized=True),
         "editable": editable, "url": f"{base}feld/{field.key}/",
         "reveal_url": f"{base}geheim/{field.key}/" if field.type == "secret" else "",
@@ -132,13 +132,13 @@ def build_view(tree, record, user, readonly=False):
             return _field_entry(item, record, field, user, editable and editable_type(field) and field.key not in fixed)
         if kind == "block" and item.get("block") in BLOCKS:
             name = item["block"]
-            return {"w": item.get("w", 12), "type": "block", "block": name, "title": BLOCKS[name][0],
+            return {"w": safe.width(item.get("w")), "type": "block", "block": name, "title": BLOCKS[name][0],
                     "block_url": reverse("record_block", args=[record.table.key, record.pk, name])}
         if kind == "note":
-            return {"w": item.get("w", 12), "type": "note", "text": item.get("text", "")}
+            return {"w": safe.width(item.get("w")), "type": "note", "text": item.get("text", "")}
         return None
 
-    for tab in tree.get("tabs", []):
+    for index, tab in enumerate(tree.get("tabs", [])):
         sections = []
         for section in tab.get("sections", []):
             items = [e for item in section.get("items", []) if _condition_met(item, record, every) and (e := entry_for(item))]
@@ -146,7 +146,7 @@ def build_view(tree, record, user, readonly=False):
             if items or title:
                 sections.append({"title": title, "items": items})
         if sections:
-            tabs.append({"id": tab.get("id"), "title": i18n.pick(tab.get("title", ""), tab.get("titles")), "sections": sections})
+            tabs.append({"id": safe.tab_id(tab.get("id"), index), "title": i18n.pick(tab.get("title", ""), tab.get("titles")), "sections": sections})
     rest = [f for f in fields.values() if f.key not in placed and not (f.type == "secret" and not user.can("vault.view"))]
     if rest:
         items = [entry_for({"type": "field", "field": f.key, "w": _width(f)}) for f in rest]

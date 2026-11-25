@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Zweiter Faktor" %}{% endblock %}
+{% block content %}
+<div class="narrow panel form"><h1 class="title">{% translate "Zweiter Faktor" %}</h1>
+{% if setup %}<p>{% translate "Prüfer bestätigen ihre Anmeldung zusätzlich mit einem Code aus einer Authenticator-App. Einmal einrichten: diesen Code scannen oder den Schlüssel eintippen." %}</p>
+<img class="qr" src="{{ qr }}" alt="{% translate 'QR-Code für die Authenticator-App' %}" width="200" height="200"><p class="small break"><code>{{ secret }}</code></p>
+{% else %}<p>{% translate "Bitte den Code aus Ihrer Authenticator-App eingeben." %}</p>{% endif %}
+{% if error %}<p class="msg msg-error" role="alert">{{ error }}</p>{% endif %}
+<form method="post">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}"><label for="t-code">{% translate "Code" %}</label>
+<input class="input" id="t-code" name="code" inputmode="numeric" autocomplete="one-time-code" required autofocus maxlength="8"><button class="btn btn-primary btn-block">{% translate "Bestätigen" %}</button></form></div>
+{% endblock %}

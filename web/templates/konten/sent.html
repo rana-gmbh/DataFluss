@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "E-Mail unterwegs" %}{% endblock %}
+{% block content %}
+<div class="narrow panel"><h1 class="title">{% translate "Bitte ins Postfach schauen" %}</h1>
+<p>{% blocktranslate trimmed %}Wenn die Adresse <b>{{ email }}</b> stimmt, kommt gleich eine E-Mail mit einem Anmeldelink. Er gilt 15 Minuten und nur einmal.{% endblocktranslate %}</p>
+<p class="muted small">{% translate "Nichts angekommen? Auch im Spam-Ordner nachsehen, oder in ein paar Minuten noch einmal versuchen." %}</p></div>
+{% endblock %}

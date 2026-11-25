@@ -1,0 +1,9 @@
+{% load i18n %}{% autoescape off %}{% translate "Hallo," %}
+
+{% blocktranslate with title=version.title n=version.number %}Ihre Vorlage „{{ title }}“ (Version {{ n }}) wurde nicht freigegeben. Der Grund:{% endblocktranslate %}
+
+{{ version.decision }}
+
+{% translate "Sie können eine überarbeitete Fassung jederzeit wieder hochladen." %}
+{{ url }}
+{% endautoescape %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% translate "Datenbank-Vorlagen" %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>{% translate "Fertige Datenbanken für DataFluss" %}</h1>
+  <p>{% translate "Vorlagen für Sammlungen, Vereine, Büros und mehr: herunterladen, in DataFluss als neue Datenbank anwenden und nach Belieben anpassen. Eigene Vorlagen lassen sich teilen; jede wird vor dem Erscheinen geprüft." %}</p>
+  <form class="search" method="get" role="search">
+    <input class="input" type="search" name="q" value="{{ q }}" placeholder="{% translate 'Vorlagen suchen, z. B. Bücher, Verein, Rezepte' %}" aria-label="{% translate 'Suchen' %}">
+    <select class="input" name="kategorie" aria-label="{% translate 'Kategorie' %}"><option value="">{% translate "Alle Kategorien" %}</option>{% for value, label in categories %}<option value="{{ value }}" {% if value == category %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+    <select class="input" name="sortierung" aria-label="{% translate 'Sortierung' %}">{% for value, label in sorts %}<option value="{{ value }}" {% if value == sort %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+    <button class="btn btn-primary">{% translate "Suchen" %}</button>
+  </form>
+</section>
+{% if page.object_list %}
+<div class="cards">{% for t in page %}{% include "katalog/_card.html" %}{% endfor %}</div>
+{% if page.has_other_pages %}<nav class="pager" aria-label="{% translate 'Seiten' %}">
+  {% if page.has_previous %}<a class="btn" href="?q={{ q|urlencode }}&kategorie={{ category }}&sortierung={{ sort }}&seite={{ page.previous_page_number }}">{% translate "Zurück" %}</a>{% endif %}
+  <span class="muted">{% blocktranslate with n=page.number of=page.paginator.num_pages %}Seite {{ n }} von {{ of }}{% endblocktranslate %}</span>
+  {% if page.has_next %}<a class="btn" href="?q={{ q|urlencode }}&kategorie={{ category }}&sortierung={{ sort }}&seite={{ page.next_page_number }}">{% translate "Weiter" %}</a>{% endif %}
+</nav>{% endif %}
+{% else %}
+<div class="empty"><p class="strong">{% if q or category %}{% translate "Keine Vorlage gefunden." %}{% else %}{% translate "Noch keine Vorlagen." %}{% endif %}</p>
+<p class="muted">{% translate "Haben Sie eine Datenbank, die anderen helfen könnte?" %} <a href="{% url 'upload' %}">{% translate "Vorlage teilen" %}</a></p></div>
+{% endif %}
+<section class="how">
+  <div><h2>{% translate "1. Herunterladen" %}</h2><p class="muted">{% translate "Eine Vorlage ist eine kleine Datei mit Tabellen, Feldern, Datensatzseiten, Druckvorlagen und Ansichten – ohne Programmcode." %}</p></div>
+  <div><h2>{% translate "2. Anwenden" %}</h2><p class="muted">{% translate "In DataFluss als neue Datenbank anwenden. Direkt aus diesem Katalog installieren kommt mit der nächsten Version von DataFluss." %}</p></div>
+  <div><h2>{% translate "3. Teilen" %}</h2><p class="muted">{% translate "Eigene Tabellen unter Tabellen → Als Vorlage exportieren speichern und hier hochladen." %}</p></div>
+</section>
+{% endblock %}

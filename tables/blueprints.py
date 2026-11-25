@@ -30,7 +30,6 @@ updated. "changes": {"2": {"de": "…", "en": "…"}} says what a version brings
 the start page and the list of tables say so, with a button that adds it (newer_versions).
 """
 import json
-import re
 import uuid
 from pathlib import Path
 
@@ -42,13 +41,11 @@ from core.models import SavedView
 from masks import i18n
 from masks.models import Mask, MaskVersion
 
-from .models import RIGHTS, Field, Record, Table
+from .models import RIGHTS, Field, Link, Record, Table
+from .template_check import FIELD_KEY, FORMAT, KEY, check, check_untrusted  # noqa: F401 (used by others through here)
 
-FORMAT = 1
 NAMESPACE = uuid.UUID("0b7f4f0e-4f3a-4a8e-9d55-1f6c0e2d7a19")
 LIBRARY = Path(__file__).resolve().parent / "library"
-KEY = re.compile(r"^[a-z0-9_]{1,20}$")
-FIELD_KEY = re.compile(r"^f_[a-z0-9_]{1,57}$")
 
 
 class BlueprintError(Exception):
@@ -177,67 +174,8 @@ def installed_version(template_id):
 
 # ---------------------------------------------------------------- checking
 
-def check(data):
-    """Problems of a template file, in plain words; empty when it can be applied."""
-    problems = []
-    if not isinstance(data, dict) or data.get("format") != FORMAT:
-        return [_("Unbekanntes Vorlagenformat.")]
-    if not isinstance(data.get("id"), str) or not KEY.match(data["id"]):
-        problems.append(_("Die Vorlage braucht eine Kennung aus Kleinbuchstaben, Ziffern und _."))
-    if not isinstance(data.get("version"), int) or data["version"] < 1:
-        problems.append(_("Die Vorlage braucht eine Versionsnummer."))
-    if not data.get("title"):
-        problems.append(_("Die Vorlage braucht einen Titel."))
-    tables = data.get("tables")
-    if not isinstance(tables, list) or not tables:
-        return problems + [_("Die Vorlage enthält keine Tabellen.")]
-    keys = set()
-    for table in tables:
-        key = table.get("key") if isinstance(table, dict) else None
-        if not isinstance(key, str) or not KEY.match(key) or key in keys:
-            problems.append(_("Tabelle %(key)s: ungültige oder doppelte Kennung.") % {"key": key})
-            continue
-        keys.add(key)
-        if not table.get("name"):
-            problems.append(_("Tabelle %(key)s: Name fehlt.") % {"key": key})
-        for role, right in (table.get("rights") or {}).items():
-            if right not in RIGHTS:
-                problems.append(_("Tabelle %(key)s: unbekanntes Recht %(right)s.") % {"key": key, "right": right})
-        field_keys = set()
-        for field in table.get("fields") or []:
-            fkey = field.get("key") if isinstance(field, dict) else None
-            if not isinstance(fkey, str) or not FIELD_KEY.match(fkey) or fkey in field_keys:
-                problems.append(_("Tabelle %(key)s: ungültiges oder doppeltes Feld %(field)s.") % {"key": key, "field": fkey})
-                continue
-            field_keys.add(fkey)
-            kind = ft.TYPES.get(field.get("type"))
-            if kind is None or not kind.tables:
-                problems.append(_("Feld %(field)s: unbekannter Typ.") % {"field": fkey})
-            if not field.get("label"):
-                problems.append(_("Feld %(field)s: Bezeichnung fehlt.") % {"field": fkey})
-            if kind is not None and kind.options and not field.get("options"):
-                problems.append(_("Feld %(field)s: Optionen fehlen.") % {"field": fkey})
-            config = field.get("config") or {}
-            if field.get("type") == "link":
-                target = config.get("target")
-                if target not in ("record", "pupil", "staff", "asset"):
-                    problems.append(_("Feld %(field)s: unbekanntes Ziel der Verknüpfung.") % {"field": fkey})
-                elif target == "record" and config.get("table") not in {t.get("key") for t in tables if isinstance(t, dict)}:
-                    problems.append(_("Feld %(field)s: Die verknüpfte Tabelle fehlt in der Vorlage.") % {"field": fkey})
-            if field.get("type") == "formula" and not config.get("expression"):
-                problems.append(_("Feld %(field)s: Formel fehlt.") % {"field": fkey})
-        if table.get("look") is not None and not isinstance(table.get("look"), dict):
-            problems.append(_("Tabelle %(key)s: ungültige Darstellung.") % {"key": key})
-        if table.get("title_field") and table["title_field"] not in field_keys:
-            problems.append(_("Tabelle %(key)s: Das Titelfeld fehlt.") % {"key": key})
-    for group in ("masks", "prints", "views"):
-        for item in data.get(group) or []:
-            if not isinstance(item, dict) or item.get("table") not in keys or not item.get("name"):
-                problems.append(_("%(group)s: Eintrag ohne Tabelle oder Namen.") % {"group": group})
-    for table_key in (data.get("demo") or {}):
-        if table_key not in keys:
-            problems.append(_("Beispieldaten für eine unbekannte Tabelle %(key)s.") % {"key": table_key})
-    return problems
+# check() lives in tables/template_check.py, which the template site (web/) shares; check_untrusted() there is the
+# stricter check for templates someone else wrote.
 
 
 # ---------------------------------------------------------------- applying
@@ -248,7 +186,20 @@ def _field_differs(field, spec):
 
 
 def apply(data, user=None, demo=False, request=None):
-    """Creates what is missing and keeps everything else. Returns {"created", "kept", "changed"} (names)."""
+    """Creates what is missing and keeps everything else. Returns {"created", "kept", "changed"} (names).
+    A template that fails while being applied leaves nothing behind and says so, instead of an error page."""
+    from django.core.exceptions import ValidationError
+    from django.db import DatabaseError
+
+    try:
+        return _apply(data, user, demo, request)
+    except ValidationError as exc:
+        raise BlueprintError(_("Die Vorlage lässt sich nicht anwenden: %(problem)s") % {"problem": " ".join(exc.messages)})
+    except (TypeError, KeyError, ValueError, AttributeError, DatabaseError):
+        raise BlueprintError(_("Die Vorlage lässt sich nicht anwenden: Sie enthält ungültige Angaben."))
+
+
+def _apply(data, user, demo, request):
     from . import formula, services
 
     problems = check(data)
@@ -267,8 +218,8 @@ def apply(data, user=None, demo=False, request=None):
                 if Table.objects.filter(key=spec["key"]).exists():
                     raise BlueprintError(_("Eine Tabelle mit der Kennung %(key)s gibt es schon.") % {"key": spec["key"]})
                 table = Table.objects.create(
-                    pk=pk, key=spec["key"], name=spec["name"], names=i18n.clean_names(spec.get("names"), 100),
-                    description=(spec.get("description") or "")[:300], icon=spec.get("icon") or "table", order=(order + 1) * 10,
+                    pk=pk, key=spec["key"], name=str(spec["name"])[:100], names=i18n.clean_names(spec.get("names"), 100),
+                    description=(spec.get("description") or "")[:300], icon=str(spec.get("icon") or "table")[:30], order=(order + 1) * 10,
                     in_nav=spec.get("in_nav", True), rights={k: v for k, v in (spec.get("rights") or {}).items() if v in RIGHTS},
                     template={"id": tid, "version": data["version"]}, section=" ".join(str(spec.get("section") or "").split())[:60],
                     look=spec.get("look") if isinstance(spec.get("look"), dict) else {},
@@ -321,7 +272,7 @@ def apply(data, user=None, demo=False, request=None):
             table = tables[item["table"]]
             if Mask.objects.filter(pk=pk).exists() or Mask.objects.filter(table=table, is_default=True).exists():
                 continue
-            mask = Mask.objects.create(pk=pk, entity=Mask.RECORD, table=table, name=item["name"], names=i18n.clean_names(item.get("names"), 80), is_default=True)
+            mask = Mask.objects.create(pk=pk, entity=Mask.RECORD, table=table, name=str(item["name"])[:80], names=i18n.clean_names(item.get("names"), 80), is_default=True)
             MaskVersion.objects.create(pk=item_id(tid, "maskversion", item["table"], item["name"]), mask=mask, number=1,
                                        status=MaskVersion.PUBLISHED, tree=item.get("tree") or {"tabs": []}, author=user)
             report["created"].append(f"{table.name} · {item['name']}")
@@ -331,14 +282,14 @@ def apply(data, user=None, demo=False, request=None):
             pk = item_id(tid, "print", item["table"], item["name"])
             if PrintTemplate.objects.filter(pk=pk).exists():
                 continue
-            PrintTemplate.objects.create(pk=pk, name=item["name"], description=(item.get("description") or "")[:200],
+            PrintTemplate.objects.create(pk=pk, name=str(item["name"])[:120], description=(item.get("description") or "")[:200],
                                          source=f"table:{item['table']}", tree=item.get("tree") or {"page": {"preset": "a4"}, "rows": []})
             report["created"].append(item["name"])
         for item in data.get("views") or []:
             pk = item_id(tid, "view", item["table"], item["name"])
             if SavedView.objects.filter(pk=pk).exists():
                 continue
-            SavedView.objects.create(pk=pk, entity=f"table:{item['table']}", name=item["name"], owner=None, config=item.get("config") or {})
+            SavedView.objects.create(pk=pk, entity=f"table:{item['table']}", name=str(item["name"])[:80], owner=None, config=item.get("config") or {})
             report["created"].append(item["name"])
         if demo:
             _demo(data, tables)
@@ -404,3 +355,249 @@ def _demo(data, tables):
                 ids = [str(pk) for pk in Record.objects.filter(table=target, title__in=names).values_list("pk", flat=True)] if target else []
                 if ids:
                     links.set_targets(record, field, ids if (field.config or {}).get("multiple") else ids[:1])
+
+
+# ---------------------------------------------------------------- exporting
+
+DEMO_ROWS = 20  # sample records per table an export takes along at most
+
+
+def export(tables, meta, demo=False, user=None):
+    """A template file of these tables, for sharing (datafluss.de) or another database: fields, look, record pages,
+    printouts and shared views; sample records only when asked, without files, pictures and secrets.
+    Links to tables not chosen and to pupils, staff or devices are left out, so the file stands on its own.
+    Returns (data, problems, skipped): problems from template_check.check_untrusted, skipped names what was left out."""
+    from schule.bundles import platform_version
+
+    from . import template_check as tc
+
+    keys = {t.key for t in tables}
+    skipped = []
+    specs, kept = [], {}
+    for table in tables:
+        fields = _export_fields(table, keys, skipped)
+        kept[table.key] = {f["key"]: f for f in fields}
+        spec = {"key": table.key, "name": table.name, "icon": table.icon or "table", "fields": fields}
+        for name, value in (("names", table.names), ("description", table.description), ("section", table.section)):
+            if value:
+                spec[name] = value
+        if not table.in_nav:
+            spec["in_nav"] = False
+        if table.title_field in kept[table.key]:
+            spec["title_field"] = table.title_field
+        rights = {role: right for role, right in (table.rights or {}).items() if role in tc.UNTRUSTED_ROLES and right in ("read", "edit")}
+        if rights:
+            spec["rights"] = rights
+        look = _export_look(table.look or {}, kept[table.key])
+        if look:
+            spec["look"] = look
+        specs.append(spec)
+    for spec in specs:  # a person table of TMDB may be left out: the look of the titles then forgets it
+        tmdb = (spec.get("look") or {}).get("tmdb")
+        if tmdb and any((p or {}).get("table") not in keys for p in (tmdb.get("people") or {}).values()):
+            tmdb.pop("people", None)
+        if tmdb and ((tmdb.get("watch") or {}).get("viewings") or {}).get("table") not in (keys | {None}):
+            tmdb.pop("watch", None)
+    data = {"format": FORMAT, "id": meta.get("id", ""), "version": 1, "title": meta.get("title", ""), "database": True, "requires": [],
+            "datafluss": platform_version(), "tables": specs}
+    if meta.get("description"):
+        data["description"] = meta["description"]
+    data["masks"] = [m for t in tables if (m := _export_mask(t, kept[t.key]))]
+    data["prints"] = _export_prints(tables, kept, skipped)
+    data["views"] = _export_views(tables, kept)
+    if demo:
+        data["demo"] = {t.key: rows for t in tables if (rows := _export_demo(t, kept[t.key], keys, user))}
+    for group in ("masks", "prints", "views"):
+        if not data[group]:
+            del data[group]
+    return data, tc.check_untrusted(data), skipped
+
+
+def _export_fields(table, keys, skipped):
+    from . import formula, services
+    from . import template_check as tc
+
+    out = []
+    for field in services.fields_of(table):
+        config = {k: v for k, v in (field.config or {}).items() if k in tc.FIELD_CONFIG.get(field.type, ())}
+        if field.type == "link" and (config.get("target") != Link.RECORD or config.get("table") not in keys):
+            skipped.append(f"{table.name} · {field.display_label}")
+            continue
+        if field.type == "backlink" and str(config.get("link", "")).partition(".")[0] not in keys:
+            skipped.append(f"{table.name} · {field.display_label}")
+            continue
+        spec = {"key": field.key, "label": field.label, "type": field.type}
+        if field.labels:
+            spec["labels"] = field.labels
+        if field.help_text:
+            spec["help_text"] = field.help_text
+        if field.options:
+            spec["options"] = [{"value": o["value"], **({"color": o["color"]} if tc.COLOR.match(str(o.get("color") or "")) else {}),
+                                **({"labels": o["labels"]} if o.get("labels") else {})} for o in field.options]
+        if config:
+            spec["config"] = config
+        for flag in ("required", "unique"):
+            if getattr(field, flag):
+                spec[flag] = True
+        if not field.in_grid:
+            spec["in_grid"] = False
+        out.append(spec)
+    # A formula naming a field or table that stays behind goes too, and so on, until all that is left works.
+    while True:
+        present = {f["key"] for f in out}
+        broken = [f for f in out if f["type"] == "formula" and not _formula_fits(f["config"].get("expression", ""), present, keys, formula)]
+        if not broken:
+            return out
+        for f in broken:
+            skipped.append(f"{table.name} · {f['label']}")
+            out.remove(f)
+
+
+def _formula_fits(expression, present, keys, formula):
+    try:
+        refs = [inner for _start, _end, inner in formula._ref_tokens(expression)]
+    except formula.FormulaError:
+        return False
+    if any(inner.startswith("@") and inner[1:].partition(".")[0] not in keys for inner in refs):
+        return False
+    return formula.used_fields(expression) <= present
+
+
+def _export_look(look, fields):
+    from . import template_check as tc
+
+    out = {}
+    for name in ("cover", "backdrop", "flag", "rating", "text"):
+        if look.get(name) in fields:
+            out[name] = look[name]
+    subtitle = [k for k in look.get("subtitle") or [] if k in fields][:3]
+    if subtitle:
+        out["subtitle"] = subtitle
+    if look.get("layout") in tc.LAYOUTS and "cover" in out:
+        out["layout"] = look["layout"]
+    if look.get("shape") in tc.SHAPES:
+        out["shape"] = look["shape"]
+    if isinstance(look.get("tmdb"), dict):
+        out["tmdb"] = json.loads(json.dumps(look["tmdb"]))
+    return out
+
+
+def _clean(obj, allowed):
+    return {k: v for k, v in obj.items() if k in allowed} if isinstance(obj, dict) else {}
+
+
+def _export_mask(table, fields):
+    from . import template_check as tc
+
+    mask = Mask.objects.filter(table=table, is_default=True).first()
+    version = mask.published if mask else None
+    if version is None:
+        return None
+    tabs = []
+    for index, tab in enumerate((version.tree or {}).get("tabs", [])):
+        sections = []
+        for section in tab.get("sections", []):
+            items = []
+            for item in section.get("items", []):
+                item = _clean(item, tc.MASK_ITEM_KEYS)
+                if item.get("type") == "field" and item.get("field") not in fields:
+                    continue
+                if item.get("type") == "block" and item.get("block") not in tc.MASK_BLOCKS:
+                    continue
+                if (item.get("show_if") or {}).get("field") not in (None, *fields):
+                    item.pop("show_if")
+                items.append(item)
+            section = {**_clean(section, tc.SECTION_KEYS), "items": items}
+            section["id"] = section["id"] if tc.TOKEN.match(str(section.get("id", ""))) else f"s{len(sections) + 1}"
+            sections.append(section)
+        tab = {**_clean(tab, tc.TAB_KEYS), "sections": sections}
+        tab["id"] = tab["id"] if tc.TOKEN.match(str(tab.get("id", ""))) else f"t{index + 1}"
+        tabs.append(tab)
+    out = {"table": table.key, "name": mask.name, "tree": {"tabs": tabs}}
+    if mask.names:
+        out["names"] = mask.names
+    return out
+
+
+def _export_prints(tables, kept, skipped):
+    from prints.models import PrintTemplate
+
+    from . import template_check as tc
+
+    out = []
+    for table in tables:
+        for template in PrintTemplate.objects.filter(source=f"table:{table.key}", archived=False).order_by("name"):
+            if template.code_mode:
+                skipped.append(template.name)
+                continue
+            tree = template.tree or {}
+            rows = []
+            for row in tree.get("rows", []):
+                cols = []
+                for col in row.get("cols", []):
+                    items = []
+                    for el in col.get("items", []):
+                        el = _clean(el, tc.ELEMENT_KEYS)
+                        if el.get("type") not in tc.PRINT_ELEMENTS or (el.get("type") == "field" and el.get("key") not in kept[table.key]):
+                            continue
+                        if el.get("type") == "list":
+                            listed = _list_table(table.key, el.get("link"), kept)
+                            if listed is None:
+                                continue
+                            # a column of a field that stayed behind would print empty
+                            el["columns"] = [c for c in el.get("columns") or [] if not FIELD_KEY.match(str(c.get("key", ""))) or c["key"] in kept[listed]]
+                        items.append(el)
+                    cols.append({**_clean(col, tc.COLUMN_KEYS), "items": items})
+                rows.append({"cols": cols})
+            item = {"table": table.key, "name": template.name, "tree": {"page": _clean(tree.get("page"), tc.PAGE_KEYS), "rows": rows}}
+            if template.description:
+                item["description"] = template.description
+            out.append(item)
+    return out
+
+
+def _list_table(table_key, link, kept):
+    """The table whose records a printed list shows: "@other.f_link" for records of another table linking here,
+    or a link field of the table itself. None when that table or field is not part of the export."""
+    if isinstance(link, str) and link.startswith("@"):
+        other, _dot, key = link[1:].partition(".")
+        return other if key in kept.get(other, {}) else None
+    field = kept[table_key].get(link)
+    target = ((field or {}).get("config") or {}).get("table")
+    return target if target in kept else None
+
+
+def _export_views(tables, kept):
+    from . import template_check as tc
+
+    out = []
+    for table in tables:
+        for view in SavedView.objects.filter(entity=f"table:{table.key}", owner=None).order_by("name"):
+            config = _clean(view.config, tc.VIEW_KEYS)
+            if isinstance(config.get("filters"), dict):
+                config["filters"] = {k: v for k, v in config["filters"].items() if k in kept[table.key]}
+            out.append({"table": table.key, "name": view.name, "config": config})
+    return out
+
+
+def _export_demo(table, fields, keys, user):
+    from . import links, services
+
+    if user is not None and not services.may_read(user, table):
+        return []
+    rows = []
+    for record in Record.objects.filter(table=table).order_by("created_at")[:DEMO_ROWS]:
+        row = {}
+        for key, spec in fields.items():
+            if spec["type"] in ("secret", "file", "image", "formula", "backlink"):
+                continue
+            if spec["type"] == "link":
+                ids = links.targets(record, Field.objects.get(table=table, key=key))
+                titles = list(Record.objects.filter(pk__in=ids).values_list("title", flat=True))
+                if titles:
+                    row[key] = titles if (spec.get("config") or {}).get("multiple") else titles[0]
+            elif record.values.get(key) not in (None, "", []):
+                row[key] = record.values[key]
+        if row:
+            rows.append(row)
+    return rows

@@ -293,6 +293,40 @@ def table_blueprints(request):
     return render(request, "tables/blueprints.html", {"rows": rows, "active_nav": "settings_home"})
 
 
+@require("tables.design")
+def table_export(request):
+    """Tabellen → Als Vorlage exportieren: chosen tables as a template file, to share on datafluss.de or to use in
+    another database (blueprints.export)."""
+    from django.http import HttpResponse
+    from django.utils.text import slugify
+
+    tables = list(Table.objects.filter(archived=False))
+    groups = services.by_section(tables)
+    chosen = set(request.POST.getlist("tables")) if request.method == "POST" else set()
+    first_section = next((t.section for t in tables if t.section), "")
+    values = {"id": "", "title": first_section, "description": "", "demo": False}
+    problems, skipped = [], []
+    if request.method == "POST":
+        values = {"id": request.POST.get("id", "").strip(), "title": request.POST.get("title", "").strip()[:100],
+                  "description": request.POST.get("description", "").strip()[:1000], "demo": bool(request.POST.get("demo"))}
+        picked = [t for t in tables if str(t.pk) in chosen]
+        if not picked:
+            problems = [_("Bitte mindestens eine Tabelle wählen.")]
+        else:
+            if not values["id"]:
+                values["id"] = slugify(values["title"]).replace("-", "_")[:20]
+            data, problems, skipped = blueprints.export(picked, values, demo=values["demo"], user=request.user)
+            if not problems:
+                audit.log("table", f"Als Vorlage exportiert: {', '.join(t.name for t in picked)}", request=request, user=request.user)
+                answer = HttpResponse(json.dumps(data, ensure_ascii=False, indent=1), content_type="application/json; charset=utf-8")
+                answer["Content-Disposition"] = f'attachment; filename="{data["id"]}.json"'
+                return answer
+    else:
+        chosen = {str(t.pk) for t in tables if first_section and t.section == first_section} or {str(t.pk) for t in tables}
+    return render(request, "tables/export.html", {"groups": groups, "chosen": chosen, "values": values, "problems": problems,
+                                                  "skipped": skipped, "active_nav": "settings_home"})
+
+
 # ---------------------------------------------------------------- a new table from a file
 
 NEW_TABLE = "newtable"  # ImportSession.entity of a file that is still waiting to become a table

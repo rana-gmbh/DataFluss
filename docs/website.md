@@ -1,0 +1,139 @@
+# The template site (datafluss.de)
+
+A website where people find, download, share and rate DataFluss database templates. Every upload and every
+review text is checked by a reviewer before it appears. The site is its own Django project in `web/`, with its
+own database and image; it shares only the template check (`tables/template_check.py`) with DataFluss.
+
+| | |
+|---|---|
+| **Visitors** | browse, search and filter by category, look at a template (tables and fields, pictures, versions, reviews), download it. No account, no cookie. |
+| **Signed in** | share templates and new versions, rate (½ to 5 stars) and review others' templates, report a template or review. |
+| **Reviewers** | a queue of submitted versions, review texts and reports; approve or reject (with a reason the uploader gets by mail). |
+
+## Templates people share
+
+A shared template is a **database template** (`"database": true`) that stands on its own: no modules
+(`requires: []`), links only between its own tables, never to pupils, staff or devices. People make one in
+DataFluss under **Einstellungen → Tabellen → Als Vorlage exportieren** (see [Own tables](tables.md)).
+
+Templates contain no code, but their texts reach pages, styles and printouts of every database that applies
+them. So nothing someone else wrote is trusted:
+
+- **`check_untrusted`** (`tables/template_check.py`) runs on upload, again on approval, and (from DataFluss 1.4)
+  before a database applies a file from the catalog. It knows every key at every level with its type (template,
+  table, field per type, option, `look` and `look.tmdb`, record page and print trees, saved views, sample
+  records) and refuses everything else; every reference must point into the template; ids, colours, widths,
+  print values and sizes are held to what they may be. Limits: 1 MB, nesting depth 20, 30 tables, 150 fields per
+  table, 200 options, 50 record pages, printouts and views each, 200 sample records per table, 2,000 nodes per
+  tree. Whatever slips through raises nothing: the result is "invalid template".
+- **Ids** of the platform's own templates are reserved, and an id belongs to whoever shared it first, so a
+  shared template can never "update" someone else's tables.
+- **Pictures** are decoded and written anew as WebP (no metadata; at most 4 per version, 5 MB each, 1600 px wide).
+- **For the reviewer**, `notes()` points out what a person should look at: links in texts, sample records (real
+  personal data?), fields that look personal, rights to edit.
+- DataFluss itself escapes these values where they are shown (record page tabs, list column titles, printouts),
+  so a template that got past the check still could not run script.
+
+The catalog hands out the approved file as it was checked, with `"database": true`, `"requires": []` and where it
+comes from: `"catalog": {"source": "datafluss.de", "author", "license": "CC-BY-4.0", "url"}` (DataFluss ignores keys
+it does not know). The file is written once when approved; its SHA-256 is part of the index.
+
+### Versions
+
+A new version keeps the id and has a higher `version`. The shown version stays until the new one is approved;
+uploading again while one is waiting replaces the waiting one. Where a template is applied, a newer version only
+adds (tables/blueprints.py): what the earlier one brought stays there, even if the new file no longer has it.
+
+## Accounts and sign-in
+
+- **By link, without a password.** An address gets a link valid for 15 minutes and only once (it is signed and
+  holds the account's last sign-in, `konten/tokens.py`). The link page shows a button; only the click signs in,
+  so mail programs that open links to check them do not spend it. An account is made when its first link is used,
+  so nobody can create accounts for addresses they do not read. The answer is the same for known and unknown
+  addresses.
+- A **name** is needed before sharing or rating: it is shown with templates and reviews (attribution under
+  CC BY 4.0). The address is never shown.
+- **Reviewers** (`is_staff`) also confirm a code from an authenticator app once per session; they set it up on
+  first use (QR code). Make the first reviewer with `python web/manage.py createsuperuser` (address and name; no
+  password is used).
+- **Deleting an account** (Konto) removes its reviews and the templates that were never published; published
+  templates stay under "gelöschtes Konto", since they were shared under CC BY 4.0 (they can be withdrawn first).
+
+## Ratings and reviews
+
+One review per person and template: ½ to 5 stars in half steps, and an optional text. Stars count at once; a new
+or changed text waits for a reviewer. Nobody rates their own template or an official one. The average shows as
+stars and as a number ("4,5 (12)").
+
+## Abuse protection
+
+No outside service is involved. Rate limits per address, account and IP (5 sign-in mails per address and 20 per
+IP an hour, 10 uploads, 30 reviews and 20 reports per account a day; `konten/limits.py`, keys stored as keyed
+hashes for a day), a hidden trap field and a minimum time of 3 s on every form people fill in, sizes as above,
+the review before anything appears, and **Melden** for templates and review texts. Should spam get through
+anyway, a self-hosted proof-of-work captcha (ALTCHA) would be the next step.
+
+## Privacy and legal
+
+- No tracking, no analytics, no fonts or scripts from other servers; a strict content policy (`script-src 'self'`,
+  no inline script or style). The only cookie is the session after signing in (and the CSRF cookie of forms).
+- Pages **Impressum**, **Datenschutz** and **Nutzungsbedingungen** (`web/templates/recht/`) are **drafts** with
+  placeholders in [brackets]; they must be completed and checked legally before the site goes public.
+- Shared templates are licensed **CC BY 4.0**; uploaders confirm that and that the file holds no real personal data.
+
+## Interface for DataFluss
+
+Stable, under `/api/v1/`; fields are only ever added.
+
+- `GET /api/v1/vorlagen.json`: `{"format": 1, "templates": [{"id", "version", "title", "titles", "description",
+  "descriptions", "category", "official", "author", "license", "rating", "ratings", "downloads", "has_demo",
+  "datafluss", "tables", "sha256", "size", "updated", "url", "page"}]}`. `datafluss` is the version of DataFluss the
+  template was exported from (empty for older files).
+- `GET /api/v1/vorlagen/<id>/<version>.json`: the file (counted as a download). Its SHA-256 matches the index.
+
+DataFluss 1.4 is to use this for "Vorlage hinzufügen → Von datafluss.de" and the "Neue Datenbank" wizard, always
+running `check_untrusted` itself before applying.
+
+## Running it
+
+Locally (SQLite in `web/data/`, mails in the console):
+
+```bash
+DEBUG=1 .venv/bin/python web/manage.py migrate
+```
+
+```bash
+DEBUG=1 .venv/bin/python web/manage.py import_library
+```
+
+```bash
+DEBUG=1 .venv/bin/python web/manage.py runserver 127.0.0.1:8140
+```
+
+`import_library` publishes DataFluss's own database templates as official ones. Tests:
+`.venv/bin/python web/manage.py test webtests` (CI job `web`).
+
+### On Coolify
+
+Not set up yet; this is what it takes, all of it in your accounts:
+
+1. A **Dockerfile application** from this repository, base directory `/`, Dockerfile `web/Dockerfile`, port 8000,
+   health check `/healthz/`, and a **PostgreSQL** resource. A volume on `/data` keeps the pictures (`/data/media`).
+2. Environment (runtime only, not "Available at Buildtime"):
+
+   | Variable | |
+   |---|---|
+   | `SECRET_KEY` | long random value |
+   | `SITE_URL` | `https://datafluss.de` (links in mails, cookies marked secure, HSTS) |
+   | `DATABASE_URL` | `postgres://user:password@host:5432/name` of the PostgreSQL resource |
+   | `TRUST_PROXY` | `1` behind Coolify's proxy (client address from X-Forwarded-For for the limits) |
+   | `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `DEFAULT_FROM_EMAIL` | SMTP of a mail provider with a data processing agreement |
+   | `REVIEW_NOTIFY` | addresses told of new uploads, review texts and reports (comma-separated) |
+   | `ALLOWED_HOSTS` | further host names, e.g. `www.datafluss.de` |
+
+3. **DNS** of datafluss.de to the server, the domain in Coolify (HTTPS by Coolify, which also redirects HTTP).
+4. In the container: `python manage.py createsuperuser` for the first reviewer, `python manage.py import_library`.
+5. Complete the legal pages.
+
+`check --deploy` leaves three warnings that are decisions, not faults: HTTPS redirect (Coolify does it), HSTS for
+subdomains and preload (only once every subdomain is HTTPS for good).

@@ -1,0 +1,42 @@
+{% load static i18n %}<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% translate "Vorlagen" %}{% endblock %} · DataFluss</title>
+  <meta name="description" content="{% block description %}{% translate 'Fertige Datenbank-Vorlagen für DataFluss: finden, herunterladen, teilen und bewerten.' %}{% endblock %}">
+  <link rel="stylesheet" href="{% static 'web/site.css' %}">
+  <link rel="icon" href="{% static 'web/logo.svg' %}" type="image/svg+xml">
+  <script src="{% static 'web/site.js' %}" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">{% translate "Zum Inhalt springen" %}</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="{% url 'home' %}"><img src="{% static 'web/logo.svg' %}" alt="" width="28" height="28"><span>DataFluss <b>Vorlagen</b></span></a>
+    <nav class="nav" aria-label="{% translate 'Hauptmenü' %}">
+      <a href="{% url 'home' %}">{% translate "Stöbern" %}</a>
+      <a href="{% url 'upload' %}">{% translate "Teilen" %}</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'my_templates' %}">{% translate "Meine Vorlagen" %}</a>
+        {% if user.is_staff %}<a href="{% url 'review_queue' %}">{% translate "Prüfen" %}{% if review_waiting %} <span class="count">{{ review_waiting }}</span>{% endif %}</a>{% endif %}
+        <a href="{% url 'account' %}" title="{{ user.email }}">{{ user.shown_name }}</a>
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link">{% translate "Abmelden" %}</button></form>
+      {% else %}
+        <a class="btn btn-sm" href="{% url 'login' %}?next={{ request.get_full_path|urlencode }}">{% translate "Anmelden" %}</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+<main id="main" class="wrap" tabindex="-1">
+  {% if messages %}<div class="messages">{% for message in messages %}<p class="msg msg-{{ message.tags }}" role="status">{{ message }}</p>{% endfor %}</div>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="foot">
+  <div class="wrap foot-row">
+    <span>{% translate "Vorlagen für" %} <a href="https://github.com/rana-gmbh/DataFluss">DataFluss</a> · {% translate "geteilt unter" %} <a href="https://creativecommons.org/licenses/by/4.0/deed.de" rel="license">CC BY 4.0</a></span>
+    <span><a href="{% url 'imprint' %}">{% translate "Impressum" %}</a> · <a href="{% url 'privacy' %}">{% translate "Datenschutz" %}</a> · <a href="{% url 'terms' %}">{% translate "Nutzungsbedingungen" %}</a></span>
+  </div>
+</footer>
+</body>
+</html>
