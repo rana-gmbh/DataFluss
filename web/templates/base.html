@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{% translate "Vorlagen" %}{% endblock %} · DataFluss</title>
   <meta name="description" content="{% block description %}{% translate 'Fertige Datenbank-Vorlagen für DataFluss: finden, herunterladen, teilen und bewerten.' %}{% endblock %}">
-  <meta property="og:site_name" content="DataFluss Vorlagen">
+  <meta property="og:site_name" content="DataFluss Templates">
   <meta property="og:type" content="website">
   <meta property="og:title" content="{% block og_title %}{% translate 'Datenbank-Vorlagen für DataFluss' %}{% endblock %}">
   <meta property="og:description" content="{% block og_description %}{% translate 'Fertige Datenbank-Vorlagen für DataFluss: finden, herunterladen, teilen und bewerten.' %}{% endblock %}">
@@ -19,7 +19,7 @@
 <a class="skip" href="#main">{% translate "Zum Inhalt springen" %}</a>
 <header class="top">
   <div class="wrap top-row">
-    <a class="brand" href="{% url 'home' %}"><img src="{% static 'web/logo.svg' %}" alt="" width="28" height="28"><span>DataFluss <b>Vorlagen</b></span></a>
+    <a class="brand" href="{% url 'home' %}"><img src="{% static 'web/logo.svg' %}" alt="" width="28" height="28"><span>DataFluss <b>Templates</b></span></a>
     <nav class="nav" aria-label="{% translate 'Hauptmenü' %}">
       <a href="{% url 'home' %}">{% translate "Stöbern" %}</a>
       <a href="{% url 'upload' %}">{% translate "Teilen" %}</a>
@@ -43,8 +43,7 @@
   <div class="wrap foot-row">
     <span>{% translate "Vorlagen für" %} <a href="https://github.com/rana-gmbh/DataFluss">DataFluss</a> · {% translate "geteilt unter" %} <a href="https://creativecommons.org/licenses/by/4.0/deed.de" rel="license">CC BY 4.0</a></span>
     <span><a href="{% url 'imprint' %}">{% translate "Impressum" %}</a> · <a href="{% url 'privacy' %}">{% translate "Datenschutz" %}</a> · <a href="{% url 'terms' %}">{% translate "Nutzungsbedingungen" %}</a></span>
-    <form class="lang" method="post" action="{% url 'set_language' %}">{% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
-      {% get_available_languages as languages %}{% for code, name in languages %}<button class="link{% if code == LANG %} current{% endif %}" name="language" value="{{ code }}" lang="{{ code }}"{% if code == LANG %} aria-current="true"{% endif %}>{{ name }}</button>{% endfor %}</form>
+    <nav class="lang" aria-label="{% translate 'Sprache' %}">{% get_available_languages as languages %}{% for code, name in languages %}{% get_language_info for code as info %}<a href="{% url 'language' code %}?next={{ request.get_full_path|urlencode }}" lang="{{ code }}" hreflang="{{ code }}"{% if code == LANG %} class="current" aria-current="true"{% endif %}>{{ info.name_local }}</a>{% endfor %}</nav>
   </div>
 </footer>
 </body>

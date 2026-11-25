@@ -54,8 +54,8 @@ adds (tables/blueprints.py): what the earlier one brought stays there, even if t
 - A **name** is needed before sharing or rating: it is shown with templates and reviews (attribution under
   CC BY 4.0). The address is never shown.
 - **Reviewers** (`is_staff`) also confirm a code from an authenticator app once per session; they set it up on
-  first use (QR code). Make the first reviewer with `python web/manage.py createsuperuser` (address and name; no
-  password is used).
+  first use (QR code). Make a reviewer with `python web/manage.py createsuperuser --email … --name …`: it asks for
+  no password (none is ever used) and makes an existing account a reviewer too.
 - **Deleting an account** (Konto) removes its reviews and the templates that were never published; published
   templates stay under "gelöschtes Konto", since they were shared under CC BY 4.0 (they can be withdrawn first).
 
@@ -76,9 +76,11 @@ anyway, a self-hosted proof-of-work captcha (ALTCHA) would be the next step.
 ## Privacy and legal
 
 - No tracking, no analytics, no fonts or scripts from other servers; a strict content policy (`script-src 'self'`,
-  no inline script or style). The only cookie is the session after signing in (and the CSRF cookie of forms).
-- Pages **Impressum**, **Datenschutz** and **Nutzungsbedingungen** (`web/templates/recht/`) are **drafts** with
-  placeholders in [brackets]; they must be completed and checked legally before the site goes public.
+  no inline script or style). Browsing and downloading set no cookie at all; the session and the CSRF cookie come with
+  signing in, the language cookie only when someone uses the language links in the footer.
+- Pages **Impressum**, **Datenschutz** and **Nutzungsbedingungen** (`web/templates/recht/`) name Rana GmbH as provider
+  and netcup GmbH as host and processor. They are German (other languages show a note); change them together with
+  the facts they describe (cookies, retention, providers).
 - Shared templates are licensed **CC BY 4.0**; uploaders confirm that and that the file holds no real personal data.
 
 ## Interface for DataFluss
@@ -184,10 +186,10 @@ its own PostgreSQL. Everything below happens in your accounts; nothing of it is 
    ```
 
    ```bash
-   python web/manage.py createsuperuser
+   python web/manage.py createsuperuser --email you@example.org --name "Your name"
    ```
 
-   (your address and name; no password is used: sign in by link, then set up the second factor)
+   (no password: sign in by link, then set up the second factor)
 
    ```bash
    python web/manage.py import_library

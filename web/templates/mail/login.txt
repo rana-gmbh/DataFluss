@@ -1,6 +1,6 @@
 {% load i18n %}{% autoescape off %}{% translate "Hallo," %}
 
-{% if new %}{% translate "mit diesem Link legen Sie Ihr Konto bei DataFluss Vorlagen an und melden sich an:" %}{% else %}{% translate "mit diesem Link melden Sie sich bei DataFluss Vorlagen an:" %}{% endif %}
+{% if new %}{% translate "mit diesem Link legen Sie Ihr Konto bei DataFluss Templates an und melden sich an:" %}{% else %}{% translate "mit diesem Link melden Sie sich bei DataFluss Templates an:" %}{% endif %}
 
 {{ link }}
 

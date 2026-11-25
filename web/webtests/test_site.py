@@ -348,16 +348,16 @@ class PageTests(SiteCase):
 class LaunchTests(SiteCase):
     def test_english_from_the_switch_and_the_browser(self):
         self.assertContains(self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="en"), "Ready-made databases for DataFluss")
-        self.client.post(reverse("set_language"), {"language": "de", "next": "/"})
+        self.client.get(reverse("language", args=["de"]) + "?next=/")
         self.assertContains(self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="en"), "Fertige Datenbanken für DataFluss")
-        self.client.post(reverse("set_language"), {"language": "en", "next": "/"})
+        self.client.get(reverse("language", args=["en"]) + "?next=/")
         page = self.client.get(reverse("home"))
         self.assertContains(page, '<html lang="en">')
         self.assertContains(page, "Collections and household")  # the categories too
 
     def test_the_owner_hears_in_the_language_of_their_pages(self):
         self.client.force_login(self.anna)
-        self.client.post(reverse("set_language"), {"language": "en", "next": "/"})
+        self.client.get(reverse("language", args=["en"]) + "?next=/")
         self.client.post(reverse("upload"), human({"file": SimpleUploadedFile("t.json", template_file()), "category": "arbeit",
                                                   "license": "1", "no_personal_data": "1"}))
         self.anna.refresh_from_db()
@@ -368,7 +368,7 @@ class LaunchTests(SiteCase):
 
     def test_the_template_checks_messages_are_english_too(self):
         self.client.force_login(self.anna)
-        self.client.post(reverse("set_language"), {"language": "en", "next": "/"})
+        self.client.get(reverse("language", args=["en"]) + "?next=/")
         answer = self.client.post(reverse("upload"), human({"file": SimpleUploadedFile("t.json", template_file(id="filme")),
                                                            "license": "1", "no_personal_data": "1"}))
         self.assertContains(answer, "is taken")
@@ -412,3 +412,32 @@ class LaunchTests(SiteCase):
         german = self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="de").content.decode()
         self.assertIn("Mein Inventar", german)
         self.assertIn("3,5 (1)", german)
+
+
+class PrivacyAndAdminTests(SiteCase):
+    def test_browsing_sets_no_cookie_until_someone_switches_the_language(self):
+        template = self.published()
+        for url in (reverse("home"), reverse("template_detail", args=[template.key]), reverse("privacy")):
+            answer = self.client.get(url)
+            self.assertEqual(dict(answer.cookies), {}, url)
+        page = self.client.get(reverse("home")).content.decode()
+        self.assertIn(">Deutsch</a>", page)
+        self.assertIn(">English</a>", page)  # each language in its own name
+        answer = self.client.get(reverse("language", args=["en"]) + "?next=/vorlagen/" + template.key + "/")
+        self.assertRedirects(answer, reverse("template_detail", args=[template.key]), fetch_redirect_response=False)
+        self.assertEqual(list(answer.cookies), ["dfweb_language"])
+        self.assertTrue(answer.cookies["dfweb_language"]["httponly"])
+        away = self.client.get(reverse("language", args=["en"]) + "?next=https://evil.example/")
+        self.assertEqual(away["Location"], "/")
+
+    def test_createsuperuser_asks_for_no_password(self):
+        from io import StringIO
+
+        from django.core.management import call_command
+
+        call_command("createsuperuser", "--noinput", "--email", "Neu@Example.org", "--name", "Neue Prüferin", stdout=StringIO())
+        user = User.objects.get(email="neu@example.org")
+        self.assertEqual((user.is_staff, user.name, user.has_usable_password()), (True, "Neue Prüferin", False))
+        call_command("createsuperuser", "--noinput", "--email", "ben@example.org", stdout=StringIO())
+        self.ben.refresh_from_db()
+        self.assertTrue(self.ben.is_staff)

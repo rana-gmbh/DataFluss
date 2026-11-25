@@ -30,12 +30,12 @@ CSRF_TRUSTED_ORIGINS = [SITE_URL]
 TRUST_PROXY = env_bool("TRUST_PROXY")
 
 INSTALLED_APPS = [
+    "konten",  # first, so its createsuperuser (address and name, no password) replaces Django's
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "konten",
     "katalog",
     "seiten",
 ]

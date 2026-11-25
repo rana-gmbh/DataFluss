@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: DataFluss Vorlagen\n"
+"Project-Id-Version: DataFluss Templates\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-25 19:10+0100\n"
+"POT-Creation-Date: 2026-11-25 20:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,7 +181,7 @@ msgstr "Please enter a valid e-mail address."
 msgid "Zu viele Anmeldeversuche. Bitte später noch einmal versuchen."
 msgstr "Too many sign-in attempts. Please try again later."
 
-msgid "Anmelden bei DataFluss Vorlagen"
+msgid "Anmelden bei DataFluss Templates"
 msgstr "Sign in to DataFluss Templates"
 
 msgid "Bitte einen Namen angeben."
@@ -316,6 +316,9 @@ msgstr "Privacy"
 
 msgid "Nutzungsbedingungen"
 msgstr "Terms of use"
+
+msgid "Sprache"
+msgstr "Language"
 
 msgid "Offiziell"
 msgstr "Official"
@@ -886,12 +889,12 @@ msgstr ""
 "templates.datafluss.de. Thank you for sharing!"
 
 msgid ""
-"mit diesem Link legen Sie Ihr Konto bei DataFluss Vorlagen an und melden "
+"mit diesem Link legen Sie Ihr Konto bei DataFluss Templates an und melden "
 "sich an:"
 msgstr ""
 "with this link you create your account at DataFluss Templates and sign in:"
 
-msgid "mit diesem Link melden Sie sich bei DataFluss Vorlagen an:"
+msgid "mit diesem Link melden Sie sich bei DataFluss Templates an:"
 msgstr "with this link you sign in to DataFluss Templates:"
 
 msgid ""
@@ -911,7 +914,7 @@ msgid "Sie können eine überarbeitete Fassung jederzeit wieder hochladen."
 msgstr "You can upload a revised version at any time."
 
 msgid ""
-"Ihr Konto bei DataFluss Vorlagen darf jetzt Websites veröffentlichen. Legen "
+"Ihr Konto bei DataFluss Templates darf jetzt Websites veröffentlichen. Legen "
 "Sie eine Website an, und tragen Sie in DataFluss unter Veröffentlichen → "
 "„DataFluss-Hosting“ Adresse und Token ein:"
 msgstr ""
@@ -920,7 +923,7 @@ msgstr ""
 "“DataFluss hosting”:"
 
 msgid ""
-"Ihr Antrag auf Websites bei DataFluss Vorlagen wurde nicht freigeschaltet. "
+"Ihr Antrag auf Websites bei DataFluss Templates wurde nicht freigeschaltet. "
 "Der Grund:"
 msgstr ""
 "Your request for websites at DataFluss Templates was not granted. The reason:"

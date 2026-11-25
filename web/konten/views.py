@@ -46,7 +46,7 @@ def login_view(request):
             if request.POST.get("next"):
                 link += "?next=" + _next(request)
             text = render_to_string("mail/login.txt", {"link": link, "new": user is None})
-            send_mail(_("Anmelden bei DataFluss Vorlagen"), text, None, [email])
+            send_mail(_("Anmelden bei DataFluss Templates"), text, None, [email])
             # The same answer whether or not the address has an account, so nobody can find out who has one.
             return render(request, "konten/sent.html", {"email": email})
     return render(request, "konten/login.html", {"error": error, "stamp": limits.form_stamp(), "next": request.GET.get("next", "")})
@@ -70,6 +70,19 @@ def login_link(request, token):
             return redirect(f"{reverse('account')}?next={_next(request)}")
         return redirect(_next(request))
     return render(request, "konten/link.html", {"email": email, "next": request.GET.get("next", "")})
+
+
+def language(request, code):
+    """The language switch: a plain link, so the pages need no form and visitors get no cookie until they switch."""
+    if code not in dict(settings.LANGUAGES):
+        code = settings.LANGUAGE_CODE
+    response = redirect(_next(request))
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, code, max_age=365 * 24 * 3600, samesite="Lax",
+                        secure=request.is_secure(), httponly=True)
+    if request.user.is_authenticated and request.user.language != code:  # mails follow the pages they use
+        request.user.language = code
+        request.user.save(update_fields=["language"])
+    return response
 
 
 @require_POST
@@ -134,7 +147,7 @@ def totp(request):
     if not user.totp_secret:
         import segno
 
-        uri = pyotp.TOTP(secret).provisioning_uri(name=user.email, issuer_name="DataFluss Vorlagen")
+        uri = pyotp.TOTP(secret).provisioning_uri(name=user.email, issuer_name="DataFluss Templates")
         qr = segno.make(uri, error="m").svg_data_uri(scale=5, border=2, dark="#111827", light="#ffffff")
         context.update(secret=secret, qr=qr)
     return render(request, "konten/totp.html", context)

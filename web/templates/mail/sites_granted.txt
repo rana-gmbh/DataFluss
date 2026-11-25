@@ -1,6 +1,6 @@
 {% load i18n %}{% translate "Hallo," %}
 
-{% translate "Ihr Konto bei DataFluss Vorlagen darf jetzt Websites veröffentlichen. Legen Sie eine Website an, und tragen Sie in DataFluss unter Veröffentlichen → „DataFluss-Hosting“ Adresse und Token ein:" %}
+{% translate "Ihr Konto bei DataFluss Templates darf jetzt Websites veröffentlichen. Legen Sie eine Website an, und tragen Sie in DataFluss unter Veröffentlichen → „DataFluss-Hosting“ Adresse und Token ein:" %}
 
 {{ url }}
 {% if access.note %}
