@@ -2,24 +2,99 @@
 {% block title %}Datenschutz{% endblock %}
 {% block content %}<article class="prose">
 <h1 class="title">Datenschutzerklärung</h1>
-{% include "recht/_draft.html" %}
-<h2>Verantwortlich</h2>
-<p>Rana GmbH, [Anschrift], [E-Mail-Adresse]. [Datenschutzbeauftragte/r, falls bestellt.]</p>
+{% include "recht/_language.html" %}
+<p>Stand: November 2026. Diese Erklärung gilt für vorlagen.datafluss.de (den Vorlagenkatalog für DataFluss) und
+seiten.datafluss.de (Websites, die freigeschaltete Konten aus DataFluss veröffentlichen).</p>
+
 <h2>Kurz gesagt</h2>
 <ul>
 <li>Stöbern und Herunterladen geht ohne Konto und ohne Cookies.</li>
-<li>Keine Werbung, keine Tracker, keine Analyse-Dienste, keine Schriften oder Skripte von anderen Servern.</li>
-<li>Ein Konto besteht aus Ihrer E-Mail-Adresse und einem Anzeigenamen. Die Adresse ist nie öffentlich.</li>
+<li>Keine Werbung, keine Analyse- oder Tracking-Dienste, keine Schriften, Skripte oder Inhalte von anderen Servern.</li>
+<li>Ein Konto besteht aus Ihrer E-Mail-Adresse und einem Anzeigenamen. Die E-Mail-Adresse ist nie öffentlich.</li>
+<li>Alle Daten liegen auf Servern in Deutschland.</li>
 </ul>
-<h2>Was wir verarbeiten und warum</h2>
+
+<h2>Verantwortlicher</h2>
+<p>Rana GmbH, Kurt-Eisner-Str. 42, 04275 Leipzig, vertreten durch die Geschäftsführerin Mei-Yu Rudolph.<br>
+E-Mail: <a href="mailto:info@ranagmbh.de">info@ranagmbh.de</a>, Telefon: +49 (0)172 6793005.</p>
+
+<h2>Rechtsgrundlagen</h2>
+<p>Wir verarbeiten personenbezogene Daten nur, soweit eine Rechtsgrundlage besteht: zur Erfüllung des
+Nutzungsverhältnisses für Ihr Konto (Art. 6 Abs. 1 lit. b DSGVO), aufgrund Ihrer Einwilligung, etwa wenn Sie Inhalte
+veröffentlichen (Art. 6 Abs. 1 lit. a DSGVO), zur Erfüllung rechtlicher Pflichten (Art. 6 Abs. 1 lit. c DSGVO) und
+aufgrund unseres berechtigten Interesses an einem sicheren und funktionierenden Angebot (Art. 6 Abs. 1 lit. f
+DSGVO).</p>
+
+<h2>Aufruf der Websites</h2>
+<p>Bei jedem Aufruf verarbeitet der Server technisch notwendige Daten: IP-Adresse, Datum und Uhrzeit, aufgerufene
+Adresse, übertragene Datenmenge, Referrer und Browser-Kennung. Sie dienen dazu, die Seiten auszuliefern und Angriffe
+abzuwehren (Art. 6 Abs. 1 lit. f DSGVO). Die Server-Protokolle werden nach höchstens 14 Tagen gelöscht.</p>
+<p>Gleiches gilt, wenn ein DataFluss-Server oder die DataFluss-App den Vorlagenkatalog abfragt („Vorlage
+hinzufügen“, „Neue Datenbank“, tägliche Prüfung auf neue Versionen): Dabei sehen wir die IP-Adresse des anfragenden
+Servers bzw. Computers, aber keine Daten aus der Datenbank.</p>
+
+<h2>Konto und Anmeldung</h2>
+<p>Für das Teilen und Bewerten brauchen Sie ein Konto. Wir speichern Ihre E-Mail-Adresse, Ihren Anzeigenamen, die
+zuletzt genutzte Sprache sowie Zeitpunkte von Registrierung und letzter Anmeldung (Art. 6 Abs. 1 lit. b DSGVO). Die
+Anmeldung erfolgt über einen Link, den wir an Ihre E-Mail-Adresse schicken; ein Passwort wird nicht gespeichert.
+Prüferinnen und Prüfer bestätigen ihre Anmeldung zusätzlich mit einem Code aus einer Authenticator-App; dafür
+speichern wir den zugehörigen Schlüssel.</p>
+<p>Zum Schutz vor Missbrauch zählen wir Anmeldeversuche, Uploads, Bewertungen und Meldungen. Dafür speichern wir
+einen verschlüsselten Prüfwert (keinen Klartext) der E-Mail-Adresse, der IP-Adresse bzw. des Kontos für höchstens
+einen Tag (Art. 6 Abs. 1 lit. f DSGVO).</p>
+
+<h2>Cookies</h2>
+<p>Wir setzen nur technisch notwendige Cookies (§ 25 Abs. 2 Nr. 2 TDDDG), eine Einwilligung ist dafür nicht
+nötig:</p>
 <ul>
-<li><b>Aufruf der Website:</b> Der Server verarbeitet technisch nötige Daten (IP-Adresse, Zeitpunkt, aufgerufene Seite), um die Seite auszuliefern und vor Missbrauch zu schützen (Art. 6 Abs. 1 lit. f DSGVO). [Speicherdauer der Server-Protokolle, z. B. 7 Tage.]</li>
-<li><b>Anmeldung:</b> Ihre E-Mail-Adresse, um Ihnen Anmeldelinks und Nachrichten zu Ihren Vorlagen zu schicken (Art. 6 Abs. 1 lit. b DSGVO). Für die Begrenzung von Anmeldeversuchen speichern wir einen verschlüsselten Prüfwert (keinen Klartext) der Adresse und der IP-Adresse höchstens einen Tag.</li>
-<li><b>Sitzungs-Cookie:</b> Nur nach der Anmeldung, damit Sie angemeldet bleiben (technisch notwendig, § 25 Abs. 2 TDDDG). Es läuft nach 30 Tagen ab oder beim Abmelden.</li>
-<li><b>Geteilte Vorlagen, Bilder und Bewertungen:</b> mit Ihrem Anzeigenamen, so lange sie veröffentlicht sind. Bilder werden beim Hochladen neu erzeugt; Metadaten wie Standort oder Kamera werden dabei entfernt.</li>
+<li><code>dfweb_session</code> – hält Sie nach der Anmeldung angemeldet; läuft nach 30 Tagen oder beim Abmelden ab.</li>
+<li><code>dfweb_csrf</code> – schützt Formulare vor fremden Absendungen.</li>
+<li><code>dfweb_language</code> – merkt sich die gewählte Sprache, wenn Sie sie umschalten.</li>
 </ul>
-<h2>Empfänger</h2>
-<p>Hosting: [Anbieter, Standort Deutschland/EU], E-Mail-Versand: [Anbieter]. Mit beiden besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO).</p>
+<p>Auf seiten.datafluss.de setzen wir keine Cookies.</p>
+
+<h2>Geteilte Vorlagen, Bilder, Bewertungen und Meldungen</h2>
+<p>Was Sie teilen, veröffentlichen wir nach der Prüfung zusammen mit Ihrem Anzeigenamen (Namensnennung nach der
+Lizenz CC BY 4.0), solange es veröffentlicht ist (Art. 6 Abs. 1 lit. a und b DSGVO). Bilder werden beim Hochladen
+neu erzeugt; Metadaten wie Standort oder Kamera werden dabei entfernt. Bewertungstexte erscheinen nach der Prüfung,
+Sterne sofort. Bei einer Meldung speichern wir den Text der Meldung und das meldende Konto, bis sie bearbeitet ist.
+Bitte laden Sie keine Vorlagen mit echten personenbezogenen Daten hoch; Beispieldaten müssen erfunden sein.</p>
+
+<h2>Websites auf seiten.datafluss.de</h2>
+<p>Konten, die wir dafür freischalten, können aus DataFluss Websites veröffentlichen. Für deren Inhalte, auch für
+personenbezogene Daten darin, sind die Inhaberinnen und Inhaber des Kontos verantwortlich; wir speichern die Dateien
+in ihrem Auftrag und liefern sie aus. Für Besucherinnen und Besucher dieser Websites gilt der Abschnitt „Aufruf der
+Websites“.</p>
+
+<h2>E-Mails</h2>
+<p>Wir schicken E-Mails nur, wenn es nötig ist: Anmeldelinks, Entscheidungen zu Ihren Vorlagen und, für Prüferinnen
+und Prüfer, Hinweise auf neue Einreichungen. Es gibt keinen Newsletter und keine Werbung.</p>
+
+<h2>Hosting und Empfänger</h2>
+<p>Die Websites, die Datenbank und das Postfach für den Versand liegen bei der netcup GmbH, Emmy-Noether-Straße 10,
+76131 Karlsruhe, in Rechenzentren in Deutschland. Mit netcup besteht ein Vertrag zur Auftragsverarbeitung nach Art.
+28 DSGVO. Eine Übermittlung in Länder außerhalb der EU findet nicht statt. Darüber hinaus geben wir Daten nur weiter,
+wenn wir gesetzlich dazu verpflichtet sind.</p>
+
+<h2>Speicherdauer</h2>
+<p>Kontodaten speichern wir, bis Sie Ihr Konto löschen. Das können Sie jederzeit selbst unter „Konto“ tun: Ihre
+Bewertungen und nie veröffentlichte Vorlagen werden dabei gelöscht. Veröffentlichte Vorlagen bleiben unter „gelöschtes
+Konto“ erhalten, weil sie unter CC BY 4.0 geteilt sind; Sie können sie vorher unter „Meine Vorlagen“ zurückziehen.
+Server-Protokolle löschen wir nach höchstens 14 Tagen, Prüfwerte gegen Missbrauch nach einem Tag.</p>
+
+<h2>Minderjährige</h2>
+<p>Ein Konto ist für Personen ab 16 Jahren gedacht. Stöbern und Herunterladen geht ohne Konto.</p>
+
+<h2>Sicherheit</h2>
+<p>Alle Verbindungen sind mit HTTPS verschlüsselt. Hochgeladene Vorlagen werden automatisch geprüft und von Menschen
+freigegeben; sie enthalten keinen Programmcode. Zugänge zur Prüfung sind mit einem zweiten Faktor geschützt.</p>
+
 <h2>Ihre Rechte</h2>
-<p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie auf Beschwerde bei einer Aufsichtsbehörde. Ihr Konto und Ihre Bewertungen können Sie jederzeit selbst unter „Konto“ löschen. Veröffentlichte Vorlagen bleiben nach der Löschung des Kontos unter „gelöschtes Konto“ erhalten, weil sie unter CC BY 4.0 geteilt sind; Sie können sie vorher zurückziehen.</p>
+<p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der
+Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21). Eine Einwilligung können Sie
+jederzeit für die Zukunft widerrufen. Schreiben Sie uns dazu an <a href="mailto:info@ranagmbh.de">info@ranagmbh.de</a>.</p>
+
+<h2>Beschwerde</h2>
+<p>Sie können sich bei einer Datenschutz-Aufsichtsbehörde beschweren, für uns zuständig ist die Sächsische
+Datenschutz- und Transparenzbeauftragte, Devrientstraße 5, 01067 Dresden.</p>
 </article>{% endblock %}
