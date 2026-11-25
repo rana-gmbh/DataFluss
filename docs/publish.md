@@ -87,7 +87,7 @@ show. If it finds anything else, the publish stops and nothing is sent.
 | ZIP-Datei | Download | The whole website, for a USB stick or to upload yourself. |
 | Ordner | A folder on this computer (app only) | For example a folder another program syncs. |
 | Dieser Server | `https://<server>/p/<short name>/` (server only) | Without a DataFluss login; optionally with a password (see below). **Vom Server nehmen** removes it. |
-| DataFluss-Hosting | `seiten.datafluss.de/<name>/`, or `/p/<name>/` on another DataFluss server | Address and token of a site made there (see *Hosting*). |
+| DataFluss-Hosting | `databases.datafluss.de/<name>/`, or `/p/<name>/` on another DataFluss server | Address and token of a site made there (see *Hosting*). |
 | WebDAV | A folder on a web space or a cloud (Nextcloud …) | Only `https://`. |
 | FTP / FTPS | A folder on a web space | Encrypted (FTPS) unless switched off on purpose. |
 | SFTP | A folder on a server reached by SSH | Password or private SSH key (without passphrase). The server's key is trusted on first use and then held to. |
@@ -122,7 +122,7 @@ A protected website is never listed by search engines.
 
 A DataFluss server can host websites that other computers publish to it: **Veröffentlichen → Websites von anderen
 Geräten → Anlegen** gives an address under `/p/…` and a token, shown once. On the other computer the target
-**DataFluss-Hosting** takes the server's address and that token. The same works with `https://seiten.datafluss.de`
+**DataFluss-Hosting** takes the server's address and that token. The same works with `https://databases.datafluss.de`
 for accounts of datafluss.de that a reviewer unlocked (docs/website.md, *Websites*).
 
 What arrives this way is not made by this server, so it is served apart from it: every page runs in a sandbox

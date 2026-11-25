@@ -397,7 +397,7 @@ class LaunchTests(SiteCase):
 
         ids = {c.id for c in site_ready(None)}
         self.assertTrue({"web.E001", "web.E004", "web.E005"} <= ids)
-        good = {"SITE_URL": "https://vorlagen.datafluss.de", "DEBUG": False, "SECRET_KEY": "x" * 60, "EMAIL_HOST": "smtp.example",
+        good = {"SITE_URL": "https://templates.datafluss.de", "DEBUG": False, "SECRET_KEY": "x" * 60, "EMAIL_HOST": "smtp.example",
                 "TRUST_PROXY": True, "REVIEW_NOTIFY": ["a@example.org"],
                 "DATABASES": {"default": {"ENGINE": "django.db.backends.postgresql"}}}
         with self.settings(**good):

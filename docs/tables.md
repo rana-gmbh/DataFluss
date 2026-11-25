@@ -323,7 +323,7 @@ adding to it needs no download.
 while it is open) DataFluss asks the catalog whether a template applied here has a newer version, only if one from
 the catalog is applied. The start page and the list of tables then say so, with what it brings, and **Ergänzen**
 fetches, checks and adds it. The switch **Neue Versionen** on the same page turns the daily question off;
-`TEMPLATE_CATALOG_URL=` (empty) switches the catalog off for a whole server (default `https://vorlagen.datafluss.de`).
+`TEMPLATE_CATALOG_URL=` (empty) switches the catalog off for a whole server (default `https://templates.datafluss.de`).
 
 On a computer connected to a server, templates from the catalog or a file are installed on the server; the tables
 reach the computer by sync.

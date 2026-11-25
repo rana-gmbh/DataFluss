@@ -33,7 +33,7 @@
   <p class="sm:col-span-2 muted text-[12px]">{% translate "Ein Token mit Schreibrecht auf „Contents“ dieses Repositorys. GitHub Pages stellen Sie im Repository auf diesen Branch und Ordner." %}</p>
 </div>
 <div x-show="target === 'hosting'" x-cloak>
-  <label class="label" for="pub-host-url">{% translate "Adresse" %}</label><input id="pub-host-url" class="input mono" name="url" value="{% if p.target == 'hosting' %}{{ config.url }}{% endif %}" placeholder="https://seiten.datafluss.de" :disabled="target !== 'hosting'">
+  <label class="label" for="pub-host-url">{% translate "Adresse" %}</label><input id="pub-host-url" class="input mono" name="url" value="{% if p.target == 'hosting' %}{{ config.url }}{% endif %}" placeholder="https://databases.datafluss.de" :disabled="target !== 'hosting'">
   <p class="muted text-[12px] mt-1">{% translate "Die Website legen Sie dort an: auf datafluss.de unter „Websites“, auf einem DataFluss-Server unter Veröffentlichen → Websites von anderen Geräten. Dort steht auch der Token." %}</p>
 </div>
 <div x-show="['webdav', 'ftp', 'sftp', 's3', 'netlify', 'github', 'hosting'].includes(target)" x-cloak>

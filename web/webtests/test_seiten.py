@@ -16,7 +16,7 @@ from seiten.models import Access, Site, SiteReport
 from .test_site import human
 
 MEDIA = tempfile.mkdtemp(prefix="web-seiten-")
-SITES = "seiten.localhost:8140"
+SITES = "databases.localhost:8140"
 
 
 @override_settings(MEDIA_ROOT=MEDIA, REVIEW_NOTIFY=["pruefer@example.org"], SITES_URL=f"http://{SITES}", SITES_QUOTA_MB=1, SITES_PER_ACCOUNT=2)
@@ -140,9 +140,9 @@ class DeployCheckTests(TestCase):
     def test_the_sites_host_must_be_its_own(self):
         from seiten.checks import sites_ready
 
-        with override_settings(SITE_URL="https://vorlagen.datafluss.de", SITES_URL="https://seiten.datafluss.de"):
+        with override_settings(SITE_URL="https://templates.datafluss.de", SITES_URL="https://databases.datafluss.de"):
             self.assertEqual(sites_ready(None), [])
-        with override_settings(SITE_URL="https://vorlagen.datafluss.de", SITES_URL="https://vorlagen.datafluss.de"):
+        with override_settings(SITE_URL="https://templates.datafluss.de", SITES_URL="https://templates.datafluss.de"):
             self.assertEqual([e.id for e in sites_ready(None)], ["web.E102"])
-        with override_settings(SITE_URL="https://vorlagen.datafluss.de", SITES_URL="http://seiten.datafluss.de", SESSION_COOKIE_DOMAIN=".datafluss.de"):
+        with override_settings(SITE_URL="https://templates.datafluss.de", SITES_URL="http://databases.datafluss.de", SESSION_COOKIE_DOMAIN=".datafluss.de"):
             self.assertEqual([e.id for e in sites_ready(None)], ["web.E101", "web.E103"])

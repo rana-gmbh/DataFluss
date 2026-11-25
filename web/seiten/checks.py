@@ -13,7 +13,7 @@ def sites_ready(app_configs, **kwargs):
         found.append(Error("SITES_URL muss mit https:// beginnen.", id="web.E101"))
     if not sites.hostname or sites.hostname == site.hostname or (sites.hostname or "").endswith("." + (site.hostname or "")):
         # Hosted pages are someone else's HTML: on the template site's own host (or below it) they would share its cookies.
-        found.append(Error("SITES_URL braucht einen eigenen Host neben SITE_URL (z. B. seiten.datafluss.de neben vorlagen.datafluss.de).",
+        found.append(Error("SITES_URL braucht einen eigenen Host neben SITE_URL (z. B. databases.datafluss.de neben templates.datafluss.de).",
                            id="web.E102"))
     if getattr(settings, "SESSION_COOKIE_DOMAIN", None) or getattr(settings, "CSRF_COOKIE_DOMAIN", None):
         found.append(Error("SESSION_COOKIE_DOMAIN/CSRF_COOKIE_DOMAIN müssen leer bleiben, damit gehostete Seiten keine Anmeldung sehen.",

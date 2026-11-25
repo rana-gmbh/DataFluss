@@ -1,5 +1,5 @@
 """Targets that are services on the web (docs/publish.md "Ziele"): S3-compatible storage, Netlify, GitHub Pages,
-and a DataFluss hosting (another DataFluss server, or seiten.datafluss.de; publish/hosting.py). Python's
+and a DataFluss hosting (another DataFluss server, or databases.datafluss.de; publish/hosting.py). Python's
 standard library only, like publish/targets.py: the desktop app's sidecar brings nothing else.
 
 S3 and DataFluss hosting take file by file. Netlify and GitHub take one whole state at a time, so they have
@@ -245,7 +245,7 @@ class GitHubTarget(Target):
 # ---------------------------------------------------------------- DataFluss hosting
 
 class HostingTarget(Target):
-    """A site on another DataFluss server or on seiten.datafluss.de, with its site token (publish/hosting.py)."""
+    """A site on another DataFluss server or on databases.datafluss.de, with its site token (publish/hosting.py)."""
 
     def __init__(self, url, token):
         self.base = _https_only(url, "DataFluss-Hosting") + "/api/hosting/v1"

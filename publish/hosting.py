@@ -1,7 +1,7 @@
 """DataFluss hosting v1: a site that another computer publishes to with a token (docs/publish.md "Hosting").
 
 Used by DataFluss servers (publish/hosting_api.py, sites under /p/<name>/) and by the template site
-datafluss.de (web/seiten/, sites under seiten.datafluss.de/<name>/), so it imports nothing of the platform but
+datafluss.de (web/seiten/, sites under databases.datafluss.de/<name>/), so it imports nothing of the platform but
 Django. The other side is publish/cloud.py HostingTarget.
 
     Authorization: Bearer <site token>

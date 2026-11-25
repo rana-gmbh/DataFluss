@@ -434,7 +434,7 @@ def _catalog_index():
 
     # Messages stay German here: translations need Django's app registry, which this short run does not load.
     settings.configure(USE_I18N=False, DEBUG=os.environ.get("DEBUG") == "1",  # DEBUG: a catalog on this computer over http
-                       TEMPLATE_CATALOG_URL=os.environ.get("TEMPLATE_CATALOG_URL", "https://vorlagen.datafluss.de"))
+                       TEMPLATE_CATALOG_URL=os.environ.get("TEMPLATE_CATALOG_URL", "https://templates.datafluss.de"))
     from tables import catalog
 
     try:

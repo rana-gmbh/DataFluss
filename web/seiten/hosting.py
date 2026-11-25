@@ -1,4 +1,4 @@
-"""The sites' own host (SITES_URL, seiten.datafluss.de): the hosted files and the hosting API, nothing else.
+"""The sites' own host (SITES_URL, databases.datafluss.de): the hosted files and the hosting API, nothing else.
 
 SitesHostMiddleware answers every request to that host before sessions, CSRF or accounts come into play, so
 no cookie of the template site is ever read or set there, and a hosted page cannot reach an account page on

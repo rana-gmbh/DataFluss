@@ -1,4 +1,4 @@
-# The template site (vorlagen.datafluss.de)
+# The template site (templates.datafluss.de)
 
 A website where people find, download, share and rate DataFluss database templates. Every upload and every
 review text is checked by a reviewer before it appears. The site is its own Django project in `web/`, with its
@@ -102,7 +102,7 @@ app when its "Neue Datenbank" wizard opens. The site logs nothing of this beyond
 
 ## Websites
 
-People publish read-only websites from DataFluss to **`seiten.datafluss.de/<name>/`** (docs/publish.md, target
+People publish read-only websites from DataFluss to **`databases.datafluss.de/<name>/`** (docs/publish.md, target
 *DataFluss-Hosting*). It lives in `web/seiten/`:
 
 - An account asks for websites under **Websites** with a short reason; a reviewer unlocks it (or refuses, with a
@@ -140,35 +140,35 @@ DEBUG=1 .venv/bin/python web/manage.py runserver 127.0.0.1:8140
 `import_library` publishes DataFluss's own database templates as official ones. Tests:
 `.venv/bin/python web/manage.py test webtests` (CI job `web`).
 
-### Start on vorlagen.datafluss.de (Coolify)
+### Start on templates.datafluss.de (Coolify)
 
-The site runs at `https://vorlagen.datafluss.de` as its own Coolify application on the same server as the demo, with
+The site runs at `https://templates.datafluss.de` as its own Coolify application on the same server as the demo, with
 its own PostgreSQL. Everything below happens in your accounts; nothing of it is set up from this repository.
 
-1. **DNS.** An `A` record `vorlagen.datafluss.de` → the IP address of the Coolify server (or a `CNAME` to its host
-   name), and the same for `seiten.datafluss.de` (websites people publish). `datafluss.de` itself stays free for a
+1. **DNS.** An `A` record `templates.datafluss.de` → the IP address of the Coolify server (or a `CNAME` to its host
+   name), and the same for `databases.datafluss.de` (websites people publish). `datafluss.de` itself stays free for a
    product page.
-2. **Mailbox.** A mailbox such as `vorlagen@datafluss.de` with SMTP access at your mail provider. For datafluss.de,
+2. **Mailbox.** A mailbox such as `templates@datafluss.de` with SMTP access at your mail provider. For datafluss.de,
    SPF (the provider's `include:`), DKIM (the provider's key) and a DMARC record (`v=DMARC1; p=quarantine; …`), so
    sign-in links do not land in spam. A data processing agreement with the provider (Art. 28 GDPR).
 3. **Coolify, PostgreSQL.** New resource PostgreSQL 17, scheduled backups on (daily, keep 14).
 4. **Coolify, application.** New resource → public/private repository `rana-gmbh/DataFluss`, branch `main`, build
    pack **Dockerfile**, base directory `/`, Dockerfile location `web/Dockerfile`, port `8000`, health check path
-   `/healthz/`, domains `https://vorlagen.datafluss.de,https://seiten.datafluss.de`. Persistent storage: a volume mounted on `/data` (pictures in
+   `/healthz/`, domains `https://templates.datafluss.de,https://databases.datafluss.de`. Persistent storage: a volume mounted on `/data` (pictures in
    `/data/media`; back it up with the server's backups).
 5. **Environment** (all runtime only: switch off "Available at Buildtime" for each):
 
    | Variable | Value |
    |---|---|
    | `SECRET_KEY` | a new random value of at least 50 characters (`python3 -c "import secrets; print(secrets.token_urlsafe(60))"`) |
-   | `SITE_URL` | `https://vorlagen.datafluss.de` |
+   | `SITE_URL` | `https://templates.datafluss.de` |
    | `DATABASE_URL` | `postgres://user:password@host:5432/name`, the internal URL Coolify shows for the PostgreSQL resource |
    | `TRUST_PROXY` | `1` |
    | `EMAIL_HOST`, `EMAIL_PORT` | the provider's SMTP server, `587` (STARTTLS) or `465` with `EMAIL_USE_SSL=1` |
    | `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | the mailbox's login |
-   | `DEFAULT_FROM_EMAIL` | `DataFluss Vorlagen <vorlagen@datafluss.de>` |
+   | `DEFAULT_FROM_EMAIL` | `DataFluss Templates <templates@datafluss.de>` |
    | `REVIEW_NOTIFY` | your own address(es), comma-separated: new uploads, review texts, reports |
-   | `SITES_URL` | `https://seiten.datafluss.de` (websites people publish; see *Websites*) |
+   | `SITES_URL` | `https://databases.datafluss.de` (websites people publish; see *Websites*) |
    | `SITES_QUOTA_MB`, `SITES_PER_ACCOUNT` | optional, `200` and `3` |
 
 6. **Deploy**, then in the application's terminal (the container starts in `/app`):
@@ -194,7 +194,7 @@ its own PostgreSQL. Everything below happens in your accounts; nothing of it is 
    ```
 
 7. **First round:** sign in, set up the second factor, upload a template with a picture, approve it, rate it with
-   half stars, download it; `https://vorlagen.datafluss.de/api/v1/vorlagen.json` lists it with its SHA-256.
+   half stars, download it; `https://templates.datafluss.de/api/v1/vorlagen.json` lists it with its SHA-256.
 8. **Legal pages** completed and checked; only then share the address.
 
 **Updates:** Coolify builds the image again on every push to `main` (the site's tests run in CI job `web`); the

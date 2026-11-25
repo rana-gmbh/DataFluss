@@ -1,4 +1,4 @@
-"""Websites people publish from DataFluss to seiten.datafluss.de (docs/website.md "Websites").
+"""Websites people publish from DataFluss to databases.datafluss.de (docs/website.md "Websites").
 
 An account asks for websites with a short reason; a reviewer unlocks it (Access). Then it may make a few sites,
 each with a token that DataFluss uses to publish (publish/hosting.py; only the token's hash is kept). Anyone

@@ -20,7 +20,7 @@ if not SECRET_KEY:
     raise RuntimeError("SECRET_KEY fehlt.")
 SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8140").rstrip("/")
 # Websites people publish from DataFluss live on a host of their own (seiten/hosting.py), apart from the accounts.
-SITES_URL = os.environ.get("SITES_URL", "http://seiten.localhost:8140").rstrip("/")
+SITES_URL = os.environ.get("SITES_URL", "http://databases.localhost:8140").rstrip("/")
 SITES_QUOTA_MB = int(os.environ.get("SITES_QUOTA_MB", "200"))
 SITES_PER_ACCOUNT = int(os.environ.get("SITES_PER_ACCOUNT", "3"))
 ALLOWED_HOSTS = [h for h in os.environ.get("ALLOWED_HOSTS", "").split(",") if h] + [urlparse(SITE_URL).hostname, urlparse(SITES_URL).hostname,
@@ -132,7 +132,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_SSL = env_bool("EMAIL_USE_SSL")  # port 465; otherwise STARTTLS on 587
 EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True) and not EMAIL_USE_SSL
 EMAIL_TIMEOUT = 20
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "DataFluss Vorlagen <vorlagen@datafluss.de>")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "DataFluss Templates <templates@datafluss.de>")
 EMAIL_BACKEND = ("django.core.mail.backends.smtp.EmailBackend" if EMAIL_HOST else "django.core.mail.backends.console.EmailBackend")
 # Who hears of new uploads and reports (comma-separated); empty: nobody, the queue is still there.
 REVIEW_NOTIFY = [a for a in os.environ.get("REVIEW_NOTIFY", "").split(",") if a]

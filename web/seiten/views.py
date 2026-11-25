@@ -1,4 +1,4 @@
-"""Websites on seiten.datafluss.de (docs/website.md "Websites"): asking for them, making them, reporting them,
+"""Websites on databases.datafluss.de (docs/website.md "Websites"): asking for them, making them, reporting them,
 and the reviewers' part. Files are served by seiten/hosting.py on the sites' own host."""
 import re
 
