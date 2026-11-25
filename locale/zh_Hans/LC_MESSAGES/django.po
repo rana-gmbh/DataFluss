@@ -5039,6 +5039,390 @@ msgstr "标识符"
 msgid "Muss geändert werden"
 msgstr "必须修改"
 
+msgid ""
+"Ausgewählte Tabellen als Website veröffentlichen, die jeder lesen kann."
+msgstr "将所选表格发布为任何人都可阅读的网站。"
+
+msgid "Diese Veröffentlichung läuft gerade."
+msgstr "此发布正在进行中。"
+
+msgid "ZIP wird gepackt …"
+msgstr "正在打包 ZIP …"
+
+#, python-format
+msgid "Veröffentlicht: %(sent)s Dateien übertragen, %(gone)s entfernt."
+msgstr "已发布：已传输 %(sent)s 个文件，已删除 %(gone)s 个。"
+
+msgid ""
+"Angehalten: Die Prüfung hat Daten gefunden, die nicht veröffentlicht werden "
+"dürfen. Nichts wurde übertragen."
+msgstr "已停止：检查发现了不得发布的数据。未传输任何内容。"
+
+#, python-format
+msgid "WebDAV: Anmeldung abgelehnt (%(code)s)."
+msgstr "WebDAV：登录被拒绝（%(code)s）。"
+
+#, python-format
+msgid "WebDAV: Ordner %(folder)s konnte nicht angelegt werden (%(code)s)."
+msgstr "WebDAV：无法创建文件夹 %(folder)s（%(code)s）。"
+
+#, python-format
+msgid "FTP: %(error)s"
+msgstr "FTP：%(error)s"
+
+#, python-format
+msgid "FTP: %(path)s konnte nicht gespeichert werden (%(error)s)."
+msgstr "FTP：无法保存 %(path)s（%(error)s）。"
+
+msgid "Auf diesem Server (/p/…)"
+msgstr "在此服务器上（/p/…）"
+
+msgid "WebDAV"
+msgstr "WebDAV"
+
+msgid "FTP / FTPS"
+msgstr "FTP / FTPS"
+
+msgid "Verbindung klappt, Schreiben geht."
+msgstr "连接正常，可以写入。"
+
+msgid "Tabellen als Website, die jeder lesen kann"
+msgstr "将表格发布为任何人都可阅读的网站"
+
+msgid "Läuft"
+msgstr "进行中"
+
+msgid "Klappt"
+msgstr "正常"
+
+msgid "Klappt nicht"
+msgstr "不正常"
+
+msgid "Nichts: Die Rolle darf keine der gewählten Tabellen lesen."
+msgstr "无：该角色无权读取任何所选表格。"
+
+msgid ""
+"Nie dabei: geheime Felder, der Änderungsverlauf, Benutzer, Papierkorb und "
+"Felder, die nicht ausgewählt sind."
+msgstr "绝不包含：机密字段、修改记录、用户、回收站以及未选择的字段。"
+
+msgid ""
+"Schüler, Personal, Eltern, Geräte und Zugänge der Schulverwaltung werden nie"
+" veröffentlicht, auch nicht über Verknüpfungen."
+msgstr "学校管理中的学生、教职工、家长、设备和账号绝不会被发布，即使通过关联也不会。"
+
+msgid "Jeder, der die Adresse kennt, kann alles davon lesen."
+msgstr "任何知道地址的人都可以阅读全部内容。"
+
+msgid "Suchmaschinen dürfen die Seiten aufnehmen."
+msgstr "搜索引擎可以收录这些页面。"
+
+msgid ""
+"Angeboten wird nur, was die Rolle der Veröffentlichung sehen darf. Neue "
+"Felder und Tabellen kommen nie von selbst dazu. Geheime Felder, der "
+"Änderungsverlauf sowie Personen und Geräte werden nie veröffentlicht."
+msgstr "只提供发布所用角色可见的内容。新字段和新表格绝不会自动加入。机密字段、修改记录以及人员和设备绝不会被发布。"
+
+msgid "Der Titel kommt immer mit."
+msgstr "标题始终包含在内。"
+
+msgid "Dateien (PDF usw.) zum Herunterladen"
+msgstr "可下载的文件（PDF 等）"
+
+msgid ""
+"Die gewählte Rolle darf keine Tabelle lesen. Wählen Sie unten eine andere "
+"Rolle oder geben Sie ihr Rechte an Tabellen."
+msgstr "所选角色无权读取任何表格。请在下方选择其他角色，或为其授予表格权限。"
+
+msgid ""
+"Die ganze Website als ZIP-Datei zum Herunterladen, zum Beispiel für einen "
+"USB-Stick oder um sie selbst hochzuladen."
+msgstr "将整个网站下载为 ZIP 文件，例如用于 U 盘或自行上传。"
+
+msgid ""
+"Dieser Server zeigt die Website unter seiner eigenen Adresse, öffentlich und"
+" ohne Anmeldung."
+msgstr "此服务器在自己的地址下公开展示该网站，无需登录。"
+
+msgid ""
+"Zum Beispiel ein Ordner, den ein anderes Programm hochlädt oder "
+"synchronisiert. DataFluss löscht dort nur Dateien, die es selbst angelegt "
+"hat."
+msgstr "例如由其他程序上传或同步的文件夹。DataFluss 只会删除其中由它自己创建的文件。"
+
+msgid "Port"
+msgstr "端口"
+
+msgid ""
+"Ohne Verschlüsselung (nur wenn der Server kein FTPS kann: Passwort und Daten"
+" gehen dann lesbar über das Netz)"
+msgstr "不加密（仅当服务器不支持 FTPS 时：密码和数据将以明文在网络上传输）"
+
+msgid "Wird verschlüsselt gespeichert und nie angezeigt."
+msgstr "加密保存，绝不显示。"
+
+msgid "Kurzname (für die Adresse)"
+msgstr "简称（用于地址）"
+
+msgid "Zeigt höchstens, was diese Rolle sieht"
+msgstr "最多显示此角色可见的内容"
+
+msgid "Suchmaschinen dürfen die Website aufnehmen"
+msgstr "搜索引擎可以收录该网站"
+
+msgid "Zuerst unter „Inhalt“ mindestens eine Tabelle wählen."
+msgstr "请先在“内容”中至少选择一个表格。"
+
+msgid "Die Website von diesem Server nehmen? Die Einstellungen bleiben."
+msgstr "要从此服务器上撤下该网站吗？设置将保留。"
+
+msgid ""
+"Auf einem fremden Webspace (WebDAV, FTP) oder in einem Ordner bleibt die "
+"Website liegen, bis Sie sie dort löschen."
+msgstr "在其他网络空间（WebDAV、FTP）或文件夹中，网站会一直保留，直到您在那里将其删除。"
+
+msgid ""
+"Diese Veröffentlichung löschen? Auf diesem Server wird die Website entfernt."
+msgstr "要删除此发布吗？该网站将从此服务器上移除。"
+
+msgid ""
+"Ausgewählte Tabellen als Website, die jeder lesen kann: mit Liste oder "
+"Galerie, Datensatzseiten und Suche, aber ohne Anlegen oder Ändern. Geändert "
+"wird weiter hier; danach überträgt „Veröffentlichen“ nur, was sich geändert "
+"hat."
+msgstr "将所选表格发布为任何人都可阅读的网站：包含列表或图库、记录页面和搜索，但不能新增或修改。修改仍在这里进行；之后“发布”只传输有变化的内容。"
+
+msgid "z. B. Unsere Filmsammlung"
+msgstr "例如：我们的电影收藏"
+
+msgid ""
+"Danach wählen Sie Tabellen, Felder und das Ziel. Veröffentlicht wird erst, "
+"wenn Sie es bestätigen."
+msgstr "然后选择表格、字段和目标。在您确认之前不会发布任何内容。"
+
+#, python-format
+msgid "Stand: %(date)s. Nur zum Lesen."
+msgstr "截至 %(date)s。仅供阅读。"
+
+msgid "Brotkrümel"
+msgstr "导航路径"
+
+msgid "ZIP-Datei"
+msgstr "ZIP 文件"
+
+msgid "Dieser Server"
+msgstr "此服务器"
+
+msgid "Wird vorbereitet …"
+msgstr "正在准备 …"
+
+#, python-format
+msgid "Vorschau fertig: %(n)s Dateien."
+msgstr "预览已就绪：%(n)s 个文件。"
+
+#, python-format
+msgid "ZIP fertig: %(n)s Dateien."
+msgstr "ZIP 已就绪：%(n)s 个文件。"
+
+#, python-format
+msgid "Fehler: %(error)s"
+msgstr "错误：%(error)s"
+
+msgid "Daten werden gelesen …"
+msgstr "正在读取数据 …"
+
+msgid "Seiten werden erstellt …"
+msgstr "正在生成页面 …"
+
+#, python-format
+msgid "Bilder und Dateien: %(n)s"
+msgstr "图片和文件：%(n)s"
+
+#, python-format
+msgid "Ungültiger Pfad: %(path)s"
+msgstr "无效路径：%(path)s"
+
+#, python-format
+msgid "Den Ordner gibt es nicht: %(folder)s"
+msgstr "该文件夹不存在：%(folder)s"
+
+msgid "Bitte eine Adresse mit https:// angeben."
+msgstr "请输入以 https:// 开头的地址。"
+
+#, python-format
+msgid "WebDAV nicht erreichbar: %(error)s"
+msgstr "无法连接 WebDAV：%(error)s"
+
+#, python-format
+msgid ""
+"WebDAV: Den Ordner gibt es nicht oder er ist nicht erreichbar (%(code)s)."
+msgstr "WebDAV：文件夹不存在或无法访问（%(code)s）。"
+
+#, python-format
+msgid "WebDAV: %(path)s konnte nicht gespeichert werden (%(code)s)."
+msgstr "WebDAV：无法保存 %(path)s（%(code)s）。"
+
+#, python-format
+msgid "WebDAV: %(path)s konnte nicht gelöscht werden (%(code)s)."
+msgstr "WebDAV：无法删除 %(path)s（%(code)s）。"
+
+msgid "Bitte den Server angeben."
+msgstr "请输入服务器。"
+
+#, python-format
+msgid "FTP nicht erreichbar: %(error)s"
+msgstr "无法连接 FTP：%(error)s"
+
+msgid "Dieses Ziel lädt nichts hoch."
+msgstr "此目标不上传任何内容。"
+
+#, python-format
+msgid "%(n)s von %(total)s Dateien übertragen"
+msgstr "已传输 %(n)s / %(total)s 个文件"
+
+msgid "Ordner auf diesem Computer"
+msgstr "此电脑上的文件夹"
+
+msgid "Bitte einen Namen eingeben."
+msgstr "请输入名称。"
+
+msgid "Diese Adresse ist schon vergeben."
+msgstr "此地址已被使用。"
+
+msgid "Unbekanntes Ziel."
+msgstr "未知目标。"
+
+msgid "Der Port ist eine Zahl."
+msgstr "端口必须是数字。"
+
+msgid "Es ist noch keine Tabelle ausgewählt."
+msgstr "尚未选择任何表格。"
+
+msgid "Zurückgezogen."
+msgstr "已撤下。"
+
+msgid "Gelöscht."
+msgstr "已删除。"
+
+msgid "Fehlgeschlagen"
+msgstr "失败"
+
+#, python-format
+msgid "Zuletzt veröffentlicht: %(when)s"
+msgstr "上次发布：%(when)s"
+
+msgid "Noch nicht veröffentlicht."
+msgstr "尚未发布。"
+
+msgid "Noch nicht veröffentlicht"
+msgstr "尚未发布"
+
+#, python-format
+msgid "„%(name)s“ veröffentlichen"
+msgstr "发布“%(name)s”"
+
+msgid "Das wird öffentlich"
+msgstr "以下内容将会公开"
+
+msgid "Öffentlich"
+msgstr "公开"
+
+msgid "Ja, veröffentlichen"
+msgstr "是，发布"
+
+msgid "Zurück zu den Veröffentlichungen"
+msgstr "返回发布列表"
+
+msgid "Inhalt speichern"
+msgstr "保存内容"
+
+msgid "Wählen …"
+msgstr "选择 …"
+
+msgid "WebDAV-Adresse des Ordners"
+msgstr "文件夹的 WebDAV 地址"
+
+msgid "Ordner auf dem Server"
+msgstr "服务器上的文件夹"
+
+msgid "Leer lassen, um das gespeicherte zu behalten"
+msgstr "留空以保留已保存的"
+
+msgid "Ziel speichern"
+msgstr "保存目标"
+
+msgid "Gespeichertes Ziel testen"
+msgstr "测试已保存的目标"
+
+msgid "Name der Website"
+msgstr "网站名称"
+
+msgid "Sprache der Website"
+msgstr "网站语言"
+
+msgid "Einstellungen speichern"
+msgstr "保存设置"
+
+msgid "Vorschau erstellen"
+msgstr "生成预览"
+
+msgid "Vorschau öffnen"
+msgstr "打开预览"
+
+msgid "Veröffentlichen …"
+msgstr "发布 …"
+
+msgid "Neu veröffentlichen"
+msgstr "重新发布"
+
+msgid "ZIP herunterladen"
+msgstr "下载 ZIP"
+
+msgid "Zurückziehen und löschen"
+msgstr "撤下和删除"
+
+msgid "Vom Server nehmen"
+msgstr "从服务器撤下"
+
+msgid "Veröffentlichung löschen"
+msgstr "删除发布"
+
+msgid "Zurück zu den Einstellungen"
+msgstr "返回设置"
+
+msgid "Noch keine Veröffentlichung."
+msgstr "尚无发布。"
+
+msgid "Neue Veröffentlichung"
+msgstr "新建发布"
+
+msgid "Suchen …"
+msgstr "搜索 …"
+
+msgid "Hell oder dunkel"
+msgstr "浅色或深色"
+
+msgid "Erstellt mit"
+msgstr "制作工具："
+
+msgid "Noch keine Tabellen veröffentlicht."
+msgstr "尚未发布任何表格。"
+
+msgid "In dieser Tabelle filtern"
+msgstr "在此表格中筛选"
+
+msgid "Keine Datensätze."
+msgstr "没有记录。"
+
+#, python-format
+msgid ""
+"%(n)s Datensatz, so wie die Rolle „%(role)s“ ihn sieht, mit Bildern; Ziel: "
+"%(target)s."
+msgid_plural ""
+"%(n)s Datensätze, so wie die Rolle „%(role)s“ sie sieht, mit Bildern; Ziel: "
+"%(target)s."
+msgstr[0] "%(n)s 条记录，按角色“%(role)s”可见的内容，含图片；目标：%(target)s。"
+
 #~ msgid "Schule und Sprachen"
 #~ msgstr "学校和语言"
 

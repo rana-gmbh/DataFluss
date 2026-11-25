@@ -1,0 +1,8 @@
+{% load i18n ui %}<div id="publish-status" aria-live="polite"{% if p.status == 'running' %} hx-get="{% url 'publication_status' p.pk %}?running=1" hx-trigger="every 2s" hx-swap="outerHTML"{% endif %}>
+  {% if p.status == 'running' %}<p class="text-[13px] flex items-center gap-2"><span class="badge badge-accent">{% icon 'refresh' %}{% translate "Läuft" %}</span>{{ p.progress }}</p>
+  {% elif p.status == 'failed' %}<p class="text-[13px]"><span class="badge badge-bad">{% icon 'alert' %}{% translate "Fehlgeschlagen" %}</span></p><p class="text-[13px] mt-1 text-[var(--bad)]">{{ p.error }}</p>
+  {% elif p.status == 'done' %}<p class="text-[13px]"><span class="badge badge-ok">{% icon 'check' %}{% translate "Fertig" %}</span> {{ p.progress }}</p>
+  {% endif %}
+  {% if p.published_at %}<p class="muted text-[12px] mt-1">{% blocktranslate trimmed with when=p.published_at|date:"d.m.Y H:i" %}Zuletzt veröffentlicht: {{ when }}{% endblocktranslate %}</p>
+  {% else %}<p class="muted text-[12px] mt-1">{% translate "Noch nicht veröffentlicht." %}</p>{% endif %}
+</div>

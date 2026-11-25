@@ -16,6 +16,8 @@ def rules(user, entity):
     """{field key: "read" | "hidden"} of the user's role for this entity, kept on the user for the request."""
     if user is None or not getattr(user, "is_authenticated", False):
         return {}
+    if (own := getattr(user, "field_rules", None)) is not None:  # a publication: everything not chosen is hidden (publish/viewer.py)
+        return own(entity)
     from .models import Role, UserRole
 
     if user.role == Role.IT:

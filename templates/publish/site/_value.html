@@ -1,0 +1,15 @@
+{% load i18n ui site %}<div class="min-w-0">
+  <div class="label">{{ item.label }}</div>
+  {% if item.type == 'link' or item.type == 'backlink' %}
+    <div class="site-chips">{% for target in item.targets %}{% if target.href %}<a class="badge badge-accent" href="{{ root }}{{ target.href }}">{{ target.title }}</a>{% else %}<span class="badge">{{ target.title }}</span>{% endif %}{% empty %}<span class="muted">–</span>{% endfor %}</div>
+  {% elif item.type == 'image' %}
+    <div class="site-files">{% for file in item.files %}{% if file.thumb %}<a href="{{ root }}{{ file.href|default:file.thumb }}"><img class="site-file-image" src="{{ root }}{{ file.thumb }}" alt="{{ file.name }}" loading="lazy"></a>{% endif %}{% empty %}<span class="muted">–</span>{% endfor %}</div>
+  {% elif item.type == 'file' %}
+    <div class="site-chips">{% for file in item.files %}{% if file.href %}<a class="badge badge-accent" href="{{ root }}{{ file.href }}" download="{{ file.name }}">{{ file.name }}</a>{% else %}<span class="badge">{{ file.name }}</span>{% endif %}{% empty %}<span class="muted">–</span>{% endfor %}</div>
+  {% elif item.type == 'rating' %}
+    {% if item.rating is not None %}<div class="rating-input" aria-readonly="true">{% stars item.rating item.stars %}<span class="rating-value">{{ item.text }}</span></div>{% else %}<div class="site-value">–</div>{% endif %}
+  {% elif item.type == 'url' and item.text|web_url %}<div class="site-value"><a class="site-link" href="{{ item.text|web_url }}" rel="noopener nofollow">{{ item.text }}</a></div>
+  {% elif item.type == 'email' and item.text %}<div class="site-value"><a class="site-link" href="mailto:{{ item.text }}">{{ item.text }}</a></div>
+  {% else %}<div class="site-value{% if item.type == 'textarea' %} is-long{% endif %}">{{ item.text|default:"–" }}</div>{% endif %}
+  {% if item.help %}<p class="muted site-help">{{ item.help }}</p>{% endif %}
+</div>

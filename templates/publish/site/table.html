@@ -1,0 +1,42 @@
+{% extends "publish/site/base.html" %}{% load i18n site ui %}
+{% block title %}{{ table.name }} · {{ site.title }}{% endblock %}
+{% block content %}
+<nav class="site-crumbs muted" aria-label="{% translate 'Brotkrümel' %}"><a href="{{ root }}index.html">{{ site.title }}</a> {% sicon 'chevron' %} <span>{{ table.name }}</span></nav>
+<div class="site-titlebar">
+  <h1 class="page-title">{{ table.name }} <span class="badge">{{ table.count }}</span></h1>
+  <div class="site-tools" data-tools hidden>
+    <input class="input site-filter" type="search" data-filter placeholder="{% translate 'In dieser Tabelle filtern' %}" aria-label="{% translate 'In dieser Tabelle filtern' %}">
+    {% if table.has_gallery %}<div class="segmented" role="group" aria-label="{% translate 'Ansicht' %}">
+      <label><input type="radio" name="view" value="gallery" data-view {% if table.layout == 'gallery' %}checked{% endif %}><span>{% translate "Galerie" %}</span></label>
+      <label><input type="radio" name="view" value="list" data-view {% if table.layout == 'list' %}checked{% endif %}><span>{% translate "Liste" %}</span></label>
+    </div>{% endif %}
+  </div>
+</div>
+{% if table.description %}<p class="soft mb-4">{{ table.description }}</p>{% endif %}
+{% if table.has_gallery %}
+<div class="gallery shape-{{ table.shape }} site-gallery" data-layout="gallery"{% if table.layout != 'gallery' %} hidden{% endif %}>
+{% for row in table.rows %}
+  <a class="gallery-card" href="{{ root }}{{ row.href }}" data-row data-text="{{ row.search }}" data-title="{{ row.title }}">
+    <div class="gallery-cover">{% if row.cover %}<img src="{{ root }}{{ row.cover }}" alt="" loading="lazy">{% else %}<div class="gallery-empty">{{ row.title }}</div>{% endif %}{% if row.flag %}<span class="gallery-flag">{{ row.flag }}</span>{% endif %}</div>
+    <div class="gallery-title">{{ row.title }}</div>
+    {% if row.subtitle %}<div class="gallery-sub">{{ row.subtitle }}</div>{% endif %}
+    {% if row.rating %}{% stars row.rating.value row.rating.stars "stars-sm" %}{% endif %}
+  </a>
+{% endfor %}
+</div>
+{% endif %}
+<div class="surface site-list" data-layout="list"{% if table.layout == 'gallery' %} hidden{% endif %}>
+  <table class="data-table">
+    <thead><tr><th scope="col"><button type="button" class="site-sort" data-sort="0">{{ table.title_label }}</button></th>{% for column in table.columns %}<th scope="col"><button type="button" class="site-sort" data-sort="{{ forloop.counter }}"{% if column.type == 'number' or column.type == 'rating' %} data-numeric{% endif %}>{{ column.label }}</button></th>{% endfor %}</tr></thead>
+    <tbody>
+    {% for row in table.rows %}<tr data-row data-text="{{ row.search }}">
+      <td data-value="{{ row.title }}"><a class="site-row-link" href="{{ root }}{{ row.href }}">{% if row.cover %}<img class="site-thumb" src="{{ root }}{{ row.cover }}" alt="" loading="lazy">{% endif %}<span>{{ row.title }}</span></a></td>
+      {% for cell in row.cells %}<td data-value="{% if cell.rating is not None %}{{ cell.rating|stringformat:'s' }}{% else %}{{ cell.text }}{% endif %}">{% if cell.rating is not None %}{% stars cell.rating cell.stars "stars-sm" %}{% elif cell.type == 'url' and cell.text|web_url %}<a class="site-link" href="{{ cell.text|web_url }}" rel="noopener nofollow">{{ cell.text }}</a>{% else %}{{ cell.text }}{% endif %}</td>{% endfor %}
+    </tr>{% endfor %}
+    </tbody>
+  </table>
+  {% if not table.rows %}<p class="muted p-4">{% translate "Keine Datensätze." %}</p>{% endif %}
+</div>
+<p class="muted site-none" data-none hidden>{% translate "Nichts gefunden." %}</p>
+{% if table.tmdb %}{% include "publish/site/_tmdb.html" %}{% endif %}
+{% endblock %}

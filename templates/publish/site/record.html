@@ -1,0 +1,35 @@
+{% extends "publish/site/base.html" %}{% load i18n site ui %}
+{% block title %}{{ page.title }} · {{ site.title }}{% endblock %}
+{% block content %}
+<nav class="site-crumbs muted" aria-label="{% translate 'Brotkrümel' %}"><a href="{{ root }}index.html">{{ site.title }}</a> {% sicon 'chevron' %} <a href="{{ root }}{{ page.table }}/index.html">{{ page.table_name }}</a></nav>
+{% if page.head %}{% with head=page.head %}
+<section class="record-hero" aria-labelledby="record-title">
+  <div class="record-hero-backdrop{% if head.blurred %} is-blurred{% endif %}" style="background-image: url('{{ root }}{{ head.backdrop|default:head.cover }}')"></div>
+  <div class="record-hero-body">
+    {% if head.cover %}<a href="{{ root }}{{ head.cover }}" class="flex-none"><img class="record-hero-cover shape-{{ head.shape }}" src="{{ root }}{{ head.cover }}" alt=""></a>{% endif %}
+    <div class="site-hero-text">
+      {% if head.flag %}<span class="badge">{{ head.flag }}</span>{% endif %}
+      <h1 id="record-title">{{ page.title }}</h1>
+      {% if head.subtitle %}<div class="record-hero-meta">{% for text in head.subtitle %}<span>{{ text }}</span>{% endfor %}</div>{% endif %}
+      {% if head.rating %}<div class="rating-input" aria-readonly="true">{% stars head.rating.value head.rating.stars %}<span class="rating-value">{{ head.rating.text }}</span></div>{% endif %}
+      {% if head.text %}<p class="record-hero-text">{{ head.text }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% endwith %}{% else %}
+<h1 class="page-title site-record-title">{{ page.title }}</h1>
+{% endif %}
+{% if page.cast %}<section class="surface site-section" aria-labelledby="cast-title"><h2 id="cast-title" class="section-title site-section-title">{% translate "Besetzung" %}</h2>
+  <div class="cast-strip">{% for person in page.cast %}<{% if person.href %}a href="{{ root }}{{ person.href }}"{% else %}div{% endif %} class="cast-card">{% if person.photo %}<img class="cast-photo" src="{{ root }}{{ person.photo }}" alt="" loading="lazy">{% else %}<div class="cast-photo" aria-hidden="true">{{ person.initials }}</div>{% endif %}
+    <div class="cast-name">{{ person.name }}</div>{% if person.role %}<div class="cast-role">{{ person.role }}</div>{% endif %}</{% if person.href %}a{% else %}div{% endif %}>{% endfor %}</div></section>{% endif %}
+{% if page.tabs|length > 1 %}<div class="site-tabs" role="tablist" hidden>{% for tab in page.tabs %}<button type="button" class="tab{% if forloop.first %} active{% endif %}" role="tab" data-tab="{{ tab.id }}">{{ tab.title }}</button>{% endfor %}</div>{% endif %}
+{% for tab in page.tabs %}<div class="site-tab-panel" data-panel="{{ tab.id }}">
+  {% if page.tabs|length > 1 %}<h2 class="site-tab-title">{{ tab.title }}</h2>{% endif %}
+  {% for section in tab.sections %}<section class="surface site-section mask-wrap">{% if section.title %}<h2 class="section-title site-section-title">{{ section.title }}</h2>{% endif %}
+    <div class="mask-grid">{% for item in section.items %}<div class="mask-item" data-w="{{ item.w }}" style="--w: {{ item.w }}">
+      {% if item.kind == 'note' %}<p class="soft site-note">{{ item.text }}</p>{% else %}{% include "publish/site/_value.html" %}{% endif %}
+    </div>{% endfor %}</div>
+  </section>{% endfor %}
+</div>{% endfor %}
+{% if page.tmdb %}{% include "publish/site/_tmdb.html" %}{% endif %}
+{% endblock %}

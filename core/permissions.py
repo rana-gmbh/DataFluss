@@ -47,6 +47,7 @@ CAPABILITIES = {
     "admin.update": {IT},
     "admin.backup": {IT},
     "tables.design": {IT},  # own tables: tables, fields, rights; records follow each table's rights
+    "publish.manage": {IT},  # publications: read-only websites of chosen tables (publish/)
     "home.view": {IT, SEK, SL},  # the start page; module roles have their own (core/modules.py "home")
 }
 
@@ -109,7 +110,7 @@ DERIVED = {
 
 # "Einstellungen" opens for anyone with one of these; it is not a right of its own (core/context.py NAV).
 SETTINGS = ("admin.masks", "admin.fields", "tables.design", "admin.platforms", "admin.users", "admin.school",
-            "admin.update", "admin.backup", "admin.audit")
+            "admin.update", "admin.backup", "admin.audit", "publish.manage")
 
 
 def has_capability(user, capability):

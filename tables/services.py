@@ -34,6 +34,8 @@ def right(user, table):
     """none, read or edit. IT always edits; an archived table can still be read but not changed."""
     if user is None or not user.is_authenticated:
         return NONE
+    if (own := getattr(user, "table_right", None)) is not None:  # a publication reads only its chosen tables (publish/viewer.py)
+        return own(table)
     granted = EDIT if user.role == Role.IT else (table.rights or {}).get(user.role, NONE)
     if granted not in RIGHTS:
         granted = NONE

@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% load i18n ui %}
+{% block title %}{% translate "Veröffentlichen" %}{% endblock %}
+{% block content %}
+<div class="flex items-center gap-2 mb-1"><a class="btn btn-ghost btn-icon" href="{% url 'settings_home' %}" aria-label="{% translate 'Zurück zu den Einstellungen' %}"><svg class="icon rotate-180"><use href="/static/img/icons.svg#chevron"></use></svg></a>
+  <h1 class="page-title inline-flex items-center gap-2">{% icon 'external' 'text-[20px] text-[var(--accent)]' %}{% translate "Veröffentlichen" %}</h1></div>
+<p class="muted text-[13px] mb-4 max-w-3xl">{% translate "Ausgewählte Tabellen als Website, die jeder lesen kann: mit Liste oder Galerie, Datensatzseiten und Suche, aber ohne Anlegen oder Ändern. Geändert wird weiter hier; danach überträgt „Veröffentlichen“ nur, was sich geändert hat." %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+  <div class="lg:col-span-2 surface">
+    {% if publications %}<table class="data-table">
+      <thead><tr><th>{% translate "Name" %}</th><th>{% translate "Ziel" %}</th><th>{% translate "Stand" %}</th></tr></thead>
+      <tbody>{% for p in publications %}<tr>
+        <td><a class="font-medium hover:underline" href="{% url 'publication_detail' p.pk %}">{{ p.name }}</a></td>
+        <td class="muted">{{ p.get_target_display|default:p.target }}</td>
+        <td>{% if p.status == 'failed' %}<span class="badge badge-bad">{% translate "Fehlgeschlagen" %}</span>{% elif p.published_at %}<span class="badge badge-ok">{{ p.published_at|date:"d.m.Y H:i" }}</span>{% else %}<span class="badge">{% translate "Noch nicht veröffentlicht" %}</span>{% endif %}</td>
+      </tr>{% endfor %}</tbody>
+    </table>{% else %}<p class="muted text-[13px] p-4">{% translate "Noch keine Veröffentlichung." %}</p>{% endif %}
+  </div>
+  <form method="post" class="surface p-4 space-y-3">{% csrf_token %}
+    <h2 class="font-semibold">{% translate "Neue Veröffentlichung" %}</h2>
+    <div><label class="label" for="pub-name">{% translate "Name der Website" %}</label><input id="pub-name" class="input" name="name" maxlength="100" required placeholder="{% translate 'z. B. Unsere Filmsammlung' %}"></div>
+    <button class="btn btn-primary">{% icon 'plus' %}{% translate "Anlegen" %}</button>
+    <p class="muted text-[12px]">{% translate "Danach wählen Sie Tabellen, Felder und das Ziel. Veröffentlicht wird erst, wenn Sie es bestätigen." %}</p>
+  </form>
+</div>
+{% endblock %}

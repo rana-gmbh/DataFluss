@@ -84,7 +84,8 @@ A module brings ready-made sections, forms, print templates and sample data.
 | Private modules | Built for one organisation, delivered as signed add-ons by its server | On request |
 
 How modules plug in, and how a signed module reaches the computers of an organisation: [docs/modules.md](docs/modules.md).
-Own tables, formulas and templates: [docs/tables.md](docs/tables.md).
+Own tables, formulas and templates: [docs/tables.md](docs/tables.md). Publishing tables as a read-only website:
+[docs/publish.md](docs/publish.md).
 
 ## Run a server
 

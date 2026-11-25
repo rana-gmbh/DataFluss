@@ -85,6 +85,8 @@ PLATFORM_AREAS = [
         Extra("admin.school", _("Schule oder Organisation"), _("Name, Logo und Sprachen."), ("admin.school",), needs=""),
         Extra("admin.update", _("Aktualisierung"), _("Neue Versionen einspielen."), ("admin.update",), needs=""),
         Extra("admin.backup", _("Sicherung"), _("Sicherungen anlegen und zurückspielen."), ("admin.backup",), needs=""),
+        Extra("publish.manage", _("Veröffentlichen"), _("Ausgewählte Tabellen als Website veröffentlichen, die jeder lesen kann."),
+              ("publish.manage",), needs=""),
         Extra("admin.audit", _("Protokoll"), _("Wer wann was getan hat."), ("admin.audit",), needs=""),
     ]),
 ]

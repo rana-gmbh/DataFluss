@@ -1,0 +1,18 @@
+{% extends "publish/site/base.html" %}{% load i18n site %}
+{% block content %}
+<h1 class="page-title">{{ site.title }}</h1>
+{% if site.organisation and site.organisation != site.title %}<p class="muted mt-1">{{ site.organisation }}</p>{% endif %}
+<div class="site-tiles">
+{% for table in site.tables %}
+  <a class="surface site-tile" href="{{ root }}{{ table.href }}">
+    {% if table.covers %}<span class="site-tile-covers" aria-hidden="true">{% for cover in table.covers %}<img src="{{ root }}{{ cover }}" alt="" loading="lazy">{% endfor %}</span>{% endif %}
+    <span class="avatar site-tile-icon">{% sicon table.icon %}</span>
+    <span class="min-w-0"><span class="site-tile-name">{{ table.name }}</span>
+      <span class="muted site-tile-count">{% blocktranslate count n=table.count trimmed %}{{ n }} Datensatz{% plural %}{{ n }} Datensätze{% endblocktranslate %}</span>
+      {% if table.description %}<span class="soft site-tile-text">{{ table.description }}</span>{% endif %}</span>
+  </a>
+{% empty %}
+  <p class="muted">{% translate "Noch keine Tabellen veröffentlicht." %}</p>
+{% endfor %}
+</div>
+{% endblock %}

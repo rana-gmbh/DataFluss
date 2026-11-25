@@ -1,0 +1,111 @@
+{% extends "base.html" %}{% load i18n ui static %}
+{% block title %}{{ p.name }} · {% translate "Veröffentlichen" %}{% endblock %}
+{% block scripts %}<script src="{% static 'publish/settings.js' %}" defer></script>{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-center gap-2 mb-4"><a class="btn btn-ghost btn-icon" href="{% url 'publication_list' %}" aria-label="{% translate 'Zurück zu den Veröffentlichungen' %}"><svg class="icon rotate-180"><use href="/static/img/icons.svg#chevron"></use></svg></a>
+  <h1 class="page-title inline-flex items-center gap-2">{% icon 'external' 'text-[20px] text-[var(--accent)]' %}{{ p.name }}</h1>
+  <span class="badge">{{ p.get_target_display }}</span></div>
+
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 space-y-4">
+
+  <form method="post" class="surface p-5 space-y-4" aria-labelledby="pub-content">{% csrf_token %}<input type="hidden" name="section" value="content">
+    <div><h2 id="pub-content" class="font-semibold">{% translate "Inhalt" %}</h2>
+      <p class="muted text-[12.5px]">{% blocktranslate trimmed %}Angeboten wird nur, was die Rolle der Veröffentlichung sehen darf. Neue Felder und Tabellen kommen nie von selbst dazu. Geheime Felder, der Änderungsverlauf sowie Personen und Geräte werden nie veröffentlicht.{% endblocktranslate %}</p></div>
+    {% for t in offer %}
+    <fieldset class="rounded-lg p-3 space-y-3" style="border: 1px solid var(--line)" x-data="{ on: {% if t.chosen %}true{% else %}false{% endif %} }">
+      <legend class="sr-only">{{ t.table.display_name }}</legend>
+      <label class="flex items-center gap-2 font-medium cursor-pointer"><input type="checkbox" class="h-4 w-4 accent-[var(--accent)]" name="t:{{ t.table.key }}" value="1" x-model="on">{% icon t.table.icon 'text-[var(--accent)]' %}{{ t.table.display_name }}</label>
+      <div x-show="on" x-cloak class="space-y-3 pl-6">
+        <div class="flex flex-wrap gap-x-4 gap-y-1.5">
+          {% for f in t.fields %}<label class="flex items-center gap-1.5 text-[13px]{% if f.locked %} muted{% endif %}" {% if f.locked %}title="{% translate 'Der Titel kommt immer mit.' %}"{% endif %}>
+            <input type="checkbox" class="accent-[var(--accent)]" name="f:{{ t.table.key }}" value="{{ f.field.key }}" {% if f.chosen %}checked{% endif %} {% if f.locked %}disabled checked{% endif %}>{{ f.field.display_label }} <span class="muted text-[11px]">{{ f.field.type_label }}</span></label>{% endfor %}
+        </div>
+        <div class="flex flex-wrap items-center gap-4 text-[13px]">
+          {% if t.gallery %}<div class="segmented" role="group" aria-label="{% translate 'Ansicht' %}">
+            <label><input type="radio" name="layout:{{ t.table.key }}" value="gallery" {% if t.layout == 'gallery' %}checked{% endif %}><span>{% translate "Galerie" %}</span></label>
+            <label><input type="radio" name="layout:{{ t.table.key }}" value="list" {% if t.layout != 'gallery' %}checked{% endif %}><span>{% translate "Liste" %}</span></label></div>{% endif %}
+          {% if t.any_files %}<label class="flex items-center gap-1.5"><input type="checkbox" class="accent-[var(--accent)]" name="files:{{ t.table.key }}" value="1" {% if t.files %}checked{% endif %}>{% translate "Dateien (PDF usw.) zum Herunterladen" %}</label>{% endif %}
+        </div>
+      </div>
+    </fieldset>
+    {% empty %}<p class="muted text-[13px]">{% translate "Die gewählte Rolle darf keine Tabelle lesen. Wählen Sie unten eine andere Rolle oder geben Sie ihr Rechte an Tabellen." %}</p>{% endfor %}
+    {% if offer %}<button class="btn btn-primary">{% icon 'save' %}{% translate "Inhalt speichern" %}</button>{% endif %}
+  </form>
+
+  <form method="post" class="surface p-5 space-y-3" aria-labelledby="pub-target" x-data="{ target: '{{ p.target }}' }">{% csrf_token %}<input type="hidden" name="section" value="target">
+    <h2 id="pub-target" class="font-semibold">{% translate "Ziel" %}</h2>
+    <div class="flex flex-wrap gap-x-4 gap-y-2">{% for value, label in targets %}<label class="flex items-center gap-1.5 text-[13px]"><input type="radio" class="accent-[var(--accent)]" name="target" value="{{ value }}" x-model="target" {% if p.target == value %}checked{% endif %}>{{ label }}</label>{% endfor %}</div>
+    <p class="muted text-[12.5px]" x-show="target === 'zip'" x-cloak>{% translate "Die ganze Website als ZIP-Datei zum Herunterladen, zum Beispiel für einen USB-Stick oder um sie selbst hochzuladen." %}</p>
+    <p class="muted text-[12.5px]" x-show="target === 'server'" x-cloak>{% translate "Dieser Server zeigt die Website unter seiner eigenen Adresse, öffentlich und ohne Anmeldung." %}</p>
+    <div x-show="target === 'folder'" x-cloak class="space-y-2">
+      <label class="label" for="pub-path">{% translate "Ordner" %}</label>
+      <div class="flex gap-2"><input id="pub-path" class="input mono" name="path" value="{% if p.target == 'folder' %}{{ config.path }}{% endif %}" placeholder="/Users/…/Website" data-folder-input :disabled="target !== 'folder'">
+        {% if on_computer %}<button type="button" class="btn" data-pick-folder>{% icon 'file' %}{% translate "Wählen …" %}</button>{% endif %}</div>
+      <p class="muted text-[12px]">{% translate "Zum Beispiel ein Ordner, den ein anderes Programm hochlädt oder synchronisiert. DataFluss löscht dort nur Dateien, die es selbst angelegt hat." %}</p>
+    </div>
+    <div x-show="target === 'webdav'" x-cloak class="grid sm:grid-cols-2 gap-3">
+      <div class="sm:col-span-2"><label class="label" for="pub-url">{% translate "WebDAV-Adresse des Ordners" %}</label><input id="pub-url" class="input mono" name="url" value="{% if p.target == 'webdav' %}{{ config.url }}{% endif %}" placeholder="https://cloud.example.org/remote.php/dav/files/name/website/"></div>
+      <div><label class="label" for="pub-user-dav">{% translate "Benutzer" %}</label><input id="pub-user-dav" class="input" name="user" value="{% if p.target == 'webdav' %}{{ config.user }}{% endif %}" autocomplete="off" :disabled="target !== 'webdav'"></div>
+    </div>
+    <div x-show="target === 'ftp'" x-cloak class="grid sm:grid-cols-2 gap-3">
+      <div><label class="label" for="pub-host">{% translate "Server" %}</label><input id="pub-host" class="input mono" name="host" value="{% if p.target == 'ftp' %}{{ config.host }}{% endif %}" placeholder="ftp.example.org"></div>
+      <div><label class="label" for="pub-port">{% translate "Port" %}</label><input id="pub-port" class="input" name="port" inputmode="numeric" value="{% if p.target == 'ftp' %}{{ config.port }}{% endif %}" placeholder="21"></div>
+      <div><label class="label" for="pub-user-ftp">{% translate "Benutzer" %}</label><input id="pub-user-ftp" class="input" name="user" value="{% if p.target == 'ftp' %}{{ config.user }}{% endif %}" autocomplete="off" :disabled="target !== 'ftp'"></div>
+      <div><label class="label" for="pub-folder">{% translate "Ordner auf dem Server" %}</label><input id="pub-folder" class="input mono" name="path" value="{% if p.target == 'ftp' %}{{ config.path }}{% endif %}" placeholder="/htdocs/sammlung" :disabled="target !== 'ftp'"></div>
+      <label class="sm:col-span-2 flex items-center gap-1.5 text-[13px]"><input type="checkbox" class="accent-[var(--accent)]" name="plain" value="1" {% if p.target == 'ftp' and config.tls is False %}checked{% endif %}>{% translate "Ohne Verschlüsselung (nur wenn der Server kein FTPS kann: Passwort und Daten gehen dann lesbar über das Netz)" %}</label>
+    </div>
+    <div x-show="target === 'webdav' || target === 'ftp'" x-cloak>
+      <label class="label" for="pub-password">{% if has_password %}{% translate "Neues Passwort" %}{% else %}{% translate "Passwort" %}{% endif %}</label>
+      <input id="pub-password" class="input" name="password" type="password" autocomplete="new-password" placeholder="{% if has_password %}{% translate 'Leer lassen, um das gespeicherte zu behalten' %}{% endif %}">
+      <p class="muted text-[12px] mt-1">{% translate "Wird verschlüsselt gespeichert und nie angezeigt." %}</p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button class="btn btn-primary">{% icon 'save' %}{% translate "Ziel speichern" %}</button>
+      {% if p.target == 'folder' or p.target == 'webdav' or p.target == 'ftp' %}<button type="button" class="btn" hx-post="{% url 'publication_test' p.pk %}" hx-target="#pub-test">{% icon 'check' %}{% translate "Gespeichertes Ziel testen" %}</button>{% endif %}
+    </div>
+    <div id="pub-test" aria-live="polite"></div>
+  </form>
+
+  <form method="post" class="surface p-5 space-y-3" aria-labelledby="pub-settings">{% csrf_token %}<input type="hidden" name="section" value="settings">
+    <h2 id="pub-settings" class="font-semibold">{% translate "Einstellungen" %}</h2>
+    <div class="grid sm:grid-cols-2 gap-3">
+      <div><label class="label" for="pub-name">{% translate "Name der Website" %}</label><input id="pub-name" class="input" name="name" value="{{ p.name }}" maxlength="100" required></div>
+      <div><label class="label" for="pub-slug">{% translate "Kurzname (für die Adresse)" %}</label><input id="pub-slug" class="input mono" name="slug" value="{{ p.slug }}" maxlength="40" pattern="[a-z0-9\-]+"></div>
+      <div><label class="label" for="pub-role">{% translate "Zeigt höchstens, was diese Rolle sieht" %}</label>
+        <select id="pub-role" class="input" name="role">{% for value, label in roles %}<option value="{{ value }}" {% if value == p.role %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+      <div><label class="label" for="pub-language">{% translate "Sprache der Website" %}</label>
+        <select id="pub-language" class="input" name="language">{% for code, name in languages %}<option value="{{ code }}" {% if code == p.language %}selected{% endif %}>{{ name }}</option>{% endfor %}</select></div>
+    </div>
+    <label class="flex items-center gap-1.5 text-[13px]"><input type="checkbox" class="accent-[var(--accent)]" name="indexable" value="1" {% if p.indexable %}checked{% endif %}>{% translate "Suchmaschinen dürfen die Website aufnehmen" %}</label>
+    <button class="btn btn-primary">{% icon 'save' %}{% translate "Einstellungen speichern" %}</button>
+  </form>
+</div>
+
+<div class="space-y-4">
+  <div class="surface p-4 space-y-3">
+    <h2 class="font-semibold">{% translate "Stand" %}</h2>
+    {% include "publish/_status.html" %}
+    {% if site_url and p.published_at %}<p class="text-[13px]"><a class="text-[var(--accent)] hover:underline break-all" href="{{ site_url }}" target="_blank" rel="noopener">{{ site_url }} {% icon 'external' %}</a></p>{% endif %}
+    <div class="flex flex-wrap gap-2">
+      <form method="post" action="{% url 'publication_confirm' p.pk %}">{% csrf_token %}<input type="hidden" name="kind" value="preview">
+        <button class="btn" {% if not p.choice or p.status == 'running' %}disabled{% endif %}>{% icon 'eye' %}{% translate "Vorschau erstellen" %}</button></form>
+      {% if preview_ready %}<a class="btn" href="{% url 'publication_preview' p.pk %}" target="_blank" rel="noopener">{% icon 'external' %}{% translate "Vorschau öffnen" %}</a>{% endif %}
+    </div>
+    {% if needs_confirmation or not p.published_at %}<a class="btn btn-primary w-full{% if not p.choice or p.status == 'running' %} pointer-events-none opacity-50{% endif %}" href="{% url 'publication_confirm' p.pk %}">{% icon 'upload' %}{% translate "Veröffentlichen …" %}</a>
+    {% else %}<form method="post" action="{% url 'publication_confirm' p.pk %}">{% csrf_token %}<input type="hidden" name="kind" value="publish">
+      <button class="btn btn-primary w-full" {% if p.status == 'running' %}disabled{% endif %}>{% icon 'upload' %}{% translate "Neu veröffentlichen" %}</button></form>{% endif %}
+    {% if zip_ready %}<a class="btn w-full" href="{% url 'publication_zip' p.pk %}">{% icon 'download' %}{% translate "ZIP herunterladen" %}</a>{% endif %}
+    {% if not p.choice %}<p class="muted text-[12px]">{% translate "Zuerst unter „Inhalt“ mindestens eine Tabelle wählen." %}</p>{% endif %}
+  </div>
+  <div class="surface p-4 space-y-2">
+    <h2 class="font-semibold">{% translate "Zurückziehen und löschen" %}</h2>
+    {% if p.target == 'server' and p.published_at %}<form method="post" action="{% url 'publication_withdraw' p.pk %}">{% csrf_token %}
+      <button class="btn btn-sm" data-confirm="{% translate 'Die Website von diesem Server nehmen? Die Einstellungen bleiben.' %}">{% icon 'archive' %}{% translate "Vom Server nehmen" %}</button></form>{% endif %}
+    <p class="muted text-[12px]">{% translate "Auf einem fremden Webspace (WebDAV, FTP) oder in einem Ordner bleibt die Website liegen, bis Sie sie dort löschen." %}</p>
+    <form method="post" action="{% url 'publication_delete' p.pk %}">{% csrf_token %}
+      <button class="btn btn-sm btn-danger" data-confirm="{% translate 'Diese Veröffentlichung löschen? Auf diesem Server wird die Website entfernt.' %}">{% icon 'trash' %}{% translate "Veröffentlichung löschen" %}</button></form>
+  </div>
+</div>
+</div>
+{% endblock %}

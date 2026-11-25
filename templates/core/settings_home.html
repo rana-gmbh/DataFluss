@@ -21,6 +21,9 @@
 {% if request.user|can:'admin.update' %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'updates' %}">{% icon 'refresh' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2 flex items-center gap-2">{% translate "Aktualisierung" %}{% if update_available %}<span class="badge badge-warn">{% translate "Neu" %}</span>{% endif %}</h2><p class="muted text-[13px]">{% if on_computer %}{% translate "Nach einer neuen Version der App suchen" %}{% else %}{% translate "Neueste Version installieren" %}{% endif %}</p></a>
 {% endif %}
+{% if request.user|can:'publish.manage' %}
+  <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'publication_list' %}">{% icon 'external' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Veröffentlichen" %}</h2><p class="muted text-[13px]">{% translate "Tabellen als Website, die jeder lesen kann" %}</p></a>
+{% endif %}
 {% if request.user|can:'admin.backup' %}
   <a class="surface p-4 hover:border-[var(--line-strong)]" href="{% url 'backups' %}">{% icon 'archive' 'text-[20px] text-[var(--accent)]' %}<h2 class="font-semibold mt-2">{% translate "Sicherung" %}</h2><p class="muted text-[13px]">{% translate "Alle Daten sichern und einspielen" %}</p></a>
 {% endif %}

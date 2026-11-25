@@ -7,7 +7,8 @@ export, sync with a server and backups.
 
 Designing tables needs IT or a role with "Tabellen gestalten". Who may read or edit the records is set
 for each table and role, and a role can also see single fields read-only or not at all (see
-[Roles and rights](roles.md)).
+[Roles and rights](roles.md)). Chosen tables can also be published as a read-only website (see
+[Publishing](publish.md)).
 
 ## Creating a table
 
