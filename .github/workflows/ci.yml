@@ -44,6 +44,8 @@ jobs:
   # The template site datafluss.de (web/, docs/website.md): its own project, its own tests.
   web:
     runs-on: ubuntu-latest
+    env:
+      TESTING: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
