@@ -264,6 +264,17 @@ let chosenStart = { without: [], templates: [] }; // "Leer" or a database templa
 let chosenTemplate = null; // the database template picked, for the next step's wording
 let templates = null; // templates this installation has (tables/blueprints.py): [{id, title, database, order, has_demo, …}]
 
+let catalog = null; // templates on datafluss.de (client/sidecar/sidecar.py --catalog-index), [] offline
+
+async function catalogTemplates() {
+  if (catalog === null) {
+    try { catalog = await invoke("catalog_templates"); } catch { catalog = []; }
+  }
+  // The platform's own templates are in the catalog too; here they are the cards above already.
+  const own = new Set((templates || []).map((t) => t.id));
+  return catalog.filter((t) => !own.has(t.id));
+}
+
 async function offeredTemplates() {
   if (templates === null) {
     try { templates = await invoke("available_templates"); } catch { templates = []; }
@@ -298,6 +309,38 @@ function renderTemplates(box) {
   box.hidden = list.children.length === 0;
 }
 
+function stars(value) {
+  const full = Math.round((value || 0) * 2) / 2;
+  return "★".repeat(Math.floor(full)) + (full % 1 ? "½" : "");
+}
+
+function renderCatalog(box, entries) {
+  if (!box || !box.isConnected) return; // the sheet was closed meanwhile
+  const list = box.querySelector(".choices");
+  list.replaceChildren();
+  for (const entry of entries) {
+    const label = document.createElement("label");
+    label.className = "choice";
+    const input = Object.assign(document.createElement("input"), { type: "radio", name: "start", value: `katalog:${entry.id}` });
+    const text = document.createElement("span");
+    text.append(Object.assign(document.createElement("strong"), { textContent: pick(entry.title, entry.titles) }));
+    const meta = [entry.author, entry.ratings ? `${stars(entry.rating)} (${entry.ratings})` : ""].filter(Boolean).join(" · ");
+    if (meta) text.append(Object.assign(document.createElement("span"), { className: "muted small", textContent: meta }));
+    const description = pick(entry.description, entry.descriptions);
+    if (description) text.append(Object.assign(document.createElement("span"), { className: "muted small", textContent: description }));
+    label.append(input, text);
+    list.append(label);
+  }
+  box.hidden = list.children.length === 0;
+}
+
+// The template picked on the first page: a built-in one ("vorlage:<id>") or one from datafluss.de ("katalog:<id>").
+function pickedTemplate(start) {
+  if (start.startsWith("vorlage:")) return databaseTemplates().find((t) => `vorlage:${t.id}` === start) || null;
+  if (start.startsWith("katalog:")) return (catalog || []).find((t) => `katalog:${t.id}` === start) || null;
+  return null;
+}
+
 async function startCreate() {
   await offeredTemplates();
   openSheet("Neue Datenbank", {
@@ -313,23 +356,30 @@ async function startCreate() {
   const demo = field("demo");
   const showDemo = () => {
     const chosen = start();
-    const template = chosen.startsWith("vorlage:") ? databaseTemplates().find((t) => `vorlage:${t.id}` === chosen) : null;
+    const template = pickedTemplate(chosen);
     const none = chosen === "leer" || (template && !template.has_demo);
     demo.closest("label").hidden = none;
     if (none) demo.checked = false;
   };
-  sheet.querySelectorAll('[name="start"]').forEach((radio) => radio.addEventListener("change", showDemo));
+  const listen = () => sheet.querySelectorAll('[name="start"]').forEach((radio) => radio.addEventListener("change", showDemo));
+  listen();
   showDemo();
+  const box = $("#catalog-choices");
+  catalogTemplates().then((entries) => { renderCatalog(box, entries); listen(); });
 }
 
 function afterStart() {
   const start = sheet.querySelector('[name="start"]:checked').value;
   const id = start.startsWith("vorlage:") ? start.slice("vorlage:".length) : "";
-  chosenTemplate = id ? databaseTemplates().find((t) => t.id === id) || null : null;
+  chosenTemplate = pickedTemplate(start);
   chosenStart = {
     without: start === "schulverwaltung" ? [] : ["schulverwaltung"],
     templates: id ? [id] : [],
   };
+  if (start.startsWith("katalog:") && chosenTemplate) {
+    // The sidecar fetches it from datafluss.de and checks it again before applying it (tables/catalog.py).
+    chosenStart.catalog = { id: chosenTemplate.id, version: chosenTemplate.version };
+  }
   if (field("demo").checked) {
     openSheet("Neue Datenbank mit Beispieldaten", {
       template: "#t-demo-name",

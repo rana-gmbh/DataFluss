@@ -34,6 +34,12 @@ class TablesConfig(AppConfig):
                 tmdb.refresh_due()
             except Exception:  # noqa: BLE001 - never stands in the way of the bins and the backup
                 logging.getLogger(__name__).exception("TMDB refresh failed")
+            try:  # once a day: newer versions of templates from datafluss.de (tables/catalog.py)
+                from . import catalog
+
+                catalog.check_updates()
+            except Exception:  # noqa: BLE001 - the catalog being away is no reason to skip the backup
+                logging.getLogger(__name__).warning("Template catalog not checked", exc_info=True)
 
         # Files of records are served by their own view, which checks the table's right (views_records.record_file).
         modules.contribute(sync=TablesScope(), nightly=nightly, search=services.search, private_media=("tables/",))

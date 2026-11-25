@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-25 16:58+0100\n"
+"POT-Creation-Date: 2026-11-25 17:42+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1584,6 +1584,23 @@ msgstr "模板有误：%(error)s"
 msgid "Version %(number)s wiederhergestellt."
 msgstr "已恢复版本 %(number)s。"
 
+msgid "Ihre Rolle darf auf dem Server nicht veröffentlichen."
+msgstr "您的角色无权在服务器上发布。"
+
+msgid "Diese Veröffentlichung gibt es auf dem Server nicht."
+msgstr "服务器上没有此发布。"
+
+msgid "Auf dem Server muss zuerst jemand bestätigen, was veröffentlicht wird."
+msgstr "须先有人在服务器上确认要发布的内容。"
+
+msgid "Eine ZIP-Datei lässt sich nur auf dem Server selbst herunterladen."
+msgstr "ZIP 文件只能在服务器本身上下载。"
+
+msgid ""
+"Wartet auf Bestätigung: Auswahl oder Rolle haben sich geändert, oder die "
+"Rolle sieht jetzt mehr."
+msgstr "等待确认：所选内容或角色已更改，或该角色现在可见的内容更多。"
+
 msgid "ZIP-Datei"
 msgstr "ZIP 文件"
 
@@ -1592,6 +1609,28 @@ msgstr "文件夹"
 
 msgid "Dieser Server"
 msgstr "此服务器"
+
+msgid "Nur von Hand"
+msgstr "仅手动"
+
+msgid "Nach Änderungen"
+msgstr "有更改后"
+
+msgid "5 Minuten"
+msgstr "5 分钟"
+
+msgid "15 Minuten"
+msgstr "15 分钟"
+
+msgid "1 Stunde"
+msgstr "1 小时"
+
+#, python-format
+msgid "Der Abgleich mit dem Server hat nicht geklappt: %(error)s"
+msgstr "与服务器同步失败：%(error)s"
+
+msgid "Bitte zuerst bestätigen, was veröffentlicht wird."
+msgstr "请先确认要发布的内容。"
 
 msgid "Wird vorbereitet …"
 msgstr "正在准备 …"
@@ -1715,6 +1754,12 @@ msgstr "请输入名称。"
 msgid "Diese Adresse ist schon vergeben."
 msgstr "此地址已被使用。"
 
+msgid "Unbekannte Einstellung."
+msgstr "未知设置。"
+
+msgid "Bitte eine Uhrzeit wie 03:00 angeben."
+msgstr "请输入时间，例如 03:00。"
+
 msgid "Unbekanntes Ziel."
 msgstr "未知目标。"
 
@@ -1726,6 +1771,10 @@ msgstr "连接正常，可以写入。"
 
 msgid "Es ist noch keine Tabelle ausgewählt."
 msgstr "尚未选择任何表格。"
+
+msgid ""
+"Was veröffentlicht würde, hat sich eben geändert. Bitte noch einmal ansehen."
+msgstr "要发布的内容刚刚发生了变化。请再查看一遍。"
 
 msgid "Zurückgezogen."
 msgstr "已撤下。"
@@ -1868,8 +1917,57 @@ msgid "Eine Tabelle mit der Kennung %(key)s gibt es schon."
 msgstr "标识为 %(key)s 的表格已存在。"
 
 #, python-format
+msgid ""
+"Die Tabelle %(name)s stammt aus einer anderen Quelle und wird nicht "
+"verändert."
+msgstr "表格 %(name)s 来自其他来源，不会被更改。"
+
+#, python-format
 msgid "Formel %(field)s: %(problem)s"
 msgstr "公式 %(field)s：%(problem)s"
+
+msgid "Diese Adresse gehört nicht zum Vorlagenkatalog."
+msgstr "此地址不属于模板目录。"
+
+msgid "Der Vorlagenkatalog leitet an eine fremde Adresse weiter."
+msgstr "模板目录重定向到了外部地址。"
+
+msgid "Diese Vorlage gibt es im Katalog nicht (mehr)."
+msgstr "目录中没有（或不再有）此模板。"
+
+#, python-format
+msgid ""
+"Der Vorlagenkatalog antwortet mit einem Fehler (%(code)s). Bitte später noch "
+"einmal versuchen."
+msgstr "模板目录返回错误（%(code)s）。请稍后再试。"
+
+msgid ""
+"Der Vorlagenkatalog ist nicht erreichbar. Besteht eine Internetverbindung?"
+msgstr "无法访问模板目录。是否已连接互联网？"
+
+msgid "Der Vorlagenkatalog hat zu viele Daten geschickt."
+msgstr "模板目录发送的数据过多。"
+
+msgid "Der Vorlagenkatalog ist auf diesem Server ausgeschaltet."
+msgstr "此服务器已关闭模板目录。"
+
+msgid "Der Vorlagenkatalog hat keine lesbare Liste geschickt."
+msgstr "模板目录未发送可读的列表。"
+
+msgid "Die Datei aus dem Katalog stimmt nicht mit seinem Verzeichnis überein."
+msgstr "目录中的文件与其索引不符。"
+
+#, python-format
+msgid "Die Vorlage aus dem Katalog ist ungültig: %(problems)s"
+msgstr "目录中的模板无效：%(problems)s"
+
+#, python-format
+msgid ""
+"Eine Vorlage mit der Kennung %(id)s stammt hier aus einer anderen Quelle."
+msgstr "此处标识为 %(id)s 的模板来自其他来源。"
+
+msgid "Hier ist schon die neueste Version angewendet."
+msgstr "此处已应用最新版本。"
 
 msgid "Die Datei enthält keine lesbare Sammlung."
 msgstr "该文件不包含可读取的收藏。"
@@ -2544,6 +2642,11 @@ msgstr "%(n)s 行不符合要求，已跳过（详见“导入与导出”）。
 
 msgid "Bitte mindestens eine Spalte übernehmen."
 msgstr "请至少选择一列。"
+
+msgid ""
+"Eine Datenbank-Vorlage passt nur in eine Datenbank ohne Schulverwaltung und "
+"ohne andere Datenbank-Vorlage."
+msgstr "数据库模板只适用于没有学校管理且没有其他数据库模板的数据库。"
 
 #, python-format
 msgid "%(name)s liegt im Papierkorb."
@@ -4319,11 +4422,40 @@ msgid ""
 "PDFs werden nicht gespeichert. Protokolliert wird nur, wer was gedruckt hat."
 msgstr "不保存 PDF。仅记录谁打印了什么。"
 
+msgid "Auf dem Server"
+msgstr "在服务器上"
+
+msgid ""
+"Diese Veröffentlichungen zeigen die Daten des Servers. „Neu veröffentlichen“ "
+"schickt zuerst die Änderungen dieses Computers an den Server. Eingerichtet "
+"und bestätigt werden sie auf dem Server."
+msgstr ""
+"这些发布显示服务器上的数据。“重新发布”会先将此电脑的更改发送到服务器。它们在"
+"服务器上设置和确认。"
+
+msgid "Ziel"
+msgstr "目标字段"
+
 msgid "Läuft"
 msgstr "进行中"
 
 msgid "Fehlgeschlagen"
 msgstr "失败"
+
+msgid "Veröffentlicht"
+msgstr "已发布"
+
+msgid "Noch nicht veröffentlicht"
+msgstr "尚未发布"
+
+msgid "Auf dem Server bestätigen"
+msgstr "在服务器上确认"
+
+msgid "Neu veröffentlichen"
+msgstr "重新发布"
+
+msgid "Der Server hat keine Veröffentlichung."
+msgstr "服务器上没有发布。"
 
 msgid "Fertig"
 msgstr "完成"
@@ -4357,6 +4489,14 @@ msgid_plural ""
 "%(target)s."
 msgstr[0] ""
 "%(n)s 条记录，按角色“%(role)s”可见的内容，含图片；目标：%(target)s。"
+
+msgid ""
+"Seit der letzten Bestätigung hat sich etwas geändert. Neu dabei ist, was als "
+"„neu“ markiert ist."
+msgstr "自上次确认以来有所变化。新增内容标记为“新”。"
+
+msgid "neu"
+msgstr "新"
 
 msgid "Nichts: Die Rolle darf keine der gewählten Tabellen lesen."
 msgstr "无：该角色无权读取任何所选表格。"
@@ -4411,9 +4551,6 @@ msgstr "所选角色无权读取任何表格。请在下方选择其他角色，
 
 msgid "Inhalt speichern"
 msgstr "保存内容"
-
-msgid "Ziel"
-msgstr "目标字段"
 
 msgid ""
 "Die ganze Website als ZIP-Datei zum Herunterladen, zum Beispiel für einen "
@@ -4479,6 +4616,12 @@ msgstr "搜索引擎可以收录该网站"
 msgid "Einstellungen speichern"
 msgstr "保存设置"
 
+msgid "Bestätigung nötig"
+msgstr "需要确认"
+
+msgid "Auswahl, Rolle oder was die Rolle sieht, haben sich geändert."
+msgstr "所选内容、角色或角色可见的内容已更改。"
+
 msgid "Vorschau erstellen"
 msgstr "生成预览"
 
@@ -4488,14 +4631,44 @@ msgstr "打开预览"
 msgid "Veröffentlichen …"
 msgstr "发布 …"
 
-msgid "Neu veröffentlichen"
-msgstr "重新发布"
-
 msgid "ZIP herunterladen"
 msgstr "下载 ZIP"
 
 msgid "Zuerst unter „Inhalt“ mindestens eine Tabelle wählen."
 msgstr "请先在“内容”中至少选择一个表格。"
+
+msgid "Automatisch veröffentlichen"
+msgstr "自动发布"
+
+msgid "Wenn so lange nichts mehr geändert wurde"
+msgstr "在此期间无更改时"
+
+msgid "Uhrzeit"
+msgstr "时间"
+
+msgid ""
+"Auf diesem Computer nur, solange die Datenbank geöffnet ist; danach holt sie "
+"es nach."
+msgstr "在此电脑上仅在数据库打开时进行；之后会补上。"
+
+msgid ""
+"Erst nach dem ersten Veröffentlichen von Hand. Sieht die Rolle mehr als "
+"bestätigt, wartet die Automatik auf eine neue Bestätigung."
+msgstr ""
+"仅在第一次手动发布之后。如果角色可见的内容多于已确认的内容，自动发布会等待新"
+"的确认。"
+
+msgid "Wartet"
+msgstr "等待中"
+
+#, python-format
+msgid "Nächster Versuch nicht vor %(when)s."
+msgstr "下次尝试不早于 %(when)s。"
+
+msgid ""
+"Eine ZIP-Datei lädt man selbst herunter; automatisch geht es mit einem "
+"Ordner, diesem Server, WebDAV oder FTP."
+msgstr "ZIP 文件需手动下载；自动发布适用于文件夹、此服务器、WebDAV 或 FTP。"
 
 msgid "Zurückziehen und löschen"
 msgstr "撤下和删除"
@@ -4520,6 +4693,9 @@ msgstr "要删除此发布吗？该网站将从此服务器上移除。"
 msgid "Veröffentlichung löschen"
 msgstr "删除发布"
 
+msgid "Veröffentlichungen des Servers werden geladen …"
+msgstr "正在加载服务器的发布 …"
+
 msgid "Zurück zu den Einstellungen"
 msgstr "返回设置"
 
@@ -4532,14 +4708,16 @@ msgstr ""
 "将所选表格发布为任何人都可阅读的网站：包含列表或图库、记录页面和搜索，但不能"
 "新增或修改。修改仍在这里进行；之后“发布”只传输有变化的内容。"
 
-msgid "Noch nicht veröffentlicht"
-msgstr "尚未发布"
-
 msgid "Noch keine Veröffentlichung."
 msgstr "尚无发布。"
 
 msgid "Neue Veröffentlichung"
 msgstr "新建发布"
+
+msgid ""
+"Eine Veröffentlichung hier zeigt die Daten dieses Computers. Was der Server "
+"veröffentlicht, steht unten."
+msgstr "此处的发布显示此电脑的数据。服务器发布的内容列在下方。"
 
 msgid "z. B. Unsere Filmsammlung"
 msgstr "例如：我们的电影收藏"
@@ -4683,6 +4861,44 @@ msgstr "请在浏览器中打开学校管理系统进行此操作。"
 
 msgid "Verknüpft in eigenen Tabellen"
 msgstr "在自定义表格中的关联"
+
+msgid "Die mitgelieferten Vorlagen und „Aus Datei …“ gehen trotzdem."
+msgstr "内置模板和“从文件…”仍可使用。"
+
+msgid "Keine Vorlagen im Katalog."
+msgstr "目录中没有模板。"
+
+msgid ""
+"Eine Datenbank-Vorlage ist eine Datenbank für sich: Sie passt nur in eine "
+"Datenbank ohne Schulverwaltung und ohne andere Datenbank-Vorlage. Für eine "
+"neue legen Sie in der App eine neue Datenbank an."
+msgstr "数据库模板是独立的数据库：只适用于没有学校管理且没有其他数据库模板的数据库。如需新的，请在应用中新建数据库。"
+
+msgid "Offiziell"
+msgstr "官方"
+
+#, python-format
+msgid "Version %(n)s"
+msgstr "版本 %(n)s"
+
+#, python-format
+msgid "%(n)s Download"
+msgid_plural "%(n)s Downloads"
+msgstr[0] "%(n)s 次下载"
+
+#, python-format
+msgid "Version %(n)s angewendet"
+msgstr "已应用版本 %(n)s"
+
+#, python-format
+msgid "Version %(n)s ansehen"
+msgstr "查看版本 %(n)s"
+
+msgid "Ansehen und anwenden"
+msgstr "查看并应用"
+
+msgid "Auf datafluss.de"
+msgstr "在 datafluss.de 上"
 
 #, python-format
 msgid "%(name)s entfernen?"
@@ -4868,9 +5084,11 @@ msgstr ""
 "模板会创建现成的表格，包括字段、记录页面、打印模板和视图。之后一切均可修改；"
 "新版本只会补充缺少的内容。"
 
-#, python-format
-msgid "Version %(n)s angewendet"
-msgstr "已应用版本 %(n)s"
+msgid "Mitgeliefert und angewendet"
+msgstr "内置和已应用"
+
+msgid "aus Datei"
+msgstr "来自文件"
 
 msgid "Braucht ein Modul, das diese Datenbank nicht nutzt."
 msgstr "需要本数据库未使用的模块。"
@@ -4890,6 +5108,45 @@ msgstr "再次应用（补充缺少的内容）"
 
 msgid "Keine Vorlagen vorhanden."
 msgstr "没有可用的模板。"
+
+msgid "Von datafluss.de"
+msgstr "来自 datafluss.de"
+
+msgid ""
+"Vorlagen, die andere geteilt haben. Jede wurde dort geprüft, und DataFluss "
+"prüft sie vor dem Anwenden noch einmal. Sie stehen unter CC BY 4.0."
+msgstr "他人共享的模板。每个模板都已在那里审核，DataFluss 在应用前会再次检查。它们采用 CC BY 4.0 许可。"
+
+msgid ""
+"Vorlagen aus dem Katalog oder aus einer Datei werden auf dem Server "
+"installiert; die Tabellen kommen dann von selbst hierher."
+msgstr "来自目录或文件的模板在服务器上安装；表格随后会自动同步到这里。"
+
+msgid "Katalog wird geladen …"
+msgstr "正在加载目录…"
+
+msgid "Aus Datei …"
+msgstr "从文件…"
+
+msgid ""
+"Eine Vorlagendatei (.json), etwa von „Als Vorlage exportieren“ in einer "
+"anderen Datenbank. Sie wird streng geprüft und vor dem Anwenden gezeigt."
+msgstr "模板文件（.json），例如来自其他数据库的“导出为模板”。它会经过严格检查，并在应用前显示。"
+
+msgid "Vorlagendatei"
+msgstr "模板文件"
+
+msgid "Prüfen und ansehen"
+msgstr "检查并查看"
+
+msgid "Neue Versionen"
+msgstr "新版本"
+
+msgid ""
+"Ist eine Vorlage von datafluss.de angewendet, fragt DataFluss einmal am Tag "
+"dort nach einer neueren Version und zeigt sie dann an. Dabei sieht "
+"datafluss.de die Internet-Adresse dieses Servers bzw. Computers."
+msgstr "应用了来自 datafluss.de 的模板时，DataFluss 每天会向其查询一次是否有新版本并显示。此时 datafluss.de 会看到此服务器或电脑的网络地址。"
 
 msgid "Sammlung übernehmen"
 msgstr "导入收藏"
@@ -5007,7 +5264,10 @@ msgid ""
 "datafluss.de teilen oder in einer anderen Datenbank anwenden. Verknüpfungen "
 "zu Tabellen, die nicht dabei sind, und zu Schülern, Personal oder Geräten "
 "bleiben weg."
-msgstr "所选表格将生成一个模板文件：包含字段、记录页面、打印模板和共享视图。可在 datafluss.de 上分享，或在其他数据库中应用。指向未包含的表格以及学生、教职工或设备的链接将被省略。"
+msgstr ""
+"所选表格将生成一个模板文件：包含字段、记录页面、打印模板和共享视图。可在 "
+"datafluss.de 上分享，或在其他数据库中应用。指向未包含的表格以及学生、教职工或"
+"设备的链接将被省略。"
 
 msgid "So lässt sich das nicht exportieren:"
 msgstr "无法这样导出："
@@ -5034,7 +5294,9 @@ msgid ""
 "Ohne Dateien, Bilder und Geheimfelder. Vorsicht: Beim Teilen sieht jeder "
 "diese Daten – nur erfundene Beispiele, keine echten Namen, Adressen oder "
 "Telefonnummern."
-msgstr "不含文件、图片和保密字段。注意：分享后所有人都能看到这些数据——请只用虚构的示例，不要用真实的姓名、地址或电话号码。"
+msgstr ""
+"不含文件、图片和保密字段。注意：分享后所有人都能看到这些数据——请只用虚构的示"
+"例，不要用真实的姓名、地址或电话号码。"
 
 msgid "Vorlage herunterladen"
 msgstr "下载模板"
@@ -5272,10 +5534,6 @@ msgstr ""
 "在表单设计器中将字段排列到选项卡和分区中。未放入表单的字段显示在底部的“更多字"
 "段”中。"
 
-#, python-format
-msgid "Version %(n)s"
-msgstr "版本 %(n)s"
-
 msgid ""
 "Noch keine eigene Gestaltung: Die Seite zeigt alle Felder untereinander."
 msgstr "尚无自定义设计：页面将所有字段依次显示。"
@@ -5383,6 +5641,68 @@ msgstr "无"
 
 msgid "Legen Sie zuerst ein Feld vom Typ Bild an, etwa „Foto“ oder „Cover“."
 msgstr "请先创建一个图片类型的字段，例如“照片”或“封面”。"
+
+#, python-format
+msgid "von %(name)s"
+msgstr "作者 %(name)s"
+
+msgid "Aus einer Datei"
+msgstr "来自文件"
+
+#, python-format
+msgid "hier ist Version %(n)s angewendet"
+msgstr "此处已应用版本 %(n)s"
+
+#, python-format
+msgid "%(n)s Beispieldatensatz"
+msgid_plural "%(n)s Beispieldatensätze"
+msgstr[0] "%(n)s 条示例记录"
+
+msgid "Datensatzseiten"
+msgstr "记录页面"
+
+msgid "Ansichten"
+msgstr "视图"
+
+msgid ""
+"Geprüft: nur Tabellen, Felder, Seiten, Drucke und Ansichten, keine "
+"Verknüpfung zu Schülern, Personal oder Geräten, kein Programmcode."
+msgstr "已检查：仅包含表格、字段、页面、打印和视图，没有到学生、教职工或设备的链接，没有程序代码。"
+
+msgid "Rechte, die die Vorlage vergibt"
+msgstr "模板授予的权限"
+
+msgid "bearbeiten"
+msgstr "编辑"
+
+msgid "lesen"
+msgstr "读取"
+
+msgid "Lassen sich danach unter Rechte ändern."
+msgstr "之后可在“权限”中更改。"
+
+#, python-format
+msgid ""
+"Lizenz CC BY 4.0: frei nutzbar und veränderbar mit Nennung von %(name)s."
+msgstr "许可 CC BY 4.0：可自由使用和修改，需注明 %(name)s。"
+
+msgid "Seite der Vorlage"
+msgstr "模板页面"
+
+msgid "Vorlage abgelehnt"
+msgstr "模板被拒绝"
+
+msgid "Diese Datei lässt sich nicht anwenden"
+msgstr "无法应用此文件"
+
+msgid ""
+"Vorlagen von außen werden streng geprüft, damit sie keine Daten oder Seiten "
+"dieser Datenbank berühren können. Gefunden wurde:"
+msgstr "外部模板会经过严格检查，以免触及此数据库的数据或页面。发现："
+
+#, python-format
+msgid "… und %(n)s weitere."
+msgstr "…以及另外 %(n)s 项。"
 
 msgid "Zurück zu den Tabellen"
 msgstr "返回表格"
@@ -5755,123 +6075,3 @@ msgstr "必须修改"
 #, python-brace-format
 #~ msgid "z. B. {Preis} * {Menge}"
 #~ msgstr "例如 {价格} * {数量}"
-
-msgid "Ihre Rolle darf auf dem Server nicht veröffentlichen."
-msgstr "您的角色无权在服务器上发布。"
-
-msgid "Diese Veröffentlichung gibt es auf dem Server nicht."
-msgstr "服务器上没有此发布。"
-
-msgid "Auf dem Server muss zuerst jemand bestätigen, was veröffentlicht wird."
-msgstr "须先有人在服务器上确认要发布的内容。"
-
-msgid "Eine ZIP-Datei lässt sich nur auf dem Server selbst herunterladen."
-msgstr "ZIP 文件只能在服务器本身上下载。"
-
-msgid ""
-"Wartet auf Bestätigung: Auswahl oder Rolle haben sich geändert, oder die "
-"Rolle sieht jetzt mehr."
-msgstr "等待确认：所选内容或角色已更改，或该角色现在可见的内容更多。"
-
-msgid "Nur von Hand"
-msgstr "仅手动"
-
-msgid "Nach Änderungen"
-msgstr "有更改后"
-
-msgid "5 Minuten"
-msgstr "5 分钟"
-
-msgid "15 Minuten"
-msgstr "15 分钟"
-
-msgid "1 Stunde"
-msgstr "1 小时"
-
-#, python-format
-msgid "Der Abgleich mit dem Server hat nicht geklappt: %(error)s"
-msgstr "与服务器同步失败：%(error)s"
-
-msgid "Bitte zuerst bestätigen, was veröffentlicht wird."
-msgstr "请先确认要发布的内容。"
-
-msgid "Unbekannte Einstellung."
-msgstr "未知设置。"
-
-msgid "Bitte eine Uhrzeit wie 03:00 angeben."
-msgstr "请输入时间，例如 03:00。"
-
-msgid ""
-"Was veröffentlicht würde, hat sich eben geändert. Bitte noch einmal ansehen."
-msgstr "要发布的内容刚刚发生了变化。请再查看一遍。"
-
-msgid "Auf dem Server"
-msgstr "在服务器上"
-
-msgid ""
-"Diese Veröffentlichungen zeigen die Daten des Servers. „Neu veröffentlichen“ "
-"schickt zuerst die Änderungen dieses Computers an den Server. Eingerichtet "
-"und bestätigt werden sie auf dem Server."
-msgstr "这些发布显示服务器上的数据。“重新发布”会先将此电脑的更改发送到服务器。它们在服务器上设置和确认。"
-
-msgid "Veröffentlicht"
-msgstr "已发布"
-
-msgid "Auf dem Server bestätigen"
-msgstr "在服务器上确认"
-
-msgid "Der Server hat keine Veröffentlichung."
-msgstr "服务器上没有发布。"
-
-msgid ""
-"Seit der letzten Bestätigung hat sich etwas geändert. Neu dabei ist, was als "
-"„neu“ markiert ist."
-msgstr "自上次确认以来有所变化。新增内容标记为“新”。"
-
-msgid "neu"
-msgstr "新"
-
-msgid "Bestätigung nötig"
-msgstr "需要确认"
-
-msgid "Auswahl, Rolle oder was die Rolle sieht, haben sich geändert."
-msgstr "所选内容、角色或角色可见的内容已更改。"
-
-msgid "Automatisch veröffentlichen"
-msgstr "自动发布"
-
-msgid "Wenn so lange nichts mehr geändert wurde"
-msgstr "在此期间无更改时"
-
-msgid "Uhrzeit"
-msgstr "时间"
-
-msgid ""
-"Auf diesem Computer nur, solange die Datenbank geöffnet ist; danach holt sie "
-"es nach."
-msgstr "在此电脑上仅在数据库打开时进行；之后会补上。"
-
-msgid ""
-"Erst nach dem ersten Veröffentlichen von Hand. Sieht die Rolle mehr als "
-"bestätigt, wartet die Automatik auf eine neue Bestätigung."
-msgstr "仅在第一次手动发布之后。如果角色可见的内容多于已确认的内容，自动发布会等待新的确认。"
-
-msgid "Wartet"
-msgstr "等待中"
-
-#, python-format
-msgid "Nächster Versuch nicht vor %(when)s."
-msgstr "下次尝试不早于 %(when)s。"
-
-msgid ""
-"Eine ZIP-Datei lädt man selbst herunter; automatisch geht es mit einem "
-"Ordner, diesem Server, WebDAV oder FTP."
-msgstr "ZIP 文件需手动下载；自动发布适用于文件夹、此服务器、WebDAV 或 FTP。"
-
-msgid "Veröffentlichungen des Servers werden geladen …"
-msgstr "正在加载服务器的发布 …"
-
-msgid ""
-"Eine Veröffentlichung hier zeigt die Daten dieses Computers. Was der Server "
-"veröffentlicht, steht unten."
-msgstr "此处的发布显示此电脑的数据。服务器发布的内容列在下方。"

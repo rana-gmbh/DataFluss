@@ -10,7 +10,9 @@ from django.urls import resolve
 # files here, but a copy neither makes nor restores backups of its own.
 SERVER_ONLY = {"password_change", "totp_setup", "users", "user_update", "two_factor_switch", "school_settings", "school_languages", "tables_tmdb",
                "update_status", "update_request", "backup_create", "backup_upload", "backup_check", "backup_restore",
-               "backup_plan", "backup_plan_run", "backup_plan_off", "backup_transfer_check", "backup_transfer_run"}
+               "backup_plan", "backup_plan_run", "backup_plan_off", "backup_transfer_check", "backup_transfer_run",
+               # templates from datafluss.de or a file are installed on the server; the tables come by sync
+               "table_template_preview", "table_catalog_switch", "table_catalog_update"}
 
 
 class ConnectedMacMiddleware:

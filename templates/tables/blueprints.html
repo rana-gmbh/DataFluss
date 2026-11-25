@@ -4,9 +4,10 @@
 <a class="muted text-[13px] hover:underline" href="{% url 'table_list' %}">{% translate "Tabellen" %}</a>
 <h1 class="page-title mb-1 mt-1">{% translate "Vorlage hinzufügen" %}</h1>
 <p class="muted text-[13px] mb-4">{% translate "Eine Vorlage legt fertige Tabellen mit Feldern, Datensatzseiten, Druckvorlagen und Ansichten an. Danach lässt sich alles anpassen; eine neuere Version ergänzt nur, was fehlt." %}</p>
+<h2 class="font-semibold mb-2">{% translate "Mitgeliefert und angewendet" %}</h2>
 <div class="grid md:grid-cols-2 gap-4 items-start">
 {% for row in rows %}<form method="post" class="surface p-5 space-y-2">{% csrf_token %}<input type="hidden" name="template" value="{{ row.id }}">
-  <div class="flex items-center gap-2"><h2 class="font-semibold flex-1">{{ row.title }}</h2>{% if row.installed %}<span class="badge badge-accent">{% blocktranslate trimmed with n=row.installed %}Version {{ n }} angewendet{% endblocktranslate %}</span>{% endif %}</div>
+  <div class="flex items-center gap-2"><h2 class="font-semibold flex-1">{{ row.title }}</h2>{% if row.origin == "catalog" %}<span class="badge">datafluss.de</span>{% elif row.origin == "file" %}<span class="badge">{% translate "aus Datei" %}</span>{% endif %}{% if row.installed %}<span class="badge badge-accent">{% blocktranslate trimmed with n=row.installed %}Version {{ n }} angewendet{% endblocktranslate %}</span>{% endif %}</div>
   <p class="text-[13px]">{{ row.description }}</p>
   <p class="muted text-[12px]">{% translate "Tabellen" %}: {{ row.tables|join:", " }}</p>
   {% if not row.usable %}<p class="muted text-[12px]">{% translate "Braucht ein Modul, das diese Datenbank nicht nutzt." %}</p>
@@ -18,4 +19,27 @@
   {% endif %}
 </form>{% empty %}<div class="surface p-6 muted text-[13px]">{% translate "Keine Vorlagen vorhanden." %}</div>{% endfor %}
 </div>
+
+<h2 class="font-semibold mt-6 mb-1">{% translate "Von datafluss.de" %}</h2>
+<p class="muted text-[13px] mb-3">{% translate "Vorlagen, die andere geteilt haben. Jede wurde dort geprüft, und DataFluss prüft sie vor dem Anwenden noch einmal. Sie stehen unter CC BY 4.0." %}</p>
+{% if connected %}<div class="surface p-4 muted text-[13px]">{% translate "Vorlagen aus dem Katalog oder aus einer Datei werden auf dem Server installiert; die Tabellen kommen dann von selbst hierher." %}</div>
+{% elif not catalog_enabled %}<div class="surface p-4 muted text-[13px]">{% translate "Der Vorlagenkatalog ist auf diesem Server ausgeschaltet." %}</div>
+{% else %}<div hx-get="{% url 'table_catalog' %}" hx-trigger="load" hx-swap="outerHTML"><div class="surface p-4 muted text-[13px]">{% translate "Katalog wird geladen …" %}</div></div>{% endif %}
+
+{% if not connected %}
+<div class="grid md:grid-cols-2 gap-4 items-start mt-6">
+<form method="post" action="{% url 'table_template_preview' %}" enctype="multipart/form-data" class="surface p-5 space-y-2">{% csrf_token %}
+  <h2 class="font-semibold">{% translate "Aus Datei …" %}</h2>
+  <p class="muted text-[13px]">{% translate "Eine Vorlagendatei (.json), etwa von „Als Vorlage exportieren“ in einer anderen Datenbank. Sie wird streng geprüft und vor dem Anwenden gezeigt." %}</p>
+  <input class="input text-[13px] py-1.5 h-auto" type="file" name="file" accept=".json,application/json" required aria-label="{% translate 'Vorlagendatei' %}">
+  <button class="btn">{% translate "Prüfen und ansehen" %}</button>
+</form>
+{% if catalog_enabled %}<form method="post" action="{% url 'table_catalog_switch' %}" class="surface p-5 space-y-2">{% csrf_token %}
+  <h2 class="font-semibold">{% translate "Neue Versionen" %}</h2>
+  <p class="muted text-[13px]">{% translate "Ist eine Vorlage von datafluss.de angewendet, fragt DataFluss einmal am Tag dort nach einer neueren Version und zeigt sie dann an. Dabei sieht datafluss.de die Internet-Adresse dieses Servers bzw. Computers." %}</p>
+  {% if catalog_updates %}<p class="text-[13px]"><span class="badge badge-ok">{% translate "Eingeschaltet" %}</span></p><button class="btn" name="action" value="off">{% translate "Ausschalten" %}</button>
+  {% else %}<p class="text-[13px]"><span class="badge">{% translate "Ausgeschaltet" %}</span></p><button class="btn" name="action" value="on">{% translate "Einschalten" %}</button>{% endif %}
+</form>{% endif %}
+</div>
+{% endif %}
 {% endblock %}

@@ -297,6 +297,37 @@ Which fields TMDB fills is set in the template, under `look.tmdb` (see below), s
 TMDB with its own fields.
 
 
+### Templates from datafluss.de and from files
+
+**Vorlage hinzufügen …** has two more areas below the built-in templates:
+
+- **Von datafluss.de**: the templates others shared on [the template site](website.md), with author, stars and
+  downloads (the platform's own are left out there, they are the cards above). **Ansehen und anwenden** fetches
+  the file, checks that it matches the catalog's index (size and SHA-256) and checks it with the strict check for
+  templates of others (`tables/template_check.py` `check_untrusted`); then a **preview** shows its tables and
+  fields, the rights it gives, sample records, author and licence (CC BY 4.0). Only **Anwenden** applies it. When
+  the catalog cannot be reached, the area says so; everything else works as before.
+- **Aus Datei …**: a template file from anywhere, for instance from **Als Vorlage exportieren** in another
+  database. The same strict check and the same preview; a file that fails names what is wrong.
+
+Shared templates are database templates, so the same rule applies as for the built-in ones: only in a database
+without Schulverwaltung that has no other database template yet. The app's **Neue Datenbank** lists the catalog's
+templates below the built-in ones ("Von datafluss.de"); offline it simply shows none.
+
+**Where a template comes from** is noted with its tables (`Table.template` `"source": "catalog"` or `"file"`), and
+a version is only applied to tables of the same source: a file never changes a template from the catalog, and
+neither changes the platform's. The file as checked is kept (`tables.CatalogTemplate`), so applying it again or
+adding to it needs no download.
+
+**Newer versions:** once a day (on a server with the hourly nightly work, on a computer with its own database
+while it is open) DataFluss asks the catalog whether a template applied here has a newer version, only if one from
+the catalog is applied. The start page and the list of tables then say so, with what it brings, and **Ergänzen**
+fetches, checks and adds it. The switch **Neue Versionen** on the same page turns the daily question off;
+`TEMPLATE_CATALOG_URL=` (empty) switches the catalog off for a whole server (default `https://datafluss.de`).
+
+On a computer connected to a server, templates from the catalog or a file are installed on the server; the tables
+reach the computer by sync.
+
 ### Exporting tables as a template
 
 **Tabellen → Als Vorlage exportieren …** (for those who may design tables) turns chosen tables into a template

@@ -84,7 +84,19 @@ def available():
             data = _read(path)
             if data and not check(data):
                 found.setdefault(data["id"], {**data, "origin": module_id})
+    # Templates from datafluss.de or a file that were applied here (tables/catalog.py), as they were checked then.
+    from .models import CatalogTemplate
+
+    for kept in CatalogTemplate.objects.all():
+        if isinstance(kept.data, dict) and not check(kept.data):
+            found.setdefault(kept.template_id, {**kept.data, "origin": kept.source})
     return found
+
+
+def source_of(template):
+    """Where a template comes from, as Table.template notes it: None for the platform and modules, else catalog or file."""
+    origin = (template or {}).get("origin")
+    return origin if origin in ("catalog", "file") else None
 
 
 def is_database(template):
@@ -115,6 +127,14 @@ def offered(template, found=None):
         others = {tid for tid in here if is_database(found.get(tid) or {})}
         return "schulverwaltung" not in modules.active() and not others
     return True
+
+
+def database_free():
+    """Whether this database may still get a database template: no Schulverwaltung and none applied yet."""
+    from core import modules
+
+    found = available()
+    return "schulverwaltung" not in modules.active() and not any(is_database(found.get(tid) or {}) for tid in applied_ids())
 
 
 def any_offered():
@@ -155,15 +175,26 @@ def newer_versions(user):
             applied[tid] = max(version, applied.get(tid, 0))
     if not applied:
         return []
+    from .models import CatalogTemplate
+
     rows, found = [], available()
+    # The catalog names its newer versions (catalog.check_updates); "Ergänzen" fetches them, on the server only.
+    latest = {c.template_id: c for c in CatalogTemplate.objects.filter(source=CatalogTemplate.CATALOG, latest_version__isnull=False)}
     for tid, installed in sorted(applied.items()):
         template = found.get(tid)
+        if tid in latest and latest[tid].latest_version > installed:
+            changes = latest[tid].latest_changes or {}
+            template = {**(template or latest[tid].data), "version": latest[tid].latest_version, "changes": changes}
+            from_catalog = True
+        else:
+            from_catalog = False
         if template is None or template["version"] <= installed or not usable(template):
             continue
         changes = template.get("changes") or {}
         news = [i18n.pick(changes[v].get("de", ""), changes[v]) for v in sorted(changes, key=int)
                 if v.isdigit() and int(v) > installed and isinstance(changes[v], dict)]
-        rows.append({"id": tid, "title": title(template), "version": template["version"], "installed": installed, "news": " ".join(news)})
+        rows.append({"id": tid, "title": title(template), "version": template["version"], "installed": installed, "news": " ".join(news),
+                     "catalog": from_catalog})
     return rows
 
 
@@ -185,21 +216,23 @@ def _field_differs(field, spec):
             or (spec.get("options") and [o["value"] for o in field.options] != [o["value"] for o in spec["options"]]))
 
 
-def apply(data, user=None, demo=False, request=None):
+def apply(data, user=None, demo=False, request=None, source=None):
     """Creates what is missing and keeps everything else. Returns {"created", "kept", "changed"} (names).
-    A template that fails while being applied leaves nothing behind and says so, instead of an error page."""
+    A template that fails while being applied leaves nothing behind and says so, instead of an error page.
+    `source` ("catalog" or "file", tables/catalog.py) is noted in Table.template; tables of a template only take a
+    version of the same source, so a file never changes a catalog template and neither changes the platform's."""
     from django.core.exceptions import ValidationError
     from django.db import DatabaseError
 
     try:
-        return _apply(data, user, demo, request)
+        return _apply(data, user, demo, request, source)
     except ValidationError as exc:
         raise BlueprintError(_("Die Vorlage lässt sich nicht anwenden: %(problem)s") % {"problem": " ".join(exc.messages)})
     except (TypeError, KeyError, ValueError, AttributeError, DatabaseError):
         raise BlueprintError(_("Die Vorlage lässt sich nicht anwenden: Sie enthält ungültige Angaben."))
 
 
-def _apply(data, user, demo, request):
+def _apply(data, user, demo, request, source=None):
     from . import formula, services
 
     problems = check(data)
@@ -221,13 +254,15 @@ def _apply(data, user, demo, request):
                     pk=pk, key=spec["key"], name=str(spec["name"])[:100], names=i18n.clean_names(spec.get("names"), 100),
                     description=(spec.get("description") or "")[:300], icon=str(spec.get("icon") or "table")[:30], order=(order + 1) * 10,
                     in_nav=spec.get("in_nav", True), rights={k: v for k, v in (spec.get("rights") or {}).items() if v in RIGHTS},
-                    template={"id": tid, "version": data["version"]}, section=" ".join(str(spec.get("section") or "").split())[:60],
+                    template={"id": tid, "version": data["version"], **({"source": source} if source else {})}, section=" ".join(str(spec.get("section") or "").split())[:60],
                     look=spec.get("look") if isinstance(spec.get("look"), dict) else {},
                 )
                 report["created"].append(table.name)
             else:
+                if (table.template or {}).get("source") != source:
+                    raise BlueprintError(_("Die Tabelle %(name)s stammt aus einer anderen Quelle und wird nicht verändert.") % {"name": table.name})
                 report["kept"].append(table.name)
-                table.template = {"id": tid, "version": max(data["version"], (table.template or {}).get("version", 0))}
+                table.template = {"id": tid, "version": max(data["version"], (table.template or {}).get("version", 0)), **({"source": source} if source else {})}
                 if isinstance(spec.get("look"), dict):  # a newer version may bring more of the look; what is set here stays
                     table.look = _add_missing(table.look or {}, spec["look"])
                 table.save()

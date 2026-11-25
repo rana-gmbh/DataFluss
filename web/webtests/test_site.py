@@ -265,6 +265,7 @@ class ApiAndDownloadTests(SiteCase):
         self.assertEqual(index["format"], 1)
         entry = index["templates"][0]
         self.assertEqual((entry["id"], entry["version"], entry["author"], entry["license"]), ("mein_inventar", 1, "Anna", "CC-BY-4.0"))
+        self.assertEqual((entry["changes"], entry["picture"]), ({}, ""))
         answer = self.client.get(entry["url"].replace("http://127.0.0.1:8140", ""))
         self.assertEqual(hashlib.sha256(answer.content).hexdigest(), entry["sha256"])
         data = json.loads(answer.content)
@@ -274,6 +275,13 @@ class ApiAndDownloadTests(SiteCase):
         self.assertIn("attachment", download["Content-Disposition"])
         template.refresh_from_db()
         self.assertEqual(template.downloads, 2)
+
+    def test_index_names_what_a_version_brings_and_its_first_picture(self):
+        version, _problems = services.submit(self.anna, template_file(changes={"1": {"de": "Erste Fassung"}}), uploads=[png()])
+        services.approve(version, self.prue)
+        entry = self.client.get(reverse("api_index")).json()["templates"][0]
+        self.assertEqual(entry["changes"], {"1": {"de": "Erste Fassung"}})
+        self.assertTrue(entry["picture"].endswith(".webp"))
 
     def test_unpublished_and_withdrawn_are_not_handed_out(self):
         version = self.shared()

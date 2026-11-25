@@ -154,3 +154,28 @@ class Attachment(TrackedModel):
 
     class Meta:
         ordering = ["created_at"]
+
+
+class CatalogTemplate(models.Model):
+    """A template from datafluss.de or from a file, as it was checked when it was applied here (tables/catalog.py).
+    Not synced: catalog templates are installed and updated on the server or on a computer with its own database;
+    connected computers get the tables by sync. Backups carry it like every model."""
+
+    CATALOG, FILE = "catalog", "file"
+    SOURCES = [(CATALOG, "datafluss.de"), (FILE, "Datei")]
+
+    template_id = models.CharField(max_length=20, unique=True)
+    version = models.PositiveIntegerField()
+    data = models.JSONField()
+    sha256 = models.CharField(max_length=64, blank=True, default="")
+    source = models.CharField(max_length=10, choices=SOURCES)
+    author = models.CharField(max_length=100, blank=True, default="")
+    license = models.CharField(max_length=30, blank=True, default="")
+    page = models.URLField(max_length=300, blank=True, default="")
+    latest_version = models.PositiveIntegerField(null=True, blank=True)  # a newer version the catalog offers
+    latest_changes = models.JSONField(default=dict, blank=True)  # {version: {language: text}} of the catalog
+    checked_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.template_id} {self.version}"

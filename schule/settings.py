@@ -244,6 +244,9 @@ GITHUB_REPOSITORY = os.environ.get("GITHUB_REPOSITORY", "rana-gmbh/DataFluss")
 # running commit against the newest one of GITHUB_BRANCH).
 UPDATE_SOURCE = os.environ.get("UPDATE_SOURCE", "releases")
 GITHUB_BRANCH = os.environ.get("GITHUB_BRANCH", "main")
+# The template catalog (tables/catalog.py, docs/website.md): where "Von datafluss.de" and the daily check for newer
+# versions ask. Empty switches the catalog off for this server.
+TEMPLATE_CATALOG_URL = os.environ.get("TEMPLATE_CATALOG_URL", "https://datafluss.de").rstrip("/")
 GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "")
 CARD_INPUT_FORMAT = os.environ.get("CARD_INPUT_FORMAT", "hex")  # hex | dec
 REVEAL_LIMIT_PER_MINUTE = int(os.environ.get("REVEAL_LIMIT_PER_MINUTE", "30"))

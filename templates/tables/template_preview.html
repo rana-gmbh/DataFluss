@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<a class="muted text-[13px] hover:underline" href="{% url 'table_blueprints' %}">{% translate "Vorlage hinzufügen" %}</a>
+<h1 class="page-title mb-1 mt-1">{{ title }}</h1>
+<p class="muted text-[13px] mb-4">{% if source == "catalog" %}{% translate "Von datafluss.de" %}{% if details.author %} · {% blocktranslate trimmed with name=details.author %}von {{ name }}{% endblocktranslate %}{% endif %}{% else %}{% translate "Aus einer Datei" %}{% endif %} · {% blocktranslate trimmed with n=data.version %}Version {{ n }}{% endblocktranslate %}{% if installed %} · {% blocktranslate trimmed with n=installed %}hier ist Version {{ n }} angewendet{% endblocktranslate %}{% endif %}</p>
+<div class="grid lg:grid-cols-3 gap-4 items-start">
+<div class="lg:col-span-2 space-y-4">
+  {% if description %}<div class="surface p-4 text-[13px]">{{ description|linebreaksbr }}</div>{% endif %}
+  {% for table in summary.tables %}<div class="surface p-4"><h2 class="font-semibold flex items-center gap-2">{% icon table.icon 'text-[16px] text-[var(--accent)]' %}{{ table.name }}{% if table.records %} <span class="muted text-[12px]">· {% blocktranslate trimmed count n=table.records %}{{ n }} Beispieldatensatz{% plural %}{{ n }} Beispieldatensätze{% endblocktranslate %}</span>{% endif %}</h2>
+    {% if table.description %}<p class="muted text-[12px]">{{ table.description }}</p>{% endif %}
+    <table class="data-table mt-2"><tbody>{% for f in table.fields %}<tr><td>{{ f.label }}</td><td class="muted">{{ f.type_label }}{% if f.options %}: {{ f.options|join:", "|truncatechars:80 }}{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% endfor %}
+  <p class="muted text-[12px]">{% translate "Datensatzseiten" %}: {{ summary.masks|join:", "|default:"–" }} · {% translate "Druckvorlagen" %}: {{ summary.prints|join:", "|default:"–" }} · {% translate "Ansichten" %}: {{ summary.views|join:", "|default:"–" }}</p>
+</div>
+<form method="post" class="surface p-4 space-y-3">{% csrf_token %}
+  <p class="badge-ok rounded-lg px-3 py-2 text-[13px]">{% translate "Geprüft: nur Tabellen, Felder, Seiten, Drucke und Ansichten, keine Verknüpfung zu Schülern, Personal oder Geräten, kein Programmcode." %}</p>
+  {% if rights %}<div class="text-[13px]"><p class="font-semibold">{% translate "Rechte, die die Vorlage vergibt" %}</p><ul class="muted">{% for table, role, right in rights %}<li>{{ table }}: {{ role }} – {% if right == "edit" %}{% translate "bearbeiten" %}{% else %}{% translate "lesen" %}{% endif %}</li>{% endfor %}</ul><p class="muted text-[12px]">{% translate "Lassen sich danach unter Rechte ändern." %}</p></div>{% endif %}
+  {% if notes %}<ul class="text-[12px] muted list-disc pl-5">{% for n in notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
+  {% if source == "catalog" %}<p class="text-[12px] muted">{% blocktranslate trimmed with name=details.author|default:"?" %}Lizenz CC BY 4.0: frei nutzbar und veränderbar mit Nennung von {{ name }}.{% endblocktranslate %}{% if details.page %} <a class="underline" href="{{ details.page }}" target="_blank" rel="noopener noreferrer">{% translate "Seite der Vorlage" %}</a>{% endif %}</p>{% endif %}
+  {% if not may_add %}<p class="badge-bad rounded-lg px-3 py-2 text-[13px]">{% translate "Eine Datenbank-Vorlage passt nur in eine Datenbank ohne Schulverwaltung und ohne andere Datenbank-Vorlage." %}</p>
+  {% else %}
+  {% if summary.records and not installed %}<label class="flex items-center gap-2 text-[13px]"><input type="checkbox" name="demo" class="accent-[var(--accent)]">{% translate "Mit Beispieldaten" %}</label>{% endif %}
+  <button class="btn btn-primary w-full" name="action" value="apply">{% if installed %}{% translate "Ergänzen" %}{% else %}{% translate "Anwenden" %}{% endif %}</button>{% endif %}
+  <button class="btn btn-ghost w-full" name="action" value="cancel" formnovalidate>{% translate "Abbrechen" %}</button>
+</form>
+</div>
+{% endblock %}

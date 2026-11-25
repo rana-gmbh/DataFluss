@@ -87,12 +87,18 @@ Stable, under `/api/v1/`; fields are only ever added.
 
 - `GET /api/v1/vorlagen.json`: `{"format": 1, "templates": [{"id", "version", "title", "titles", "description",
   "descriptions", "category", "official", "author", "license", "rating", "ratings", "downloads", "has_demo",
-  "datafluss", "tables", "sha256", "size", "updated", "url", "page"}]}`. `datafluss` is the version of DataFluss the
-  template was exported from (empty for older files).
+  "datafluss", "tables", "sha256", "size", "updated", "url", "page", "changes", "picture"}]}`. `datafluss` is the
+  version of DataFluss the template was exported from (empty for older files); `changes` is the template's own
+  `{version: {language: text}}`, shown in DataFluss's update notice; `picture` the first screenshot or empty.
 - `GET /api/v1/vorlagen/<id>/<version>.json`: the file (counted as a download). Its SHA-256 matches the index.
 
-DataFluss 1.4 is to use this for "Vorlage hinzufügen → Von datafluss.de" and the "Neue Datenbank" wizard, always
-running `check_untrusted` itself before applying.
+DataFluss (from 1.4) uses it for "Vorlage hinzufügen → Von datafluss.de", the app's "Neue Datenbank" and the daily
+question for newer versions (`tables/catalog.py`, docs/tables.md). It accepts only the catalog's own origin over
+https, checks size and SHA-256 against the index and runs `check_untrusted` itself before applying.
+
+Who asks, and when: a DataFluss server or a computer with its own database when someone opens "Vorlage hinzufügen"
+or picks a catalog template, and once a day while a catalog template is applied there (can be switched off); the
+app when its "Neue Datenbank" wizard opens. The site logs nothing of this beyond the server's access log.
 
 ## Running it
 

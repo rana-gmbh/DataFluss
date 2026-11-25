@@ -684,7 +684,7 @@ def _strings(value):
 def notes(data):
     """Things a reviewer should look at; none of them refuses the template."""
     found = []
-    urls = sorted({m.group(0)[:80] for text in _strings({k: v for k, v in data.items() if k != "demo"}) for m in URL.finditer(text)})
+    urls = sorted({m.group(0)[:80] for text in _strings({k: v for k, v in data.items() if k not in ("demo", "catalog")}) for m in URL.finditer(text)})
     if urls:
         found.append(_("Links in Texten: %(urls)s") % {"urls": ", ".join(urls[:5])})
     demo = data.get("demo") or {}

@@ -1,0 +1,21 @@
+{% load ui i18n %}{# The catalog on datafluss.de, loaded into "Vorlage hinzufügen" (tables/views_catalog.py catalog_list). #}
+<div>
+{% if error %}<div class="surface p-4 text-[13px]"><p>{{ error }}</p><p class="muted mt-1">{% translate "Die mitgelieferten Vorlagen und „Aus Datei …“ gehen trotzdem." %}</p></div>
+{% elif not free and not rows %}<div class="surface p-4 muted text-[13px]">{% translate "Keine Vorlagen im Katalog." %}</div>
+{% else %}
+{% if not free %}<p class="muted text-[13px] mb-3">{% translate "Eine Datenbank-Vorlage ist eine Datenbank für sich: Sie passt nur in eine Datenbank ohne Schulverwaltung und ohne andere Datenbank-Vorlage. Für eine neue legen Sie in der App eine neue Datenbank an." %}</p>{% endif %}
+<div class="grid md:grid-cols-2 gap-4 items-start">
+{% for row in rows %}<form method="post" action="{% url 'table_template_preview' %}" class="surface p-5 space-y-2">{% csrf_token %}<input type="hidden" name="pick" value="{{ row.id }}">
+  <div class="flex items-start gap-2"><h3 class="font-semibold flex-1">{{ row.title }}</h3>{% if row.official %}<span class="badge badge-accent">{% translate "Offiziell" %}</span>{% endif %}</div>
+  <p class="muted text-[12px]">{{ row.author }} · {% blocktranslate trimmed with n=row.version %}Version {{ n }}{% endblocktranslate %}{% if row.ratings %} · {% stars row.rating 5 "sm" %} ({{ row.ratings }}){% endif %} · {% blocktranslate trimmed count n=row.downloads %}{{ n }} Download{% plural %}{{ n }} Downloads{% endblocktranslate %}</p>
+  {% if row.description %}<p class="text-[13px]">{{ row.description|truncatechars:220 }}</p>{% endif %}
+  {% if row.tables %}<p class="muted text-[12px]">{% translate "Tabellen" %}: {{ row.tables|join:", " }}</p>{% endif %}
+  <div class="flex flex-wrap items-center gap-2">
+  {% if row.applied and row.installed >= row.version %}<span class="badge badge-ok">{% blocktranslate trimmed with n=row.installed %}Version {{ n }} angewendet{% endblocktranslate %}</span>
+  {% elif row.applied %}<button class="btn btn-primary btn-sm">{% blocktranslate trimmed with n=row.version %}Version {{ n }} ansehen{% endblocktranslate %}</button>
+  {% elif free %}<button class="btn btn-primary btn-sm">{% translate "Ansehen und anwenden" %}</button>{% endif %}
+  {% if row.page %}<a class="btn btn-ghost btn-sm" href="{{ row.page }}" target="_blank" rel="noopener noreferrer">{% translate "Auf datafluss.de" %}</a>{% endif %}</div>
+</form>{% endfor %}
+</div>
+{% endif %}
+</div>

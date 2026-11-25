@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Schulverwaltung\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-25 16:58+0100\n"
+"POT-Creation-Date: 2026-11-25 17:42+0100\n"
 "PO-Revision-Date: 2026-11-08 12:00+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1634,6 +1634,25 @@ msgstr "Template has errors: %(error)s"
 msgid "Version %(number)s wiederhergestellt."
 msgstr "Version %(number)s restored."
 
+msgid "Ihre Rolle darf auf dem Server nicht veröffentlichen."
+msgstr "Your role may not publish on the server."
+
+msgid "Diese Veröffentlichung gibt es auf dem Server nicht."
+msgstr "This publication does not exist on the server."
+
+msgid "Auf dem Server muss zuerst jemand bestätigen, was veröffentlicht wird."
+msgstr "Someone must first confirm on the server what is published."
+
+msgid "Eine ZIP-Datei lässt sich nur auf dem Server selbst herunterladen."
+msgstr "A ZIP file can only be downloaded on the server itself."
+
+msgid ""
+"Wartet auf Bestätigung: Auswahl oder Rolle haben sich geändert, oder die "
+"Rolle sieht jetzt mehr."
+msgstr ""
+"Waiting for confirmation: the choice or the role changed, or the role now "
+"sees more."
+
 msgid "ZIP-Datei"
 msgstr "ZIP file"
 
@@ -1642,6 +1661,28 @@ msgstr "Folder"
 
 msgid "Dieser Server"
 msgstr "This server"
+
+msgid "Nur von Hand"
+msgstr "Only by hand"
+
+msgid "Nach Änderungen"
+msgstr "After changes"
+
+msgid "5 Minuten"
+msgstr "5 minutes"
+
+msgid "15 Minuten"
+msgstr "15 minutes"
+
+msgid "1 Stunde"
+msgstr "1 hour"
+
+#, python-format
+msgid "Der Abgleich mit dem Server hat nicht geklappt: %(error)s"
+msgstr "Syncing with the server did not work: %(error)s"
+
+msgid "Bitte zuerst bestätigen, was veröffentlicht wird."
+msgstr "Please first confirm what is published."
 
 msgid "Wird vorbereitet …"
 msgstr "Preparing …"
@@ -1766,6 +1807,12 @@ msgstr "Please enter a name."
 msgid "Diese Adresse ist schon vergeben."
 msgstr "This address is already taken."
 
+msgid "Unbekannte Einstellung."
+msgstr "Unknown setting."
+
+msgid "Bitte eine Uhrzeit wie 03:00 angeben."
+msgstr "Please enter a time such as 03:00."
+
 msgid "Unbekanntes Ziel."
 msgstr "Unknown target."
 
@@ -1777,6 +1824,10 @@ msgstr "The connection works and writing is possible."
 
 msgid "Es ist noch keine Tabelle ausgewählt."
 msgstr "No table is chosen yet."
+
+msgid ""
+"Was veröffentlicht würde, hat sich eben geändert. Bitte noch einmal ansehen."
+msgstr "What would be published has just changed. Please look at it again."
 
 msgid "Zurückgezogen."
 msgstr "Taken off."
@@ -1928,8 +1979,57 @@ msgid "Eine Tabelle mit der Kennung %(key)s gibt es schon."
 msgstr "A table with the ID %(key)s already exists."
 
 #, python-format
+msgid ""
+"Die Tabelle %(name)s stammt aus einer anderen Quelle und wird nicht "
+"verändert."
+msgstr "The table %(name)s comes from another source and is left unchanged."
+
+#, python-format
 msgid "Formel %(field)s: %(problem)s"
 msgstr "Formula %(field)s: %(problem)s"
+
+msgid "Diese Adresse gehört nicht zum Vorlagenkatalog."
+msgstr "This address is not part of the template catalog."
+
+msgid "Der Vorlagenkatalog leitet an eine fremde Adresse weiter."
+msgstr "The template catalog redirects to a foreign address."
+
+msgid "Diese Vorlage gibt es im Katalog nicht (mehr)."
+msgstr "This template is not (or no longer) in the catalog."
+
+#, python-format
+msgid ""
+"Der Vorlagenkatalog antwortet mit einem Fehler (%(code)s). Bitte später noch "
+"einmal versuchen."
+msgstr "The template catalog answers with an error (%(code)s). Please try again later."
+
+msgid ""
+"Der Vorlagenkatalog ist nicht erreichbar. Besteht eine Internetverbindung?"
+msgstr "The template catalog cannot be reached. Is there an internet connection?"
+
+msgid "Der Vorlagenkatalog hat zu viele Daten geschickt."
+msgstr "The template catalog sent too much data."
+
+msgid "Der Vorlagenkatalog ist auf diesem Server ausgeschaltet."
+msgstr "The template catalog is switched off on this server."
+
+msgid "Der Vorlagenkatalog hat keine lesbare Liste geschickt."
+msgstr "The template catalog did not send a readable list."
+
+msgid "Die Datei aus dem Katalog stimmt nicht mit seinem Verzeichnis überein."
+msgstr "The file from the catalog does not match its index."
+
+#, python-format
+msgid "Die Vorlage aus dem Katalog ist ungültig: %(problems)s"
+msgstr "The template from the catalog is invalid: %(problems)s"
+
+#, python-format
+msgid ""
+"Eine Vorlage mit der Kennung %(id)s stammt hier aus einer anderen Quelle."
+msgstr "A template with the key %(id)s comes from another source here."
+
+msgid "Hier ist schon die neueste Version angewendet."
+msgstr "The newest version is already applied here."
 
 msgid "Die Datei enthält keine lesbare Sammlung."
 msgstr "The file holds no readable collection."
@@ -2609,6 +2709,11 @@ msgstr ""
 
 msgid "Bitte mindestens eine Spalte übernehmen."
 msgstr "Please take over at least one column."
+
+msgid ""
+"Eine Datenbank-Vorlage passt nur in eine Datenbank ohne Schulverwaltung und "
+"ohne andere Datenbank-Vorlage."
+msgstr "A database template only fits a database without school administration and without another database template."
 
 #, python-format
 msgid "%(name)s liegt im Papierkorb."
@@ -4448,11 +4553,41 @@ msgid ""
 "PDFs werden nicht gespeichert. Protokolliert wird nur, wer was gedruckt hat."
 msgstr "PDFs are not stored. Only who printed what is logged."
 
+msgid "Auf dem Server"
+msgstr "On the server"
+
+msgid ""
+"Diese Veröffentlichungen zeigen die Daten des Servers. „Neu veröffentlichen“ "
+"schickt zuerst die Änderungen dieses Computers an den Server. Eingerichtet "
+"und bestätigt werden sie auf dem Server."
+msgstr ""
+"These publications show the server's data. “Publish again” first sends this "
+"computer's changes to the server. They are set up and confirmed on the "
+"server."
+
+msgid "Ziel"
+msgstr "Target"
+
 msgid "Läuft"
 msgstr "Running"
 
 msgid "Fehlgeschlagen"
 msgstr "Failed"
+
+msgid "Veröffentlicht"
+msgstr "Published"
+
+msgid "Noch nicht veröffentlicht"
+msgstr "Not published yet"
+
+msgid "Auf dem Server bestätigen"
+msgstr "Confirm on the server"
+
+msgid "Neu veröffentlichen"
+msgstr "Publish again"
+
+msgid "Der Server hat keine Veröffentlichung."
+msgstr "The server has no publication."
 
 msgid "Fertig"
 msgstr "Done"
@@ -4490,6 +4625,15 @@ msgstr[0] ""
 msgstr[1] ""
 "%(n)s records, as the role “%(role)s” sees them, with pictures; target: "
 "%(target)s."
+
+msgid ""
+"Seit der letzten Bestätigung hat sich etwas geändert. Neu dabei ist, was als "
+"„neu“ markiert ist."
+msgstr ""
+"Something changed since the last confirmation. What is new is marked “new”."
+
+msgid "neu"
+msgstr "new"
 
 msgid "Nichts: Die Rolle darf keine der gewählten Tabellen lesen."
 msgstr "Nothing: the role may not read any of the chosen tables."
@@ -4550,9 +4694,6 @@ msgstr ""
 
 msgid "Inhalt speichern"
 msgstr "Save content"
-
-msgid "Ziel"
-msgstr "Target"
 
 msgid ""
 "Die ganze Website als ZIP-Datei zum Herunterladen, zum Beispiel für einen "
@@ -4625,6 +4766,12 @@ msgstr "Search engines may list the website"
 msgid "Einstellungen speichern"
 msgstr "Save settings"
 
+msgid "Bestätigung nötig"
+msgstr "Confirmation needed"
+
+msgid "Auswahl, Rolle oder was die Rolle sieht, haben sich geändert."
+msgstr "The choice, the role or what the role sees has changed."
+
 msgid "Vorschau erstellen"
 msgstr "Create preview"
 
@@ -4634,14 +4781,47 @@ msgstr "Open preview"
 msgid "Veröffentlichen …"
 msgstr "Publish …"
 
-msgid "Neu veröffentlichen"
-msgstr "Publish again"
-
 msgid "ZIP herunterladen"
 msgstr "Download ZIP"
 
 msgid "Zuerst unter „Inhalt“ mindestens eine Tabelle wählen."
 msgstr "First choose at least one table under “Inhalt”."
+
+msgid "Automatisch veröffentlichen"
+msgstr "Publish automatically"
+
+msgid "Wenn so lange nichts mehr geändert wurde"
+msgstr "When nothing has changed for"
+
+msgid "Uhrzeit"
+msgstr "Time"
+
+msgid ""
+"Auf diesem Computer nur, solange die Datenbank geöffnet ist; danach holt sie "
+"es nach."
+msgstr ""
+"On this computer only while the database is open; it catches up afterwards."
+
+msgid ""
+"Erst nach dem ersten Veröffentlichen von Hand. Sieht die Rolle mehr als "
+"bestätigt, wartet die Automatik auf eine neue Bestätigung."
+msgstr ""
+"Only after the first publish by hand. If the role sees more than was "
+"confirmed, it waits for a new confirmation."
+
+msgid "Wartet"
+msgstr "Waiting"
+
+#, python-format
+msgid "Nächster Versuch nicht vor %(when)s."
+msgstr "Next attempt not before %(when)s."
+
+msgid ""
+"Eine ZIP-Datei lädt man selbst herunter; automatisch geht es mit einem "
+"Ordner, diesem Server, WebDAV oder FTP."
+msgstr ""
+"A ZIP file is downloaded by hand; automatic publishing works with a folder, "
+"this server, WebDAV or FTP."
 
 msgid "Zurückziehen und löschen"
 msgstr "Take off and delete"
@@ -4666,6 +4846,9 @@ msgstr "Delete this publication? The website is removed from this server."
 msgid "Veröffentlichung löschen"
 msgstr "Delete publication"
 
+msgid "Veröffentlichungen des Servers werden geladen …"
+msgstr "Loading the server's publications …"
+
 msgid "Zurück zu den Einstellungen"
 msgstr "Back to the settings"
 
@@ -4679,14 +4862,18 @@ msgstr ""
 "pages and search, but without adding or changing anything. You keep making "
 "changes here; “Publish” then sends only what changed."
 
-msgid "Noch nicht veröffentlicht"
-msgstr "Not published yet"
-
 msgid "Noch keine Veröffentlichung."
 msgstr "No publication yet."
 
 msgid "Neue Veröffentlichung"
 msgstr "New publication"
+
+msgid ""
+"Eine Veröffentlichung hier zeigt die Daten dieses Computers. Was der Server "
+"veröffentlicht, steht unten."
+msgstr ""
+"A publication here shows this computer's data. What the server publishes is "
+"listed below."
 
 msgid "z. B. Unsere Filmsammlung"
 msgstr "e.g. Our film collection"
@@ -4840,6 +5027,45 @@ msgstr "For this, please open the school administration in your browser."
 
 msgid "Verknüpft in eigenen Tabellen"
 msgstr "Linked in own tables"
+
+msgid "Die mitgelieferten Vorlagen und „Aus Datei …“ gehen trotzdem."
+msgstr "The built-in templates and “From file …” still work."
+
+msgid "Keine Vorlagen im Katalog."
+msgstr "No templates in the catalog."
+
+msgid ""
+"Eine Datenbank-Vorlage ist eine Datenbank für sich: Sie passt nur in eine "
+"Datenbank ohne Schulverwaltung und ohne andere Datenbank-Vorlage. Für eine "
+"neue legen Sie in der App eine neue Datenbank an."
+msgstr "A database template is a database of its own: it only fits a database without school administration and without another database template. For a new one, create a new database in the app."
+
+msgid "Offiziell"
+msgstr "Official"
+
+#, python-format
+msgid "Version %(n)s"
+msgstr "Version %(n)s"
+
+#, python-format
+msgid "%(n)s Download"
+msgid_plural "%(n)s Downloads"
+msgstr[0] "%(n)s download"
+msgstr[1] "%(n)s downloads"
+
+#, python-format
+msgid "Version %(n)s angewendet"
+msgstr "Version %(n)s applied"
+
+#, python-format
+msgid "Version %(n)s ansehen"
+msgstr "View version %(n)s"
+
+msgid "Ansehen und anwenden"
+msgstr "View and apply"
+
+msgid "Auf datafluss.de"
+msgstr "On datafluss.de"
 
 #, python-format
 msgid "%(name)s entfernen?"
@@ -5035,9 +5261,11 @@ msgstr ""
 "templates and views. Everything can be changed afterwards; a newer version "
 "only adds what is missing."
 
-#, python-format
-msgid "Version %(n)s angewendet"
-msgstr "Version %(n)s applied"
+msgid "Mitgeliefert und angewendet"
+msgstr "Built in and applied"
+
+msgid "aus Datei"
+msgstr "from file"
 
 msgid "Braucht ein Modul, das diese Datenbank nicht nutzt."
 msgstr "Needs a module this database does not use."
@@ -5057,6 +5285,45 @@ msgstr "Apply again (adds what is missing)"
 
 msgid "Keine Vorlagen vorhanden."
 msgstr "No templates available."
+
+msgid "Von datafluss.de"
+msgstr "From datafluss.de"
+
+msgid ""
+"Vorlagen, die andere geteilt haben. Jede wurde dort geprüft, und DataFluss "
+"prüft sie vor dem Anwenden noch einmal. Sie stehen unter CC BY 4.0."
+msgstr "Templates others have shared. Each was checked there, and DataFluss checks it again before applying it. They are licensed CC BY 4.0."
+
+msgid ""
+"Vorlagen aus dem Katalog oder aus einer Datei werden auf dem Server "
+"installiert; die Tabellen kommen dann von selbst hierher."
+msgstr "Templates from the catalog or from a file are installed on the server; the tables then come here by themselves."
+
+msgid "Katalog wird geladen …"
+msgstr "Loading catalog …"
+
+msgid "Aus Datei …"
+msgstr "From file …"
+
+msgid ""
+"Eine Vorlagendatei (.json), etwa von „Als Vorlage exportieren“ in einer "
+"anderen Datenbank. Sie wird streng geprüft und vor dem Anwenden gezeigt."
+msgstr "A template file (.json), for example from “Export as template” in another database. It is checked strictly and shown before it is applied."
+
+msgid "Vorlagendatei"
+msgstr "Template file"
+
+msgid "Prüfen und ansehen"
+msgstr "Check and view"
+
+msgid "Neue Versionen"
+msgstr "New versions"
+
+msgid ""
+"Ist eine Vorlage von datafluss.de angewendet, fragt DataFluss einmal am Tag "
+"dort nach einer neueren Version und zeigt sie dann an. Dabei sieht "
+"datafluss.de die Internet-Adresse dieses Servers bzw. Computers."
+msgstr "When a template from datafluss.de is applied, DataFluss asks there once a day for a newer version and then shows it. datafluss.de sees the internet address of this server or computer when it does."
 
 msgid "Sammlung übernehmen"
 msgstr "Import collection"
@@ -5184,7 +5451,11 @@ msgid ""
 "datafluss.de teilen oder in einer anderen Datenbank anwenden. Verknüpfungen "
 "zu Tabellen, die nicht dabei sind, und zu Schülern, Personal oder Geräten "
 "bleiben weg."
-msgstr "The chosen tables become a template file: with fields, record pages, printouts and shared views. It can be shared on datafluss.de or applied in another database. Links to tables that are not included, and to pupils, staff or devices, are left out."
+msgstr ""
+"The chosen tables become a template file: with fields, record pages, "
+"printouts and shared views. It can be shared on datafluss.de or applied in "
+"another database. Links to tables that are not included, and to pupils, "
+"staff or devices, are left out."
 
 msgid "So lässt sich das nicht exportieren:"
 msgstr "This cannot be exported like this:"
@@ -5201,7 +5472,9 @@ msgstr "from the title"
 msgid ""
 "Kleinbuchstaben, Ziffern und _, bis 20 Zeichen. Sie bleibt für alle "
 "Versionen gleich."
-msgstr "Lower-case letters, digits and _, up to 20 characters. It stays the same for all versions."
+msgstr ""
+"Lower-case letters, digits and _, up to 20 characters. It stays the same for "
+"all versions."
 
 #, python-format
 msgid "Bis zu %(n)s Datensätze je Tabelle als Beispieldaten mitnehmen"
@@ -5211,7 +5484,10 @@ msgid ""
 "Ohne Dateien, Bilder und Geheimfelder. Vorsicht: Beim Teilen sieht jeder "
 "diese Daten – nur erfundene Beispiele, keine echten Namen, Adressen oder "
 "Telefonnummern."
-msgstr "Without files, pictures and secret fields. Careful: when shared, everyone sees this data – only made-up examples, no real names, addresses or phone numbers."
+msgstr ""
+"Without files, pictures and secret fields. Careful: when shared, everyone "
+"sees this data – only made-up examples, no real names, addresses or phone "
+"numbers."
 
 msgid "Vorlage herunterladen"
 msgstr "Download template"
@@ -5463,10 +5739,6 @@ msgstr ""
 "Arrange the fields in tabs and sections in the mask designer. Fields not "
 "placed in the mask appear at the bottom under “More fields”."
 
-#, python-format
-msgid "Version %(n)s"
-msgstr "Version %(n)s"
-
 msgid ""
 "Noch keine eigene Gestaltung: Die Seite zeigt alle Felder untereinander."
 msgstr ""
@@ -5580,6 +5852,69 @@ msgstr "None"
 
 msgid "Legen Sie zuerst ein Feld vom Typ Bild an, etwa „Foto“ oder „Cover“."
 msgstr "First create a field of type picture, such as “Photo” or “Cover”."
+
+#, python-format
+msgid "von %(name)s"
+msgstr "by %(name)s"
+
+msgid "Aus einer Datei"
+msgstr "From a file"
+
+#, python-format
+msgid "hier ist Version %(n)s angewendet"
+msgstr "version %(n)s is applied here"
+
+#, python-format
+msgid "%(n)s Beispieldatensatz"
+msgid_plural "%(n)s Beispieldatensätze"
+msgstr[0] "%(n)s sample record"
+msgstr[1] "%(n)s sample records"
+
+msgid "Datensatzseiten"
+msgstr "Record pages"
+
+msgid "Ansichten"
+msgstr "Views"
+
+msgid ""
+"Geprüft: nur Tabellen, Felder, Seiten, Drucke und Ansichten, keine "
+"Verknüpfung zu Schülern, Personal oder Geräten, kein Programmcode."
+msgstr "Checked: only tables, fields, pages, printouts and views, no links to pupils, staff or devices, no program code."
+
+msgid "Rechte, die die Vorlage vergibt"
+msgstr "Rights the template gives"
+
+msgid "bearbeiten"
+msgstr "edit"
+
+msgid "lesen"
+msgstr "read"
+
+msgid "Lassen sich danach unter Rechte ändern."
+msgstr "Can be changed under Rights afterwards."
+
+#, python-format
+msgid ""
+"Lizenz CC BY 4.0: frei nutzbar und veränderbar mit Nennung von %(name)s."
+msgstr "Licence CC BY 4.0: free to use and change, crediting %(name)s."
+
+msgid "Seite der Vorlage"
+msgstr "Template page"
+
+msgid "Vorlage abgelehnt"
+msgstr "Template refused"
+
+msgid "Diese Datei lässt sich nicht anwenden"
+msgstr "This file cannot be applied"
+
+msgid ""
+"Vorlagen von außen werden streng geprüft, damit sie keine Daten oder Seiten "
+"dieser Datenbank berühren können. Gefunden wurde:"
+msgstr "Templates from outside are checked strictly, so that they cannot touch data or pages of this database. Found:"
+
+#, python-format
+msgid "… und %(n)s weitere."
+msgstr "… and %(n)s more."
 
 msgid "Zurück zu den Tabellen"
 msgstr "Back to the tables"
@@ -5969,136 +6304,3 @@ msgstr "Must be changed"
 #, python-brace-format
 #~ msgid "z. B. {Preis} * {Menge}"
 #~ msgstr "e.g. {Price} * {Quantity}"
-
-msgid "Ihre Rolle darf auf dem Server nicht veröffentlichen."
-msgstr "Your role may not publish on the server."
-
-msgid "Diese Veröffentlichung gibt es auf dem Server nicht."
-msgstr "This publication does not exist on the server."
-
-msgid "Auf dem Server muss zuerst jemand bestätigen, was veröffentlicht wird."
-msgstr "Someone must first confirm on the server what is published."
-
-msgid "Eine ZIP-Datei lässt sich nur auf dem Server selbst herunterladen."
-msgstr "A ZIP file can only be downloaded on the server itself."
-
-msgid ""
-"Wartet auf Bestätigung: Auswahl oder Rolle haben sich geändert, oder die "
-"Rolle sieht jetzt mehr."
-msgstr ""
-"Waiting for confirmation: the choice or the role changed, or the role now "
-"sees more."
-
-msgid "Nur von Hand"
-msgstr "Only by hand"
-
-msgid "Nach Änderungen"
-msgstr "After changes"
-
-msgid "5 Minuten"
-msgstr "5 minutes"
-
-msgid "15 Minuten"
-msgstr "15 minutes"
-
-msgid "1 Stunde"
-msgstr "1 hour"
-
-#, python-format
-msgid "Der Abgleich mit dem Server hat nicht geklappt: %(error)s"
-msgstr "Syncing with the server did not work: %(error)s"
-
-msgid "Bitte zuerst bestätigen, was veröffentlicht wird."
-msgstr "Please first confirm what is published."
-
-msgid "Unbekannte Einstellung."
-msgstr "Unknown setting."
-
-msgid "Bitte eine Uhrzeit wie 03:00 angeben."
-msgstr "Please enter a time such as 03:00."
-
-msgid ""
-"Was veröffentlicht würde, hat sich eben geändert. Bitte noch einmal ansehen."
-msgstr "What would be published has just changed. Please look at it again."
-
-msgid "Auf dem Server"
-msgstr "On the server"
-
-msgid ""
-"Diese Veröffentlichungen zeigen die Daten des Servers. „Neu veröffentlichen“ "
-"schickt zuerst die Änderungen dieses Computers an den Server. Eingerichtet "
-"und bestätigt werden sie auf dem Server."
-msgstr ""
-"These publications show the server's data. “Publish again” first sends this "
-"computer's changes to the server. They are set up and confirmed on the "
-"server."
-
-msgid "Veröffentlicht"
-msgstr "Published"
-
-msgid "Auf dem Server bestätigen"
-msgstr "Confirm on the server"
-
-msgid "Der Server hat keine Veröffentlichung."
-msgstr "The server has no publication."
-
-msgid ""
-"Seit der letzten Bestätigung hat sich etwas geändert. Neu dabei ist, was als "
-"„neu“ markiert ist."
-msgstr ""
-"Something changed since the last confirmation. What is new is marked “new”."
-
-msgid "neu"
-msgstr "new"
-
-msgid "Bestätigung nötig"
-msgstr "Confirmation needed"
-
-msgid "Auswahl, Rolle oder was die Rolle sieht, haben sich geändert."
-msgstr "The choice, the role or what the role sees has changed."
-
-msgid "Automatisch veröffentlichen"
-msgstr "Publish automatically"
-
-msgid "Wenn so lange nichts mehr geändert wurde"
-msgstr "When nothing has changed for"
-
-msgid "Uhrzeit"
-msgstr "Time"
-
-msgid ""
-"Auf diesem Computer nur, solange die Datenbank geöffnet ist; danach holt sie "
-"es nach."
-msgstr ""
-"On this computer only while the database is open; it catches up afterwards."
-
-msgid ""
-"Erst nach dem ersten Veröffentlichen von Hand. Sieht die Rolle mehr als "
-"bestätigt, wartet die Automatik auf eine neue Bestätigung."
-msgstr ""
-"Only after the first publish by hand. If the role sees more than was "
-"confirmed, it waits for a new confirmation."
-
-msgid "Wartet"
-msgstr "Waiting"
-
-#, python-format
-msgid "Nächster Versuch nicht vor %(when)s."
-msgstr "Next attempt not before %(when)s."
-
-msgid ""
-"Eine ZIP-Datei lädt man selbst herunter; automatisch geht es mit einem "
-"Ordner, diesem Server, WebDAV oder FTP."
-msgstr ""
-"A ZIP file is downloaded by hand; automatic publishing works with a folder, "
-"this server, WebDAV or FTP."
-
-msgid "Veröffentlichungen des Servers werden geladen …"
-msgstr "Loading the server's publications …"
-
-msgid ""
-"Eine Veröffentlichung hier zeigt die Daten dieses Computers. Was der Server "
-"veröffentlicht, steht unten."
-msgstr ""
-"A publication here shows this computer's data. What the server publishes is "
-"listed below."

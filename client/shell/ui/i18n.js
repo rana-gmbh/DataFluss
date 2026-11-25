@@ -174,6 +174,11 @@ window.I18N = (() => {
     "Datenbank wird eingerichtet": ["Setting up the database", "正在设置数据库", "正在設定資料庫"],
     "Beispieldaten werden angelegt": ["Creating sample data", "正在创建示例数据", "正在建立範例資料"],
     "Vorlage wird angewendet": ["Applying template", "正在应用模板", "正在套用範本"],
+    "Vorlage wird geladen": ["Loading template", "正在加载模板", "正在載入範本"],
+    "Von datafluss.de": ["From datafluss.de", "来自 datafluss.de", "來自 datafluss.de"],
+    "(geteilt und geprüft, CC BY 4.0)": ["(shared and checked, CC BY 4.0)", "（共享并经审核，CC BY 4.0）", "（共享並經審核，CC BY 4.0）"],
+    "Diese Vorlage gibt es im Katalog nicht (mehr).": ["This template is not (or no longer) in the catalog.", "目录中没有（或不再有）此模板。", "目錄中沒有（或不再有）此範本。"],
+    "Der Vorlagenkatalog ist nicht erreichbar. Besteht eine Internetverbindung?": ["The template catalog cannot be reached. Is there an internet connection?", "无法访问模板目录。是否已连接互联网？", "無法連線範本目錄。是否已連上網際網路？"],
     "Zugangsdaten werden entfernt": ["Removing logins", "正在删除账号信息", "正在刪除帳號資訊"],
   };
   const COLUMN = { en: 0, "zh-hans": 1, "zh-hant": 2 };

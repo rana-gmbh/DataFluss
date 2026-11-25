@@ -653,9 +653,9 @@ async fn create_with_task(app: &AppHandle, name: &str, kind: &str, task: &str, d
 }
 
 #[tauri::command]
-async fn create_database(app: AppHandle, window: WebviewWindow, name: String, school: String, username: String, password: String, modules: Option<Vec<String>>, without: Option<Vec<String>>, templates: Option<Vec<String>>) -> Result<String, String> {
+async fn create_database(app: AppHandle, window: WebviewWindow, name: String, school: String, username: String, password: String, modules: Option<Vec<String>>, without: Option<Vec<String>>, templates: Option<Vec<String>>, catalog: Option<Value>) -> Result<String, String> {
     from_launcher(&window)?;
-    let data = json!({"school": school, "username": username, "password": password, "modules": modules, "without": without, "templates": templates});
+    let data = json!({"school": school, "username": username, "password": password, "modules": modules, "without": without, "templates": templates, "catalog": catalog});
     let (node, _) = create_with_task(&app, &name, "local", "create", data).await?;
     Ok(node.id)
 }
@@ -663,11 +663,11 @@ async fn create_database(app: AppHandle, window: WebviewWindow, name: String, sc
 /// A demo with the optional modules picked in the wizard; without a pick (the start screen's
 /// "Mit erfundenen Daten ausprobieren"), with the basic modules only.
 #[tauri::command]
-async fn create_demo(app: AppHandle, window: WebviewWindow, name: Option<String>, modules: Option<Vec<String>>, without: Option<Vec<String>>, templates: Option<Vec<String>>) -> Result<Value, String> {
+async fn create_demo(app: AppHandle, window: WebviewWindow, name: Option<String>, modules: Option<Vec<String>>, without: Option<Vec<String>>, templates: Option<Vec<String>>, catalog: Option<Value>) -> Result<Value, String> {
     from_launcher(&window)?;
     let name = name.filter(|n| !n.trim().is_empty()).unwrap_or_else(|| "Demo".into());
     let modules = modules.unwrap_or_default();
-    let data = json!({"modules": modules, "without": without.unwrap_or_default(), "templates": templates.unwrap_or_default()});
+    let data = json!({"modules": modules, "without": without.unwrap_or_default(), "templates": templates.unwrap_or_default(), "catalog": catalog});
     let (node, result) = create_with_task(&app, &name, "demo", "demo", data).await?;
     Ok(json!({"id": node.id, "logins": result["logins"]}))
 }
@@ -753,6 +753,52 @@ fn available_templates(app: AppHandle, window: WebviewWindow) -> Result<Vec<Valu
         }
     }
     Ok(found)
+}
+
+/// The template catalog of datafluss.de for the wizard (tables/catalog.py). The sidecar fetches and checks the list in
+/// a short run without a database (`--catalog-index`); offline or slow (20 s), the wizard simply shows none.
+#[tauri::command]
+async fn catalog_templates(app: AppHandle, window: WebviewWindow) -> Result<Vec<Value>, String> {
+    from_launcher(&window)?;
+    let program = sidecar_program(&app)?;
+    let output = tauri::async_runtime::spawn_blocking(move || -> Result<Vec<u8>, String> {
+        use std::io::Read;
+        use std::process::{Command, Stdio};
+        let mut command = Command::new(&program);
+        command.arg("--catalog-index").stdin(Stdio::null()).stdout(Stdio::piped()).stderr(Stdio::null());
+        #[cfg(windows)]
+        {
+            use std::os::windows::process::CommandExt;
+            command.creation_flags(0x0800_0000); // CREATE_NO_WINDOW
+        }
+        let mut child = command.spawn().map_err(|e| e.to_string())?;
+        let mut stdout = child.stdout.take().ok_or("no output")?;
+        let reader = std::thread::spawn(move || {
+            let mut body = Vec::new();
+            let _ = stdout.by_ref().take(4 * 1024 * 1024).read_to_end(&mut body);
+            body
+        });
+        let started = std::time::Instant::now();
+        loop {
+            if child.try_wait().map_err(|e| e.to_string())?.is_some() {
+                break;
+            }
+            if started.elapsed() > std::time::Duration::from_secs(20) {
+                let _ = child.kill();
+                let _ = child.wait();
+                return Err("Der Vorlagenkatalog antwortet nicht.".into());
+            }
+            std::thread::sleep(std::time::Duration::from_millis(100));
+        }
+        reader.join().map_err(|_| "no output".to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())??;
+    let answer: Value = serde_json::from_slice(&output).map_err(|_| "Der Vorlagenkatalog hat keine lesbare Liste geschickt.".to_string())?;
+    if let Some(error) = answer["error"].as_str() {
+        return Err(error.to_string());
+    }
+    Ok(answer["templates"].as_array().cloned().unwrap_or_default())
 }
 
 #[tauri::command]
@@ -1125,6 +1171,7 @@ fn main() {
             install_module,
             available_modules,
             available_templates,
+            catalog_templates,
             welcome_seen,
             welcome_done,
             open_db,

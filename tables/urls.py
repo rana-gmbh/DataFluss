@@ -1,11 +1,15 @@
 from django.urls import path
 
-from . import views, views_collection as films, views_records as records, views_tmdb as tmdb
+from . import views, views_catalog as catalog_views, views_collection as films, views_records as records, views_tmdb as tmdb
 
 urlpatterns = [
     path("einstellungen/tabellen/", views.table_list, name="table_list"),
     path("einstellungen/tabellen/vorlagen/", views.table_blueprints, name="table_blueprints"),
     path("einstellungen/tabellen/vorlagen/exportieren/", views.table_export, name="table_export"),
+    path("einstellungen/tabellen/vorlagen/katalog/", catalog_views.catalog_list, name="table_catalog"),
+    path("einstellungen/tabellen/vorlagen/vorschau/", catalog_views.template_preview, name="table_template_preview"),
+    path("einstellungen/tabellen/vorlagen/katalog/schalter/", catalog_views.catalog_switch, name="table_catalog_switch"),
+    path("einstellungen/tabellen/vorlagen/katalog/<slug:template_id>/ergaenzen/", catalog_views.catalog_update, name="table_catalog_update"),
     path("einstellungen/tabellen/tmdb/", tmdb.tmdb_settings, name="tables_tmdb"),
     path("einstellungen/tabellen/tmdb/testen/", tmdb.tmdb_test, name="tables_tmdb_test"),
     path("einstellungen/tabellen/aus-datei/", views.table_from_file, name="table_from_file"),

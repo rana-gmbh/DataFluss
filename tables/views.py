@@ -274,7 +274,8 @@ def table_blueprints(request):
             messages.error(request, _("Diese Vorlage gibt es nicht."))
             return redirect("table_blueprints")
         try:
-            report = blueprints.apply(template, request.user, demo=bool(request.POST.get("demo")), request=request)
+            report = blueprints.apply(template, request.user, demo=bool(request.POST.get("demo")), request=request,
+                                      source=blueprints.source_of(template))
         except blueprints.BlueprintError as exc:
             messages.error(request, str(exc))
             return redirect("table_blueprints")
@@ -289,8 +290,14 @@ def table_blueprints(request):
         installed = blueprints.installed_version(template["id"])
         rows.append({"id": template["id"], "title": blueprints.title(template), "description": blueprints.description(template),
                      "version": template["version"], "installed": installed, "usable": blueprints.usable(template),
-                     "tables": [i18n.pick(t["name"], t.get("names")) for t in template["tables"]], "has_demo": bool(template.get("demo"))})
-    return render(request, "tables/blueprints.html", {"rows": rows, "active_nav": "settings_home"})
+                     "tables": [i18n.pick(t["name"], t.get("names")) for t in template["tables"]], "has_demo": bool(template.get("demo")),
+                     "origin": blueprints.source_of(template)})
+    from archive import plan
+
+    from . import catalog
+
+    return render(request, "tables/blueprints.html", {"rows": rows, "active_nav": "settings_home", "connected": plan.is_connected(),
+                                                      "catalog_enabled": catalog.enabled(), "catalog_updates": SchoolSettings.load().catalog_updates})
 
 
 @require("tables.design")

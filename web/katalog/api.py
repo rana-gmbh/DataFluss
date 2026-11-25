@@ -10,9 +10,14 @@ from .models import LICENSE, Template, Version
 from .views import _file, listed
 
 
+def _picture(version):
+    first = version.pictures.first()
+    return settings.SITE_URL + reverse("picture", args=[first.uid]) if first else ""
+
+
 def index(request):
     rows = []
-    for template in listed().order_by("key"):
+    for template in listed().prefetch_related("published__pictures").order_by("key"):
         version, data = template.published, template.published.data
         rows.append({
             "id": template.key, "version": version.number, "title": data.get("title", ""), "titles": data.get("titles") or {},
@@ -20,6 +25,8 @@ def index(request):
             "category": template.category, "official": template.official, "author": template.author, "license": LICENSE,
             "rating": float(template.rating), "ratings": template.ratings, "downloads": template.downloads,
             "has_demo": bool(data.get("demo")), "datafluss": data.get("datafluss", ""),
+            "changes": data.get("changes") if isinstance(data.get("changes"), dict) else {},
+            "picture": _picture(version),
             "tables": [t.get("name", "") for t in data.get("tables", [])],
             "sha256": version.sha256, "size": len(services.file_bytes(version)), "updated": template.updated.isoformat(),
             "url": settings.SITE_URL + reverse("api_file", args=[template.key, version.number]),

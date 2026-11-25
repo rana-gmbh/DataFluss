@@ -174,12 +174,15 @@ def _apply_templates(data, progress, user, demo):
     from tables import blueprints
 
     wanted = [t for t in (data.get("templates") or []) if isinstance(t, str)]
-    if not wanted:
+    chosen = data.get("catalog") if isinstance(data.get("catalog"), dict) and isinstance(data["catalog"].get("id"), str) else None
+    if not wanted and not chosen:
         return
     found = blueprints.available()
-    databases = [t for t in wanted if blueprints.is_database(found.get(t) or {})]
+    databases = [t for t in wanted if blueprints.is_database(found.get(t) or {})] + ([chosen["id"]] if chosen else [])
     if databases and (len(databases) > 1 or "schulverwaltung" not in (data.get("without") or [])):
         raise TaskError("Eine Datenbank-Vorlage ist eine Datenbank für sich: ohne Schulverwaltung und ohne weitere Vorlage.")
+    if chosen:
+        _apply_catalog(chosen["id"], progress, user, demo)
     for template_id in wanted:
         template = found.get(template_id)
         if template is None:
@@ -189,6 +192,23 @@ def _apply_templates(data, progress, user, demo):
             blueprints.apply(template, user, demo=demo)
         except blueprints.BlueprintError as exc:
             raise TaskError(str(exc))
+
+
+def _apply_catalog(template_id, progress, user, demo):
+    """A template from datafluss.de, chosen in the wizard: fetched, checked against the catalog's index and with the
+    strict check (tables/catalog.py), then applied like the built-in ones."""
+    from tables import blueprints, catalog
+
+    progress("Vorlage wird geladen")
+    try:
+        item = catalog.entry(template_id)
+        if item is None:
+            raise catalog.CatalogError("Diese Vorlage gibt es im Katalog nicht (mehr).")
+        template = catalog.fetch(item)
+        progress("Vorlage wird angewendet")
+        catalog.install(template, "catalog", user, demo=demo, details=catalog.info(item))
+    except (catalog.CatalogError, blueprints.BlueprintError) as exc:
+        raise TaskError(str(exc))
 
 
 def _task_demo(data, progress, db_dir):
@@ -407,7 +427,28 @@ def _fetch_missing(missing):
         return str(exc)
 
 
+def _catalog_index():
+    """`--catalog-index`: the list of datafluss.de for the "Neue Datenbank" wizard, before any database exists.
+    Writes {"templates": [...]} or {"error": "..."} as JSON to stdout and ends; no database, no frames."""
+    from django.conf import settings
+
+    # Messages stay German here: translations need Django's app registry, which this short run does not load.
+    settings.configure(USE_I18N=False, DEBUG=os.environ.get("DEBUG") == "1",  # DEBUG: a catalog on this computer over http
+                       TEMPLATE_CATALOG_URL=os.environ.get("TEMPLATE_CATALOG_URL", "https://datafluss.de"))
+    from tables import catalog
+
+    try:
+        answer = {"templates": catalog.index(cache=False)}
+    except catalog.CatalogError as exc:
+        answer = {"error": str(exc)}
+    sys.stdout.write(json.dumps(answer, ensure_ascii=False))
+    sys.stdout.flush()
+
+
 def main():
+    if sys.argv[1:2] == ["--catalog-index"]:
+        _catalog_index()
+        return
     # Only frames may reach the shell. Anything printed by mistake goes to stderr instead.
     frames_out = os.fdopen(os.dup(1), "wb", buffering=0)
     os.dup2(2, 1)

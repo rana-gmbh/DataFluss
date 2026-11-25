@@ -273,6 +273,9 @@ class SchoolSettings(models.Model):
     modules_off = models.JSONField(default=list, blank=True)
     # The database's own key for themoviedb.org (tables/tmdb.py), encrypted like a secret field. Empty: none.
     tmdb_key = models.TextField(blank=True, default="", db_default="")
+    # Whether the server (or a computer with its own database) asks datafluss.de once a day for newer versions of
+    # the catalog templates applied here (tables/catalog.py check_updates).
+    catalog_updates = models.BooleanField(default=True, db_default=True)
 
     class Meta:
         verbose_name = "Schuleinstellungen"

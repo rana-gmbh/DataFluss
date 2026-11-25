@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% load ui i18n %}
+{% block title %}{% translate "Vorlage abgelehnt" %}{% endblock %}
+{% block content %}
+<a class="muted text-[13px] hover:underline" href="{% url 'table_blueprints' %}">{% translate "Vorlage hinzufügen" %}</a>
+<h1 class="page-title mb-1 mt-1">{% translate "Diese Datei lässt sich nicht anwenden" %}</h1>
+<div class="surface p-5 max-w-3xl"><p class="text-[13px] mb-2">{% translate "Vorlagen von außen werden streng geprüft, damit sie keine Daten oder Seiten dieser Datenbank berühren können. Gefunden wurde:" %}</p>
+<ul class="list-disc pl-5 text-[13px] space-y-1">{% for p in problems %}<li>{{ p }}</li>{% endfor %}</ul>
+{% if more %}<p class="muted text-[12px] mt-2">{% blocktranslate trimmed with n=more %}… und {{ n }} weitere.{% endblocktranslate %}</p>{% endif %}
+<a class="btn mt-4" href="{% url 'table_blueprints' %}">{% translate "Zurück" %}</a></div>
+{% endblock %}
