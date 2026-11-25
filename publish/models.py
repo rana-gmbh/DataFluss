@@ -5,6 +5,7 @@ of what it last put there. What it shows is decided by `choice` (opt-in: tables 
 listed are never published) and by the role it is bound to (publish/viewer.py).
 """
 import uuid
+from datetime import time
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -15,6 +16,9 @@ class Publication(models.Model):
     TARGETS = (ZIP, FOLDER, SERVER, WEBDAV, FTP)
     TARGET_CHOICES = [(ZIP, _("ZIP-Datei")), (FOLDER, _("Ordner")), (SERVER, _("Dieser Server")), (WEBDAV, "WebDAV"), (FTP, "FTP / FTPS")]
     IDLE, RUNNING, DONE, FAILED = "idle", "running", "done", "failed"
+    OFF, CHANGES, DAILY = "off", "changes", "daily"
+    AUTO_CHOICES = [(OFF, _("Nur von Hand")), (CHANGES, _("Nach Änderungen")), (DAILY, _("Täglich"))]
+    QUIET_CHOICES = [(5, _("5 Minuten")), (15, _("15 Minuten")), (60, _("1 Stunde"))]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
@@ -34,6 +38,15 @@ class Publication(models.Model):
     progress = models.CharField(max_length=200, blank=True, default="")
     error = models.TextField(blank=True, default="")
     busy_until = models.DateTimeField(null=True, blank=True)
+    # Publishing by itself (publish/auto.py): after changes, once nothing changed for `auto_quiet` minutes,
+    # or every day at `auto_time`. Never more than was confirmed (`published_choice`).
+    auto = models.CharField(max_length=10, default=OFF, choices=AUTO_CHOICES)
+    auto_quiet = models.PositiveSmallIntegerField(default=15)
+    auto_time = models.TimeField(default=time(3, 0))
+    auto_marker = models.BigIntegerField(default=0)  # the last change (sync.Journal id) the website already holds
+    auto_day = models.DateField(null=True, blank=True)  # the day of the last daily publish
+    auto_retry_at = models.DateTimeField(null=True, blank=True)  # after a failed automatic publish, not before this
+    auto_note = models.CharField(max_length=300, blank=True, default="")  # why it waits, shown on its page
 
     class Meta:
         ordering = ["name"]

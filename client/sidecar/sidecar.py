@@ -463,6 +463,10 @@ def main():
     if plan.applies():
         plan.Scheduler().start()  # the regular backup and the nightly work, while this database is open
 
+    from publish import auto
+
+    auto.Ticker().start()  # publications that publish by themselves, while this database is open
+
     from django.db import connection
 
     connection.close()  # Each worker thread opens its own.

@@ -69,7 +69,7 @@ class PageTests(Synchronous, PublishCase):
         confirm = self.client.get(reverse("publication_confirm", args=[publication.pk])).content.decode()
         self.assertIn("Notiz", confirm)
         self.assertIn("Jeder, der die Adresse kennt", confirm)
-        self.client.post(reverse("publication_confirm", args=[publication.pk]), {"kind": "publish", "confirm": "1"})
+        self.client.post(reverse("publication_confirm", args=[publication.pk]), {"kind": "publish", "confirm": "1", "seen": self.seen(publication)})
         publication.refresh_from_db()
         self.assertEqual(publication.status, Publication.DONE, publication.error)
         self.assertIsNotNone(publication.published_at)
@@ -99,7 +99,7 @@ class PageTests(Synchronous, PublishCase):
         self.login(self.it)
         self.publication.target = Publication.SERVER
         self.publication.save()
-        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1"})
+        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1", "seen": self.seen()})
         self.publication.refresh_from_db()
         self.assertFalse(service.needs_confirmation(self.publication))
         self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish"})
@@ -124,7 +124,7 @@ class PageTests(Synchronous, PublishCase):
 
     def test_zip(self):
         self.login(self.it)
-        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1"})
+        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1", "seen": self.seen()})
         response = self.client.get(reverse("publication_zip", args=[self.publication.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertIn("attachment", response["Content-Disposition"])
@@ -138,12 +138,12 @@ class PageTests(Synchronous, PublishCase):
         self.login(self.it)
         self.publication.target = Publication.SERVER
         self.publication.save()
-        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1"})
+        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1", "seen": self.seen()})
         self.assertTrue(default_storage.exists("published/filmabend/index.html"))
         self.client.post(reverse("publication_withdraw", args=[self.publication.pk]))
         self.assertFalse(default_storage.exists("published/filmabend/index.html"))
         self.assertEqual(self.client.get("/p/filmabend/").status_code, 404)
-        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1"})
+        self.client.post(reverse("publication_confirm", args=[self.publication.pk]), {"kind": "publish", "confirm": "1", "seen": self.seen()})
         self.client.post(reverse("publication_detail", args=[self.publication.pk]), {"section": "settings", "name": "Filmabend", "slug": "kino",
                                                                                        "language": "de", "role": Role.SCHULLEITUNG})
         self.assertFalse(default_storage.exists("published/filmabend/index.html"))  # moved: the old address is gone
@@ -165,7 +165,7 @@ class PageTests(Synchronous, PublishCase):
         self.publication.target = Publication.FOLDER
         self.publication.target_config = {"path": "/gibt/es/nicht"}
         self.publication.save()
-        service.start(self.publication, service.PUBLISH)
+        service.start(self.confirmed(), service.PUBLISH)
         self.publication.refresh_from_db()
         self.assertEqual(self.publication.status, Publication.FAILED)
         self.assertIn("/gibt/es/nicht", self.publication.error)
@@ -175,9 +175,10 @@ class PageTests(Synchronous, PublishCase):
     def test_one_run_at_a_time(self):
         from django.utils import timezone
 
+        publication = self.confirmed()
         Publication.objects.filter(pk=self.publication.pk).update(busy_until=timezone.now() + service.LOCK)
-        with self.assertRaises(ValidationError):
-            service.start(self.publication, service.PUBLISH)
+        with self.assertRaisesMessage(ValidationError, "läuft gerade"):
+            service.start(publication, service.PUBLISH)
 
 
 class FolderTests(Synchronous, PublishCase):
@@ -323,14 +324,14 @@ class WebDavTests(Synchronous, PublishCase):
         self.publication.save()
 
     def test_publish_and_republish(self):
-        service.start(self.publication, service.PUBLISH)
+        service.start(self.confirmed(), service.PUBLISH)
         self.publication.refresh_from_db()
         self.assertEqual(self.publication.status, Publication.DONE, self.publication.error)
         self.assertIn("index.html", FakeDav.files)
         self.assertIn("datafluss-manifest.json", FakeDav.files)
         self.assertIn(f"filme/{self.momo.pk}.html", FakeDav.files)
         Record.objects.get(pk=self.story.pk).recycle()
-        service.start(self.publication, service.PUBLISH)
+        service.start(Publication.objects.get(pk=self.publication.pk), service.PUBLISH)
         self.assertNotIn(f"filme/{self.story.pk}.html", FakeDav.files)
 
     def test_wrong_password_and_plain_http_elsewhere(self):
@@ -402,7 +403,7 @@ class FtpTests(Synchronous, PublishCase):
         targets.set_password(self.publication, "geheim")
         self.publication.save()
         with mock.patch("publish.targets.ftplib.FTP_TLS", FakeFtp), mock.patch("publish.targets.ftplib.FTP", side_effect=AssertionError("plain FTP")):
-            service.start(self.publication, service.PUBLISH)
+            service.start(self.confirmed(), service.PUBLISH)
         self.publication.refresh_from_db()
         self.assertEqual(self.publication.status, Publication.DONE, self.publication.error)
         ftp = FakeFtp.instances[-1]

@@ -125,11 +125,12 @@ def _prune(publication, used):
             default_storage.delete(f"{folder}/{name}")
 
 
-def build(publication, progress=None):
-    """The whole site of a publication. Raises snapshot.Unsafe when the snapshot fails its check."""
+def build(publication, progress=None, confirmed=None):
+    """The whole site of a publication. Raises snapshot.Unsafe when the snapshot fails its check. With
+    `confirmed`, never more fields than those (publish/service.py)."""
     say = progress or (lambda text: None)
     say("data")
-    site_data = snapshot.build(publication)
+    site_data = snapshot.build(publication, confirmed)
     site = Site()
     used, mapping = set(), {}
     total = len(site_data["assets"])

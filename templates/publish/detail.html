@@ -86,6 +86,7 @@
   <div class="surface p-4 space-y-3">
     <h2 class="font-semibold">{% translate "Stand" %}</h2>
     {% include "publish/_status.html" %}
+    {% if needs_confirmation and p.published_at %}<p class="text-[12.5px]"><span class="badge badge-warn">{% icon 'alert' %}{% translate "Bestätigung nötig" %}</span> {% translate "Auswahl, Rolle oder was die Rolle sieht, haben sich geändert." %}</p>{% endif %}
     {% if site_url and p.published_at %}<p class="text-[13px]"><a class="text-[var(--accent)] hover:underline break-all" href="{{ site_url }}" target="_blank" rel="noopener">{{ site_url }} {% icon 'external' %}</a></p>{% endif %}
     <div class="flex flex-wrap gap-2">
       <form method="post" action="{% url 'publication_confirm' p.pk %}">{% csrf_token %}<input type="hidden" name="kind" value="preview">
@@ -98,6 +99,20 @@
     {% if zip_ready %}<a class="btn w-full" href="{% url 'publication_zip' p.pk %}">{% icon 'download' %}{% translate "ZIP herunterladen" %}</a>{% endif %}
     {% if not p.choice %}<p class="muted text-[12px]">{% translate "Zuerst unter „Inhalt“ mindestens eine Tabelle wählen." %}</p>{% endif %}
   </div>
+  <form method="post" class="surface p-4 space-y-3" x-data="{ auto: '{{ p.auto }}' }" aria-labelledby="pub-auto">{% csrf_token %}<input type="hidden" name="section" value="auto">
+    <h2 id="pub-auto" class="font-semibold">{% translate "Automatisch veröffentlichen" %}</h2>
+    {% if auto_possible %}
+    <div class="space-y-1.5">{% for value, label in auto_choices %}<label class="flex items-center gap-1.5 text-[13px]"><input type="radio" class="accent-[var(--accent)]" name="auto" value="{{ value }}" x-model="auto" {% if p.auto == value %}checked{% endif %}>{{ label }}</label>{% endfor %}</div>
+    <div x-show="auto === 'changes'" x-cloak><label class="label" for="pub-quiet">{% translate "Wenn so lange nichts mehr geändert wurde" %}</label>
+      <select id="pub-quiet" class="input" name="quiet">{% for value, label in quiet_choices %}<option value="{{ value }}" {% if p.auto_quiet == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+    <div x-show="auto === 'daily'" x-cloak><label class="label" for="pub-time">{% translate "Uhrzeit" %}</label>
+      <input id="pub-time" class="input" type="time" name="time" value="{{ p.auto_time|time:'H:i' }}"></div>
+    <p class="muted text-[12px]">{% if on_computer %}{% translate "Auf diesem Computer nur, solange die Datenbank geöffnet ist; danach holt sie es nach." %} {% endif %}{% translate "Erst nach dem ersten Veröffentlichen von Hand. Sieht die Rolle mehr als bestätigt, wartet die Automatik auf eine neue Bestätigung." %}</p>
+    {% if p.auto_note %}<p class="text-[12.5px]"><span class="badge badge-warn">{% icon 'alert' %}{% translate "Wartet" %}</span> {{ p.auto_note }}</p>{% endif %}
+    {% if p.auto_retry_at and p.status == 'failed' %}<p class="muted text-[12px]">{% blocktranslate trimmed with when=p.auto_retry_at|date:"H:i" %}Nächster Versuch nicht vor {{ when }}.{% endblocktranslate %}</p>{% endif %}
+    <button class="btn btn-sm btn-primary">{% icon 'save' %}{% translate "Speichern" %}</button>
+    {% else %}<p class="muted text-[12.5px]">{% translate "Eine ZIP-Datei lädt man selbst herunter; automatisch geht es mit einem Ordner, diesem Server, WebDAV oder FTP." %}</p>{% endif %}
+  </form>
   <div class="surface p-4 space-y-2">
     <h2 class="font-semibold">{% translate "Zurückziehen und löschen" %}</h2>
     {% if p.target == 'server' and p.published_at %}<form method="post" action="{% url 'publication_withdraw' p.pk %}">{% csrf_token %}

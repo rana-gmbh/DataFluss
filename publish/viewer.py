@@ -25,8 +25,11 @@ class PublicationViewer:
     pk = id = None
     username = ""
 
-    def __init__(self, publication):
+    def __init__(self, publication, confirmed=None):
+        """`confirmed` ({table key: [field keys]}, publish/service.py) caps what a publish shows to what was
+        confirmed, even if the role came to see more in the meantime."""
         self.publication = publication
+        self._confirmed = confirmed
         self.role = f"publication:{publication.pk}"  # no UserRole has this key
         self._base = SimpleNamespace(role=publication.role, is_authenticated=True)  # the bound role, for its own rights and rules
         self._chosen = publication.tables()
@@ -49,6 +52,7 @@ class PublicationViewer:
     def table_right(self, table):
         if table.pk not in self._tables:
             ok = table.key in self._chosen and not table.archived and services.may_read(self._base, table)
+            ok = ok and (self._confirmed is None or table.key in self._confirmed)
             self._tables[table.pk] = READ if ok else NONE
         return self._tables[table.pk]
 
@@ -74,6 +78,8 @@ class PublicationViewer:
         role_hidden = fieldrules.hidden(self._base, entity)
         # The title names a record in lists, links and on its page, so it always comes along (as for roles).
         chosen = set((self._chosen.get(key) or {}).get("fields") or []) | fieldrules.locked(entity)
+        if self._confirmed is not None:
+            chosen &= set(self._confirmed.get(key) or [])
         out = {}
         for field_key, field_type in keys:
             seen = field_key in chosen and field_key not in role_hidden and field_type != "secret"

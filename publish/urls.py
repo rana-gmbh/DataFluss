@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import api, views
 
 urlpatterns = [
     path("einstellungen/veroeffentlichen/", views.publication_list, name="publication_list"),
@@ -13,6 +13,11 @@ urlpatterns = [
     path("einstellungen/veroeffentlichen/<uuid:pk>/zip/", views.publication_zip, name="publication_zip"),
     path("einstellungen/veroeffentlichen/<uuid:pk>/vorschau/", views.publication_preview, name="publication_preview"),
     path("einstellungen/veroeffentlichen/<uuid:pk>/vorschau/<path:path>", views.publication_preview, name="publication_preview_file"),
+    path("einstellungen/veroeffentlichen/server/", views.remote_list, name="publication_remote"),
+    path("einstellungen/veroeffentlichen/server/<uuid:pk>/", views.remote_run, name="publication_remote_run"),
+    # For a computer connected to this server, with its device token (core/middleware.py PUBLIC_NAMES).
+    path("sync/v1/publish/list", api.remote_list, name="sync_publish_list"),
+    path("sync/v1/publish/run", api.remote_run, name="sync_publish_run"),
     # The sites this server hosts: public (core/middleware.py PUBLIC_NAMES).
     path("p/<slug:slug>/", views.site_file, name="site_file"),
     path("p/<slug:slug>/<path:path>", views.site_file, name="site_file_path"),

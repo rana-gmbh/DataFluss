@@ -1,0 +1,20 @@
+{% load i18n ui %}<section id="publish-remote" class="surface mt-4" aria-labelledby="remote-title"{% if running %} hx-get="{% url 'publication_remote' %}" hx-trigger="every 3s" hx-swap="outerHTML"{% endif %}>
+  <div class="p-4 pb-2"><h2 id="remote-title" class="font-semibold">{% translate "Auf dem Server" %}{% if server %} <span class="muted text-[12px] font-normal">{{ server }}</span>{% endif %}</h2>
+    <p class="muted text-[12.5px]">{% translate "Diese Veröffentlichungen zeigen die Daten des Servers. „Neu veröffentlichen“ schickt zuerst die Änderungen dieses Computers an den Server. Eingerichtet und bestätigt werden sie auf dem Server." %}</p></div>
+  {% if problem %}<p class="px-4 pb-3 text-[13px] text-[var(--bad)]">{{ problem }}</p>{% endif %}
+  {% if allowed is False %}<p class="px-4 pb-4 muted text-[13px]">{% translate "Ihre Rolle darf auf dem Server nicht veröffentlichen." %}</p>
+  {% elif rows %}<table class="data-table">
+    <thead><tr><th>{% translate "Name" %}</th><th>{% translate "Ziel" %}</th><th>{% translate "Stand" %}</th><th></th></tr></thead>
+    <tbody>{% for r in rows %}<tr>
+      <td><span class="font-medium">{{ r.name }}</span>{% if r.url %}<br><a class="text-[12px] text-[var(--accent)] hover:underline break-all" href="{{ r.url }}" target="_blank" rel="noopener">{{ r.url }}</a>{% endif %}</td>
+      <td class="muted">{{ r.target_label }}<br><span class="text-[12px]">{{ r.auto }}</span></td>
+      <td class="text-[12.5px]">{% if r.status == 'running' %}<span class="badge badge-accent">{% translate "Läuft" %}</span> {{ r.progress }}
+        {% elif r.status == 'failed' %}<span class="badge badge-bad">{% translate "Fehlgeschlagen" %}</span> <span class="text-[var(--bad)]">{{ r.error }}</span>
+        {% elif r.published_at %}<span class="badge badge-ok">{% translate "Veröffentlicht" %}</span> {{ r.progress }}
+        {% else %}<span class="badge">{% translate "Noch nicht veröffentlicht" %}</span>{% endif %}</td>
+      <td class="text-right whitespace-nowrap">{% if r.needs_confirmation %}<a class="btn btn-sm" href="{{ r.manage_url }}" target="_blank" rel="noopener">{% icon 'external' %}{% translate "Auf dem Server bestätigen" %}</a>
+        {% elif r.target != 'zip' %}<button class="btn btn-sm btn-primary" hx-post="{% url 'publication_remote_run' r.id %}" hx-target="#publish-remote" hx-swap="outerHTML" {% if r.status == 'running' %}disabled{% endif %}>{% icon 'upload' %}{% translate "Neu veröffentlichen" %}</button>{% endif %}</td>
+    </tr>{% endfor %}</tbody>
+  </table>
+  {% elif not problem %}<p class="px-4 pb-4 muted text-[13px]">{% translate "Der Server hat keine Veröffentlichung." %}</p>{% endif %}
+</section>

@@ -7,14 +7,15 @@
   <section class="surface p-5 space-y-3">
     <h2 class="font-semibold">{% translate "Das wird öffentlich" %}</h2>
     <p class="text-[13px]">{% blocktranslate trimmed with role=role_name target=p.get_target_display count n=records %}{{ n }} Datensatz, so wie die Rolle „{{ role }}“ ihn sieht, mit Bildern; Ziel: {{ target }}.{% plural %}{{ n }} Datensätze, so wie die Rolle „{{ role }}“ sie sieht, mit Bildern; Ziel: {{ target }}.{% endblocktranslate %}</p>
-    {% for table, fields in listed %}<div class="rounded-lg p-3" style="border: 1px solid var(--line)">
-      <div class="font-medium flex items-center gap-2">{% icon table.icon 'text-[var(--accent)]' %}{{ table.display_name }}</div>
-      <div class="flex flex-wrap gap-1.5 mt-2">{% for f in fields %}<span class="badge">{{ f.display_label }}</span>{% endfor %}</div>
+    {% if again %}<p class="text-[13px]">{% translate "Seit der letzten Bestätigung hat sich etwas geändert. Neu dabei ist, was als „neu“ markiert ist." %}</p>{% endif %}
+    {% for table, fields, table_new in listed %}<div class="rounded-lg p-3" style="border: 1px solid var(--line)">
+      <div class="font-medium flex items-center gap-2">{% icon table.icon 'text-[var(--accent)]' %}{{ table.display_name }}{% if table_new %} <span class="badge badge-warn">{% translate "neu" %}</span>{% endif %}</div>
+      <div class="flex flex-wrap gap-1.5 mt-2">{% for f, new in fields %}<span class="badge{% if new %} badge-warn{% endif %}">{{ f.display_label }}{% if new %} · {% translate "neu" %}{% endif %}</span>{% endfor %}</div>
     </div>{% empty %}<p class="muted text-[13px]">{% translate "Nichts: Die Rolle darf keine der gewählten Tabellen lesen." %}</p>{% endfor %}
     <p class="muted text-[12.5px]">{% translate "Nie dabei: geheime Felder, der Änderungsverlauf, Benutzer, Papierkorb und Felder, die nicht ausgewählt sind." %}{% if school %} {% translate "Schüler, Personal, Eltern, Geräte und Zugänge der Schulverwaltung werden nie veröffentlicht, auch nicht über Verknüpfungen." %}{% endif %}</p>
     {% if p.target != 'zip' %}<p class="text-[13px]"><span class="badge badge-warn">{% icon 'alert' %}{% translate "Öffentlich" %}</span> {% translate "Jeder, der die Adresse kennt, kann alles davon lesen." %}{% if p.indexable %} {% translate "Suchmaschinen dürfen die Seiten aufnehmen." %}{% endif %}</p>{% endif %}
   </section>
-  <form method="post" class="flex flex-wrap gap-2">{% csrf_token %}<input type="hidden" name="kind" value="publish"><input type="hidden" name="confirm" value="1">
+  <form method="post" class="flex flex-wrap gap-2">{% csrf_token %}<input type="hidden" name="kind" value="publish"><input type="hidden" name="confirm" value="1"><input type="hidden" name="seen" value="{{ seen }}">
     <button class="btn btn-primary" {% if not listed %}disabled{% endif %}>{% icon 'upload' %}{% translate "Ja, veröffentlichen" %}</button>
     <a class="btn" href="{% url 'publication_detail' p.pk %}">{% translate "Abbrechen" %}</a>
   </form>

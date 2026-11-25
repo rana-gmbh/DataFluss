@@ -5969,3 +5969,136 @@ msgstr "Must be changed"
 #, python-brace-format
 #~ msgid "z. B. {Preis} * {Menge}"
 #~ msgstr "e.g. {Price} * {Quantity}"
+
+msgid "Ihre Rolle darf auf dem Server nicht veröffentlichen."
+msgstr "Your role may not publish on the server."
+
+msgid "Diese Veröffentlichung gibt es auf dem Server nicht."
+msgstr "This publication does not exist on the server."
+
+msgid "Auf dem Server muss zuerst jemand bestätigen, was veröffentlicht wird."
+msgstr "Someone must first confirm on the server what is published."
+
+msgid "Eine ZIP-Datei lässt sich nur auf dem Server selbst herunterladen."
+msgstr "A ZIP file can only be downloaded on the server itself."
+
+msgid ""
+"Wartet auf Bestätigung: Auswahl oder Rolle haben sich geändert, oder die "
+"Rolle sieht jetzt mehr."
+msgstr ""
+"Waiting for confirmation: the choice or the role changed, or the role now "
+"sees more."
+
+msgid "Nur von Hand"
+msgstr "Only by hand"
+
+msgid "Nach Änderungen"
+msgstr "After changes"
+
+msgid "5 Minuten"
+msgstr "5 minutes"
+
+msgid "15 Minuten"
+msgstr "15 minutes"
+
+msgid "1 Stunde"
+msgstr "1 hour"
+
+#, python-format
+msgid "Der Abgleich mit dem Server hat nicht geklappt: %(error)s"
+msgstr "Syncing with the server did not work: %(error)s"
+
+msgid "Bitte zuerst bestätigen, was veröffentlicht wird."
+msgstr "Please first confirm what is published."
+
+msgid "Unbekannte Einstellung."
+msgstr "Unknown setting."
+
+msgid "Bitte eine Uhrzeit wie 03:00 angeben."
+msgstr "Please enter a time such as 03:00."
+
+msgid ""
+"Was veröffentlicht würde, hat sich eben geändert. Bitte noch einmal ansehen."
+msgstr "What would be published has just changed. Please look at it again."
+
+msgid "Auf dem Server"
+msgstr "On the server"
+
+msgid ""
+"Diese Veröffentlichungen zeigen die Daten des Servers. „Neu veröffentlichen“ "
+"schickt zuerst die Änderungen dieses Computers an den Server. Eingerichtet "
+"und bestätigt werden sie auf dem Server."
+msgstr ""
+"These publications show the server's data. “Publish again” first sends this "
+"computer's changes to the server. They are set up and confirmed on the "
+"server."
+
+msgid "Veröffentlicht"
+msgstr "Published"
+
+msgid "Auf dem Server bestätigen"
+msgstr "Confirm on the server"
+
+msgid "Der Server hat keine Veröffentlichung."
+msgstr "The server has no publication."
+
+msgid ""
+"Seit der letzten Bestätigung hat sich etwas geändert. Neu dabei ist, was als "
+"„neu“ markiert ist."
+msgstr ""
+"Something changed since the last confirmation. What is new is marked “new”."
+
+msgid "neu"
+msgstr "new"
+
+msgid "Bestätigung nötig"
+msgstr "Confirmation needed"
+
+msgid "Auswahl, Rolle oder was die Rolle sieht, haben sich geändert."
+msgstr "The choice, the role or what the role sees has changed."
+
+msgid "Automatisch veröffentlichen"
+msgstr "Publish automatically"
+
+msgid "Wenn so lange nichts mehr geändert wurde"
+msgstr "When nothing has changed for"
+
+msgid "Uhrzeit"
+msgstr "Time"
+
+msgid ""
+"Auf diesem Computer nur, solange die Datenbank geöffnet ist; danach holt sie "
+"es nach."
+msgstr ""
+"On this computer only while the database is open; it catches up afterwards."
+
+msgid ""
+"Erst nach dem ersten Veröffentlichen von Hand. Sieht die Rolle mehr als "
+"bestätigt, wartet die Automatik auf eine neue Bestätigung."
+msgstr ""
+"Only after the first publish by hand. If the role sees more than was "
+"confirmed, it waits for a new confirmation."
+
+msgid "Wartet"
+msgstr "Waiting"
+
+#, python-format
+msgid "Nächster Versuch nicht vor %(when)s."
+msgstr "Next attempt not before %(when)s."
+
+msgid ""
+"Eine ZIP-Datei lädt man selbst herunter; automatisch geht es mit einem "
+"Ordner, diesem Server, WebDAV oder FTP."
+msgstr ""
+"A ZIP file is downloaded by hand; automatic publishing works with a folder, "
+"this server, WebDAV or FTP."
+
+msgid "Veröffentlichungen des Servers werden geladen …"
+msgstr "Loading the server's publications …"
+
+msgid ""
+"Eine Veröffentlichung hier zeigt die Daten dieses Computers. Was der Server "
+"veröffentlicht, steht unten."
+msgstr ""
+"A publication here shows this computer's data. What the server publishes is "
+"listed below."

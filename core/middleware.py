@@ -25,8 +25,9 @@ PUBLIC_NAMES = {"login", "set_language", "js_catalog", "oidc_authentication_init
                 # Moving a database to the server and a full backup to a computer (archive/transfer.py), with a ticket.
                 "sync_transfer_start", "sync_transfer_chunk", "sync_transfer_finish", "sync_transfer_status",
                 "sync_backup_start", "sync_backup_file",
-                # Read-only sites this server hosts (publish/views.py site_file).
-                "site_file", "site_file_path"}
+                # Read-only sites this server hosts (publish/views.py site_file), and its publications for a
+                # connected computer, with a device token (publish/api.py).
+                "site_file", "site_file_path", "sync_publish_list", "sync_publish_run"}
 
 
 def _refuse(request, target):

@@ -1,5 +1,6 @@
 """Einstellungen → Veröffentlichen, and the sites this server hosts under /p/<slug>/ (docs/publish.md)."""
 import mimetypes
+from datetime import time
 from types import SimpleNamespace
 
 from django.contrib import messages
@@ -7,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_POST, require_safe
@@ -119,7 +121,10 @@ def publication_list(request):
                                                  target=_targets()[0][0])
         audit.log("publish", f"Veröffentlichung angelegt: {name}", request=request, target=publication.pk)
         return redirect("publication_detail", pk=publication.pk)
-    return render(request, "publish/list.html", {"publications": Publication.objects.all(), "active_nav": "settings_home"})
+    from . import remote
+
+    return render(request, "publish/list.html", {"publications": Publication.objects.all(), "active_nav": "settings_home",
+                                                 "connected": remote.available()})
 
 
 @require("publish.manage")
@@ -140,6 +145,8 @@ def publication_detail(request, pk):
         "zip_ready": publication.target == Publication.ZIP and default_storage.exists(service.zip_name(publication)),
         "preview_ready": default_storage.exists(f"{service.preview_folder(publication)}/index.html"),
         "on_computer": plan.is_client(), "needs_confirmation": service.needs_confirmation(publication), "active_nav": "settings_home",
+        "auto_choices": Publication.AUTO_CHOICES, "quiet_choices": Publication.QUIET_CHOICES,
+        "auto_possible": publication.target != Publication.ZIP,
     })
 
 
@@ -159,6 +166,21 @@ def _save(request, publication):
         if post.get("role") in dict(_roles()):
             publication.role = post["role"]
         publication.indexable = bool(post.get("indexable"))
+    elif section == "auto":
+        kind = post.get("auto")
+        if kind not in dict(Publication.AUTO_CHOICES):
+            raise ValidationError(_("Unbekannte Einstellung."))
+        quiet = post.get("quiet", "")
+        if kind == Publication.CHANGES and quiet.isdigit() and int(quiet) in dict(Publication.QUIET_CHOICES):
+            publication.auto_quiet = int(quiet)
+        if kind == Publication.DAILY:
+            try:
+                publication.auto_time = time.fromisoformat(post.get("time") or "")
+            except ValueError:
+                raise ValidationError(_("Bitte eine Uhrzeit wie 03:00 angeben."))
+        publication.auto, publication.auto_retry_at = kind, None
+        if kind == Publication.DAILY and publication.auto_day is None:
+            publication.auto_day = timezone.localdate() if timezone.localtime().time() >= publication.auto_time else None
     elif section == "content":
         publication.choice = _choice_from(post, publication)
     elif section == "target":
@@ -204,26 +226,74 @@ def publication_test(request, pk):
 
 @require("publish.manage")
 def publication_confirm(request, pk):
-    """What goes public, before the first publish and after the choice or role changed; then the run."""
+    """What goes public, before the first publish and whenever the choice, the role or what the role sees
+    changed; then the run. The page sends back a hash of the list it showed, so a list that changed in the
+    meantime is shown again instead of being confirmed unseen."""
     publication = _pick(request, pk)
     if request.method == "POST":
         kind = request.POST.get("kind", service.PUBLISH)
-        if kind == service.PUBLISH and service.needs_confirmation(publication) and not request.POST.get("confirm"):
-            return redirect("publication_confirm", pk=publication.pk)
+        kind = kind if kind in (service.PUBLISH, service.PREVIEW) else service.PUBLISH
         if kind == service.PUBLISH and not publication.choice:
             messages.error(request, _("Es ist noch keine Tabelle ausgewählt."))
             return redirect("publication_detail", pk=publication.pk)
+        if kind == service.PUBLISH and request.POST.get("confirm"):
+            if not service.confirm(publication, request.POST.get("seen", "")):
+                messages.warning(request, _("Was veröffentlicht würde, hat sich eben geändert. Bitte noch einmal ansehen."))
+                return redirect("publication_confirm", pk=publication.pk)
+            audit.log("publish", f"Veröffentlichung {publication.name} bestätigt", request=request, target=publication.pk)
+        if kind == service.PUBLISH and service.needs_confirmation(publication):
+            return redirect("publication_confirm", pk=publication.pk)
         try:
-            service.start(publication, kind if kind in (service.PUBLISH, service.PREVIEW) else service.PUBLISH, request.user, request)
+            service.start(publication, kind, request.user, request)
         except ValidationError as exc:
             messages.error(request, " ".join(exc.messages))
         return redirect("publication_detail", pk=publication.pk)
     listed = snapshot.published_fields(publication)
+    # What is new since the last confirmation; a confirmation of DataFluss before 1.4 holds no field list.
+    known = (publication.published_choice or {}).get("fields") is not None
+    new = set(service.grown(publication)) if known else set()
     return render(request, "publish/confirm.html", {
-        "p": publication, "listed": listed, "school": "schulverwaltung" in _active(), "active_nav": "settings_home",
-        "role_name": dict(_roles()).get(publication.role, publication.role),
-        "records": sum(t.records.count() for t, _fields in listed),
+        "p": publication, "school": "schulverwaltung" in _active(), "active_nav": "settings_home",
+        "listed": [(t, [(f, (t.key, f.key) in new) for f in fields], (t.key, None) in new) for t, fields in listed],
+        "role_name": dict(_roles()).get(publication.role, publication.role), "seen": service.state_hash(service.confirmed_state(publication)),
+        "records": sum(t.records.count() for t, _fields in listed), "again": known and bool(new),
     })
+
+
+def _remote_page(request, problem=""):
+    from sync.client import SyncError
+
+    from . import remote
+
+    try:
+        server, allowed, rows = remote.publications()
+    except SyncError as exc:
+        return render(request, "publish/_remote.html", {"problem": problem or str(exc)})
+    return render(request, "publish/_remote.html", {"server": server, "allowed": allowed, "rows": rows, "problem": problem,
+                                                    "running": any(r["status"] == Publication.RUNNING for r in rows)})
+
+
+@require("publish.manage")
+@require_GET
+def remote_list(request):
+    """On a connected computer: the server's publications (publish/remote.py)."""
+    from . import remote
+
+    if not remote.available():
+        raise Http404
+    return _remote_page(request)
+
+
+@require("publish.manage")
+@require_POST
+def remote_run(request, pk):
+    """Send this computer's changes, then have the server publish again."""
+    from . import remote
+
+    if not remote.available():
+        raise Http404
+    _row, problem = remote.publish(pk)
+    return _remote_page(request, problem)
 
 
 def _active():

@@ -28,6 +28,39 @@ role changes; after that, **Neu veröffentlichen** publishes straight away.
 Publishing runs in the background; the page shows its progress and the result. Every publish is in the
 log (Protokoll).
 
+## Publishing by itself
+
+Under **Automatisch veröffentlichen** a publication can publish on its own:
+
+- **Nach Änderungen:** once something in its tables changed and nothing changed for 5 minutes, 15 minutes or
+  an hour. Changes made on a computer connected to the server count as soon as they are synced.
+- **Täglich:** every day at a set time.
+
+It only does so after it was published once by hand, never to a ZIP, and never while it needs a
+confirmation: when the content or the role changed, or when the role came to see more than was confirmed
+(a chosen field no longer hidden for it, a chosen table it may now read). Then the page says **Wartet auf
+Bestätigung**, and **Veröffentlichen …** shows the list again with what is new marked. Fewer fields, and new
+or changed records, never ask. Even a publish that was already running when the role changed shows only
+what was confirmed.
+
+If an automatic publish fails (a web space that is down, a wrong password), it is tried again after half an
+hour at the earliest; the page shows the error.
+
+On a server, `deploy/start.sh` runs `manage.py publish_auto --loop`, which looks every minute. Elsewhere,
+run `manage.py publish_auto` from cron. In the desktop app it runs while the database is open and catches up
+when it is opened again.
+
+## From a computer connected to a server
+
+On a computer connected to a server, **Veröffentlichen** also lists the server's publications under **Auf
+dem Server**: their state, address and automatic setting. **Neu veröffentlichen** sends this computer's
+changes to the server first and then has the server publish, with the server's data. This needs the switch
+**Veröffentlichen** on the server. Setting up and confirming a server's publication happens on the server
+(**Auf dem Server bestätigen** opens its page).
+
+Publications made on the computer itself publish the computer's own copy, which holds only what its user's
+role may see.
+
 ## What is never published
 
 The website shows only what is **chosen** and what the **role** of the publication may see:
@@ -92,5 +125,11 @@ until you delete it there.
 - Tests: `tests/test_publish_safety.py` (unique markers in every place that must stay private, searched in
   every file of the website) and `tests/test_publish.py`.
 - Publications are not synced: each server or computer keeps its own.
-- Later: publishing automatically after changes or on a schedule, SFTP, Netlify, S3, GitHub Pages, a
-  password for `/p/…`, and publishing to datafluss.de (a target with a token and the same manifest).
+- `publish/auto.py`: a publication's last change is the newest `sync.Journal` row of its tables' records,
+  or of any table, field, link, file, role or record page (`marker`); `due` and `tick` decide and publish.
+  `Publication.published_choice` holds the confirmed choice, role and resulting fields; `service.run`
+  caps a publish to those fields and shrinks them when the role sees less.
+- `publish/api.py` (`sync/v1/publish/list|run`, device token) and `publish/remote.py` serve a connected
+  computer. Both names are in `core/middleware.py PUBLIC_NAMES`.
+- Later: SFTP, Netlify, S3, GitHub Pages, a password for `/p/…`, and publishing to datafluss.de (a target
+  with a token and the same manifest).

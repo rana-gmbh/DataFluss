@@ -136,13 +136,13 @@ def content_path(asset, data):
 
 # ---------------------------------------------------------------- the snapshot
 
-def build(publication):
+def build(publication, confirmed=None):
     with override(publication.language):
-        return _build(publication)
+        return _build(publication, confirmed)
 
 
-def _build(publication):
-    viewer = PublicationViewer(publication)
+def _build(publication, confirmed=None):
+    viewer = PublicationViewer(publication, confirmed)
     collector = Collector(viewer, publication)
     school = SchoolSettings.load()
     tables = viewer.readable_tables()
@@ -408,8 +408,8 @@ def summary(site):
     }
 
 
-def published_fields(publication):
+def published_fields(publication, confirmed=None):
     """[(table, [fields])] the viewer sees: what the confirmation lists."""
-    viewer = PublicationViewer(publication)
+    viewer = PublicationViewer(publication, confirmed)
     return [(t, _fields(t, viewer)) for t in viewer.readable_tables()]
 

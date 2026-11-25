@@ -5760,3 +5760,123 @@ msgstr "必須修改"
 #, python-brace-format
 #~ msgid "z. B. {Preis} * {Menge}"
 #~ msgstr "例如 {價格} * {數量}"
+
+msgid "Ihre Rolle darf auf dem Server nicht veröffentlichen."
+msgstr "您的角色無權在伺服器上發佈。"
+
+msgid "Diese Veröffentlichung gibt es auf dem Server nicht."
+msgstr "伺服器上沒有此發佈。"
+
+msgid "Auf dem Server muss zuerst jemand bestätigen, was veröffentlicht wird."
+msgstr "須先有人在伺服器上確認要發佈的內容。"
+
+msgid "Eine ZIP-Datei lässt sich nur auf dem Server selbst herunterladen."
+msgstr "ZIP 檔案只能在伺服器本身上下載。"
+
+msgid ""
+"Wartet auf Bestätigung: Auswahl oder Rolle haben sich geändert, oder die "
+"Rolle sieht jetzt mehr."
+msgstr "等待確認：所選內容或角色已變更，或該角色現在可見的內容更多。"
+
+msgid "Nur von Hand"
+msgstr "僅手動"
+
+msgid "Nach Änderungen"
+msgstr "有變更後"
+
+msgid "5 Minuten"
+msgstr "5 分鐘"
+
+msgid "15 Minuten"
+msgstr "15 分鐘"
+
+msgid "1 Stunde"
+msgstr "1 小時"
+
+#, python-format
+msgid "Der Abgleich mit dem Server hat nicht geklappt: %(error)s"
+msgstr "與伺服器同步失敗：%(error)s"
+
+msgid "Bitte zuerst bestätigen, was veröffentlicht wird."
+msgstr "請先確認要發佈的內容。"
+
+msgid "Unbekannte Einstellung."
+msgstr "未知設定。"
+
+msgid "Bitte eine Uhrzeit wie 03:00 angeben."
+msgstr "請輸入時間，例如 03:00。"
+
+msgid ""
+"Was veröffentlicht würde, hat sich eben geändert. Bitte noch einmal ansehen."
+msgstr "要發佈的內容剛剛發生了變化。請再查看一遍。"
+
+msgid "Auf dem Server"
+msgstr "在伺服器上"
+
+msgid ""
+"Diese Veröffentlichungen zeigen die Daten des Servers. „Neu veröffentlichen“ "
+"schickt zuerst die Änderungen dieses Computers an den Server. Eingerichtet "
+"und bestätigt werden sie auf dem Server."
+msgstr "這些發佈顯示伺服器上的資料。「重新發佈」會先將此電腦的變更傳送到伺服器。它們在伺服器上設定和確認。"
+
+msgid "Veröffentlicht"
+msgstr "已發佈"
+
+msgid "Auf dem Server bestätigen"
+msgstr "在伺服器上確認"
+
+msgid "Der Server hat keine Veröffentlichung."
+msgstr "伺服器上沒有發佈。"
+
+msgid ""
+"Seit der letzten Bestätigung hat sich etwas geändert. Neu dabei ist, was als "
+"„neu“ markiert ist."
+msgstr "自上次確認以來有所變化。新增內容標記為「新」。"
+
+msgid "neu"
+msgstr "新"
+
+msgid "Bestätigung nötig"
+msgstr "需要確認"
+
+msgid "Auswahl, Rolle oder was die Rolle sieht, haben sich geändert."
+msgstr "所選內容、角色或角色可見的內容已變更。"
+
+msgid "Automatisch veröffentlichen"
+msgstr "自動發佈"
+
+msgid "Wenn so lange nichts mehr geändert wurde"
+msgstr "在此期間無變更時"
+
+msgid "Uhrzeit"
+msgstr "時間"
+
+msgid ""
+"Auf diesem Computer nur, solange die Datenbank geöffnet ist; danach holt sie "
+"es nach."
+msgstr "在此電腦上僅在資料庫開啟時進行；之後會補上。"
+
+msgid ""
+"Erst nach dem ersten Veröffentlichen von Hand. Sieht die Rolle mehr als "
+"bestätigt, wartet die Automatik auf eine neue Bestätigung."
+msgstr "僅在第一次手動發佈之後。如果角色可見的內容多於已確認的內容，自動發佈會等待新的確認。"
+
+msgid "Wartet"
+msgstr "等待中"
+
+#, python-format
+msgid "Nächster Versuch nicht vor %(when)s."
+msgstr "下次嘗試不早於 %(when)s。"
+
+msgid ""
+"Eine ZIP-Datei lädt man selbst herunter; automatisch geht es mit einem "
+"Ordner, diesem Server, WebDAV oder FTP."
+msgstr "ZIP 檔案需手動下載；自動發佈適用於資料夾、此伺服器、WebDAV 或 FTP。"
+
+msgid "Veröffentlichungen des Servers werden geladen …"
+msgstr "正在載入伺服器的發佈 …"
+
+msgid ""
+"Eine Veröffentlichung hier zeigt die Daten dieses Computers. Was der Server "
+"veröffentlicht, steht unten."
+msgstr "此處的發佈顯示此電腦的資料。伺服器發佈的內容列在下方。"

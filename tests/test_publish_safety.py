@@ -106,6 +106,21 @@ class PublishCase(AppTestCase):
             choice={"filme": {"fields": chosen, "layout": "gallery", "files": False},
                     "personalakten": {"fields": ["f_name"]}})
 
+    def seen(self, publication=None):
+        """The hash the confirmation page sends back for what it shows now."""
+        from publish import service
+
+        publication = Publication.objects.get(pk=(publication or self.publication).pk)
+        return service.state_hash(service.confirmed_state(publication))
+
+    def confirmed(self, publication=None):
+        """The publication, confirmed as it is now (as after "Ja, veröffentlichen")."""
+        from publish import service
+
+        publication = Publication.objects.get(pk=(publication or self.publication).pk)
+        self.assertTrue(service.confirm(publication, self.seen(publication)))
+        return publication
+
     def site_text(self, site):
         """Every file of the site as text (bytes decoded leniently), keyed by path."""
         return {path: site.read(path).decode("utf-8", "replace") for path in site.files}
